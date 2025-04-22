@@ -430,6 +430,37 @@ Here is an excerpt from the Ansible Playbook used in our AIOps workshop:
         survey_spec: "{{ lookup('template', playbook_dir + '/templates/survey.j2') }}"
 ```
 
+We are able to dynamically update the survey inside the workflow by using the survey_spec.  The survey spec looks like the following:
+
+```json
+{
+  "name": "Prompt Lightspeed",
+  "description": "Survey for working with Ansible Lightspeed",
+  "spec": [
+    {
+      "type": "textarea",
+      "question_name": "Enter a prompt to create a remediation playbook?",
+      "question_description": "This prompt will be used with Ansible Lightspeed to automatically generate an Ansible Playbook",
+      "variable": "lightspeed_prompt",
+      "required": true,
+      "default": "For all hosts, use become true,  Remove line that contains InvalidDirectiveHere from /etc/httpd/conf/httpd.conf and restart httpd"
+    },
+    {
+      "type": "textarea",
+      "question_name": "This box shows the prompt generated from our Workflow job template",
+      "question_description": "This area shows you that AI was able to understand the error and create a prompt for Ansible Lightspeed.",
+      "variable": "ai_lightspeed_prompt",
+      "required": false,
+      "default": "{{ gpt_generated_prompt }}"
+    }
+  ]
+}
+```
+
+Now everytime the first workflow **Log Enrichment and Prompt Generation Workflow** runs, the second workflow **Remediation Workflow** automatically has its survey updates to be relevant to that workflow. This is doing **Config as Code** using the ansible.controller content collection.
+
+Please consider using the <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/validated/infra/aap_configuration/">AAP Configuration Collection on Automation hub.</a> This content collection  simplifies interactions for Ansible Automation Platform.
+
 ## 3. Remediation Workflow
    Generates a playbook via Ansible Lightspeed, syncs it to Git, builds another Job Template
 
