@@ -1,49 +1,52 @@
 
 # AIOps Hub - Solution Guide for Ansible Automation Platform customers
 
+<style>
+  div#toc {
+    display: none;
+  }
+</style>
+
 ## Overview
 
 ![aiops](https://github.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/blob/main/solution_images/aiops.png?raw=true)
 
-
-- [AIOps Hub - Solution Guide for Ansible Automation Platform customers](#aiops-hub---solution-guide-for-ansible-automation-platform-customers)
-  - [Overview](#overview)
-  - [Background](#background)
-- [Solution](#solution)
-  - [AIOps Workflow](#aiops-workflow)
-    - [Example Workflow Diagram](#example-workflow-diagram)
-  - [1. Event-Driven Ansible (EDA) Response](#1-event-driven-ansible-eda-response)
-    - [Example Walkthrough for EDA Reponse](#example-walkthrough-for-eda-reponse)
-    - [1. **IT infrastrucure event**:](#1-it-infrastrucure-event)
-      - [ Application-Level Events](#-application-level-events)
-      - [ Infrastructure \& Platform Events](#-infrastructure--platform-events)
-      - [ Network \& Security Events](#-network--security-events)
-      - [Observability-Driven Triggers](#observability-driven-triggers)
-    - [2. **Observability tool picks up event**:](#2-observability-tool-picks-up-event)
-      - [Filebeat](#filebeat)
-      - [IBM Instana](#ibm-instana)
-      - [Splunk](#splunk)
-    - [3. **EDA sees event in message queue**](#3-eda-sees-event-in-message-queue)
-      - [AWS SQS](#aws-sqs)
-      - [Azure Service Bus](#azure-service-bus)
-      - [Kafka](#kafka)
-  - [2. Log Enrichment and Prompt Generation Workflow](#2-log-enrichment-and-prompt-generation-workflow)
-    - [1. Capture Additional Information](#1-capture-additional-information)
-    - [2. Red Hat AI: Analyze Incident](#2-red-hat-ai-analyze-incident)
-      - [ Tools That Support the OpenAI-Compatible API](#-tools-that-support-the-openai-compatible-api)
-    - [3. Notify Chat / ITSM](#3-notify-chat--itsm)
-      - [Mattermost](#mattermost)
-      - [ServiceNow](#servicenow)
-      - [Slack](#slack)
-    - [4. Build Ansible Lightspeed Job Template](#4-build-ansible-lightspeed-job-template)
-  - [3. Remediation Workflow](#3-remediation-workflow)
-    - [1. Lightspeed Remedation Playbook Generator](#1-lightspeed-remedation-playbook-generator)
-    - [2. Commit Fix to Git](#2-commit-fix-to-git)
-    - [3. Sync Project](#3-sync-project)
-    - [4. Build Remedation Template](#4-build-remedation-template)
-  - [4. Execute Remediation](#4-execute-remediation)
-    - [Policy Enforcement](#policy-enforcement)
-
+  - [Overview](#overview-1)
+  - [Background](#background-2)
+  - [Solution](#solution-3)
+  - [AIOps Workflow](#aiops-workflow-4)
+    - [Example Workflow Diagram](#example-workflow-diagram-5)
+  - [1. Event-Driven Ansible (EDA) Response](#1-event-driven-ansible-eda-response-6)
+    - [Example Walkthrough for EDA Reponse](#example-walkthrough-for-eda-reponse-7)
+    - [1. **IT infrastrucure event**:](#1-it-infrastrucure-event-8)
+      - [ Application-Level Events](#-application-level-events-9)
+      - [ Infrastructure \& Platform Events](#-infrastructure--platform-events-10)
+      - [ Network \& Security Events](#-network--security-events-11)
+      - [Observability-Driven Triggers](#observability-driven-triggers-12)
+    - [2. **Observability tool picks up event**:](#2-observability-tool-picks-up-event-13)
+      - [Filebeat](#filebeat-14)
+      - [IBM Instana](#ibm-instana-15)
+      - [Splunk](#splunk-16)
+    - [3. **EDA sees event in message queue**](#3-eda-sees-event-in-message-queue-17)
+      - [AWS SQS](#aws-sqs-18)
+      - [Azure Service Bus](#azure-service-bus-19)
+      - [Kafka](#kafka-20)
+  - [2. Log Enrichment and Prompt Generation Workflow](#2-log-enrichment-and-prompt-generation-workflow-21)
+    - [1. Capture Additional Information](#1-capture-additional-information-22)
+    - [2. Red Hat AI: Analyze Incident](#2-red-hat-ai-analyze-incident-23)
+      - [ Tools That Support the OpenAI-Compatible API](#-tools-that-support-the-openai-compatible-api-24)
+    - [3. Notify Chat / ITSM](#3-notify-chat--itsm-25)
+      - [Mattermost](#mattermost-26)
+      - [ServiceNow](#servicenow-27)
+      - [Slack](#slack-28)
+    - [4. Build Ansible Lightspeed Job Template](#4-build-ansible-lightspeed-job-template-29)
+  - [3. Remediation Workflow](#3-remediation-workflow-30)
+    - [1. Lightspeed Remedation Playbook Generator](#1-lightspeed-remedation-playbook-generator-31)
+    - [2. Commit Fix to Git](#2-commit-fix-to-git-32)
+    - [3. Sync Project](#3-sync-project-33)
+    - [4. Build Remedation Template](#4-build-remedation-template-34)
+  - [4. Execute Remediation](#4-execute-remediation-35)
+    - [Policy Enforcement](#policy-enforcement-36)
 
 ## Background
 
@@ -71,7 +74,7 @@ There are three major parts of AIOps:
 
 > <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:text-bottom;"> AIOps adoption can be incremental. You don’t need full automation on Day One. *Start small, think big!*
 
-# Solution
+## Solution
 
 What makes up the solution?
 
