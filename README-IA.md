@@ -69,7 +69,7 @@ The solution leverages:
   - InstructLab configuration
   - Model deployment and validation
 
-## How to Download These Collections
+## How to download these Collections
 
 Before installing the collections, ensure your `ansible.cfg` file is configured to authenticate and pull content from [automation hub](https://console.redhat.com/ansible/automation-hub/token).
 Then install the collections directly from automation hub:
@@ -107,7 +107,7 @@ Pass the obtained AMI ID into your playbook using the variable:
 rhelai_aws_rhelai_ami: ami-xxxxxxxxxxxxxxxxx
 ```
 
-## Setting Up the Inventory
+## Setting up the inventory
 
 After provisioning the AWS instance, you need to create or sync an inventory that targets your RHEL AI host. You can do this via the Ansible CLI or Ansible Automation Controller.
 
@@ -126,7 +126,7 @@ Use this inventory when running the playbook manually:
 ansible-playbook -i inventory.ini ilab.yml
 ```
 
-### Option 2: Inventory Sync in Ansible Automation Controller
+### Option 2: Inventory sync in Ansible Automation Platform
 
 For workflows within Ansible Automation Platform, configure a dynamic inventory source:
 
@@ -142,7 +142,7 @@ This dynamic inventory sync ensures your infrastructure is always up to date and
 > ✅ Tip: Use dynamic inventory sync in AAP to scale automation and keep environments consistent.
 
 
-## Visualizing the Workflow in Ansible Automation Platform
+## Visualizing the workflow in Ansible Automation Platform
 
 You can also orchestrate this automation through **Ansible Automation Controller** by creating a workflow template. The example below shows a simple two-step workflow:
 
@@ -153,7 +153,7 @@ This visual representation can help teams manage hand-offs between infrastructur
 
 ![Automation Controller Workflow Example](https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/ia-workflow-template.png)
 
-## Included Playbooks
+## Included playbooks
 
 ### 1. provision.yml (`infra.ai`)
 
@@ -193,7 +193,7 @@ For this solution, the focus is on **inference**—deploying a model to serve re
     registry_password: "{{ my_registry_password }}"
 ```
 
-## Pulling Sample Vars and Playbook Files
+## Pulling sample vars and playbook files
 
 You can obtain the `sample_vars.yml`, `provision.yml`, and `ilab.yml` files directly from their respective collections:
 
@@ -202,11 +202,11 @@ These files are typically available in the installed collections directory:
 - `~/.ansible/collections/ansible_collections/infra/ai/playbooks/`
 - `~/.ansible/collections/ansible_collections/redhat/ai/playbooks/`
 
-## Variable Configuration
+## Variable configuration
 
 All required variables for these playbooks are pre-defined in `sample_vars.yml`. Ensure this file is correctly populated to match your specific setup.
 
-## Validating Model Deployment
+## Validating model deployment
 
 Once your model is deployed and the inference server is running, you can validate that it is operational using either a curl command or the redhat.ai.completion module available in the redhat.ai Ansible content collection.
 
