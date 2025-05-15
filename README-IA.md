@@ -1,28 +1,40 @@
 
 # AI Infrastructure Automation with Ansible – Solution Guide
 
+<style>
+  div#toc {
+    display: none;
+  }
+</style>
+
 ## Table of Contents
 
 - [Background](#background)
-- [What this solution automates?](#what-this-solution-automates)
-- [Solution](#solution)
-- [Solution Components](#solution-components)
-- [How to Download These Collections](#how-to-download-these-collections)
+- [What this solution automates](#what-this-solution-automates)
+- [Solution Overview](#solution-overview)
+  - [Components](#components)
+- [How to download these Collections](#how-to-download-these-collections)
 - [AWS AMI Setup for RHEL AI](#aws-ami-setup-for-rhel-ai)
   - [Option 1: Subscribe via AWS Marketplace](#option-1-subscribe-via-aws-marketplace)
   - [Option 2: Create Your Own AMI](#option-2-create-your-own-ami)
-- [Setting Up Inventory File](#setting-up-inventory-file)
-- [Visualizing the Workflow in Ansible Automation Platform](#visualizing-the-workflow-in-ansible-automation-platform)
-- [Playbooks Included in the Collections](#playbooks-included-in-the-collections)
-  - [provision.yml (`infra.ai`)](#1-provisionyml-infraai)
-  - [ilab.yml (`redhat.ai`)](#2-ilabyml-redhatai)
-- [Pulling Sample Vars and Playbook Files](#pulling-sample-vars-and-playbook-files)
-- [Variable Configuration](#variable-configuration)
-- [Validating Model Deployment](#validating-model-deployment)
+- [Setting up the inventory](#setting-up-the-inventory)
+  - [Option 1: CLI-Based Inventory](#option-1-cli-based-inventory)
+  - [Option 2: Inventory sync in Ansible Automation Platform](#option-2-inventory-sync-in-ansible-automation-platform)
+- [Visualizing the workflow in Ansible Automation Platform](#visualizing-the-workflow-in-ansible-automation-platform)
+- [Included playbooks](#included-playbooks)
+  - [1. provision.yml (`infra.ai`)](#1-provisionyml-infraai)
+  - [2. ilab.yml (`redhat.ai`)](#2-ilabyml-redhatai)
+- [Model selection and usage](#model-selection-and-usage)
+- [Pulling sample vars and playbook files](#pulling-sample-vars-and-playbook-files)
+- [Variable configuration](#variable-configuration)
+- [Validating model deployment](#validating-model-deployment)
+  - [Option 1: Using curl](#option-1-using-curl)
+  - [Option 2: Using Ansible](#option-2-using-ansible)
 - [Integration with Ansible Lightspeed](#integration-with-ansible-lightspeed)
 - [Final Notes](#final-notes)
 - [Sources](#sources)
 
+<h2 id="background"></h2>
 ## Background
 
 This solution article demonstrates how Ansible can automate the provisioning and configuration of AI infrastructure—specifically using Red Hat Enterprise Linux AI (RHEL AI) and InstructLab on AWS. It walks through how to set up infrastructure, serve models, and validate them using Ansible playbooks built with enterprise-ready content.
@@ -36,6 +48,7 @@ More broadly, deploying AI infrastructure involves provisioning compute resource
 
 While this guide focuses on AWS, RHEL AI, and InstructLab, the same automation principles apply across public clouds, virtual machines, OpenShift clusters, and edge environments. Ansible collections for cloud, networking, operating systems, and AI runtimes enable teams to scale infrastructure for AI workloads reliably and consistently.
 
+<h2 id="what-this-solution-automates"></h2>
 ## What this solution automates?
 
 This Ansible-based solution automates the key steps involved in setting up an AI-ready environment using RHEL AI and InstructLab on AWS. It includes:
@@ -45,8 +58,9 @@ This Ansible-based solution automates the key steps involved in setting up an AI
 - Serving an AI model: Deploys InstructLab, fetches a model, and launches an inference endpoint.
 - Validation: Verifies that the model server is accessible and working using test prompts.
 
-Together, these steps create a repeatable and auditable way to deploy AI infrastructure—from infrastructure provisioning to serving a model—using automation best practices.
+Together, these steps create a repeatable and auditable way to deploy AI infrastructure—from infrastructure provisioning to serving a model—using automation best practices. This automation can also be used to power the Ansible Lightspeed intelligent assistant by configuring Red Hat AI as a model provider and connecting Ansible Lightspeed to the hosted LLM.
 
+<h2 id="solution-overview"></h2>
 ## Solution Overview
 
 This solution guide helps Ansible Automation Platform (AAP) customers automate the deployment and configuration of **RHEL AI** on **AWS** using two key Ansible collections:
@@ -54,7 +68,7 @@ This solution guide helps Ansible Automation Platform (AAP) customers automate t
 - **Validated Collection**: [**infra.ai**](https://console.redhat.com/ansible/automation-hub/repo/validated/infra/ai) – Provisions RHEL AI infrastructure.
 - **Certified Collection**: [**redhat.ai**](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/ai) – Configures and serves an AI model on a provisioned RHEL AI host using InstructLab.
 
-
+<h3 id="components"></h3>
 ### Components
 
 The solution leverages:
@@ -69,6 +83,7 @@ The solution leverages:
   - InstructLab configuration
   - Model deployment and validation
 
+<h2 id="how-to-download-these-collections"></h2>
 ## How to download these Collections
 
 Before installing the collections, ensure your `ansible.cfg` file is configured to authenticate and pull content from [automation hub](https://console.redhat.com/ansible/automation-hub/token).
@@ -81,10 +96,12 @@ ansible-galaxy collection install redhat.ai
 
 [Installing Ansible Collections – Documentation](https://docs.ansible.com/ansible/latest/collections_guide/collections_installing.html)
 
+<h2 id="aws-ami-setup-for-rhel-ai"></h2>
 ## AWS AMI Setup for RHEL AI
 
 Provisioning requires an AMI ID for RHEL AI. Obtain it using one of these two methods:
 
+<h3 id="option-1-subscribe-via-aws-marketplace"></h3>
 ### Option 1: Subscribe via AWS Marketplace
 
 - Visit [Red Hat RHEL AI on AWS Marketplace](https://aws.amazon.com/marketplace).
@@ -93,6 +110,7 @@ Provisioning requires an AMI ID for RHEL AI. Obtain it using one of these two me
 
 [Detailed instructions](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux_ai/1.4/html/installing/installing_on_aws#installing_on_aws)
 
+<h3 id="option-2-create-your-own-ami"></h3>
 ### Option 2: Create Your Own AMI
 
 - Install and configure RHEL AI manually on a supported base AWS image.
@@ -107,10 +125,12 @@ Pass the obtained AMI ID into your playbook using the variable:
 rhelai_aws_rhelai_ami: ami-xxxxxxxxxxxxxxxxx
 ```
 
+<h2 id="setting-up-the-inventory"></h2>
 ## Setting up the inventory
 
 After provisioning the AWS instance, you need to create or sync an inventory that targets your RHEL AI host. You can do this via the Ansible CLI or Ansible Automation Controller.
 
+<h3 id="option-1-cli-based-inventory"></h3>
 ### Option 1: CLI-Based Inventory
 
 Create a static inventory file locally with the instance IP and SSH credentials:
@@ -126,6 +146,7 @@ Use this inventory when running the playbook manually:
 ansible-playbook -i inventory.ini ilab.yml
 ```
 
+<h3 id="option-2-inventory-sync-in-ansible-automation-platform"></h3>
 ### Option 2: Inventory sync in Ansible Automation Platform
 
 For workflows within Ansible Automation Platform, configure a dynamic inventory source:
@@ -142,6 +163,7 @@ This dynamic inventory sync ensures your infrastructure is always up to date and
 > ✅ Tip: Use dynamic inventory sync in AAP to scale automation and keep environments consistent.
 
 
+<h2 id="visualizing-the-workflow-in-ansible-automation-platform"></h2>
 ## Visualizing the workflow in Ansible Automation Platform
 
 You can also orchestrate this automation through **Ansible Automation Controller** by creating a workflow template. The example below shows a simple two-step workflow:
@@ -153,8 +175,10 @@ This visual representation can help teams manage hand-offs between infrastructur
 
 ![Automation Controller Workflow Example](https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/ia-workflow-template.png)
 
+<h2 id="included-playbooks"></h2>
 ## Included playbooks
 
+<h3 id="1-provisionyml-infraai"></h3>
 ### 1. provision.yml (`infra.ai`)
 
 This playbook automates infrastructure provisioning:
@@ -164,6 +188,7 @@ This playbook automates infrastructure provisioning:
 - Provisions networking (VPC, Subnets, Security Groups).
 - Launches EC2 instance with RHEL AI AMI.
 
+<h3 id="2-ilabyml-redhatai"></h3>
 ### 2. ilab.yml (`redhat.ai`)
 
 This playbook configures and serves your AI model:
@@ -174,6 +199,7 @@ This playbook configures and serves your AI model:
 
 These playbooks work sequentially to provision infrastructure and serve an AI model quickly and efficiently.
 
+<h2 id="model-selection-and-usage"></h2>
 ## Model selection and usage
 
 This solution uses a Red Hat-supported large language model (LLM) designed specifically for **inference serving**. The model is automatically downloaded and served using the `redhat.ai` collection as part of the InstructLab configuration process.
@@ -193,6 +219,7 @@ For this solution, the focus is on **inference**—deploying a model to serve re
     registry_password: "{{ my_registry_password }}"
 ```
 
+<h2 id="pulling-sample-vars-and-playbook-files"></h2>
 ## Pulling sample vars and playbook files
 
 You can obtain the `sample_vars.yml`, `provision.yml`, and `ilab.yml` files directly from their respective collections:
@@ -202,14 +229,17 @@ These files are typically available in the installed collections directory:
 - `~/.ansible/collections/ansible_collections/infra/ai/playbooks/`
 - `~/.ansible/collections/ansible_collections/redhat/ai/playbooks/`
 
+<h2 id="variable-configuration"></h2>
 ## Variable configuration
 
 All required variables for these playbooks are pre-defined in `sample_vars.yml`. Ensure this file is correctly populated to match your specific setup.
 
+<h2 id="validating-model-deployment"></h2>
 ## Validating model deployment
 
 Once your model is deployed and the inference server is running, you can validate that it is operational using either a curl command or the redhat.ai.completion module available in the redhat.ai Ansible content collection.
 
+<h3 id="option-1-using-curl"></h3>
 ### Option 1: Using curl
 
 Send a sample inference request:
@@ -225,6 +255,8 @@ curl -X POST http://<instance_ip>:<port>/v1/completions
       }'
 ```
 
+
+<h3 id="option-2-using-ansible"></h3>
 ### Option 2: Using Ansible
 
 You can also use the redhat.ai.completion module to send a prompt to the model directly from a playbook:
@@ -245,6 +277,7 @@ You can also use the redhat.ai.completion module to send a prompt to the model d
 
 This method is useful when testing from within an automated workflow or integrating into a larger playbook.
 
+<h2 id="integration-with-ansible-lightspeed"></h2>
 ## Integration with Ansible Lightspeed
 
 Once you have validated that the LLM is running and serving inference requests, this automated setup can act as the backend foundation for powering the Ansible Lightspeed Intelligent Assistant within Ansible Automation Platform (AAP).
@@ -257,6 +290,7 @@ After the model backend is ready:
 
 This integration enables you to leverage generative AI for Ansible Automation Platform while retaining full control over your LLM infrastructure.
 
+<h2 id="final-notes"></h2>
 ## Final Notes
 
 - This solution offers a scalable foundation for automating AI infrastructure provisioning and model serving using Ansible Automation Platform.
@@ -267,6 +301,7 @@ This integration enables you to leverage generative AI for Ansible Automation Pl
 
 We recommend checking for updates to these collections regularly on [Automation Hub](https://console.redhat.com/ansible/automation-hub/) for the latest features and improvements.
 
+<h2 id="sources"></h2>
 ## Sources
 
 - [Red Hat Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible)
