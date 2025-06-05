@@ -37,7 +37,7 @@
 <h2 id="background"></h2>
 ## Background
 
-This solution article demonstrates how Ansible can automate the provisioning and configuration of AI infrastructure—specifically using Red Hat Enterprise Linux AI (RHEL AI) and InstructLab on AWS. It walks through how to set up infrastructure, serve models, and validate them using Ansible playbooks built with enterprise-ready content.
+This solution article demonstrates how Ansible can automate the provisioning and configuration of AI infrastructure—specifically using Red Hat Enterprise Linux AI (RHEL AI) and InstructLab on AWS as the featured infrastructure example in this guide. The principles and collections used are applicable across hybrid cloud environments. It walks through how to set up infrastructure, serve models, and validate them using Ansible playbooks built with enterprise-ready content.
 
 More broadly, deploying AI infrastructure involves provisioning compute resources, applying system configurations, installing model runtimes, and securing environments—all of which are ideal for automation. Ansible helps standardize and scale this process by:
 
@@ -67,6 +67,8 @@ This solution guide helps Ansible Automation Platform (AAP) customers automate t
 
 - **Validated Collection**: [**infra.ai**](https://console.redhat.com/ansible/automation-hub/repo/validated/infra/ai) – Provisions RHEL AI infrastructure.
 - **Certified Collection**: [**redhat.ai**](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/ai) – Configures and serves an AI model on a provisioned RHEL AI host using InstructLab.
+
+> 💡 Note: This solution guide demonstrates automating the deployment and configuration of RHEL AI using Ansible Automation Platform, specifically focusing on AWS as an example infrastructure platform. The `infra.ai` validated collection, however, supports provisioning AI infrastructure on various platforms.
 
 <h3 id="components"></h3>
 ### Components
@@ -124,6 +126,8 @@ Pass the obtained AMI ID into your playbook using the variable:
 ```yaml
 rhelai_aws_rhelai_ami: ami-xxxxxxxxxxxxxxxxx
 ```
+
+>💡 Note: These steps detail provisioning on AWS using the infra.ai AWS content. When targeting other platforms like Azure, Google Cloud, or bare metal, you would utilize the corresponding content provided by the infra.ai collection and configure your inventory accordingly.
 
 <h2 id="setting-up-the-inventory"></h2>
 ## Setting up the inventory
