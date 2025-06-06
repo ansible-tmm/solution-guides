@@ -289,7 +289,7 @@ Once you have validated that the LLM is running and serving inference requests, 
 This means you can use this deployment to support internal use cases where the Ansible Lightspeed intelligent assistant needs to leverage model hosted on your own infrastructure. This is particularly useful for air-gapped, privacy-sensitive, or regulated environments where using public models is not ideal.
 
 After the model backend is ready:
-	•	Follow the [Ansible Lightspeed documentation](https://docs.redhat.com/en/documentation/red_hat_ansible_lightspeed_with_ibm_watsonx_code_assistant/2.x_latest) to configure and enable the Ansible Lightspeed intelligent assistant in AAP.
+	•	Follow the [Ansible Lightspeed documentation](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/installing_on_openshift_container_platform/deploying-chatbot-operator) to configure and enable the Ansible Lightspeed intelligent assistant in AAP.
 	•	In the Lightspeed settings, supply your hosted LLM’s API endpoint and token as required.
 
 This integration enables you to leverage generative AI for Ansible Automation Platform while retaining full control over your LLM infrastructure.
