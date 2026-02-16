@@ -5,7 +5,7 @@ A framework for creating enterprise-grade solution guides for Ansible Automation
 
 > **Quick start:** Jump to the [Starter Template](#appendix-starter-template).
 >
-> Copy the ready-made skeleton, fill in the placeholders, and use the checklists throughout this guide to validate your work before publishing.
+> Copy the ready-made skeleton, fill in the placeholders, and score your draft against the [Quality Scoring Rubric](#quality-scoring-rubric) before publishing.
 
 - [0. Title Standard (Non-Negotiable)](#0-title-standard-non-negotiable)
 - [1. The Executive Hook (Strategic Framing)](#1-the-executive-hook-strategic-framing)
@@ -32,10 +32,9 @@ A framework for creating enterprise-grade solution guides for Ansible Automation
   - [6.1 ROI Recap](#61-roi-recap)
   - [6.2 Crawl, Walk, Run](#62-crawl-walk-run)
   - [6.3 Next Steps and Cross-Linking](#63-next-steps-and-cross-linking)
-- [Quality Scoring Model (Internal Use)](#quality-scoring-model-internal-use)
+- [Quality Scoring Rubric](#quality-scoring-rubric)
 - [Common Failure Modes (What to Ban)](#common-failure-modes-what-to-ban)
 - [What Makes a Guide "Elite"](#what-makes-a-guide-elite)
-- [Final Recommendation](#final-recommendation)
 - [Appendix: Starter Template](#appendix-starter-template)
 
 ---
@@ -72,12 +71,7 @@ Solution guides published on access.redhat.com follow the convention `[Topic] - 
 | Tutorial | "Get started with EDA (Ansible Rulebook)" | Not a solution guide -- teaches a tool |
 | Solution | "Responding to Infrastructure Alerts with Event-Driven Ansible" | Solves a real operational problem |
 
-**Checklist:**
-
-- [ ] Does the title describe a business or operational outcome?
-- [ ] Does the title follow the `[Topic] - Solution Guide` convention for KB publishing?
-- [ ] Would a VP of IT understand the value without knowing Ansible?
-- [ ] Does the guide solve a real operational problem (not just teach a tool)?
+**Litmus test:** Would a VP of IT understand the value from the title alone, without knowing Ansible?
 
 ---
 
@@ -103,12 +97,6 @@ This section must be readable by a decision maker.
 | IT Ops Admin | Eliminates manual triage |
 | Architect | Reference workflow design |
 | Manager | Reduced MTTR and measurable ROI |
-
-**Checklist:**
-
-- [ ] Is the operational pain explicit?
-- [ ] Is the value framed in business terms?
-- [ ] Is there at least one quantified benefit?
 
 ---
 
@@ -136,17 +124,19 @@ This is where many solution guides fail.
 - API limits?
 - Licensing assumptions?
 
-**Checklist:**
-
-- [ ] Are version numbers explicitly listed?
-- [ ] Is the required infrastructure realistic?
-- [ ] Are security or RBAC implications mentioned?
+Ensure the required infrastructure is realistic for the target audience and that security or RBAC implications are called out.
 
 ### 2.4 KB Article Metadata
 
 Published solution guides on access.redhat.com follow a structured metadata pattern. Include these fields near the top of each guide, directly after the overview:
 
-**Operational Impact:** State the impact level per step if it varies, not just per guide.
+- **Operational Impact** -- State the impact level per step if it varies, not just per guide (None / Low / Medium / High).
+- **Business Value Drivers** -- 2-3 bullet points framing the business outcome (e.g., reduced downtime, improved compliance posture).
+- **Technical Value Drivers** -- 2-3 bullet points framing the technical outcome (e.g., simplified compliance reporting, enforced configuration policies).
+- **Recommended Demos and Self-Paced Labs** -- Link to interactive demos, YouTube videos, and Instruqt labs where available.
+- **Featured Ansible Content Collections** -- List every collection used with a direct link to its [Automation Hub](https://console.redhat.com/ansible/automation-hub/) page.
+
+For reference, the impact levels:
 
 | Impact | Meaning |
 |--------|---------|
@@ -154,21 +144,6 @@ Published solution guides on access.redhat.com follow a structured metadata patt
 | **Low** | Safe, reversible changes |
 | **Medium** | Configuration changes, test first |
 | **High** | Production mutation, requires change advisory board (CAB) |
-
-**Business Value Drivers:** 2-3 bullet points framing the business outcome (e.g., reduced downtime, improved compliance posture).
-
-**Technical Value Drivers:** 2-3 bullet points framing the technical outcome (e.g., simplified compliance reporting, enforced configuration policies).
-
-**Recommended Demos and Self-Paced Labs:** Link to interactive demos, YouTube videos, and Instruqt labs where available.
-
-**Featured Ansible Content Collections:** List every collection used in the guide with a direct link to its Automation Hub page.
-
-**Checklist:**
-
-- [ ] Is operational impact stated?
-- [ ] Are business and technical value drivers listed?
-- [ ] Are recommended demos or labs linked?
-- [ ] Are featured collections listed with Automation Hub links?
 
 ---
 
@@ -217,10 +192,7 @@ Explain the logic in 5-8 sentences:
 - What automation executes
 - What outcome is produced
 
-**Checklist:**
-
-- [ ] Could someone redraw this workflow after reading?
-- [ ] Is the automation deterministic and clear?
+**Litmus test:** Could someone redraw the workflow after reading your narrative alone?
 
 ### 3.3 Visual Design Patterns
 
@@ -248,12 +220,6 @@ Use blockquotes for tips, warnings, and contextual notes. Keep a consistent styl
 **Inline logos and branding:**
 
 When referencing third-party tools (Kafka, Splunk, ServiceNow, etc.), include their logo image inline where it aids scannability. Keep logos to a consistent width (e.g., 200px) and link to the relevant Automation Hub page.
-
-**Checklist:**
-
-- [ ] Is there at least one workflow or architecture diagram?
-- [ ] Are tables used for comparisons instead of long prose?
-- [ ] Are callout boxes used consistently?
 
 ---
 
@@ -300,12 +266,6 @@ Do **NOT** dump the full repo. Show:
 Then link to the full source:
 
 > Full source available at: `github.com/your-org/solution-guide-x`
-
-**Checklist:**
-
-- [ ] Is there copy-pasteable code?
-- [ ] Is the critical automation logic visible?
-- [ ] Is there a GitHub repo link?
 
 ### 4.3 AAP Integration
 
@@ -405,13 +365,6 @@ Include at least 2-3 common failure scenarios and how to diagnose them:
 | Playbook hangs at "Gathering Facts" | Target host unreachable | Verify network connectivity and SSH/WinRM access |
 | EDA rulebook doesn't fire | Event payload doesn't match condition | Check rulebook condition syntax against the actual event JSON |
 
-**Checklist:**
-
-- [ ] Is there a concrete, executable test (not just "run the playbook")?
-- [ ] Is the expected output shown verbatim (not just described)?
-- [ ] Are at least 2-3 common failure scenarios documented?
-- [ ] Can failure be diagnosed from the information provided?
-
 ---
 
 ## 6. Business Reinforcement and Maturity Path
@@ -445,18 +398,11 @@ Every guide exists within a broader ecosystem. Authors must identify and link to
 > - Need to deploy the AI infrastructure first? See [AI Infrastructure automation with Ansible](README-IA.md)
 > - Ready to add event-driven triggers? See [Get started with EDA](https://access.redhat.com/articles/7136720)
 
-**Checklist:**
-
-- [ ] Does the guide fit into a broader journey?
-- [ ] Is there a next logical step?
-- [ ] Are prerequisite guides linked?
-- [ ] Are complementary guides cross-referenced?
-
 ---
 
-## Quality Scoring Model (Internal Use)
+## Quality Scoring Rubric
 
-You can now grade guides objectively:
+Grade guides against this rubric before publishing:
 
 | Category | Weight |
 |----------|--------|
@@ -496,7 +442,7 @@ A truly excellent solution guide:
 
 ### Minimum Depth Standard
 
-A guide that passes the checklist on paper can still fail in practice if it lacks depth. Use this rule of thumb:
+A guide that covers every section can still fail in practice if it lacks depth. Use this rule of thumb:
 
 | Indicator | Minimum | Ideal |
 |-----------|---------|-------|
@@ -509,20 +455,6 @@ A guide that passes the checklist on paper can still fail in practice if it lack
 > **Warning:** Your guide may be too thin.
 >
 > If it has fewer than 3 walkthrough steps or fewer than 2 code blocks, either expand the scope or merge it with a related guide. The Network Fact Gathering guide is an example that would benefit from merging with its companion due to insufficient standalone depth.
-
----
-
-## Final Recommendation
-
-You should:
-
-1. **Turn this into a formal publishing rubric.**
-2. **Require authors to submit the checklist with each guide.**
-3. **Reject guides that don't include:**
-   - Featured code
-   - Validation step
-   - Outcome-oriented title
-   - Architecture diagram
 
 ---
 
