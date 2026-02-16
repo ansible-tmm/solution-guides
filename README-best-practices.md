@@ -11,22 +11,22 @@ A framework for creating enterprise-grade solution guides for Ansible Automation
 
 | Step | Section | What It Covers |
 |------|---------|---------------|
-| 0 | [Title Standard](#0-title-standard-non-negotiable) | Outcome-oriented naming convention |
-| 1 | [Executive Hook](#1-the-executive-hook) | Problem statement and persona mapping |
-| 2 | [Scope and Production](#2-scope-and-production-considerations) | Impact rating, prerequisites, KB metadata |
-| 3 | [Architecture and Workflow](#3-architecture-and-workflow) | Diagrams, narrative walkthrough, visual patterns |
-| 4 | [Technical Core](#4-technical-core) | Featured code, AAP integration, collections |
-| 5 | [Validation](#5-validation) | Concrete tests, expected output, troubleshooting |
-| 6 | [Business Reinforcement](#6-business-reinforcement) | ROI recap, maturity path, cross-linking |
+| 1 | [Title Standard](#1-title-standard) | Outcome-oriented naming convention |
+| 2 | [Executive Hook](#2-the-executive-hook) | Problem statement and persona mapping |
+| 3 | [Scope and Production](#3-scope-and-production-considerations) | Impact rating, prerequisites, KB metadata |
+| 4 | [Architecture and Workflow](#4-architecture-and-workflow) | Diagrams, narrative walkthrough, visual patterns |
+| 5 | [Technical Core](#5-technical-core) | Featured code, AAP integration, collections |
+| 6 | [Validation](#6-validation) | Concrete tests, expected output, troubleshooting |
+| 7 | [Business Reinforcement](#7-business-reinforcement) | ROI recap, maturity path, cross-linking |
 
-| | Section | What It Covers |
-|--|---------|---------------|
-| | [Reference](#reference) | Scoring rubric, failure modes, elite guide criteria |
-| | [Appendix: Starter Template](#appendix-starter-template) | Copy-paste skeleton for new guides |
+| Section | What It Covers |
+|---------|---------------|
+| [Reference](#reference) | Scoring rubric, failure modes, elite guide criteria |
+| [Appendix: Starter Template](#appendix-starter-template) | Copy-paste skeleton for new guides |
 
 ---
 
-## 0. Title Standard (Non-Negotiable)
+## 1. Title Standard
 
 **Rule:** Titles must describe an operational outcome, not a product feature.
 
@@ -62,11 +62,11 @@ Solution guides published on access.redhat.com follow the convention `[Topic] - 
 
 ---
 
-## 1. The Executive Hook
+## 2. The Executive Hook
 
 Frame the guide strategically so it is readable by a decision maker, not just a practitioner.
 
-### 1.1 The Problem Statement
+### 2.1 The Problem Statement
 
 Define the operational pain in 2-4 sentences max. Quantify if possible (time, cost, risk, compliance).
 
@@ -76,7 +76,7 @@ Define the operational pain in 2-4 sentences max. Quantify if possible (time, co
 >
 > Organizations spend X hours manually performing Y, leading to Z risk. This guide demonstrates how to automate this workflow using AAP to reduce effort by X% and improve consistency.
 
-### 1.2 Who Benefits
+### 2.2 Who Benefits
 
 | Persona | What They Gain |
 |---------|---------------|
@@ -86,24 +86,24 @@ Define the operational pain in 2-4 sentences max. Quantify if possible (time, co
 
 ---
 
-## 2. Scope and Production Considerations
+## 3. Scope and Production Considerations
 
 Set expectations early. This is where many solution guides fail -- the reader needs to know what they are getting into before they start.
 
-### 2.1 Impact Rating
+### 3.1 Impact Rating
 
 - **Low** — safe, read-only
 - **Medium** — config change, reversible
 - **High** — production mutation, requires Change Advisory Board (CAB)
 
-### 2.2 Prerequisites
+### 3.2 Prerequisites
 
 - AAP version
 - Collections
 - OS requirements
 - External systems (ServiceNow, Splunk, AWS, etc.)
 
-### 2.3 Cost and Resource Notes
+### 3.3 Cost and Resource Notes
 
 - GPU required?
 - Cloud instance sizing?
@@ -112,7 +112,7 @@ Set expectations early. This is where many solution guides fail -- the reader ne
 
 Ensure the required infrastructure is realistic for the target audience and that security or RBAC implications are called out.
 
-### 2.4 KB Article Metadata
+### 3.4 KB Article Metadata
 
 Published solution guides on access.redhat.com follow a structured metadata pattern. Include these fields near the top of each guide, directly after the overview:
 
@@ -133,11 +133,11 @@ For reference, the impact levels:
 
 ---
 
-## 3. Architecture and Workflow
+## 4. Architecture and Workflow
 
 This is the "aha" layer -- it must show causality so the reader understands the end-to-end flow before diving into code.
 
-### 3.1 Workflow Diagram
+### 4.1 Workflow Diagram
 
 Simple. Clean. 3-6 blocks max. Every guide must have at least one diagram. Choose the pattern that matches your guide type:
 
@@ -169,7 +169,7 @@ External Event (ITSM/Webhook) → Controller API → Playbook → Update Source 
 >
 > If your guide doesn't fit any of these patterns, draw your own -- but if you can't draw it in 3-6 blocks, the workflow may be too complex for a single guide. Consider splitting.
 
-### 3.2 Narrative Walkthrough
+### 4.2 Narrative Walkthrough
 
 Explain the logic in 5-8 sentences:
 
@@ -180,7 +180,7 @@ Explain the logic in 5-8 sentences:
 
 **Litmus test:** Could someone redraw the workflow after reading your narrative alone?
 
-### 3.3 Visual Design Patterns
+### 4.3 Visual Design Patterns
 
 Use the right visual format for the right purpose:
 
@@ -203,11 +203,11 @@ When referencing third-party tools (Kafka, Splunk, ServiceNow, etc.), include th
 
 ---
 
-## 4. Technical Core
+## 5. Technical Core
 
 This is where credibility is built -- the executable proof that the automation works. Keep it focused and accessible so anyone can follow along.
 
-### 4.1 Foundation Setup
+### 5.1 Foundation Setup
 
 Only include:
 
@@ -224,7 +224,7 @@ Only include:
 
 No fluff.
 
-### 4.2 Featured Code
+### 5.2 Featured Code
 
 Do **NOT** dump the full repo. Show the critical pieces:
 
@@ -245,7 +245,7 @@ Do **NOT** dump the full repo. Show the critical pieces:
 
 Then link to the full source: `github.com/your-org/solution-guide-x`
 
-### 4.3 AAP Integration
+### 5.3 AAP Integration
 
 Show:
 
@@ -282,11 +282,11 @@ No vague instructions like "Create a job template." Be explicit. Here is the min
 
 ---
 
-## 5. Validation
+## 6. Validation
 
 This is mandatory -- a guide without a validation step is a guide that cannot be trusted. Validation was the most inconsistent section across existing guides, and many omit it entirely.
 
-### 5.1 The Test
+### 6.1 The Test
 
 Define a concrete, repeatable test. Not a vague suggestion -- an actual command or action the reader can execute.
 
@@ -315,7 +315,7 @@ curl -sk https://controller.example.com/api/v2/job_templates/42/launch/ \
 >
 > Navigate to **Resources → Templates → [Template Name]** in the AAP Controller UI. Click **Launch** and provide the survey values when prompted.
 
-### 5.2 Expected Result
+### 6.2 Expected Result
 
 Show the actual output the reader should expect. Do not describe it in prose -- show it.
 
@@ -333,7 +333,7 @@ servicenow_host : ok=4    changed=2    unreachable=0    failed=0    skipped=0
 > - **Work Notes:** Contains the AI-generated summary
 > - **Assignment Group:** Updated to the correct tier
 
-### 5.3 Troubleshooting Common Failures
+### 6.3 Troubleshooting Common Failures
 
 Include at least 2-3 common failure scenarios and how to diagnose them:
 
@@ -345,17 +345,17 @@ Include at least 2-3 common failure scenarios and how to diagnose them:
 
 ---
 
-## 6. Business Reinforcement
+## 7. Business Reinforcement
 
 Close the loop so the guide is more than just a lab exercise. Reinforce the business value and show where to go next.
 
-### 6.1 ROI Recap
+### 7.1 ROI Recap
 
 > **Completed:** The solution guide is done.
 >
 > You now have automated X, reducing manual effort and improving consistency. Summarize the measurable outcome the reader has achieved.
 
-### 6.2 Crawl, Walk, Run
+### 7.2 Crawl, Walk, Run
 
 | Maturity | Description |
 |----------|-------------|
@@ -363,7 +363,7 @@ Close the loop so the guide is more than just a lab exercise. Reinforce the busi
 | **Walk** | Automated ticket updates |
 | **Run** | Fully automated remediation |
 
-### 6.3 Next Steps and Cross-Linking
+### 7.3 Next Steps and Cross-Linking
 
 Every guide exists within a broader ecosystem. Authors must identify and link to related guides so readers understand the full journey.
 
