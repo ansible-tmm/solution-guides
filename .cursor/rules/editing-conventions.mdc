@@ -1,0 +1,12 @@
+---
+description: Conventions for how the AI agent should edit files in this repository.
+alwaysApply: true
+---
+
+# Editing Conventions
+
+## Use Direct Text Editing, Not Scripts
+
+Always use the StrReplace tool (or other built-in IDE editing tools) to modify files. Never write Python scripts, shell one-liners, or `sed`/`awk` commands to batch-edit file contents — even when fixing many similar occurrences.
+
+If there are multiple instances to fix, make multiple StrReplace calls. This keeps changes visible, reviewable, and reversible in the IDE.

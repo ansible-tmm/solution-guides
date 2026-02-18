@@ -103,7 +103,7 @@ There are three major parts of AIOps:
 
 **Ansible Automation Platform** connects **observability** and **inference** to build **self-healing infrastructure.**
 
-> <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:**AIOps adoption can be incremental.**
+> **AIOps adoption can be incremental.**
 >
 > You don’t need full automation on Day One. *Start small, think big!*
 
@@ -118,7 +118,7 @@ What makes up the solution?
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f501.png" width="20" style="vertical-align:text-bottom;"> **Ansible Automation Platform (AAP)** workflows for orchestration <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **Event-Driven Ansible (EDA)** to listen to real-time service events <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible">[Link]</a>
 
-> <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:**EDA is part of Ansible Automation Platform.**
+> **EDA is part of Ansible Automation Platform.**
 >
 > It is referred to separately sometimes depending on the workflow. EDA uses rulebooks to monitor events, then executes specified job templates or workflows based on the event. Think of it simply as inputs and outputs. EDA is an automatic way for inputs into Ansible Automation Platform, where Automation controller / Automation execution is the output (running a job template or workflow).
 
@@ -189,7 +189,7 @@ An AIOps workflow has four (4) parts:
 
    The final Job Template that fixes the issue on your IT infrastructure.  This is executing the Ansible Playbook that was generated in the previous workflow.  This falls under the **automation** part of AIOps and wraps up our self healing infrastructure use-case.
 
-> <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:**Could this be one workflow?**
+> **Could this be one workflow?**
 >
 > Yes — but it’s broken up for review points and easier adoption.
 
@@ -202,7 +202,7 @@ This is a workflow **example** from our hands-on workshop **Introduction to AI-D
 [![overview_diagram](https://github.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/blob/main/solution_images/overview_diagram.png?raw=true)](https://github.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/blob/main/solution_images/overview_diagram.png?raw=true)
 
 
-> <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:**This is a high level diagram.**
+> **This is a high level diagram.**
 >
 > It shows an opinionated approach for AIOps that is easily customizable for a variety of IT infrastructure use-cases.
 
@@ -230,16 +230,16 @@ In our hands-on workshop we simulate an **httpd** application outage.  This is h
   3. **EDA sees event in message queue**: EDA listens to Kafka, launches automation workflows
   4. **Execute Enrichment workflow** Ansible Automation Platform kicks off part 2, **Log Enrichment and Prompt Generation Workflow**
 
-> <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2753.png" width="20" style="vertical-align:**Why Kafka?**
+> **Why Kafka?**
 >
 > <a target="_blank" href="https://kafka.apache.org/">Apache Kafka</a> is a distributed streaming platform used for building real-time data pipelines and streaming applications, enabling applications to publish, consume, and process high volumes of data streams. It is all open source and self hosted and works great for workshops. This could be replaced by any event bus of your choosing. Event-Driven Ansible has numerous plugins including integrations with AWS SQS, AWS CloudTrail, Azure Service Bus, and Prometheus.
 
 
-> <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2753.png" width="20" style="vertical-align:**Why Filebeat?**
+> **Why Filebeat?**
 >
 > <a target="_blank" href="https://www.elastic.co/beats/filebeat">Filebeat</a> is a lightweight shipper for logs. It is also free and open source and works great for lab environments. Event-Driven Ansible has numerous plugins including integrations with BigPanda, Dynatrace, IBM Instana, Zabbix, and CyberArk.
 
-> <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2049.png" width="20" style="vertical-align:**Do you need both a message bus and an observability tool?**
+> **Do you need both a message bus and an observability tool?**
 >
 > It depends on the particular integration. Generally combining a message bus and an observability tool will scale the most, but it really depends on your particular use-case, amount of events, etc. Many observability platforms can work directly with Event-Driven Ansible just fine.
 
@@ -434,7 +434,7 @@ In this case we have a static workflow versus a fully agentic workflow, but unli
 
 To interface with Red Hat AI we can use the API.  Many AI tools, including Red Hat AI, are using the OpenAI API standard.
 
-> <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:text-bottom;"> **Why is the OpenAI API the standard?**
+> **Why is the OpenAI API the standard?**
 >
 > The OpenAI API (`/v1/completions`, `/v1/chat/completions`) became a standard for interacting with LLMs because:
 > - It was the first widely adopted commercial LLM API
@@ -548,7 +548,7 @@ A way to do this (an opinionated way, but not the only way) is to use an <a targ
 
 In the above screenshot, the left is the prompt we will use in the next workflow, while the right is the insights we gleaned from Red Hat AI based on all the information it had.  This is a natural breakpoint where the human can course correct the prompt.  We will still have time to review the solution before we move it into production, but it may make sense for your IT operations team to review this prompt before we move onto Lightspeed.
 
-> <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:**Could we make this one workflow?**
+> **Could we make this one workflow?**
 >
 > YES! Absolutely. This is just showing how it is easy to adopt AIOps incrementally and add natural breakpoints to review what is happening as you adopt AI into your IT workflows.
 
@@ -691,7 +691,7 @@ The final job template inside this workflow is creating a new job template with 
         ask_limit_on_launch: true
 ```
 
-> <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:**Could we just run the playbook now?**
+> **Could we just run the playbook now?**
 >
 > YES, but you may want to run the playbook during a specific change window. This is another natural breakpoint where you can add more guard rails before you push an Ansible job into production. Now that you have the Job Template queued up, you can run it whenever you want.
 
