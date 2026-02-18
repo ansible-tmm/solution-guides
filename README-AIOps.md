@@ -69,6 +69,8 @@ AIOps breaks this linear relationship by inserting **AI inference** between the 
   - [4. Build Remedation Template](#4-build-remedation-template)
 - [4. Execute Remediation](#4-execute-remediation)
   - [Policy Enforcement](#policy-enforcement)
+- [Validation](#validation)
+  - [Troubleshooting Across Workflow Boundaries](#troubleshooting-across-workflow-boundaries)
 
 <h2 id="background"></h2>
 
@@ -665,15 +667,57 @@ The final job template inside this workflow is creating a new job template with 
 
 ## 4. Execute Remediation
 
-The final Job Template that fixes the issue
+The final step is running the remediation Job Template that was dynamically created in the previous workflow. This is the Ansible Playbook that Lightspeed generated — committed to Git, synced to a project, and loaded into a Job Template — now ready to execute against the affected host.
+
+<img src="https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/overview_diagram.png">
+
+In the workflow diagram above, this is the **Execute HTTPD Remediation** node at the bottom — the final step before the system returns to **steady state**. Notice this is marked as a **Manual Step**. This is intentional: the human operator reviews the AI-generated playbook and decides when to execute, giving organizations a natural approval gate before changes reach production.
+
+> **Why not fully automate this last step?**
+>
+> You absolutely can. For organizations further along their AIOps maturity, this final step can be wired directly into the Remediation Workflow so the fix executes automatically. The manual breakpoint exists for teams that want to adopt AIOps incrementally — gaining confidence in the AI-generated playbooks before removing the human gate.
 
 <h3 id="policy-enforcement"></h3>
 
 ### Policy Enforcement
 
-<a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/automated-policy-as-code">https://www.redhat.com/en/technologies/management/ansible/automated-policy-as-code</a>
+Before executing AI-generated playbooks in production, organizations should consider adding policy guardrails. <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/automated-policy-as-code">Ansible Automated Policy as Code</a> enables teams to define and enforce rules about what automation is allowed to do — for example, restricting which hosts can be targeted, which modules are permitted, or requiring approval workflows before high-impact changes.
 
+In an AIOps context, policy enforcement is the safety net that lets you increase automation confidence over time:
 
+| Maturity | Policy Approach |
+|----------|----------------|
+| **Crawl** | Human reviews every AI-generated playbook before execution |
+| **Walk** | Policy engine validates playbook content automatically; human approves execution |
+| **Run** | Policy engine validates and auto-approves within defined boundaries; exceptions escalate to human |
+
+<h2 id="validation"></h2>
+
+## Validation
+
+Because this guide covers a reference architecture rather than a single tool integration, validation is done **per workflow stage** rather than with a single test command. Each stage has a clear success indicator that confirms the pipeline is working before moving to the next.
+
+| Stage | What to Verify | Success Indicator |
+|-------|---------------|-------------------|
+| **1. EDA Response** | Rulebook activation is running and receiving events | EDA Controller shows the rulebook activation as **Running**; event log shows received events |
+| **2. Enrichment Workflow** | AI analyzed the incident and notifications were sent | Workflow Visualizer shows all nodes green; chat/ITSM received the AI-generated diagnosis |
+| **3. Remediation Workflow** | Lightspeed generated a playbook and it was committed to Git | New playbook file exists in the Git repository; Job Template was created with the correct playbook |
+| **4. Execute Remediation** | The AI-generated playbook resolved the issue | Job Template run completes successfully; the application or service returns to steady state |
+
+> **Want hands-on validation?**
+>
+> The companion workshop [Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible](https://rhpds.github.io/ai-driven-automation-showroom/modules/index.html) walks through this entire pipeline end-to-end with a live lab environment. Part 1 covers Apache service remediation, Part 2 extends the same pattern to network automation with Splunk and Cisco routers.
+
+### Troubleshooting Across Workflow Boundaries
+
+Most failures in an AIOps pipeline happen at the **integration boundaries** — where one stage hands off to the next. Here are the most common issues:
+
+| Symptom | Boundary | Likely Cause | Fix |
+|---------|----------|-------------|-----|
+| EDA rulebook is active but workflow never launches | EDA → Enrichment Workflow | Event payload doesn't match rulebook condition | Compare the actual event JSON against the rulebook `condition` field |
+| Enrichment Workflow runs but AI response is empty or generic | Enrichment → Red Hat AI | Prompt is missing context (no logs, no system info) | Verify the "Capture Additional Information" job collected data and passed it to the AI prompt |
+| Lightspeed returns a playbook but it doesn't fix the issue | Remediation → Execute | Prompt to Lightspeed was too vague or AI diagnosis was incorrect | Review the prompt in the Remediation Workflow survey; refine the AI-generated prompt before Lightspeed generates the playbook |
+| Job Template was created but playbook is missing | Remediation → Git/Project Sync | Git commit failed or project sync didn't run | Check Gitea/GitHub for the commit; verify the Project Sync node succeeded in the Workflow Visualizer |
 
 ---
 
