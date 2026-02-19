@@ -11,6 +11,18 @@ A framework for creating enterprise-grade solution guides for Ansible Automation
 
 This framework is for **Ansible Automation Platform field teams, solution architects, and technical content authors** who create customer-facing technical content. If you are writing a solution guide that will be published on [access.redhat.com](https://access.redhat.com) as a Knowledge Base article, this document defines the structure, quality bar, and review process you should follow.
 
+### Who We Write For
+
+Solution guides are written for **IT practitioners and decision makers evaluating or implementing Ansible Automation Platform**. The typical reader is:
+
+| Persona | What They Need from a Solution Guide |
+|---------|--------------------------------------|
+| **IT Ops Engineer / SRE** | Executable examples they can adapt to their environment — real YAML, real workflows, real validation steps |
+| **Automation Architect** | A reference architecture showing how AAP components connect to external systems, with enough detail to design their own implementation |
+| **IT Manager / Director** | A clear problem statement, measurable outcomes, and an incremental adoption path they can use to justify investment and manage risk |
+
+Every section of a solution guide should serve at least one of these personas. If a section only makes sense to someone who already knows the answer, it needs to be rewritten.
+
 Solution guides are a specific content type — they are not the only way Red Hat publishes technical content, and understanding the differences helps you decide whether a solution guide is the right format for what you want to write.
 
 ### Where Solution Guides Fit
