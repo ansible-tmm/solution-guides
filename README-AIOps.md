@@ -443,7 +443,7 @@ In this case we have a static workflow versus a fully agentic workflow, but unli
 
 ### 2. Red Hat AI: Analyze Incident
 
-To interface with Red Hat AI we can use the API.  Many AI tools, including Red Hat AI, are using the OpenAI API standard.
+To interface with Red Hat AI we can use the `redhat.ai` content collection, which wraps the OpenAI-compatible API into native Ansible modules.  Many AI tools, including Red Hat AI, are using the OpenAI API standard.
 
 > **Why is the OpenAI API the standard?**
 >
@@ -454,36 +454,46 @@ To interface with Red Hat AI we can use the API.  Many AI tools, including Red H
 
 In an AIOps context, **inference** refers to the process where an AI model receives a question or input—such as a system error, log snippet, or performance metric—via an API, and returns a prediction or insight. This could include identifying root causes, classifying incidents, or suggesting remediation steps. The model has already been trained, so inference is the **real-time application** of that knowledge to live operational data. It's a key part of integrating AI into IT workflows, enabling automated, intelligent responses without human intervention.
 
-Here is an Ansible task for inference to Red Hat AI:
+Here is an Ansible task for inference to Red Hat AI using the <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/ai">redhat.ai</a> collection:
 
 ```yaml
-
-    - name: Send POST request using uri module
-      ansible.builtin.uri:
-        url: "http://{{ rhelai_server }}:{{ rhelai_port }}/v1/completions"
-        method: POST
-        headers:
-          accept: "application/json"
-          Content-Type: "application/json"
-          Authorization: "Bearer {{ rhelai_token }}"
-        body:
-          prompt: "{{ gpt_prompt | default('What is the capital of the USA?') }}"
-          max_tokens: "{{ max_tokens | default('50') }}"
-          model: "/root/.cache/instructlab/models/granite-8b-lab-v1"
-          temperature: "{{ input_temperature | default(0) }}"
-          top_p: "{{ input_top_p | default(1) }}"
-          n: "{{ input_n | default(1) }}"
-        body_format: json
-        return_content: true
-        status_code: 200
-        timeout: 60
+    - name: Analyze incident with Red Hat AI
+      redhat.ai.completion:
+        base_url: "http://{{ rhelai_server }}:{{ rhelai_port }}"
+        token: "{{ rhelai_token }}"
+        prompt: "{{ gpt_prompt | default('What is the capital of the USA?') }}"
+        model_path: "/root/.cache/instructlab/models/granite-8b-lab-v1"
+      delegate_to: localhost
       register: gpt_response
 ```
 
+- `base_url:` The URL of the Red Hat AI server (the module appends `/v1/completions` automatically).
+- `token:` Authentication token for the AI server.
 - `prompt:` The text input or question you want the AI to respond to.
-- `max_tokens:` The maximum number of tokens (words or sub-words) the AI can generate in its response.
-- `model:` The path to the specific AI model used to generate the response.
+- `model_path:` The path to the specific AI model used to generate the response.
+
+The response is available as `gpt_response.choice_0_text` (the first answer) and `gpt_response.raw_response` (the full JSON payload).
+
+For advanced use cases that need full control over parameters like `temperature`, `max_tokens`, `top_p`, and `n`, use the `raw_input` parameter instead:
+
+```yaml
+    - name: Analyze incident with Red Hat AI (advanced)
+      redhat.ai.completion:
+        base_url: "http://{{ rhelai_server }}:{{ rhelai_port }}"
+        token: "{{ rhelai_token }}"
+        raw_input:
+          prompt: "{{ gpt_prompt }}"
+          model: "/root/.cache/instructlab/models/granite-8b-lab-v1"
+          max_tokens: 50
+          temperature: 0
+          top_p: 1
+          n: 1
+      delegate_to: localhost
+      register: gpt_response
+```
+
 - `temperature:` Controls randomness; lower values make outputs more deterministic, while higher values increase creativity.
+- `max_tokens:` The maximum number of tokens (words or sub-words) the AI can generate in its response.
 - `top_p:` Limits the AI to sampling from the top probability mass (e.g., top 90%) for more focused outputs.
 - `n:` Specifies how many different completions you want the AI to generate for the given prompt.
 
