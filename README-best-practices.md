@@ -7,6 +7,29 @@ A framework for creating enterprise-grade solution guides for Ansible Automation
 >
 > Copy the ready-made skeleton, fill in the placeholders, and score your draft against the [Quality Scoring Rubric](#reference) before publishing.
 
+## Who This Framework Is For
+
+This framework is for **Ansible Automation Platform field teams, solution architects, and technical content authors** who create customer-facing technical content. If you are writing a solution guide that will be published on [access.redhat.com](https://access.redhat.com) as a Knowledge Base article, this document defines the structure, quality bar, and review process you should follow.
+
+Solution guides are a specific content type — they are not the only way Red Hat publishes technical content, and understanding the differences helps you decide whether a solution guide is the right format for what you want to write.
+
+### Where Solution Guides Fit
+
+| Content Type | Where It Lives | Audience | Purpose | Depth |
+|-------------|----------------|----------|---------|-------|
+| **KB Solution** | access.redhat.com | Customer hitting a specific error | Fix a single, known issue (e.g., "Error X when upgrading AAP") | Narrow — one problem, one fix |
+| **KB Article** | access.redhat.com | Customer evaluating or implementing a solution | Explain how to solve an operational problem end-to-end using AAP | Deep — architecture, code, validation, maturity path |
+| **Blog Post** | redhat.com/blog | Broad technical audience | Announce, evangelize, or explain a concept or release | Medium — narrative-driven, light on executable detail |
+| **Learning Path** | developers.redhat.com | Developer or admin learning a skill | Teach a tool or technology through progressive, hands-on exercises | Deep — tutorial-oriented, step-by-step skill building |
+
+**Solution guides are KB Articles** — the second row. They solve a real operational problem, not a single error (that's a KB Solution). They include executable automation, not just narrative (that's a blog). They are outcome-oriented, not skill-oriented (that's a learning path).
+
+> **When not to write a solution guide.**
+>
+> If your content is a fix for a specific error, write a KB Solution. If it's an announcement or thought leadership piece, write a blog. If it's teaching someone how to use a tool from scratch, write a learning path or tutorial. Solution guides exist in the space between — they assume the reader knows *what* Ansible is but needs to see *how* to solve a specific operational problem with it.
+
+---
+
 ### The Framework at a Glance <!-- omit in toc -->
 
 These sections map 1:1 to the section names in every solution guide. When reviewing a guide, you should be able to match each section header directly to this framework.
