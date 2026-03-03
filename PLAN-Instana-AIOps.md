@@ -88,9 +88,9 @@ The guide should document both payload formats explicitly.
 - **Ansible action sensor is GA** — connects to Ansible Automation Controller via automation connector, supports up to 10 concurrent actions, configurable timeout (default 300s), Docker/Podman support
 - **AI confidence scoring is GA** — recommends actions based on text-similarity matching with event metadata
 - **Intelligent Incident Investigation launched GA Dec 2025** — agentic AI that generates Bash or Ansible scripts, exportable to GitHub
-- **NOT yet shipped**: Auto-import/sync of AAP job templates into Instana's action catalog (originally planned but not in current docs)
+- **Auto-import of AAP job templates shipped in sensor 1.0.74 (July 7, 2025)** — the sensor auto-imports job templates and workflow job templates from AAP Controller into Instana's action catalog whenever enabled or reconfigured. No manual action creation required.
 
-Both paths are now production-ready. Path B is a stronger option than originally assessed.
+All originally planned features are now GA. Both paths are fully production-ready.
 
 Sources:
 - [Managing actions (v1.0.312, no beta label)](https://www.ibm.com/docs/en/instana-observability/1.0.312?topic=instana-managing-actions)
@@ -447,17 +447,31 @@ Using the dedicated `ibm.instana.instana_webhook` source plugin:
 
 The Ansible action sensor runs on the Instana agent host and connects to AAP Controller:
 
-1. Enable the sensor in Instana agent configuration
-2. Configure the automation connector with AAP Controller URL and credentials
-3. Sensor supports up to 10 concurrent actions (configurable via `maxConcurrentActions`)
-4. Default 300-second timeout (configurable via `defaultTimeout`)
-5. Works with Docker or Podman containers
+Add the following to the Instana agent configuration file:
 
-**Step 6: Create an Ansible Action in the Action Catalog**
+```yaml
+com.instana.plugin.action.ansible:
+  enabled: true
+  url: https://aap-controller.example.com
+  token: <aap_api_token>
+  apiPath: /api/v2          # optional, default
+  maxConcurrentActions: 10  # optional, default
+  defaultTimeout: 300       # optional, seconds
+```
 
-1. Navigate to **Automation > Action Catalog > Create Action**
-2. Select action type: **Ansible**
-3. Select the AAP job template to execute (imported via automation connector)
+Key sensor capabilities (GA):
+- Auto-imports all AAP job templates and workflow job templates into Instana action catalog (since sensor 1.0.74, July 2025)
+- Supports up to 10 concurrent actions
+- Works without Docker/Podman (since sensor 1.0.58, Dec 2024)
+- Retrieves comprehensive workflow job outputs (since sensor 1.0.78, Feb 2026)
+
+**Step 6: Verify Auto-Imported AAP Job Templates**
+
+Once the sensor is enabled, it automatically imports all job templates and workflow job templates from AAP Controller into Instana's action catalog:
+
+1. Navigate to **Automation > Action Catalog**
+2. Verify AAP job templates appear as Ansible actions (auto-imported by sensor 1.0.74+)
+3. No manual action creation needed — templates sync automatically on sensor enable/reconfigure
 4. Instana shows a **Confidence score** for each action-event association based on text-similarity matching
 
 **Step 7: Create an Automation Policy for Auto-Trigger**
@@ -485,7 +499,7 @@ The Ansible action sensor runs on the Instana agent host and connects to AAP Con
 > fi
 > ```
 
-> **Note on job template auto-import**: The originally planned feature to automatically synchronize AAP job templates into Instana's action catalog is not yet available. Job templates must be imported via the automation connector.
+> **Job template auto-import**: Since sensor release 1.0.74 (July 2025), the Ansible action sensor automatically imports all job templates and workflow job templates from AAP into Instana's action catalog whenever the sensor is enabled or reconfigured.
 
 ---
 
