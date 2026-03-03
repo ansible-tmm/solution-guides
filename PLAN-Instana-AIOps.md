@@ -4,9 +4,9 @@
 
 Create a new solution guide for **IBM Instana + Ansible Automation Platform (AAP)** as an AIOps solution. It must match the gold standard of `README-AIOps.md` and follow the 9-step framework in `README-best-practices.md`.
 
-Two integration entry points:
-- **Path A**: Instana Webhook Alert Channel → Event-Driven Ansible (EDA) → AAP Job Templates (production-ready, GA)
-- **Path B**: Instana Action Framework → EDA via action sensor script → AAP Job Templates (Open Beta — manual trigger only as of Nov 2024)
+Two integration entry points (both GA):
+- **Path A**: Instana Webhook Alert Channel → Event-Driven Ansible (EDA) → AAP Job Templates
+- **Path B**: Instana Action Framework (GA) → Ansible Action Sensor → AAP Job Templates (with auto-trigger via Automation Policies)
 
 Three use cases: Service latency spike recovery, Database performance degradation, Bad deployment auto-rollback.
 
@@ -79,13 +79,23 @@ sources:
 
 The guide should document both payload formats explicitly.
 
-### 5. Action Framework Is Still Open Beta (Manual Trigger Only)
+### 5. Action Framework Is Now GA (Updated March 2026)
 
-**v1 presented** Path B as a production-ready alternative where Instana "directly executes AAP job templates."
+**v1 stated** Action Framework was in Open Beta (based on Nov 2024 announcement).
 
-**Actual**: The Action Framework is in **Open Beta** (announced Nov 2024). Currently supports **manual triggering only** — auto-trigger is a planned feature. The Ansible-specific action sensor (auto-import of job templates) is also in development.
+**Actual (re-verified March 2026)**: The Action Framework has **quietly graduated to GA**. IBM docs at v1.0.312 present "Managing actions" without any beta label. Key updates:
+- **Auto-trigger is now GA** — Automation Policies can trigger actions automatically based on event definitions, Smart Alerts, or schedules (manual, automatic, or both)
+- **Ansible action sensor is GA** — connects to Ansible Automation Controller via automation connector, supports up to 10 concurrent actions, configurable timeout (default 300s), Docker/Podman support
+- **AI confidence scoring is GA** — recommends actions based on text-similarity matching with event metadata
+- **Intelligent Incident Investigation launched GA Dec 2025** — agentic AI that generates Bash or Ansible scripts, exportable to GitHub
+- **NOT yet shipped**: Auto-import/sync of AAP job templates into Instana's action catalog (originally planned but not in current docs)
 
-The guide must clearly label Path B as "(Open Beta)" and note current limitations. Path A (webhook → EDA) should be positioned as the **production-ready** path.
+Both paths are now production-ready. Path B is a stronger option than originally assessed.
+
+Sources:
+- [Managing actions (v1.0.312, no beta label)](https://www.ibm.com/docs/en/instana-observability/1.0.312?topic=instana-managing-actions)
+- [Ansible action sensor (v1.0.309)](https://www.ibm.com/docs/en/instana-observability/1.0.309?topic=technologies-automation-action-ansible)
+- [Intelligent Incident Investigation GA (Dec 2025)](https://www.ibm.com/new/announcements/use-agentic-ai-to-resolve-incidents-faster-with-ibm-instana-intelligent-incident-investigation)
 
 ### 6. Instana Annotations API Was Wrong
 
@@ -182,7 +192,7 @@ Why Instana + AAP (positioning the IBM family angle):
 **Components:**
 - **IBM Instana** — Auto-discovery, Smart Alerts, Causal AI root cause analysis
 - **Event-Driven Ansible (EDA)** — Webhook listener, event parsing, rulebook logic
-- **Instana Action Framework** (Open Beta) — In-product action catalog with AI-powered recommendations
+- **Instana Action Framework** (GA) — In-product action catalog with AI-powered recommendations, auto-trigger via Automation Policies
 - **Ansible Automation Platform (AAP)** — Governed job template execution, audit trail, RBAC
 - **`ibm.instana` Ansible Collection** — Dedicated `instana_webhook` EDA source plugin
 - **AI Inference Endpoint** (optional) — Red Hat AI or OpenAI-compatible API for enriched recommendations
@@ -246,29 +256,29 @@ Instana Smart Alert fires
   → Instana timeline shows remediation event alongside incident
 ```
 
-**Path B: Action Framework Path (Open Beta)**
+**Path B: Action Framework Path (GA)**
 ```
-Instana detects anomaly and creates incident
-  → Operator views incident in Instana UI
-  → Instana AI recommends an action from the action catalog (confidence score)
-  → Operator triggers action manually (auto-trigger planned)
-  → Action sensor executes bash script that POSTs to EDA webhook
-  → EDA processes ${INSTANA_EVENT} payload and triggers AAP
-  → AAP executes remediation
-  → Action output displayed in Instana incident timeline
+Instana Smart Alert or event fires
+  → Automation Policy evaluates trigger conditions
+  → Policy triggers action automatically (or operator triggers manually from incident view)
+  → Instana AI recommends best action from catalog (confidence score)
+  → Ansible action sensor connects to AAP Controller via automation connector
+  → AAP executes remediation job template
+  → Action output and status reported back to Instana incident timeline
 ```
 
 **When to use which path:**
 
 | Consideration | Path A: EDA Webhook | Path B: Action Framework |
 |--------------|---------------------|--------------------------|
-| Maturity | GA (production-ready) | Open Beta (manual trigger only) |
-| Trigger type | Automatic (event-driven) | Manual (operator initiates) |
-| Automation governance | EDA rulebook conditions + AAP RBAC | Instana action catalog + AAP RBAC |
-| AI enrichment | Easy (inline in workflow before job launch) | Built-in (Instana AI recommends actions) |
-| Rule complexity | Multi-condition logic, pattern matching | 1 event → 1 action mapping |
-| Payload format | `event.payload.issue.*` (default webhook) | `event.payload.problem.*` (INSTANA_EVENT) |
-| Best for | Fully automated closed-loop remediation | Operator-assisted remediation with AI guidance |
+| Maturity | GA | GA |
+| Trigger type | Automatic (webhook-driven) | Automatic (Automation Policy) or manual (operator) |
+| Automation governance | EDA rulebook conditions + AAP RBAC | Instana Automation Policies + AAP RBAC |
+| AI enrichment | Add custom LLM step in EDA workflow | Built-in (Instana AI recommends actions with confidence score) |
+| Rule complexity | Multi-condition logic, regex matching, multi-source correlation | Policy-based: event definition, Smart Alert, or schedule triggers |
+| Infrastructure | Requires EDA Controller deployment | Uses Instana agent's Ansible action sensor (no extra infra) |
+| Payload format | `event.payload.issue.*` (default webhook) | Instana passes event context to Ansible action sensor directly |
+| Best for | Complex multi-step orchestration, custom logic, multi-source events | Direct Instana-to-AAP remediation, AI-guided actions, minimal setup |
 
 ---
 
@@ -431,42 +441,51 @@ Using the dedicated `ibm.instana.instana_webhook` source plugin:
 
 ---
 
-#### Part 3: Path B — Instana Action Framework (Open Beta)
+#### Part 3: Path B — Instana Action Framework (GA)
 
-> **Note**: The Action Framework is in Open Beta (announced November 2024). Currently only **manual triggering** is supported. Auto-trigger is a planned feature.
+**Step 5: Configure Ansible Action Sensor on Instana Agent**
 
-**Step 5: Create an Action in Instana**
+The Ansible action sensor runs on the Instana agent host and connects to AAP Controller:
+
+1. Enable the sensor in Instana agent configuration
+2. Configure the automation connector with AAP Controller URL and credentials
+3. Sensor supports up to 10 concurrent actions (configurable via `maxConcurrentActions`)
+4. Default 300-second timeout (configurable via `defaultTimeout`)
+5. Works with Docker or Podman containers
+
+**Step 6: Create an Ansible Action in the Action Catalog**
 
 1. Navigate to **Automation > Action Catalog > Create Action**
-2. Select action type: **Script**
-3. Configure the script to POST event data to the EDA webhook:
+2. Select action type: **Ansible**
+3. Select the AAP job template to execute (imported via automation connector)
+4. Instana shows a **Confidence score** for each action-event association based on text-similarity matching
 
-```bash
-#!/bin/bash
-# Instana Action: Forward event to Event-Driven Ansible
-if [ -z "${INSTANA_EVENT}" ]; then
-  # Test mode - send sample event
-  curl -s -H 'Content-Type: application/json' \
-    -d '{"message": "Test event from Instana Action Framework"}' \
-    @@eda_server@@/instana
-else
-  # Production - forward actual event
-  curl -s -H 'Content-Type: application/json' \
-    -d "${INSTANA_EVENT}" \
-    @@eda_server@@/instana
-fi
-```
+**Step 7: Create an Automation Policy for Auto-Trigger**
 
-4. Add parameter `eda_server` with value `https://eda.example.com:5000`
-5. Associate the action with relevant event types
-6. Instana shows a **Confidence score** for each action-event association based on text-similarity matching
+1. Navigate to **Automation > Automation Policies > Create Policy**
+2. Configure trigger: event definition, Smart Alert, or schedule
+3. Set execution mode: **automatic**, manual, or both
+4. Associate with one or more actions from the catalog
+5. When the trigger fires, Instana automatically executes the associated Ansible action on AAP
 
-**Step 6: Associate Action with Alert Policies**
+> **Alternative: Script-based action for EDA integration**
+>
+> If you prefer to route through EDA (for complex multi-step orchestration), create a **Script** action instead that POSTs event data to the EDA webhook:
+>
+> ```bash
+> #!/bin/bash
+> if [ -z "${INSTANA_EVENT}" ]; then
+>   curl -s -H 'Content-Type: application/json' \
+>     -d '{"message": "Test event from Instana Action Framework"}' \
+>     @@eda_server@@/instana
+> else
+>   curl -s -H 'Content-Type: application/json' \
+>     -d "${INSTANA_EVENT}" \
+>     @@eda_server@@/instana
+> fi
+> ```
 
-- Select alert rules in **Settings > Events & Alerts > Alerts**
-- Attach the action to trigger when matching events occur
-- Currently: operator manually clicks "Run Action" from the incident view
-- Future: auto-trigger will execute the action automatically
+> **Note on job template auto-import**: The originally planned feature to automatically synchronize AAP job templates into Instana's action catalog is not yet available. Job templates must be imported via the automation connector.
 
 ---
 
@@ -722,7 +741,8 @@ app-server-01.example.com : ok=4    changed=1    unreachable=0    failed=0
 | Instana Test Channel returns error | EDA host not reachable from Instana SaaS | Verify firewall rules allow inbound HTTPS from Instana SaaS IPs to EDA port |
 | Remediation playbook runs but Instana still shows incident | Instana event auto-closes based on metric recovery, not playbook completion | Wait for Instana's next evaluation cycle (seconds to minutes); verify the root metric actually recovered |
 | Annotation POST returns connection refused | Instana agent not running on target host, or agent REST API disabled | Verify agent is running: `systemctl status instana-agent`; check agent config for `com.instana.plugin.generic.event` |
-| Action Framework script fails | `${INSTANA_EVENT}` variable empty in test mode | Use the `if [ -z "${INSTANA_EVENT}" ]` guard pattern shown in Step 5 |
+| Action Framework script fails | `${INSTANA_EVENT}` variable empty in test mode | Use the `if [ -z "${INSTANA_EVENT}" ]` guard pattern shown in Step 7 |
+| Ansible action sensor can't reach AAP | Automation connector misconfigured or AAP URL unreachable | Verify AAP Controller URL and credentials in the Instana agent's automation connector config |
 
 ---
 
@@ -790,7 +810,7 @@ app-server-01.example.com : ok=4    changed=1    unreachable=0    failed=0
 - Word count: 2,500-3,500
 - All `event.payload.issue.*` accessors match the documented Instana webhook payload
 - Instana annotation API uses `http://localhost:42699/com.instana.plugin.generic.event`
-- Action Framework clearly labeled as "(Open Beta)"
+- Action Framework documented as GA with auto-trigger via Automation Policies
 - Severity values are integers (10, 5, -1), not strings
 - No fabricated URLs or unverified API endpoints
 - Score against quality rubric: target 9+/10
