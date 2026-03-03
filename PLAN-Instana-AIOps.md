@@ -291,10 +291,12 @@ Instana Smart Alert or event fires
 - Required permission: "Configuration of alert channels"
 - For posting remediation annotations: "Configuration of releases" (optional)
 
-**Step 2: Create AAP Custom Credential Type for Instana**
+**Step 2 (Optional): Create AAP Custom Credential Type for Instana Backend API**
 
-Input configuration:
+> Only needed if your playbooks call the Instana backend API (e.g., `POST /api/releases` for deployment markers). The remediation playbooks in this guide use the local agent SDK (`localhost:42699`) which requires no authentication.
+
 ```yaml
+# Input configuration
 fields:
   - id: instana_api_token
     type: string
@@ -306,10 +308,8 @@ fields:
 required:
   - instana_api_token
   - instana_base_url
-```
 
-Injector configuration:
-```yaml
+# Injector configuration
 extra_vars:
   instana_api_token: !unsafe "{{ instana_api_token }}"
   instana_base_url: !unsafe "{{ instana_base_url }}"
@@ -554,7 +554,7 @@ Job Template configuration:
 | **Inventory** | `Application Servers` |
 | **Project** | `Instana AIOps Playbooks` |
 | **Playbook** | `remediate_service_latency.yml` |
-| **Credentials** | `Machine Credential`, `Instana API Token` |
+| **Credentials** | `Machine Credential` |
 | **Extra Variables** | `target_host` (prompt on launch), `service_name`, `service_port` |
 | **Limit** | `{{ target_host }}` (dynamic from EDA) |
 
