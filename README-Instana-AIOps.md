@@ -18,6 +18,10 @@ Observability tools like IBM Instana detect thousands of infrastructure and appl
 
 Red Hat Ansible Automation Platform bridges this gap as a **trusted, governed automation layer** that turns observability signals into consistent, auditable remediation actions. This guide demonstrates how to connect IBM Instana Observability to Ansible Automation Platform so that every high-signal Incident triggers the right remediation — automatically, with full RBAC control and audit trail.
 
+**Business value:** Reduced MTTR from hours (manual triage and remediation) to minutes (automated response). Reduced alert fatigue through automated triage — only novel or unresolvable Incidents escalate to humans. Compliance-ready audit trail for every remediation action: who triggered it, what changed, pass or fail.
+
+**Technical value:** Governed remediation with RBAC-scoped job templates — only authorized teams can trigger remediation within their scope. Credential isolation — secrets stored in automation controller and injected at runtime, never exposed in playbooks or logs. Bidirectional observability-automation feedback loop via Host Agent REST API annotations, linking remediation actions to Incidents on the Instana timeline.
+
 - [Background](#background)
 - [Solution](#solution)
 - [Prerequisites](#prerequisites)
@@ -31,6 +35,7 @@ Red Hat Ansible Automation Platform bridges this gap as a **trusted, governed au
 - [Validation](#validation)
 - [Maturity Path](#maturity-path)
 - [Related Guides](#related-guides)
+- [ROI Recap](#roi-recap)
 
 ---
 
@@ -130,11 +135,32 @@ IBM owns both Instana and Red Hat, which means tighter integration than third-pa
 
 **Operational Impact:** Medium — remediation playbooks modify production services. Validate all automation in a non-production environment before enabling auto-trigger.
 
+### Cost and Resource Notes
+
+- No GPU required unless using the optional AI inference endpoint
+- **Instana licensing**: SaaS or self-hosted; automation framework capability requires Standard or Enterprise edition
+- **Event-Driven Ansible controller**: included in AAP subscription, sized per standard [AAP planning guidance](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/planning_your_installation/)
+- **AI inference endpoint** (optional): see [AI Infrastructure automation with Ansible](README-IA.md) for GPU and model serving requirements
+
 ---
 
 ## Integration Architecture
 
 This guide covers two production-ready integration paths. Both are GA and can be used independently or together.
+
+When an Instana Smart Alert fires — for example, a service latency spike detected by adaptive thresholds — the alert triggers one of two paths into Ansible Automation Platform. In Path A, Instana sends a webhook to Event-Driven Ansible, where a rulebook evaluates the event payload (severity, entity type, alert text) and triggers the matching remediation job template on automation controller. In Path B, Instana's automation framework evaluates the event against automation policies and triggers an action from the action catalog directly on automation controller via the Automation Action Ansible sensor. In both paths, automation controller executes the remediation playbook with full RBAC scoping and credential injection. The playbook performs the fix (restart a service, recycle database connections, roll back a deployment) and posts an annotation back to Instana via the Host Agent REST API. Instana displays this annotation as a Change event on the Incident timeline, closing the feedback loop so operators can see exactly what automation did and when.
+
+### Operational Impact per Stage
+
+| Stage | Impact | Why |
+|-------|--------|-----|
+| **Shared setup** (API token, credential type) | None | Configuration only — no changes to running systems |
+| **Path A setup** (webhook channel, alert config, rulebook) | Low | Configures event routing — no production changes |
+| **Path B setup** (sensor config, automation policy) | Low | Configures event routing — no production changes |
+| **Use Case 1: Service restart** | Medium | Restarts a running service; validated by health check |
+| **Use Case 2: DB connection recycle** | Medium | Kills idle database connections; validated by connection count |
+| **Use Case 3: Deployment rollback** | High | Reverts production code; use approval gates until validated |
+| **AI enrichment** (optional) | Low | Read-only API call to inference endpoint; no infrastructure changes |
 
 ### Path A: Event-Driven Ansible
 
@@ -726,6 +752,18 @@ app-server-01.example.com : ok=4    changed=1    unreachable=0    failed=0
 - [AIOps automation with Ansible](README-AIOps.md) — the tool-agnostic AIOps pattern that this guide builds on
 - [AI Infrastructure automation with Ansible](README-IA.md) — deploy the AI inference backend if using the optional LLM enrichment step
 - [Get started with EDA](https://access.redhat.com/articles/7136720) — Event-Driven Ansible fundamentals for teams new to event-driven automation
+
+---
+
+## ROI Recap
+
+By connecting IBM Instana to Ansible Automation Platform, you have built a governed, automated incident remediation pipeline:
+
+- **MTTR reduction**: Automated response drops mean time to resolution from hours (manual triage, handoff, remediation) to minutes (detect, trigger, fix, verify)
+- **Consistent remediation**: Every Incident triggers the same tested, RBAC-scoped job template — regardless of which engineer is on call or what shift it is
+- **Alert fatigue reduction**: Event-Driven Ansible filters and routes events so only truly novel or unresolvable Incidents escalate to human operators
+- **Observability ROI**: Instana shifts from passive monitoring (dashboards and alerts) to an active remediation engine, with AAP providing the trusted execution layer
+- **Compliance and audit**: Every remediation is logged in automation controller — who triggered it, what changed, which hosts were affected, and whether it succeeded — satisfying change management and compliance requirements
 
 ---
 
