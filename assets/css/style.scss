@@ -488,3 +488,102 @@ b {
 #website_explanation {
   display: none;
 }
+
+// Solution Guide Cards (homepage) — uses PatternFly 6 components
+
+.cards-hero {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+
+.cards-hero h1 {
+  font-family: 'Red Hat Display', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.cards-hero p {
+  font-size: 16px;
+  color: #555;
+  margin: 0;
+}
+
+.cards-gallery {
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 20px;
+  width: calc(100% - 40px) !important;
+  --pf-v6-l-gallery--GridTemplateColumns--min: 320px;
+}
+
+.card-link {
+  text-decoration: none !important;
+  color: inherit !important;
+  display: block;
+}
+
+.card-link .pf-v6-c-card {
+  height: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+
+.card-link .pf-v6-c-card:hover {
+  border-color: #ee0000;
+  box-shadow: 0 4px 16px rgba(238, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.card-link .pf-v6-c-card:hover .pf-v6-c-card__title-text {
+  color: #ee0000;
+}
+
+.card-link .pf-v6-c-card__title-text {
+  font-family: 'Red Hat Display', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.card-link .pf-v6-c-card__body {
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 14px;
+  color: #6a6e73;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.card-link .pf-v6-c-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.card-link .pf-v6-c-label__icon {
+  margin-right: 4px;
+}
+
+.cards-contributing {
+  max-width: 1170px;
+  margin: 20px auto 40px;
+  padding: 0 20px;
+  width: calc(100% - 40px) !important;
+}
+
+.cards-contributing h2 {
+  font-family: 'Red Hat Display', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.cards-contributing p {
+  font-size: 15px;
+  color: #555;
+}
+
+@media screen and (max-width: 600px) {
+  .cards-hero h1 {
+    font-size: 28px;
+  }
+}
