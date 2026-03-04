@@ -148,7 +148,13 @@ IBM owns both Instana and Red Hat, which means tighter integration than third-pa
 
 This guide covers two production-ready integration paths. Both are GA and can be used independently or together.
 
-When an Instana Smart Alert fires — for example, a service latency spike detected by adaptive thresholds — the alert triggers one of two paths into Ansible Automation Platform. In Path A, Instana sends a webhook to Event-Driven Ansible, where a rulebook evaluates the event payload (severity, entity type, alert text) and triggers the matching remediation job template on automation controller. In Path B, Instana's automation framework evaluates the event against automation policies and triggers an action from the action catalog directly on automation controller via the Automation Action Ansible sensor. In both paths, automation controller executes the remediation playbook with full RBAC scoping and credential injection. The playbook performs the fix (restart a service, recycle database connections, roll back a deployment) and posts an annotation back to Instana via the Host Agent REST API. Instana displays this annotation as a Change event on the Incident timeline, closing the feedback loop so operators can see exactly what automation did and when.
+The end-to-end flow starts the same way in both paths: an Instana Smart Alert fires when a metric — such as service response time or error rate — crosses an adaptive threshold tuned to the workload's daily and weekly patterns.
+
+**In Path A**, Instana delivers the alert as an HTTP POST to an Event-Driven Ansible webhook. An EDA rulebook evaluates the incoming payload — matching on severity, entity type, and alert text — and triggers the appropriate remediation job template on automation controller.
+
+**In Path B**, the alert stays inside Instana. An automation policy evaluates the trigger conditions and selects an action from the action catalog. The Automation Action Ansible sensor on the Instana host agent forwards that action to automation controller for execution — no Event-Driven Ansible infrastructure required.
+
+From this point, both paths converge. Automation controller executes the remediation playbook with full RBAC scoping and credential injection. The playbook performs the fix — restart a service, recycle database connections, or roll back a deployment — and posts an annotation back to Instana via the Host Agent REST API. Instana displays this annotation as a Change event on the Incident timeline, closing the feedback loop so operators can see exactly what automation did and when.
 
 ### Operational Impact per Stage
 
