@@ -16,7 +16,7 @@
 
 Observability tools like IBM Instana detect thousands of infrastructure and application anomalies daily — but detection alone does not fix the problem. Most organizations still route alerts to human on-call engineers for manual triage and remediation, creating alert fatigue, inconsistent responses, and mean time to resolution (MTTR) measured in hours instead of minutes.
 
-Red Hat Ansible Automation Platform bridges this gap as a **trusted, governed automation layer** that turns observability signals into consistent, auditable remediation actions. This guide demonstrates how to connect IBM Instana Observability to Ansible Automation Platform so that every high-signal Incident triggers the right remediation — automatically, with full RBAC control and audit trail.
+Most organizations already have proven Ansible automation for service restarts, database maintenance, deployment rollbacks, and dozens of other operational runbooks — built and refined by their own automation teams. Red Hat Ansible Automation Platform turns these existing, trusted playbooks into an **governed remediation layer** that observability tools can trigger directly. This guide demonstrates how to connect IBM Instana Observability to Ansible Automation Platform so that every high-signal Incident triggers the right remediation from your existing automation catalog — automatically, with full RBAC control and audit trail.
 
 **Business value:** Reduced MTTR from hours (manual triage and remediation) to minutes (automated response). Reduced alert fatigue through automated triage — only novel or unresolvable Incidents escalate to humans. Compliance-ready audit trail for every remediation action: who triggered it, what changed, pass or fail.
 
@@ -45,16 +45,20 @@ Red Hat Ansible Automation Platform bridges this gap as a **trusted, governed au
 
 Modern observability platforms excel at detecting anomalies, identifying root causes, and correlating events. But without an automation layer to act on those signals, organizations are left with dashboards and alert noise. The value of observability is only realized when it connects to remediation — and that remediation must be governed, auditable, and consistent across teams and shifts.
 
-### Ansible Automation Platform: The Trusted Automation Layer
+### Ansible Automation Platform: Connecting Existing Automation to Observability
 
-Red Hat Ansible Automation Platform provides the capabilities that turn observability signals into safe, governed action:
+Most enterprises already invest heavily in Ansible automation — service restart playbooks, database maintenance runbooks, deployment rollback procedures, compliance hardening, and more. These playbooks are written by teams who understand the infrastructure, tested in staging, reviewed through pull requests, and promoted through change management. They represent institutional knowledge codified as automation.
 
-- **Automation controller** — centralized execution of job templates with full RBAC, ensuring only authorized teams can trigger remediation within their scope
-- **Event-Driven Ansible** — real-time event processing via rulebooks that match observability events to the correct remediation job template, eliminating manual triage
-- **Audit trail** — every job execution is logged with who triggered it, what changed, and whether it succeeded, satisfying compliance and change management requirements
-- **Approval workflows** — workflow job templates can include approval nodes so that high-impact remediations require human sign-off before execution
+The challenge is not writing more playbooks. It is connecting the right playbook to the right signal at the right time — without requiring a human to interpret the alert, find the runbook, and execute it manually.
+
+Red Hat Ansible Automation Platform solves this by turning your existing automation library into a governed remediation catalog that observability tools can trigger directly:
+
+- **Automation controller** — centralizes your existing job templates with full RBAC, so observability-triggered remediation runs with the same governance as operator-initiated automation
+- **Event-Driven Ansible** — matches observability events to the correct existing job template via rulebook conditions, replacing manual triage with deterministic routing
+- **Audit trail** — every execution is logged with who triggered it, what changed, and whether it succeeded — the same audit trail whether a human or Instana initiated the job
+- **Approval workflows** — workflow job templates can include approval nodes so that high-impact remediations require human sign-off before execution, even when triggered automatically
 - **Credential management** — secrets are stored in automation controller and injected at runtime, never exposed in playbooks or logs
-- **Execution environments** — containerized, reproducible runtime environments ensure remediation playbooks run identically in dev, staging, and production
+- **Execution environments** — containerized, reproducible runtime environments ensure playbooks run identically whether triggered manually or by an observability event
 
 ### IBM Instana: The Detection Layer
 
@@ -92,9 +96,9 @@ IBM owns both Instana and Red Hat, which means tighter integration than third-pa
 
 | Persona | Challenge | What They Gain |
 |---------|-----------|---------------|
-| **IT Ops Engineer / SRE** | Alert fatigue from observability tools; manual triage and inconsistent remediation across shifts | AAP provides consistent, tested remediation via governed job templates — Instana Incidents trigger the right fix automatically, every time |
-| **Automation Architect** | Need to connect observability signals to AAP with proper RBAC, credential management, and approval workflows | Two production-ready integration patterns with verified YAML, correct payload accessors, and automation controller configuration tables |
-| **IT Manager / Director** | MTTR measured in hours; no audit trail for incident response; difficult to justify observability spend | AAP's audit trail satisfies compliance; MTTR drops to minutes; observability investment becomes an active remediation trigger, not just dashboards |
+| **IT Ops Engineer / SRE** | Alert fatigue from observability tools; manual triage even when the remediation playbook already exists and has been run dozens of times | Instana Incidents trigger the same tested playbooks they already trust — no new automation to write, just a faster path to execution |
+| **Automation Architect** | Existing automation library is disconnected from observability; teams have built reliable playbooks but still rely on manual triage to invoke them | Two production-ready integration patterns that connect existing job templates to Instana signals with proper RBAC, credential management, and approval workflows |
+| **IT Manager / Director** | MTTR measured in hours despite having automation in place; no audit trail linking observability events to remediation actions | Existing automation investment delivers more value — playbooks that were run manually now execute in minutes with the same governance and a complete audit trail |
 
 ### Demos and Labs
 
@@ -615,11 +619,13 @@ Instana detects a spike in erroneous call rate correlated with a recent deployme
 
 ---
 
-### Part 5: Optional AI Inference Enhancement
+### Part 5: Optional AI-Assisted Routing
 
-For teams that want richer remediation recommendations beyond Instana's built-in Probable Root Cause — for example, using an LLM to analyze the Incident context and recommend which remediation job template to run.
+The three use cases above use deterministic EDA rulebook conditions to select the right job template. This works well when you can map alert patterns to specific playbooks — and for most well-understood failure modes, deterministic routing is the right approach because it is predictable, testable, and auditable.
 
-This uses a **workflow job template** pattern in automation controller: Event-Driven Ansible triggers a workflow that first calls an AI inference endpoint, then conditionally runs the appropriate remediation job template based on the AI response.
+For situations where the mapping is ambiguous — a novel failure mode, an alert that could match multiple existing playbooks, or an entity type your rulebook does not yet cover — you can add an AI inference step that selects from your existing job template catalog rather than generating new automation.
+
+This uses a **workflow job template** pattern in automation controller: Event-Driven Ansible triggers a workflow that first calls an AI inference endpoint to recommend which existing job template to run, then conditionally executes it.
 
 ```yaml
 - name: Enrich Incident with AI analysis
@@ -653,13 +659,15 @@ This uses a **workflow job template** pattern in automation controller: Event-Dr
     recommended_action: "{{ ai_response.json.choices[0].message.content | trim }}"
 ```
 
-**When to use AI enrichment vs. direct remediation:**
+**When to use AI-assisted routing vs. direct remediation:**
 
 | Scenario | Approach |
 |----------|----------|
-| Well-understood, recurring failure with a single correct response | Direct remediation — no AI needed |
-| Novel failure mode, ambiguous root cause, or multiple possible remediations | AI enrichment — LLM recommends the action |
-| Instana Probable Root Cause provides a clear suggestion | Direct remediation using the `suggestion` field |
+| Well-understood, recurring failure with a single correct response | Direct remediation — deterministic rulebook routing to an existing job template |
+| Novel failure mode or alert that could match multiple existing playbooks | AI-assisted routing — LLM selects the best existing job template from your catalog |
+| Instana Probable Root Cause provides a clear suggestion | Direct remediation using the `suggestion` field to select the matching job template |
+
+> **Tip:** The AI step selects from your existing, tested job templates — it does not generate new playbooks. The remediation that runs is always automation your team has already built, reviewed, and promoted through your change management process.
 
 > **Tip:** The generic [AIOps automation with Ansible](README-AIOps.md) guide covers the AI inference pattern in depth, including how to use Red Hat AI, OpenAI, or any OpenAI-compatible endpoint.
 
@@ -763,13 +771,14 @@ app-server-01.example.com : ok=4    changed=1    unreachable=0    failed=0
 
 ## ROI Recap
 
-By connecting IBM Instana to Ansible Automation Platform, you have built a governed, automated incident remediation pipeline:
+By connecting IBM Instana to Ansible Automation Platform, you have turned your existing automation library into a governed, event-driven remediation pipeline:
 
+- **Automation reuse, not reinvention**: The playbooks that run are the same ones your teams have already built, tested, and promoted — Instana provides the trigger, AAP provides the governance, and your existing automation does the work
 - **MTTR reduction**: Automated response drops mean time to resolution from hours (manual triage, handoff, remediation) to minutes (detect, trigger, fix, verify)
 - **Consistent remediation**: Every Incident triggers the same tested, RBAC-scoped job template — regardless of which engineer is on call or what shift it is
 - **Alert fatigue reduction**: Event-Driven Ansible filters and routes events so only truly novel or unresolvable Incidents escalate to human operators
 - **Observability ROI**: Instana shifts from passive monitoring (dashboards and alerts) to an active remediation engine, with AAP providing the trusted execution layer
-- **Compliance and audit**: Every remediation is logged in automation controller — who triggered it, what changed, which hosts were affected, and whether it succeeded — satisfying change management and compliance requirements
+- **Compliance and audit**: Every remediation is logged in automation controller — who triggered it, what changed, which hosts were affected, and whether it succeeded — the same audit trail whether a human or an observability event initiated the job
 
 ---
 
