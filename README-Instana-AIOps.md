@@ -1,7 +1,4 @@
----
-render_with_liquid: false
----
-
+{% raw %}
 # Automated Incident Remediation with IBM Instana and Ansible Automation Platform - Solution Guide <!-- omit in toc -->
 
 > **Knowledge Base Article**: [https://access.redhat.com/articles/XXXXXXX](https://access.redhat.com/articles/XXXXXXX)
@@ -841,3 +838,4 @@ By connecting IBM Instana to Ansible Automation Platform, you have turned your e
 - [GitHub — ibm.instana EDA Collection](https://github.com/instana/ibm-instana-ansible)
 - [GitHub — Intelligent Remediation Playbooks](https://github.com/instana/intelligent-remediation-ansible)
 - [GitHub — Instana Ansible Callback Plugin](https://github.com/instana/instana-ansible)
+{% endraw %}
