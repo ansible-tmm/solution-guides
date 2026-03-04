@@ -36,6 +36,31 @@ patternfly: true
     </div>
   </a>
 
+  <a href="{{ '/README-Instana-AIOps' | relative_url }}" class="card-link">
+    <div class="pf-v6-c-card">
+      <div class="pf-v6-c-card__header">
+        <span class="pf-v6-c-label pf-m-green">
+          <span class="pf-v6-c-label__content">
+            <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+            Solution Guide
+          </span>
+        </span>
+      </div>
+      <div class="pf-v6-c-card__title">
+        <h3 class="pf-v6-c-card__title-text">Automated Incident Remediation with IBM Instana</h3>
+      </div>
+      <div class="pf-v6-c-card__body">
+        Closed-loop incident remediation integrating IBM Instana observability with Event-Driven Ansible for automatic detection, AI-driven job template routing, and self-healing infrastructure.
+      </div>
+      <div class="pf-v6-c-card__footer">
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">AIOps</span></span>
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Instana</span></span>
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">EDA</span></span>
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">IBM</span></span>
+      </div>
+    </div>
+  </a>
+
   <a href="{{ '/README-IA' | relative_url }}" class="card-link">
     <div class="pf-v6-c-card">
       <div class="pf-v6-c-card__header">
