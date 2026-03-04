@@ -85,6 +85,30 @@ patternfly: true
     </div>
   </a>
 
+  <a href="{{ '/README-Intelligent-Assistant-RHAIIS' | relative_url }}" class="card-link">
+    <div class="pf-v6-c-card">
+      <div class="pf-v6-c-card__header">
+        <span class="pf-v6-c-label pf-m-green">
+          <span class="pf-v6-c-label__content">
+            <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+            Solution Guide
+          </span>
+        </span>
+      </div>
+      <div class="pf-v6-c-card__title">
+        <h3 class="pf-v6-c-card__title-text">Intelligent Assistant with Red Hat AI Inference Server</h3>
+      </div>
+      <div class="pf-v6-c-card__body">
+        Configure a self-hosted LLM with Red Hat AI Inference Server to power the Ansible Lightspeed intelligent assistant in AAP.
+      </div>
+      <div class="pf-v6-c-card__footer">
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Lightspeed</span></span>
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">RHAIIS</span></span>
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">GPU</span></span>
+      </div>
+    </div>
+  </a>
+
 </div>
 
 <div class="cards-contributing">
@@ -108,21 +132,6 @@ patternfly: true
         <div class="pf-v6-c-card__footer">
           <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Analytics</span></span>
           <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Dashboard</span></span>
-        </div>
-      </div>
-    </a>
-
-    <a href="https://access.redhat.com/articles/7130595" class="card-link" target="_blank">
-      <div class="pf-v6-c-card">
-        <div class="pf-v6-c-card__title">
-          <h3 class="pf-v6-c-card__title-text">Configuring Lightspeed with Red Hat AI Inference Server</h3>
-        </div>
-        <div class="pf-v6-c-card__body">
-          Full-stack deployment of a self-hosted AI inference server — GPU drivers, model serving, and AAP integration.
-        </div>
-        <div class="pf-v6-c-card__footer">
-          <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Lightspeed</span></span>
-          <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">RHEL AI</span></span>
         </div>
       </div>
     </a>
