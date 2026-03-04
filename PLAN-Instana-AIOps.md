@@ -156,7 +156,7 @@ Built-in events and custom events for app/service/endpoint entities are **deprec
 
 ### 2. Overview
 
-**Problem statement**: IBM Instana Observability monitors 300+ technologies with 1-second granularity and uses causal AI to identify root causes automatically. Yet most organizations still route Instana alerts to human on-call engineers for manual triage and remediation — creating alert fatigue, inconsistent responses, and MTTR measured in hours. This guide demonstrates how to close the loop: Instana detects and diagnoses, Red Hat Ansible Automation Platform remediates — fully automated and governed.
+**Problem statement**: Observability tools like IBM Instana detect thousands of infrastructure and application anomalies daily — but detection alone does not fix the problem. Most organizations still route alerts to human on-call engineers for manual triage and remediation, creating alert fatigue, inconsistent responses, and MTTR measured in hours instead of minutes. Red Hat Ansible Automation Platform bridges this gap as a **trusted, governed automation layer** that turns observability signals into consistent, auditable remediation actions. This guide demonstrates how to connect IBM Instana Observability to Ansible Automation Platform so that every high-signal Incident triggers the right remediation — automatically, with full RBAC control and audit trail.
 
 Include:
 - Hero image placeholder
@@ -166,38 +166,46 @@ Include:
 
 ### 3. Background
 
-What makes Instana different from other observability tools:
-- **Zero-config auto-discovery** of 300+ technologies (vs. manual agent configuration)
-- **1-second data granularity** with no sampling on distributed traces
-- **Probable Root Cause** — uses causal AI and differential observability to analyze traces and topology, identifying unhealthy entities (not just threshold breaches)
-- **Smart Alerts** with adaptive thresholds — learns daily/weekly seasonality patterns automatically
-- **Three event types**: Changes (deployments, config), Issues (health signature breaches), Incidents (correlated groups of Issues affecting service KPIs)
+**The AIOps gap: detection without remediation.** Modern observability platforms excel at detecting anomalies, identifying root causes, and correlating events. But without an automation layer to act on those signals, organizations are left with dashboards and alert noise. The value of observability is only realized when it connects to remediation — and that remediation must be governed, auditable, and consistent across teams.
 
-Why Instana + Ansible Automation Platform (positioning the IBM family angle):
-- IBM owns both Instana and Red Hat — tighter roadmap alignment than third-party integrations
-- `ibm.instana` Ansible Content Collection available on Red Hat automation hub and Ansible Galaxy
-- Instana's Intelligent Remediation uses watsonx to generate Ansible playbooks (see `instana/intelligent-remediation-ansible` GitHub repo)
-- Instana monitors Ansible natively via a callback plugin — creating a bidirectional feedback loop
+**Why Ansible Automation Platform is the trusted automation layer.** AAP provides the capabilities that turn observability signals into safe, governed action:
+- **Automation controller** — centralized execution of job templates with full RBAC, ensuring only authorized teams can trigger remediation for their scope
+- **Event-Driven Ansible** — real-time event processing via rulebooks that match observability events to the correct remediation job template, eliminating manual triage
+- **Audit trail** — every job execution is logged with who triggered it, what changed, and whether it succeeded, satisfying compliance and change management requirements
+- **Approval workflows** — workflow job templates can include approval nodes so that high-impact remediations require human sign-off before execution
+- **Credential management** — secrets are stored in automation controller and injected at runtime, never exposed in playbooks or logs
+- **Execution environments** — containerized, reproducible runtime environments ensure remediation playbooks run identically in dev, staging, and production
+
+**IBM Instana Observability as the detection layer.** Instana is a full-stack observability platform with auto-discovery of 300+ technologies, 1-second data granularity, and Probable Root Cause analysis powered by causal AI. Instana provides the intelligent detection that feeds AAP's automation layer:
+- **Smart Alerts** with adaptive thresholds that learn seasonality — reducing false positives without manual threshold tuning
+- **Probable Root Cause** — identifies *why* something broke, not just *that* it broke, giving AAP the context needed to choose the right remediation
+- Three event types (**Change**, **Issue**, **Incident**) that map cleanly to EDA rulebook conditions
+
+**The IBM family advantage.** IBM owns both Instana and Red Hat. The `ibm.instana` Ansible Content Collection is available on Red Hat automation hub, and Instana's Intelligent Remediation roadmap uses watsonx to generate curated Ansible playbooks. Instana also monitors Ansible natively via a callback plugin — creating a bidirectional feedback loop where the automation layer is itself observed.
 
 ---
 
 ### 4. Solution
 
-**Components:**
-- **IBM Instana Observability** — Auto-discovery, Smart Alerts, Probable Root Cause (causal AI)
-- **Event-Driven Ansible** — Webhook listener, event parsing, rulebook logic (Path A)
-- **Instana automation framework** (GA) — In-product action catalog with AI-powered recommendations, auto-trigger via automation policies (Path B)
-- **Red Hat Ansible Automation Platform** — Governed job template execution, audit trail, RBAC via automation controller
-- **`ibm.instana` Ansible Content Collection** — Dedicated `instana_webhook` EDA source plugin
-- **AI inference endpoint** (optional) — Red Hat AI or OpenAI-compatible API for enriched recommendations
+**Components (AAP — the automation layer):**
+- **[Red Hat Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible)** — Governed job template execution with RBAC, audit trail, approval workflows, and credential management via automation controller
+- **[Event-Driven Ansible](https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible)** — Real-time event processing: webhook listener, rulebook conditions, and automated job template triggering (Path A)
+- **`ibm.instana` Ansible Content Collection** — Dedicated `instana_webhook` EDA source plugin for parsing Instana webhook payloads
+
+**Components (Instana — the detection layer):**
+- **[IBM Instana Observability](https://www.ibm.com/products/instana)** — Auto-discovery, Smart Alerts with adaptive thresholds, Probable Root Cause (causal AI)
+- **Instana automation framework** — In-product action catalog with AI-powered action recommendations and auto-trigger via automation policies (Path B)
+
+**Optional:**
+- **AI inference endpoint** — Red Hat AI or any OpenAI-compatible API for enriched remediation recommendations
 
 **Persona table:**
 
 | Persona | Challenge | What They Gain |
 |---------|-----------|---------------|
-| IT Ops Engineer / SRE | Alert fatigue: Instana fires hundreds of alerts daily, each requiring manual investigation and response | Automated first-response: high-signal Instana Incidents trigger targeted, tested remediation via automation controller job templates without manual triage |
-| Automation Architect | Connecting Instana's event model to automation controller requires understanding webhook payloads, EDA rulebook syntax, and credential flows | Two documented integration patterns (EDA webhook + automation framework) with verified YAML, correct payload accessors, and credential types |
-| IT Manager / Director | MTTR measured in hours; difficult to show ROI on observability investment when it only produces dashboards | Instana investment becomes an active remediation trigger; MTTR drops to minutes; only unresolvable Incidents escalate to humans |
+| IT Ops Engineer / SRE | Alert fatigue from observability tools; manual triage and inconsistent remediation across shifts | AAP provides consistent, tested remediation via governed job templates — Instana Incidents trigger the right fix automatically, every time |
+| Automation Architect | Need to connect observability signals to AAP with proper RBAC, credential management, and approval workflows | Two production-ready integration patterns with verified YAML, correct payload accessors, and automation controller configuration tables |
+| IT Manager / Director | MTTR measured in hours; no audit trail for incident response; difficult to justify observability spend | AAP's audit trail satisfies compliance; MTTR drops to minutes; observability investment becomes an active remediation trigger, not just dashboards |
 
 **Demos/Labs:**
 - [Red Hat TV: From Observability to Action with Event-Driven Ansible and IBM Instana](https://tv.redhat.com/en/detail/6365958260112/from-observability-to-action-with-event-driven-ansible-and-ibm-instana)
@@ -770,10 +778,10 @@ app-server-01.example.com : ok=4    changed=1    unreachable=0    failed=0
 - [Get started with EDA](https://access.redhat.com/articles/7136720) — EDA fundamentals for teams new to Event-Driven Ansible
 
 **ROI Recap:**
-- Instana observability investment shifts from passive monitoring to active remediation engine
-- MTTR drops from hours (manual triage) to minutes (automated response) — IBM claims up to 70% MTTR reduction
-- Alert fatigue reduction: only truly novel or unresolvable Incidents escalate to humans
-- Single-vendor advantage: IBM owns both Instana and Red Hat, enabling tighter integration roadmap
+- AAP transforms observability signals into governed, auditable remediation — every action logged, every credential managed, every scope controlled by RBAC
+- MTTR drops from hours (manual triage) to minutes (automated response) — consistent remediation regardless of which engineer is on call
+- Alert fatigue reduction: Event-Driven Ansible filters and routes events so only truly novel or unresolvable Incidents escalate to humans
+- Instana observability investment shifts from passive monitoring to active remediation engine, with AAP providing the trusted execution layer
 
 ---
 
