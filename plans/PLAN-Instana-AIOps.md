@@ -10,7 +10,9 @@ Two integration entry points (both GA):
 
 Three use cases: Service latency spike recovery, Database performance degradation, Bad deployment auto-rollback.
 
-AI layer: Instana's built-in Probable Root Cause (causal AI) is primary, with an optional external LLM step.
+AI layer: Instana's built-in Probable Root Cause (causal AI) is primary. Instana also provides native AI capabilities (Intelligent Remediation, Intelligent Incident Investigation, confidence-score action recommendations). Optional external LLM step for dynamic job template routing from AAP's existing catalog.
+
+Key messaging: AAP's value is in connecting existing, trusted automation to observability signals — not generating new playbooks. The guide emphasizes curated remediation from playbooks teams have already built, tested, and promoted.
 
 ---
 
@@ -153,20 +155,20 @@ Every section below maps to the 9-step framework. Items marked **GAP** are missi
 | # | Best Practices Section | Status | Notes |
 |---|------------------------|--------|-------|
 | 1 | Title — outcome-oriented, `[Topic] - Solution Guide` format | Done | |
-| 2.1 | Overview — problem statement (2-4 sentences, quantify pain) | Done | |
+| 2.1 | Overview — problem statement (2-4 sentences, quantify pain) | Done | Reframed around curated existing automation |
 | 2.2 | Overview — linked table of contents | Done | |
-| 3 | Background — domain context (1-3 paragraphs, link to redhat.com topic pages) | Done | |
+| 3 | Background — domain context (1-3 paragraphs, link to redhat.com topic pages) | Done | Updated: AAP section reframed as "Connecting Existing Automation to Observability"; Instana section needs AI capabilities update |
 | 4.1 | Solution — components list with product page links | Done | |
-| 4.2 | Solution — persona table (3-col: Persona, Challenge, What They Gain) | Done | |
+| 4.2 | Solution — persona table (3-col: Persona, Challenge, What They Gain) | Done | Reframed around existing automation being underutilized |
 | 4.3 | Solution — demos, videos, and labs | Done | |
 | 5.1 | Prerequisites — AAP version | Done | |
 | 5.2 | Prerequisites — featured collections with Automation Hub links | Done | |
 | 5.3 | Prerequisites — external systems table | Done | |
-| 5.4 | Prerequisites — cost and resource notes | **GAP** | Add: no GPU required, Instana SaaS vs. self-hosted licensing note, EDA controller sizing |
-| 5.5 | Prerequisites — operational impact (per-step or per-guide) | Partial | Per-step impact is present in walkthrough; add a summary impact statement table in prerequisites |
-| 5.6 | Prerequisites — KB article metadata (business value drivers, technical value drivers) | **GAP** | Add business value drivers (reduced MTTR, reduced alert fatigue, compliance-ready audit trail) and technical value drivers (governed remediation, credential isolation, bidirectional feedback loop) |
+| 5.4 | Prerequisites — cost and resource notes | Done | Added: GPU, licensing, EDA sizing, AI endpoint |
+| 5.5 | Prerequisites — operational impact (per-step or per-guide) | Done | Operational Impact per Stage table in Integration Architecture section |
+| 5.6 | Prerequisites — KB article metadata (business value drivers, technical value drivers) | Done | Business value and Technical value paragraphs in Overview |
 | 6.1 | Workflow — diagram (3-6 blocks) | Done | Two diagrams (Path A, Path B) |
-| 6.2 | Workflow — narrative walkthrough (5-8 sentences) | Partial | Diagrams are annotated but a standalone prose narrative is not present |
+| 6.2 | Workflow — narrative walkthrough (5-8 sentences) | Done | 5-paragraph prose narrative with per-path breakdown |
 | 6.3 | Workflow — visual design patterns (tables, callouts, screenshots) | Done | |
 | 7.1 | Solution walkthrough — numbered steps with headings | Done | |
 | 7.2 | Solution walkthrough — featured code (key tasks, not full playbooks) | Done | |
@@ -174,30 +176,33 @@ Every section below maps to the 9-step framework. Items marked **GAP** are missi
 | 8.1 | Validation — concrete, executable test | Done | curl command with synthetic payload |
 | 8.2 | Validation — expected result (actual output, not prose) | Done | |
 | 8.3 | Validation — troubleshooting table (2-3+ common failures) | Done | 7 rows |
-| 9.1 | Maturity path — crawl/walk/run with "What to Build" column | Done | |
+| 9.1 | Maturity path — crawl/walk/run with "What to Build" column | Done | Crawl step needs AI-recommended job template details update |
 | 9.2 | Related guides — cross-links to next, prerequisite, and advanced guides | Done | |
-| 9.3 | ROI recap — measurable outcome summary | **GAP** | Add ROI recap section after Related Guides (content exists in plan but was not written into the guide) |
+| 9.3 | ROI recap — measurable outcome summary | Done | Added after Related Guides with "Automation reuse, not reinvention" lead |
 
-### Gaps to Resolve
+### Pending Enhancements
 
-1. **Add KB Article Metadata block** after the Overview (or at the top of Prerequisites):
-   - **Business Value Drivers**: Reduced MTTR from hours to minutes; reduced alert fatigue through automated triage; compliance-ready audit trail for every remediation action
-   - **Technical Value Drivers**: Governed remediation with RBAC-scoped job templates; credential isolation (secrets never in playbooks); bidirectional observability-automation feedback loop via Host Agent REST API annotations
+1. **Expand Instana AI capabilities in Background section** — add coverage of:
+   - **Action catalog confidence scoring** (GA): text-similarity matching of event metadata against action metadata; recommends actions (including auto-imported AAP job templates) with confidence scores; no prior configuration needed
+   - **Recommended actions vs. automation policies**: recommended actions are dynamic per-event (AI-driven, manual execution); automation policies are explicit mappings (can auto-trigger). Intended workflow: start with recommended actions for unknown issues, then codify as automation policies once validated.
+   - **Intelligent Remediation** (GA Oct 2024): 90+ pre-built curated remediation actions for containers, Elasticsearch, Host, JVM, Kafka, Kubernetes. Live AI generation via watsonx Granite LLM is public preview (not GA) — generates manual steps and Bash/Ansible scripts, but these require human review and are not auto-executed.
+   - **Intelligent Incident Investigation** (GA Dec 2025): agentic AI for full incident investigation across dependency graphs. Produces root cause analysis, transparent reasoning, and remediation guidance. "Actions to Scripts" converts recommendations to Bash or Ansible scripts exportable to GitHub. Does not create AAP job templates directly.
+   - **Key distinction**: Instana's native AI generates investigation guidance and suggested scripts. AAP provides the governed execution layer for trusted, existing automation. The two are complementary, not overlapping.
 
-2. **Add Cost and Resource Notes** in Prerequisites:
-   - No GPU required (unless using optional AI inference endpoint)
-   - Instana licensing: SaaS or self-hosted (Standard/Enterprise edition with automation framework capability)
-   - Event-Driven Ansible controller: included in AAP subscription, sized per standard AAP planning guidance
-   - AI inference endpoint (optional): see [AI Infrastructure automation with Ansible](README-IA.md) for GPU and model serving requirements
+2. **Replace Part 5 hardcoded AI prompt with dynamic job template catalog pattern**:
+   - Step 1: Query automation controller API for available job templates (`/api/v2/job_templates/`)
+   - Step 2: Pass the job template list (names, descriptions, tags) + Instana event context to the LLM
+   - Step 3: LLM selects the best matching existing job template (or responds "no matching automation")
+   - Step 4: Workflow conditionally runs the selected job template
+   - This makes AI routing dynamic — as teams add new job templates, the AI automatically considers them
+   - The AI selects from existing templates; it does not generate new playbooks
+   - Rename section from "AI Inference Enhancement" to "AI-Assisted Routing"
 
-3. **Add ROI Recap** as a section after Related Guides:
-   - MTTR drops from hours (manual triage) to minutes (automated response)
-   - Consistent remediation regardless of which engineer is on call
-   - Alert fatigue reduction: EDA filters and routes events so only novel Incidents escalate to humans
-   - Observability investment shifts from passive monitoring to active remediation engine
-   - Full audit trail satisfies compliance and change management requirements
-
-4. **Add a prose narrative walkthrough** (5-8 sentences) in the Integration Architecture section explaining the end-to-end flow in plain English, distinct from the annotated diagrams
+3. **Update Crawl maturity step** to mention AI-recommended job template details:
+   - At the Crawl stage, the notification (Slack, email, ITSM) can include AI-recommended job template details: which template to run, what variables to pass, and the confidence level
+   - This gives the operator a ready-to-execute recommendation without auto-remediation
+   - Keep as a brief mention (1-2 sentences), not a full walkthrough
+   - Cross-link to ServiceNow ITSM guide for full ITSM ticket enrichment patterns
 
 ---
 
@@ -236,7 +241,14 @@ Include:
 - **Probable Root Cause** — identifies *why* something broke, not just *that* it broke, giving AAP the context needed to choose the right remediation
 - Three event types (**Change**, **Issue**, **Incident**) that map cleanly to EDA rulebook conditions
 
-**The IBM family advantage.** IBM owns both Instana and Red Hat. The `ibm.instana` Ansible Content Collection is available on Red Hat automation hub, and Instana's Intelligent Remediation roadmap uses watsonx to generate curated Ansible playbooks. Instana also monitors Ansible natively via a callback plugin — creating a bidirectional feedback loop where the automation layer is itself observed.
+**Instana's native AI capabilities.** Beyond detection, Instana includes its own AI-powered features that complement AAP's governed execution:
+- **Action catalog with confidence scoring** (GA) — when an event fires, Instana uses text-similarity matching to recommend relevant actions from the catalog (including auto-imported AAP job templates) with a confidence score. No prior configuration needed — start with recommended actions for unknown issues, then codify as automation policies once validated.
+- **Intelligent Remediation** (GA Oct 2024) — ships 90+ pre-built curated remediation actions for common technologies (containers, Elasticsearch, Host, JVM, Kafka, Kubernetes). Live AI generation of new actions via watsonx Granite LLM is public preview — generates manual steps and Bash/Ansible scripts that require human review before use.
+- **Intelligent Incident Investigation** (GA Dec 2025) — agentic AI that performs full incident investigation across dependency graphs, producing root cause analysis, transparent reasoning, and remediation guidance. The "Actions to Scripts" feature converts recommendations to Bash or Ansible scripts exportable to GitHub for review and promotion into AAP.
+
+The key distinction: Instana's native AI generates investigation guidance and suggested scripts. AAP provides the governed execution layer for trusted, existing automation. The two are complementary — Instana identifies what to do, AAP ensures it is done safely and consistently.
+
+**The IBM family advantage.** IBM owns both Instana and Red Hat. The `ibm.instana` Ansible Content Collection is available on Red Hat automation hub. Instana also monitors Ansible natively via a callback plugin — creating a bidirectional feedback loop where the automation layer is itself observed.
 
 ---
 
@@ -699,14 +711,39 @@ Instana detects a spike in erroneous call rate correlated with a recent deployme
 
 ---
 
-#### Part 5: Optional AI Inference Enhancement
+#### Part 5: Optional AI-Assisted Routing
 
-For teams that want richer remediation recommendations beyond Instana's built-in Probable Root Cause — e.g., using an LLM to analyze the Incident context and recommend which remediation job template to run.
+The three use cases above use deterministic EDA rulebook conditions to select the right job template. For most well-understood failure modes, deterministic routing is the right approach because it is predictable, testable, and auditable.
 
-This is a **workflow job template** pattern in automation controller: Event-Driven Ansible triggers a workflow that first calls AI for analysis, then conditionally runs the appropriate remediation job template.
+For situations where the mapping is ambiguous — a novel failure mode, an alert that could match multiple existing playbooks, or an entity type your rulebook does not yet cover — add an AI inference step that dynamically selects from your existing job template catalog.
+
+This is a **workflow job template** pattern in automation controller: Event-Driven Ansible triggers a workflow that first queries the available job templates, passes them with the event context to an AI inference endpoint, and conditionally runs the recommended template.
+
+**Step 1: Query automation controller for available job templates**
 
 ```yaml
-- name: Enrich Incident with AI analysis
+- name: Get available job templates from automation controller
+  ansible.builtin.uri:
+    url: "https://{{ controller_host }}/api/v2/job_templates/?page_size=100"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ controller_token }}"
+    validate_certs: true
+  register: job_templates_response
+
+- name: Build job template catalog for AI context
+  ansible.builtin.set_fact:
+    job_template_catalog: >-
+      {{ job_templates_response.json.results | map(attribute='name')
+         | zip(job_templates_response.json.results | map(attribute='description'))
+         | map('join', ': ')
+         | join('\n') }}
+```
+
+**Step 2: Pass job template catalog + event context to AI**
+
+```yaml
+- name: Ask AI to recommend a job template from existing catalog
   ansible.builtin.uri:
     url: "{{ ai_inference_url }}/v1/chat/completions"
     method: POST
@@ -719,26 +756,37 @@ This is a **workflow job template** pattern in automation controller: Event-Driv
       messages:
         - role: system
           content: >
-            You are an SRE assistant. Given an Instana Incident, recommend exactly ONE
-            remediation action from this list: restart_service, recycle_db_connections,
-            rollback_deployment, scale_out, do_nothing. Respond with only the action name.
+            You are an SRE assistant. Given an Instana Incident and a catalog of
+            available Ansible job templates, recommend the single best job template
+            to remediate the issue. If no existing template is a good match, respond
+            with "NO_MATCH". Respond in JSON format:
+            {"template": "<exact template name>", "confidence": "high|medium|low",
+             "reasoning": "<one sentence>", "variables": {"key": "value"}}
         - role: user
           content: |
-            Incident: {{ instana_issue_text }}
+            INCIDENT:
+            Text: {{ instana_issue_text }}
             Entity: {{ instana_entity_label }}
             Entity Type: {{ instana_entity_type }}
             Severity: {{ instana_severity }}
-            Instana Suggestion: {{ instana_suggestion }}
+            FQDN: {{ instana_fqdn }}
+            Suggestion: {{ instana_suggestion }}
+
+            AVAILABLE JOB TEMPLATES:
+            {{ job_template_catalog }}
   register: ai_response
 
-- name: Set recommended action
+- name: Parse AI recommendation
   ansible.builtin.set_fact:
-    recommended_action: "{{ ai_response.json.choices[0].message.content | trim }}"
+    ai_recommendation: "{{ ai_response.json.choices[0].message.content | from_json }}"
 ```
 
-**When to use AI enrichment vs. direct remediation:**
-- **Direct remediation** (no AI): Well-understood, recurring failures with a single correct response (e.g., service restart for thread pool exhaustion)
-- **AI enrichment**: Novel failure modes, ambiguous root causes, or when the correct remediation depends on context that requires reasoning
+The AI selects from existing, tested job templates — it does not generate new playbooks. As teams add new job templates to automation controller, the AI automatically considers them without rulebook changes.
+
+**When to use AI-assisted routing vs. direct remediation:**
+- **Direct remediation** (no AI): Well-understood, recurring failures with a single correct response — deterministic rulebook routing to an existing job template
+- **AI-assisted routing**: Novel failure modes, ambiguous root causes, or alerts that could match multiple existing playbooks — LLM selects the best existing template from your catalog
+- **Instana Probable Root Cause suggestion**: Direct remediation using the `suggestion` field to select the matching job template
 
 ---
 
@@ -823,7 +871,7 @@ app-server-01.example.com : ok=4    changed=1    unreachable=0    failed=0
 
 | Maturity | Description | What to Build |
 |----------|-------------|---------------|
-| **Crawl** | Instana alerts forwarded to Event-Driven Ansible, which enriches and routes notifications (Slack, email, ITSM ticket) — no remediation, human decides | Configure Instana webhook → EDA rulebook → `run_job_template` that sends a Slack notification with Incident context and Instana link |
+| **Crawl** | Instana alerts forwarded to Event-Driven Ansible, which enriches and routes notifications — no remediation, human decides | Configure Instana webhook → EDA rulebook → `run_job_template` that sends a notification (Slack, email, or ITSM ticket) with Incident context, Instana link, and optionally an AI-recommended job template with suggested variables so the operator has a ready-to-execute recommendation. For full ITSM enrichment, see the [ServiceNow ITSM Ticket Enrichment](https://access.redhat.com/articles/7127603) guide. |
 | **Walk** | Event-Driven Ansible triggers automation controller job templates with human approval gate before execution | Add `ask_variables_on_launch: true` on job templates; use automation controller approval workflow nodes; operator reviews before remediation runs |
 | **Run** | Fully automated closed-loop: Instana detects → Event-Driven Ansible triggers → automation controller remediates → Instana confirms resolution, no human in loop | Remove approval gates for well-understood failure patterns; add policy guardrails (e.g., max 3 auto-remediations per hour per service, business-hours-only for critical services) |
 
