@@ -1,4 +1,4 @@
-
+{% raw %}
 # AIOps automation with Ansible - Solution Guide <!-- omit in toc -->
 
 > **Knowledge Base Article**: [https://access.redhat.com/articles/7119667](https://access.redhat.com/articles/7119667)
@@ -852,3 +852,4 @@ With this workflow in place, your team moves from manually triaging every alert 
 ---
 
 <img width="400" src="https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/aap_logo.png">
+{% endraw %}
