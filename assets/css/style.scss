@@ -514,7 +514,19 @@ b {
   margin: 0 auto;
   padding: 20px;
   width: calc(100% - 40px) !important;
-  --pf-v6-l-gallery--GridTemplateColumns--min: 320px;
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+@media screen and (max-width: 960px) {
+  .cards-gallery {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .cards-gallery {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 .card-link {
