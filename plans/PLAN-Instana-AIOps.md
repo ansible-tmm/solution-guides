@@ -146,6 +146,61 @@ Built-in events and custom events for app/service/endpoint entities are **deprec
 
 ---
 
+## Best Practices Compliance Checklist (`README-best-practices.md`)
+
+Every section below maps to the 9-step framework. Items marked **GAP** are missing or incomplete in the current draft of `README-Instana-AIOps.md` and must be addressed.
+
+| # | Best Practices Section | Status | Notes |
+|---|------------------------|--------|-------|
+| 1 | Title — outcome-oriented, `[Topic] - Solution Guide` format | Done | |
+| 2.1 | Overview — problem statement (2-4 sentences, quantify pain) | Done | |
+| 2.2 | Overview — linked table of contents | Done | |
+| 3 | Background — domain context (1-3 paragraphs, link to redhat.com topic pages) | Done | |
+| 4.1 | Solution — components list with product page links | Done | |
+| 4.2 | Solution — persona table (3-col: Persona, Challenge, What They Gain) | Done | |
+| 4.3 | Solution — demos, videos, and labs | Done | |
+| 5.1 | Prerequisites — AAP version | Done | |
+| 5.2 | Prerequisites — featured collections with Automation Hub links | Done | |
+| 5.3 | Prerequisites — external systems table | Done | |
+| 5.4 | Prerequisites — cost and resource notes | **GAP** | Add: no GPU required, Instana SaaS vs. self-hosted licensing note, EDA controller sizing |
+| 5.5 | Prerequisites — operational impact (per-step or per-guide) | Partial | Per-step impact is present in walkthrough; add a summary impact statement table in prerequisites |
+| 5.6 | Prerequisites — KB article metadata (business value drivers, technical value drivers) | **GAP** | Add business value drivers (reduced MTTR, reduced alert fatigue, compliance-ready audit trail) and technical value drivers (governed remediation, credential isolation, bidirectional feedback loop) |
+| 6.1 | Workflow — diagram (3-6 blocks) | Done | Two diagrams (Path A, Path B) |
+| 6.2 | Workflow — narrative walkthrough (5-8 sentences) | Partial | Diagrams are annotated but a standalone prose narrative is not present |
+| 6.3 | Workflow — visual design patterns (tables, callouts, screenshots) | Done | |
+| 7.1 | Solution walkthrough — numbered steps with headings | Done | |
+| 7.2 | Solution walkthrough — featured code (key tasks, not full playbooks) | Done | |
+| 7.3 | Solution walkthrough — AAP integration (job template config, credentials, RBAC) | Done | |
+| 8.1 | Validation — concrete, executable test | Done | curl command with synthetic payload |
+| 8.2 | Validation — expected result (actual output, not prose) | Done | |
+| 8.3 | Validation — troubleshooting table (2-3+ common failures) | Done | 7 rows |
+| 9.1 | Maturity path — crawl/walk/run with "What to Build" column | Done | |
+| 9.2 | Related guides — cross-links to next, prerequisite, and advanced guides | Done | |
+| 9.3 | ROI recap — measurable outcome summary | **GAP** | Add ROI recap section after Related Guides (content exists in plan but was not written into the guide) |
+
+### Gaps to Resolve
+
+1. **Add KB Article Metadata block** after the Overview (or at the top of Prerequisites):
+   - **Business Value Drivers**: Reduced MTTR from hours to minutes; reduced alert fatigue through automated triage; compliance-ready audit trail for every remediation action
+   - **Technical Value Drivers**: Governed remediation with RBAC-scoped job templates; credential isolation (secrets never in playbooks); bidirectional observability-automation feedback loop via Host Agent REST API annotations
+
+2. **Add Cost and Resource Notes** in Prerequisites:
+   - No GPU required (unless using optional AI inference endpoint)
+   - Instana licensing: SaaS or self-hosted (Standard/Enterprise edition with automation framework capability)
+   - Event-Driven Ansible controller: included in AAP subscription, sized per standard AAP planning guidance
+   - AI inference endpoint (optional): see [AI Infrastructure automation with Ansible](README-IA.md) for GPU and model serving requirements
+
+3. **Add ROI Recap** as a section after Related Guides:
+   - MTTR drops from hours (manual triage) to minutes (automated response)
+   - Consistent remediation regardless of which engineer is on call
+   - Alert fatigue reduction: EDA filters and routes events so only novel Incidents escalate to humans
+   - Observability investment shifts from passive monitoring to active remediation engine
+   - Full audit trail satisfies compliance and change management requirements
+
+4. **Add a prose narrative walkthrough** (5-8 sentences) in the Integration Architecture section explaining the end-to-end flow in plain English, distinct from the annotated diagrams
+
+---
+
 ## Guide Structure (9-Step Framework)
 
 ### 1. Title
@@ -822,14 +877,30 @@ app-server-01.example.com : ok=4    changed=1    unreachable=0    failed=0
 
 ## Verification After Implementation
 
-- All 9 framework sections present
-- YAML blocks: minimum 6, target 8+
-- Tables: minimum 8
-- Word count: 2,500-3,500
-- Terminology audit: all terms match the reference tables (lowercase automation controller, lowercase job template, etc.)
+### Technical Accuracy
 - All `event.payload.issue.*` accessors match the documented Instana webhook payload
 - Instana annotation API uses `http://localhost:42699/com.instana.plugin.generic.event`
 - Automation framework documented as GA with auto-trigger via automation policies
 - Severity values are integers (10, 5, -1), not strings
 - No fabricated URLs or unverified API endpoints
-- Score against quality rubric: target 9+/10
+- Terminology audit: all terms match the reference tables (lowercase automation controller, lowercase job template, etc.)
+
+### Best Practices Framework Compliance (`README-best-practices.md`)
+- All 9 framework sections present and match section names in the framework
+- KB article metadata present: business value drivers, technical value drivers
+- Cost and resource notes present in prerequisites
+- ROI recap section present after related guides
+- Prose narrative walkthrough (5-8 sentences) in architecture section
+- Per-step operational impact ratings on every walkthrough step
+- Persona table uses 3-column format (Persona, Challenge, What They Gain)
+- Validation includes: executable test, expected output (verbatim), troubleshooting table (2+ rows)
+- Maturity path uses crawl/walk/run with specific "What to Build" guidance
+- Related guides cross-link to prerequisite, next, and advanced guides
+
+### Depth and Quality Indicators
+- YAML blocks: minimum 6, target 8+
+- Tables: minimum 8
+- Word count: 2,500-3,500
+- Diagrams: 2 (Path A, Path B)
+- Validation scenarios: 1 test command + 9-row checklist + 7-row troubleshooting table
+- Score against quality rubric (`README-best-practices.md` Reference section): target 4+/5 in every category
