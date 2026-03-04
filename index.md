@@ -99,7 +99,7 @@ patternfly: true
         <h3 class="pf-v6-c-card__title-text">Intelligent Assistant with Red Hat AI Inference Server</h3>
       </div>
       <div class="pf-v6-c-card__body">
-        Configure a self-hosted LLM with Red Hat AI Inference Server to power the Ansible Lightspeed intelligent assistant in AAP.
+        Deploy and configure a self-hosted LLM using Red Hat AI Inference Server on RHEL with GPU acceleration to power the Ansible Lightspeed intelligent assistant in AAP.
       </div>
       <div class="pf-v6-c-card__footer">
         <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Lightspeed</span></span>

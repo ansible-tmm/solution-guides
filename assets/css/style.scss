@@ -537,7 +537,6 @@ b {
 
 .card-link .pf-v6-c-card {
   height: 100%;
-  min-height: 290px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
   cursor: pointer;
 }
@@ -565,7 +564,6 @@ b {
   color: #6a6e73;
   line-height: 1.5;
   flex-grow: 1;
-  min-height: 84px;
 }
 
 .card-link .pf-v6-c-card__footer {
