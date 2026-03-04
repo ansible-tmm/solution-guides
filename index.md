@@ -39,10 +39,10 @@ patternfly: true
   <a href="{{ '/README-Instana-AIOps' | relative_url }}" class="card-link">
     <div class="pf-v6-c-card">
       <div class="pf-v6-c-card__header">
-        <span class="pf-v6-c-label pf-m-green">
+        <span class="pf-v6-c-label pf-m-orange">
           <span class="pf-v6-c-label__content">
-            <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
-            Solution Guide
+            <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+            Work in Progress
           </span>
         </span>
       </div>
