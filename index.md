@@ -18,9 +18,6 @@ patternfly: true
     <div class="cards-sidebar__section">
       <h4 class="cards-sidebar__title">Partners</h4>
       <label class="cards-sidebar__checkbox">
-        <input type="checkbox" value="cisco"> Cisco
-      </label>
-      <label class="cards-sidebar__checkbox">
         <input type="checkbox" value="instana"> IBM Instana
       </label>
       <label class="cards-sidebar__checkbox">
