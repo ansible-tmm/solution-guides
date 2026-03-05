@@ -509,6 +509,80 @@ b {
   margin: 0;
 }
 
+// Search bar
+.cards-search {
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: calc(100% - 40px) !important;
+}
+
+.cards-search__input-wrapper {
+  position: relative;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.cards-search__icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.cards-search__input {
+  width: 100%;
+  padding: 10px 36px 10px 38px;
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.cards-search__input:focus {
+  border-color: #ee0000;
+  box-shadow: 0 0 0 2px rgba(238, 0, 0, 0.15);
+}
+
+.cards-search__input::placeholder {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.cards-search__clear {
+  display: none;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #999;
+  cursor: pointer;
+  padding: 0 6px;
+  line-height: 1;
+}
+
+.cards-search__clear:hover {
+  color: #333;
+}
+
+.cards-search__count {
+  text-align: center;
+  font-size: 13px;
+  color: #6a6e73;
+  margin: 8px 0 0;
+  min-height: 20px;
+}
+
 .cards-gallery {
   max-width: 1170px;
   margin: 0 auto;

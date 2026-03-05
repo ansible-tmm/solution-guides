@@ -9,7 +9,16 @@ patternfly: true
   <p>Enterprise solution guides for AI-driven automation with Ansible Automation Platform.</p>
 </div>
 
-<div class="pf-v6-l-gallery pf-m-gutter cards-gallery">
+<div class="cards-search">
+  <div class="cards-search__input-wrapper">
+    <i class="fas fa-search cards-search__icon"></i>
+    <input type="text" id="guide-search" class="cards-search__input" placeholder="Filter guides — try &quot;Splunk&quot;, &quot;ServiceNow&quot;, &quot;EDA&quot;, &quot;network&quot;..." autocomplete="off">
+    <button id="guide-search-clear" class="cards-search__clear" aria-label="Clear search">&times;</button>
+  </div>
+  <p id="guide-search-count" class="cards-search__count"></p>
+</div>
+
+<div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="main-gallery">
 
   <a href="{{ '/README-AIOps' | relative_url }}" class="card-link">
     <div class="pf-v6-c-card">
@@ -57,6 +66,54 @@ patternfly: true
         <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Instana</span></span>
         <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">EDA</span></span>
         <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">IBM</span></span>
+      </div>
+    </div>
+  </a>
+
+  <a href="{{ '/README-AIOps-Splunk' | relative_url }}" class="card-link">
+    <div class="pf-v6-c-card">
+      <div class="pf-v6-c-card__header">
+        <span class="pf-v6-c-label pf-m-green">
+          <span class="pf-v6-c-label__content">
+            <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+            Solution Guide
+          </span>
+        </span>
+      </div>
+      <div class="pf-v6-c-card__title">
+        <h3 class="pf-v6-c-card__title-text">Triggering Automated Remediation from Splunk Alerts</h3>
+      </div>
+      <div class="pf-v6-c-card__body">
+        Connect Splunk alerts to Event-Driven Ansible for closed-loop detection and remediation — from webhook configuration to AI-enriched response.
+      </div>
+      <div class="pf-v6-c-card__footer">
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">AIOps</span></span>
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Splunk</span></span>
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">EDA</span></span>
+      </div>
+    </div>
+  </a>
+
+  <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}" class="card-link">
+    <div class="pf-v6-c-card">
+      <div class="pf-v6-c-card__header">
+        <span class="pf-v6-c-label pf-m-green">
+          <span class="pf-v6-c-label__content">
+            <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+            Solution Guide
+          </span>
+        </span>
+      </div>
+      <div class="pf-v6-c-card__title">
+        <h3 class="pf-v6-c-card__title-text">Reducing MTTR with ServiceNow Ticket Enrichment</h3>
+      </div>
+      <div class="pf-v6-c-card__body">
+        Automatically enrich ServiceNow incidents with diagnostic data and AI-driven root cause analysis — the lowest-risk entry point for AIOps.
+      </div>
+      <div class="pf-v6-c-card__footer">
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">AIOps</span></span>
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">ServiceNow</span></span>
+        <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">ITSM</span></span>
       </div>
     </div>
   </a>
@@ -189,3 +246,64 @@ patternfly: true
 
   </div>
 </details>
+
+<script>
+(function () {
+  var input = document.getElementById('guide-search');
+  var clearBtn = document.getElementById('guide-search-clear');
+  var countEl = document.getElementById('guide-search-count');
+  var allCards = document.querySelectorAll('.card-link');
+  var legacyDetails = document.querySelector('details.legacy-guides');
+
+  function getCardText(card) {
+    var title = card.querySelector('.pf-v6-c-card__title-text');
+    var body = card.querySelector('.pf-v6-c-card__body');
+    var labels = card.querySelectorAll('.pf-v6-c-label__content');
+    var text = '';
+    if (title) text += ' ' + title.textContent;
+    if (body) text += ' ' + body.textContent;
+    labels.forEach(function (l) { text += ' ' + l.textContent; });
+    return text.toLowerCase();
+  }
+
+  function filterCards() {
+    var query = input.value.toLowerCase().trim();
+    clearBtn.style.display = query ? 'block' : 'none';
+
+    if (!query) {
+      allCards.forEach(function (c) { c.style.display = ''; });
+      countEl.textContent = '';
+      if (legacyDetails) legacyDetails.removeAttribute('open');
+      return;
+    }
+
+    var visible = 0;
+    var legacyHasMatch = false;
+
+    allCards.forEach(function (card) {
+      var match = getCardText(card).indexOf(query) !== -1;
+      card.style.display = match ? '' : 'none';
+      if (match) {
+        visible++;
+        if (legacyDetails && legacyDetails.contains(card)) legacyHasMatch = true;
+      }
+    });
+
+    if (legacyDetails) {
+      if (legacyHasMatch) legacyDetails.setAttribute('open', '');
+      else legacyDetails.removeAttribute('open');
+    }
+
+    countEl.textContent = visible === 0
+      ? 'No guides match your search.'
+      : visible + ' guide' + (visible !== 1 ? 's' : '') + ' found.';
+  }
+
+  input.addEventListener('input', filterCards);
+  clearBtn.addEventListener('click', function () {
+    input.value = '';
+    filterCards();
+    input.focus();
+  });
+})();
+</script>
