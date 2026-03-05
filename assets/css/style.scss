@@ -589,6 +589,7 @@ b {
   padding: 20px;
   width: calc(100% - 40px) !important;
   grid-template-columns: repeat(3, 1fr) !important;
+  grid-auto-rows: minmax(250px, auto);
 }
 
 @media screen and (max-width: 960px) {
