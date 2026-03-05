@@ -289,6 +289,24 @@ header {
   flex-wrap: nowrap;
 }
 
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none !important;
+  flex-shrink: 0;
+}
+
+.header-title {
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #fff;
+  white-space: nowrap;
+  border-left: 1px solid #555;
+  padding-left: 14px;
+}
+
 .header-logo {
   width: 120px;
   height: auto;
@@ -409,6 +427,10 @@ header {
   .header-link {
     font-size: 9px;
     padding: 5px 6px;
+  }
+
+  .header-title {
+    display: none;
   }
 }
 

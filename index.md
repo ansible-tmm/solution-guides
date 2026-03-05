@@ -4,11 +4,6 @@ title: Solution Guides
 patternfly: true
 ---
 
-<div class="cards-hero">
-  <h1>Solution Guides</h1>
-  <p>Enterprise solution guides for AI-driven automation with Ansible Automation Platform.</p>
-</div>
-
 <div class="cards-layout">
   <aside class="cards-sidebar">
     <div class="cards-sidebar__header">
