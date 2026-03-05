@@ -21,6 +21,9 @@ patternfly: true
       <label class="cards-sidebar__checkbox">
         <input type="checkbox" value="splunk"> Splunk
       </label>
+      <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="azure"> Azure
+      </label>
     </div>
   </aside>
 
@@ -109,6 +112,28 @@ patternfly: true
           </div>
           <div class="pf-v6-c-card__footer">
             <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">ServiceNow</span></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ '/README-AIOps-Azure-Service-Bus' | relative_url }}" class="card-link" data-partners="azure">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-orange">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                Work in Progress
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Event-Driven Remediation with Azure Service Bus</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Connect Azure Service Bus Queues to Event-Driven Ansible for real-time event consumption, AI-driven diagnosis, and automated remediation across hybrid Azure infrastructure.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Azure</span></span>
           </div>
         </div>
       </a>
