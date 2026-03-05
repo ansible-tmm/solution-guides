@@ -332,6 +332,43 @@ header {
   border-color: #ee0000;
 }
 
+// Header search bar
+.header-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.header-search__icon {
+  position: absolute;
+  left: 10px;
+  color: #999;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.header-search__input {
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 13px;
+  padding: 6px 10px 6px 30px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: #1a1a1a;
+  color: #fff;
+  width: 160px;
+  outline: none;
+  transition: border-color 0.2s ease, width 0.2s ease;
+}
+
+.header-search__input::placeholder {
+  color: #777;
+}
+
+.header-search__input:focus {
+  border-color: #ee0000;
+  width: 200px;
+}
+
 // Responsive header adjustments
 @media screen and (max-width: 1200px) {
   .header-nav {

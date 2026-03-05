@@ -30,14 +30,7 @@ patternfly: true
   </aside>
 
   <div class="cards-main">
-    <div class="cards-search">
-      <div class="cards-search__input-wrapper">
-        <i class="fas fa-search cards-search__icon"></i>
-        <input type="text" id="guide-search" class="cards-search__input" placeholder="Search guides..." autocomplete="off">
-        <button id="guide-search-clear" class="cards-search__clear" aria-label="Clear search">&times;</button>
-      </div>
-      <p id="guide-search-count" class="cards-search__count"></p>
-    </div>
+    <p id="guide-search-count" class="cards-search__count"></p>
 
     <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="main-gallery">
       <a href="{{ '/README-AIOps' | relative_url }}" class="card-link" data-partners="">
@@ -239,13 +232,14 @@ patternfly: true
 
 <script>
 (function () {
-  var input = document.getElementById('guide-search');
-  var searchClearBtn = document.getElementById('guide-search-clear');
+  var headerInput = document.getElementById('header-search');
   var filterClearBtn = document.getElementById('filter-clear');
   var countEl = document.getElementById('guide-search-count');
   var allCards = document.querySelectorAll('.card-link');
   var legacyDetails = document.querySelector('details.legacy-guides');
   var checkboxes = document.querySelectorAll('.cards-sidebar__checkbox input');
+
+  if (!headerInput) return;
 
   function getCardText(card) {
     var title = card.querySelector('.pf-v6-c-card__title-text');
@@ -267,10 +261,9 @@ patternfly: true
   }
 
   function filterCards() {
-    var query = input.value.toLowerCase().trim();
+    var query = headerInput.value.toLowerCase().trim();
     var activePartners = getActivePartners();
-    searchClearBtn.style.display = query ? 'block' : 'none';
-    filterClearBtn.style.display = activePartners.length ? 'inline' : 'none';
+    filterClearBtn.style.display = (activePartners.length || query) ? 'inline' : 'none';
 
     var visible = 0;
     var legacyHasMatch = false;
@@ -304,12 +297,7 @@ patternfly: true
     }
   }
 
-  input.addEventListener('input', filterCards);
-  searchClearBtn.addEventListener('click', function () {
-    input.value = '';
-    filterCards();
-    input.focus();
-  });
+  headerInput.addEventListener('input', filterCards);
 
   checkboxes.forEach(function (cb) {
     cb.addEventListener('change', filterCards);
@@ -317,7 +305,7 @@ patternfly: true
 
   filterClearBtn.addEventListener('click', function () {
     checkboxes.forEach(function (cb) { cb.checked = false; });
-    input.value = '';
+    headerInput.value = '';
     filterCards();
   });
 
