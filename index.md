@@ -19,7 +19,6 @@ patternfly: true
 </div>
 
 <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="main-gallery">
-
   <a href="{{ '/README-AIOps' | relative_url }}" class="card-link">
     <div class="pf-v6-c-card">
       <div class="pf-v6-c-card__header">
@@ -177,7 +176,6 @@ patternfly: true
   <summary>Legacy Solution Guides (Under Review)</summary>
   <p>These solution guides were published on access.redhat.com before this repository existed. They are being reviewed and will be migrated to the new format as full markdown guides.</p>
   <div class="pf-v6-l-gallery pf-m-gutter cards-gallery">
-
     <a href="https://access.redhat.com/articles/7136383" class="card-link" target="_blank">
       <div class="pf-v6-c-card">
         <div class="pf-v6-c-card__title">

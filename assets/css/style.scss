@@ -604,6 +604,11 @@ b {
   }
 }
 
+.cards-gallery > * {
+  min-width: 0;
+  margin: 0 !important;
+}
+
 .card-link {
   text-decoration: none !important;
   color: inherit !important;
