@@ -15,8 +15,6 @@
 
 ## Overview
 
-![splunk-eda](https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/aiops.png)
-
 Splunk is the system of record for security and operations visibility in many enterprises — ingesting logs, metrics, and events from thousands of sources. But when a critical Splunk alert fires, the response is still manual: an analyst reads the alert, opens a terminal, gathers context, and starts troubleshooting. This gap between **detection** and **resolution** is where MTTR lives. Organizations with hundreds of Splunk-generated alerts per day cannot scale human response to match.
 
 This guide demonstrates how to connect Splunk alerts directly to **Event-Driven Ansible (EDA)**, triggering an automated pipeline that enriches the alert with AI-driven analysis and remediates the issue — closing the loop from detection to resolution without requiring a human to interpret every alert manually.
