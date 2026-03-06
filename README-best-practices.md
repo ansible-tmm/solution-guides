@@ -17,28 +17,28 @@ Solution guides are written for **IT practitioners and decision makers evaluatin
 
 | Persona | What They Need from a Solution Guide |
 |---------|--------------------------------------|
-| **IT Ops Engineer / SRE** | Executable examples they can adapt to their environment — real YAML, real workflows, real validation steps |
+| **IT Ops Engineer / SRE** | Executable examples they can adapt to their environment -- real YAML, real workflows, real validation steps |
 | **Automation Architect** | A reference architecture showing how AAP components connect to external systems, with enough detail to design their own implementation |
 | **IT Manager / Director** | A clear problem statement, measurable outcomes, and an incremental adoption path they can use to justify investment and manage risk |
 
 Every section of a solution guide should serve at least one of these personas. If a section only makes sense to someone who already knows the answer, it needs to be rewritten.
 
-Solution guides are a specific content type — they are not the only way Red Hat publishes technical content, and understanding the differences helps you decide whether a solution guide is the right format for what you want to write.
+Solution guides are a specific content type -- they are not the only way Red Hat publishes technical content, and understanding the differences helps you decide whether a solution guide is the right format for what you want to write.
 
 ### Where Solution Guides Fit
 
 | Content Type | Where It Lives | Audience | Purpose | Depth |
 |-------------|----------------|----------|---------|-------|
-| **KB Solution** | access.redhat.com | Customer hitting a specific error | Fix a single, known issue (e.g., "Error X when upgrading AAP") | Narrow — one problem, one fix |
-| **KB Article** | access.redhat.com | Customer evaluating or implementing a solution | Explain how to solve an operational problem end-to-end using AAP | Deep — architecture, code, validation, maturity path |
-| **Blog Post** | redhat.com/blog | Broad technical audience | Announce, evangelize, or explain a concept or release | Medium — narrative-driven, light on executable detail |
-| **Learning Path** | developers.redhat.com | Developer or admin learning a skill | Teach a tool or technology through progressive, hands-on exercises | Deep — tutorial-oriented, step-by-step skill building |
+| **KB Solution** | access.redhat.com | Customer hitting a specific error | Fix a single, known issue (e.g., "Error X when upgrading AAP") | Narrow -- one problem, one fix |
+| **KB Article** | access.redhat.com | Customer evaluating or implementing a solution | Explain how to solve an operational problem end-to-end using AAP | Deep -- architecture, code, validation, maturity path |
+| **Blog Post** | redhat.com/blog | Broad technical audience | Announce, evangelize, or explain a concept or release | Medium -- narrative-driven, light on executable detail |
+| **Learning Path** | developers.redhat.com | Developer or admin learning a skill | Teach a tool or technology through progressive, hands-on exercises | Deep -- tutorial-oriented, step-by-step skill building |
 
-**Solution guides are KB Articles** — the second row. They solve a real operational problem, not a single error (that's a KB Solution). They include executable automation, not just narrative (that's a blog). They are outcome-oriented, not skill-oriented (that's a learning path).
+**Solution guides are KB Articles** -- the second row. They solve a real operational problem, not a single error (that's a KB Solution). They include executable automation, not just narrative (that's a blog). They are outcome-oriented, not skill-oriented (that's a learning path).
 
 > **When not to write a solution guide.**
 >
-> If your content is a fix for a specific error, write a KB Solution. If it's an announcement or thought leadership piece, write a blog. If it's teaching someone how to use a tool from scratch, write a learning path or tutorial. Solution guides exist in the space between — they assume the reader knows *what* Ansible is but needs to see *how* to solve a specific operational problem with it.
+> If your content is a fix for a specific error, write a KB Solution. If it's an announcement or thought leadership piece, write a blog. If it's teaching someone how to use a tool from scratch, write a learning path or tutorial. Solution guides exist in the space between -- they assume the reader knows *what* Ansible is but needs to see *how* to solve a specific operational problem with it.
 
 ---
 
@@ -509,7 +509,7 @@ Grade guides against this rubric before publishing:
 | Production Readiness Info | 10% |
 | Business Framing | 10% |
 
-Score each 1-5. Anything below 3 in any category — revise before publish.
+Score each 1-5. Anything below 3 in any category -- revise before publish.
 
 </details>
 
@@ -600,7 +600,7 @@ Organizations spend X hours manually performing Y, leading to Z risk. This guide
 
 ### Ansible Automation Platform
 
-- **Ansible Automation Platform X.X+** — [reason for version requirement]
+- **Ansible Automation Platform X.X+** -- [reason for version requirement]
 
 ### Featured Ansible Content Collections
 

@@ -15,13 +15,13 @@
 
 ## Overview
 
-Organizations running workloads on Microsoft Azure use **Azure Service Bus** as their enterprise messaging backbone — routing events, alerts, and telemetry between services, monitoring tools, and operational systems. When Azure Monitor, Defender for Cloud, or a custom application publishes a critical event to a Service Bus queue or topic, the response today is manual: an engineer reads the message, investigates the affected resource, and remediates by hand.
+Organizations running workloads on Microsoft Azure use **Azure Service Bus** as their enterprise messaging backbone -- routing events, alerts, and telemetry between services, monitoring tools, and operational systems. When Azure Monitor, Defender for Cloud, or a custom application publishes a critical event to a Service Bus queue or topic, the response today is manual: an engineer reads the message, investigates the affected resource, and remediates by hand.
 
-This guide demonstrates how to connect **Azure Service Bus Queues** directly to **Event-Driven Ansible (EDA)**, creating a real-time pipeline that consumes Azure events, enriches them with AI-driven root cause analysis, and triggers automated remediation — turning Azure's messaging layer into the trigger for a closed-loop AIOps workflow.
+This guide demonstrates how to connect **Azure Service Bus Queues** directly to **Event-Driven Ansible (EDA)**, creating a real-time pipeline that consumes Azure events, enriches them with AI-driven root cause analysis, and triggers automated remediation -- turning Azure's messaging layer into the trigger for a closed-loop AIOps workflow.
 
 > **This guide builds on the AIOps reference architecture.**
 >
-> For the full end-to-end AIOps pipeline — including AI inference, Lightspeed playbook generation, and the Crawl/Walk/Run maturity model — see [AIOps automation with Ansible](README-AIOps.md). This guide focuses specifically on using **Azure Service Bus** as the event transport layer.
+> For the full end-to-end AIOps pipeline -- including AI inference, Lightspeed playbook generation, and the Crawl/Walk/Run maturity model -- see [AIOps automation with Ansible](README-AIOps.md). This guide focuses specifically on using **Azure Service Bus** as the event transport layer.
 
 - [Overview](#overview)
 - [Background](#background)
@@ -37,7 +37,7 @@ This guide demonstrates how to connect **Azure Service Bus Queues** directly to 
 - [Solution Walkthrough](#solution-walkthrough)
   - [1. Configure Azure Service Bus Queue](#1-configure-azure-service-bus-queue)
   - [2. EDA Rulebook for Azure Service Bus Events](#2-eda-rulebook-for-azure-service-bus-events)
-  - [3. Enrichment Workflow — Gather Context and Analyze with AI](#3-enrichment-workflow--gather-context-and-analyze-with-ai)
+  - [3. Enrichment Workflow -- Gather Context and Analyze with AI](#3-enrichment-workflow--gather-context-and-analyze-with-ai)
   - [4. Notify and Remediate](#4-notify-and-remediate)
 - [Validation](#validation)
   - [Troubleshooting](#troubleshooting)
@@ -51,13 +51,13 @@ This guide demonstrates how to connect **Azure Service Bus Queues** directly to 
 
 **Azure Service Bus** is a fully managed enterprise messaging service from Microsoft that supports message queuing and publish-subscribe patterns. It decouples event producers (monitoring tools, applications, Azure services) from consumers (automation systems, dashboards, alerting tools), providing reliable message delivery with features like dead-letter queues, sessions, and scheduled delivery.
 
-<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview">Azure Service Bus Messaging — microsoft.com</a>
+<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview">Azure Service Bus Messaging -- microsoft.com</a>
 
-In an AIOps context, Azure Service Bus acts as the **event transport layer** — sitting between Azure's monitoring and alerting tools (Azure Monitor, Azure Alerts, Defender for Cloud) and Ansible's automation engine. Events are published to a Service Bus queue or topic, and Event-Driven Ansible subscribes to consume them in real time.
+In an AIOps context, Azure Service Bus acts as the **event transport layer** -- sitting between Azure's monitoring and alerting tools (Azure Monitor, Azure Alerts, Defender for Cloud) and Ansible's automation engine. Events are published to a Service Bus queue or topic, and Event-Driven Ansible subscribes to consume them in real time.
 
 This architecture is particularly valuable for organizations that already use Azure Service Bus as their event backbone. Instead of building custom integrations for each alert type, you route all events through Service Bus and let a single EDA rulebook handle the dispatch to enrichment and remediation workflows.
 
-<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.redhat.com/en/topics/ai/what-is-aiops">What is AIOps? — redhat.com</a>
+<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.redhat.com/en/topics/ai/what-is-aiops">What is AIOps? -- redhat.com</a>
 
 <h2 id="solution"></h2>
 
@@ -79,9 +79,9 @@ What makes up the solution?
 
 | Persona | Challenge | What They Gain |
 |---------|-----------|---------------|
-| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e0.png" width="20" style="vertical-align:text-bottom;"> **IT Ops Engineer / SRE** | Monitoring Azure Service Bus queues for critical events and manually investigating each one across hybrid Azure and on-prem infrastructure | Azure events automatically trigger enrichment and remediation workflows — the fix starts before the engineer even sees the alert |
+| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e0.png" width="20" style="vertical-align:text-bottom;"> **IT Ops Engineer / SRE** | Monitoring Azure Service Bus queues for critical events and manually investigating each one across hybrid Azure and on-prem infrastructure | Azure events automatically trigger enrichment and remediation workflows -- the fix starts before the engineer even sees the alert |
 | <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f5fa.png" width="20" style="vertical-align:text-bottom;"> **Automation Architect** | Integrating Azure's messaging layer with Ansible requires understanding Service Bus authentication, EDA event source plugins, and credential management | A reference architecture with production-ready EDA rulebooks, Azure Service Bus configuration, and tested collection usage |
-| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4ca.png" width="20" style="vertical-align:text-bottom;"> **IT Manager / Director** | Azure event volume is growing but response times aren't improving; hybrid cloud operations span Azure and on-prem with no unified automation trigger | A single event pipeline that bridges Azure monitoring with Ansible remediation across hybrid environments — measurable MTTR reduction |
+| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4ca.png" width="20" style="vertical-align:text-bottom;"> **IT Manager / Director** | Azure event volume is growing but response times aren't improving; hybrid cloud operations span Azure and on-prem with no unified automation trigger | A single event pipeline that bridges Azure monitoring with Ansible remediation across hybrid environments -- measurable MTTR reduction |
 
 <h2 id="prerequisites"></h2>
 
@@ -89,13 +89,13 @@ What makes up the solution?
 
 ### Ansible Automation Platform
 
-- **Ansible Automation Platform 2.5+** — Required for enterprise Event-Driven Ansible (EDA Controller) support and the Azure Service Bus event source plugin.
+- **Ansible Automation Platform 2.5+** -- Required for enterprise Event-Driven Ansible (EDA Controller) support and the Azure Service Bus event source plugin.
 
 ### Featured Ansible Content Collections
 
 | Collection | Type | Purpose |
 |-----------|------|---------|
-| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/eda/content/eda%2Fplugins%2Fevent_source/azure_service_bus/">ansible.eda</a> | Certified | EDA event sources and filters — includes the `azure_service_bus` event source plugin |
+| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/eda/content/eda%2Fplugins%2Fevent_source/azure_service_bus/">ansible.eda</a> | Certified | EDA event sources and filters -- includes the `azure_service_bus` event source plugin |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/azure/azcollection/">azure.azcollection</a> | Certified | Manage Azure resources (VMs, networking, storage, etc.) for remediation tasks |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller/">ansible.controller</a> | Certified | Automation Controller configuration as code (job templates, workflows, surveys) |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/ai">redhat.ai</a> | Certified | AI model inference using the OpenAI-compatible API via InstructLab |
@@ -118,16 +118,16 @@ What makes up the solution?
 
 The workflow has four stages, matching the [AIOps reference architecture](README-AIOps.md):
 
-1. **Azure Event → Service Bus → EDA** — Azure Monitor, Defender for Cloud, or a custom application publishes an event to a Service Bus queue. EDA subscribes to the queue and consumes the message.
-2. **Enrichment Workflow** — AAP gathers additional context from the affected Azure resource or on-prem host, sends the enriched data to Red Hat AI for root cause analysis, and notifies the operations team.
-3. **Remediation Workflow** — Ansible Lightspeed generates a remediation playbook from the AI analysis, commits it to Git, and creates a Job Template.
-4. **Execute Remediation** — The generated playbook runs against the affected infrastructure (Azure VMs, on-prem hosts, or network devices), resolving the issue.
+1. **Azure Event → Service Bus → EDA** -- Azure Monitor, Defender for Cloud, or a custom application publishes an event to a Service Bus queue. EDA subscribes to the queue and consumes the message.
+2. **Enrichment Workflow** -- AAP gathers additional context from the affected Azure resource or on-prem host, sends the enriched data to Red Hat AI for root cause analysis, and notifies the operations team.
+3. **Remediation Workflow** -- Ansible Lightspeed generates a remediation playbook from the AI analysis, commits it to Git, and creates a Job Template.
+4. **Execute Remediation** -- The generated playbook runs against the affected infrastructure (Azure VMs, on-prem hosts, or network devices), resolving the issue.
 
 ### Operational Impact per Stage
 
 | Stage | Operational Impact | Why |
 |-------|-------------------|-----|
-| **1. Azure Event → EDA** | **None** | Read-only — EDA reads a message from the Service Bus queue. No changes to systems. |
+| **1. Azure Event → EDA** | **None** | Read-only -- EDA reads a message from the Service Bus queue. No changes to systems. |
 | **2. Enrichment Workflow** | **Low** | Collects logs and system info, calls an AI API, posts to chat/ITSM. No infrastructure changes. |
 | **3. Remediation Workflow** | **Low** | Generates a playbook, commits to Git, creates a Job Template. Prepares the fix but does not touch production. |
 | **4. Execute Remediation** | **High** | Modifies production infrastructure. Should go through a change window or approval gate. |
@@ -140,7 +140,7 @@ Azure Monitor/Alert → Service Bus Queue → EDA Rulebook → Enrichment Workfl
 
 > **Azure Service Bus is the event transport layer.**
 >
-> In the AIOps reference architecture, Kafka or a direct webhook handles event transport. When using Azure Service Bus, it replaces that layer — Azure services publish events to a queue, and EDA subscribes directly using the built-in `ansible.eda.azure_service_bus` plugin.
+> In the AIOps reference architecture, Kafka or a direct webhook handles event transport. When using Azure Service Bus, it replaces that layer -- Azure services publish events to a queue, and EDA subscribes directly using the built-in `ansible.eda.azure_service_bus` plugin.
 
 <h2 id="solution-walkthrough"></h2>
 
@@ -221,17 +221,17 @@ The EDA rulebook subscribes to the Azure Service Bus queue using the built-in `a
             fired_time: "{{ event.body.data.essentials.firedDateTime | default('') }}"
 ```
 
-The rulebook extracts key fields from the Azure Monitor alert schema — the alert rule name, severity, affected Azure resource ID, description, and timestamp — and passes them to the enrichment workflow.
+The rulebook extracts key fields from the Azure Monitor alert schema -- the alert rule name, severity, affected Azure resource ID, description, and timestamp -- and passes them to the enrichment workflow.
 
 > **Azure Monitor Common Alert Schema.**
 >
-> Azure Monitor alerts follow a <a target="_blank" href="https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-common-schema">Common Alert Schema</a> with `essentials` (severity, alert rule, target resource) and `alertContext` (metric/log details). Your rulebook conditions can filter on any of these fields — for example, only triggering automation on `Sev0` or `Sev1` alerts.
+> Azure Monitor alerts follow a <a target="_blank" href="https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-common-schema">Common Alert Schema</a> with `essentials` (severity, alert rule, target resource) and `alertContext` (metric/log details). Your rulebook conditions can filter on any of these fields -- for example, only triggering automation on `Sev0` or `Sev1` alerts.
 
-### 3. Enrichment Workflow — Gather Context and Analyze with AI
+### 3. Enrichment Workflow -- Gather Context and Analyze with AI
 
 **Operational Impact:** Low
 
-Once EDA triggers the enrichment workflow, Ansible gathers additional context from the affected Azure resource and sends everything to Red Hat AI for root cause analysis. This is the same pattern described in the [AIOps reference architecture — Log Enrichment and Prompt Generation Workflow](README-AIOps.md#2-log-enrichment-and-prompt-generation-workflow).
+Once EDA triggers the enrichment workflow, Ansible gathers additional context from the affected Azure resource and sends everything to Red Hat AI for root cause analysis. This is the same pattern described in the [AIOps reference architecture -- Log Enrichment and Prompt Generation Workflow](README-AIOps.md#2-log-enrichment-and-prompt-generation-workflow).
 
 **Step 3a: Gather context from the affected Azure VM**
 
@@ -310,7 +310,7 @@ Once EDA triggers the enrichment workflow, Ansible gathers additional context fr
 
 **Operational Impact:** Low (notification) → **High** (remediation execution)
 
-The enrichment workflow posts the AI analysis to your team's communication channel and — depending on your maturity level — either queues a remediation playbook for human approval or executes it automatically.
+The enrichment workflow posts the AI analysis to your team's communication channel and -- depending on your maturity level -- either queues a remediation playbook for human approval or executes it automatically.
 
 ```yaml
     - name: Post AI diagnosis to Slack
@@ -337,7 +337,7 @@ The enrichment workflow posts the AI analysis to your team's communication chann
       when: snow_instance is defined
 ```
 
-From here, the remediation follows the same pattern as the [AIOps Remediation Workflow](README-AIOps.md#3-remediation-workflow) — Lightspeed generates a playbook, it gets committed to Git, and a Job Template is created for execution.
+From here, the remediation follows the same pattern as the [AIOps Remediation Workflow](README-AIOps.md#3-remediation-workflow) -- Lightspeed generates a playbook, it gets committed to Git, and a Job Template is created for execution.
 
 <h2 id="validation"></h2>
 
@@ -350,7 +350,7 @@ From here, the remediation follows the same pattern as the [AIOps Remediation Wo
 | **3. Remediation Workflow** | Playbook was generated and committed | New playbook file exists in the Git repository; Job Template was created |
 | **4. Execute Remediation** | The fix was applied | Azure resource returns to healthy state; Azure Monitor alert auto-resolves |
 
-**Quick validation test** — Send a test message to the Service Bus queue using the Azure CLI:
+**Quick validation test** -- Send a test message to the Service Bus queue using the Azure CLI:
 
 ```bash
 az servicebus queue send \
@@ -408,7 +408,7 @@ az servicebus queue send \
 
 ## Summary
 
-With Azure Service Bus connected to Event-Driven Ansible, your Azure monitoring alerts become the trigger for automated enrichment and remediation. Instead of engineers manually triaging every Azure Monitor alert, events flow through Service Bus into an AIOps pipeline that diagnoses root cause with AI and remediates with Ansible — reducing MTTR and bridging the gap between Azure's cloud monitoring and your operational automation, whether the affected systems are in Azure, on-prem, or hybrid.
+With Azure Service Bus connected to Event-Driven Ansible, your Azure monitoring alerts become the trigger for automated enrichment and remediation. Instead of engineers manually triaging every Azure Monitor alert, events flow through Service Bus into an AIOps pipeline that diagnoses root cause with AI and remediates with Ansible -- reducing MTTR and bridging the gap between Azure's cloud monitoring and your operational automation, whether the affected systems are in Azure, on-prem, or hybrid.
 
 ---
 

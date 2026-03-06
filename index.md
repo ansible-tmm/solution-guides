@@ -86,7 +86,7 @@ patternfly: true
             <h3 class="pf-v6-c-card__title-text">Triggering Automated Remediation from Splunk Alerts</h3>
           </div>
           <div class="pf-v6-c-card__body">
-            Connect Splunk alerts to Event-Driven Ansible for closed-loop detection and remediation — from webhook configuration to AI-enriched response.
+            Connect Splunk alerts to Event-Driven Ansible for closed-loop detection and remediation -- from webhook configuration to AI-enriched response.
           </div>
           <div class="pf-v6-c-card__footer">
             <img src="{{ '/assets/images/splunk-logo.png' | relative_url }}" alt="Splunk" class="card-partner-logo">
@@ -108,7 +108,7 @@ patternfly: true
             <h3 class="pf-v6-c-card__title-text">Reducing MTTR with ServiceNow Ticket Enrichment</h3>
           </div>
           <div class="pf-v6-c-card__body">
-            Automatically enrich ServiceNow incidents with diagnostic data and AI-driven root cause analysis — the lowest-risk entry point for AIOps.
+            Automatically enrich ServiceNow incidents with diagnostic data and AI-driven root cause analysis -- the lowest-risk entry point for AIOps.
           </div>
           <div class="pf-v6-c-card__footer">
             <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">
@@ -152,7 +152,7 @@ patternfly: true
             <h3 class="pf-v6-c-card__title-text">AI Infrastructure automation with Ansible</h3>
           </div>
           <div class="pf-v6-c-card__body">
-            Provision and configure Red Hat AI infrastructure — from GPU instances to serving models — using the infra.ai and redhat.ai collections.
+            Provision and configure Red Hat AI infrastructure -- from GPU instances to serving models -- using the infra.ai and redhat.ai collections.
           </div>
         </div>
       </a>
@@ -179,7 +179,7 @@ patternfly: true
 
     <div class="cards-contributing">
       <h2>Contributing</h2>
-      <p>Writing a new solution guide? Start with the <a href="{{ '/README-best-practices' | relative_url }}">Best Practices for Writing Solution Guides</a> — it includes the framework, quality scoring rubric, and a starter template.</p>
+      <p>Writing a new solution guide? Start with the <a href="{{ '/README-best-practices' | relative_url }}">Best Practices for Writing Solution Guides</a> -- it includes the framework, quality scoring rubric, and a starter template.</p>
     </div>
 
     <details class="legacy-guides">
@@ -215,7 +215,7 @@ patternfly: true
               <h3 class="pf-v6-c-card__title-text">Get started with EDA (Ansible Rulebook)</h3>
             </div>
             <div class="pf-v6-c-card__body">
-              Fundamentals of Event-Driven Ansible — rulebooks, event sources, conditions, and actions.
+              Fundamentals of Event-Driven Ansible -- rulebooks, event sources, conditions, and actions.
             </div>
           </div>
         </a>

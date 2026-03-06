@@ -1,4 +1,4 @@
-# Plan: Instana + AAP AIOps Solution Guide (v3 — Terminology-Corrected)
+# Plan: Instana + AAP AIOps Solution Guide (v3 -- Terminology-Corrected)
 
 ## Context
 
@@ -12,7 +12,7 @@ Three use cases: Service latency spike recovery, Database performance degradatio
 
 AI layer: Instana's built-in Probable Root Cause (causal AI) is primary. Instana also provides native AI capabilities (Intelligent Remediation, Intelligent Incident Investigation, confidence-score action recommendations). Optional external LLM step for dynamic job template routing from AAP's existing catalog.
 
-Key messaging: AAP's value is in connecting existing, trusted automation to observability signals — not generating new playbooks. The guide emphasizes curated remediation from playbooks teams have already built, tested, and promoted.
+Key messaging: AAP's value is in connecting existing, trusted automation to observability signals -- not generating new playbooks. The guide emphasizes curated remediation from playbooks teams have already built, tested, and promoted.
 
 ---
 
@@ -116,10 +116,10 @@ sources:
 ### 4. Automation Framework Is Now GA (Updated March 2026)
 
 The Instana automation framework has graduated to GA. Key updates:
-- **Auto-trigger is GA** — automation policies can trigger actions automatically based on event definitions, Smart Alerts, or schedules
-- **Automation Action Ansible sensor is GA** — connects to automation controller via the Ansible automation connector, supports up to 10 concurrent actions
-- **Auto-import of job templates shipped in sensor 1.0.74 (July 2025)** — the sensor auto-imports job templates and workflow job templates from automation controller whenever enabled or reconfigured
-- **Intelligent Incident Investigation launched GA Dec 2025** — agentic AI that generates Bash or Ansible scripts
+- **Auto-trigger is GA** -- automation policies can trigger actions automatically based on event definitions, Smart Alerts, or schedules
+- **Automation Action Ansible sensor is GA** -- connects to automation controller via the Ansible automation connector, supports up to 10 concurrent actions
+- **Auto-import of job templates shipped in sensor 1.0.74 (July 2025)** -- the sensor auto-imports job templates and workflow job templates from automation controller whenever enabled or reconfigured
+- **Intelligent Incident Investigation launched GA Dec 2025** -- agentic AI that generates Bash or Ansible scripts
 
 Sources:
 - [Managing actions (v1.0.312, no beta label)](https://www.ibm.com/docs/en/instana-observability/1.0.312?topic=instana-managing-actions)
@@ -130,7 +130,7 @@ Sources:
 **v1 used** `POST {{ instana_base_url }}/api/v1/events`.
 
 **Actual**: Two correct approaches:
-- **Host Agent REST API** (recommended): `POST http://localhost:42699/com.instana.plugin.generic.event` — no auth needed, agent-local endpoint
+- **Host Agent REST API** (recommended): `POST http://localhost:42699/com.instana.plugin.generic.event` -- no auth needed, agent-local endpoint
 - **Backend API** for deployment markers: `POST /api/releases` with `authorization: apiToken <token>` header
 
 ### 6. Smart Alerts with Adaptive Thresholds Are the Recommended Approach
@@ -154,38 +154,38 @@ Every section below maps to the 9-step framework. Items marked **GAP** are missi
 
 | # | Best Practices Section | Status | Notes |
 |---|------------------------|--------|-------|
-| 1 | Title — outcome-oriented, `[Topic] - Solution Guide` format | Done | |
-| 2.1 | Overview — problem statement (2-4 sentences, quantify pain) | Done | Reframed around curated existing automation |
-| 2.2 | Overview — linked table of contents | Done | |
-| 3 | Background — domain context (1-3 paragraphs, link to redhat.com topic pages) | Done | Updated: AAP section reframed as "Connecting Existing Automation to Observability"; Instana section needs AI capabilities update |
-| 4.1 | Solution — components list with product page links | Done | |
-| 4.2 | Solution — persona table (3-col: Persona, Challenge, What They Gain) | Done | Reframed around existing automation being underutilized |
-| 4.3 | Solution — demos, videos, and labs | Done | |
-| 5.1 | Prerequisites — AAP version | Done | |
-| 5.2 | Prerequisites — featured collections with Automation Hub links | Done | |
-| 5.3 | Prerequisites — external systems table | Done | |
-| 5.4 | Prerequisites — cost and resource notes | Done | Added: GPU, licensing, EDA sizing, AI endpoint |
-| 5.5 | Prerequisites — operational impact (per-step or per-guide) | Done | Operational Impact per Stage table in Integration Architecture section |
-| 5.6 | Prerequisites — KB article metadata (business value drivers, technical value drivers) | Done | Business value and Technical value paragraphs in Overview |
-| 6.1 | Workflow — diagram (3-6 blocks) | Done | Two diagrams (Path A, Path B) |
-| 6.2 | Workflow — narrative walkthrough (5-8 sentences) | Done | 5-paragraph prose narrative with per-path breakdown |
-| 6.3 | Workflow — visual design patterns (tables, callouts, screenshots) | Done | |
-| 7.1 | Solution walkthrough — numbered steps with headings | Done | |
-| 7.2 | Solution walkthrough — featured code (key tasks, not full playbooks) | Done | |
-| 7.3 | Solution walkthrough — AAP integration (job template config, credentials, RBAC) | Done | |
-| 8.1 | Validation — concrete, executable test | Done | curl command with synthetic payload |
-| 8.2 | Validation — expected result (actual output, not prose) | Done | |
-| 8.3 | Validation — troubleshooting table (2-3+ common failures) | Done | 7 rows |
-| 9.1 | Maturity path — crawl/walk/run with "What to Build" column | Done | Crawl step needs AI-recommended job template details update |
-| 9.2 | Related guides — cross-links to next, prerequisite, and advanced guides | Done | |
-| 9.3 | ROI recap — measurable outcome summary | Done | Added after Related Guides with "Automation reuse, not reinvention" lead |
+| 1 | Title -- outcome-oriented, `[Topic] - Solution Guide` format | Done | |
+| 2.1 | Overview -- problem statement (2-4 sentences, quantify pain) | Done | Reframed around curated existing automation |
+| 2.2 | Overview -- linked table of contents | Done | |
+| 3 | Background -- domain context (1-3 paragraphs, link to redhat.com topic pages) | Done | Updated: AAP section reframed as "Connecting Existing Automation to Observability"; Instana section needs AI capabilities update |
+| 4.1 | Solution -- components list with product page links | Done | |
+| 4.2 | Solution -- persona table (3-col: Persona, Challenge, What They Gain) | Done | Reframed around existing automation being underutilized |
+| 4.3 | Solution -- demos, videos, and labs | Done | |
+| 5.1 | Prerequisites -- AAP version | Done | |
+| 5.2 | Prerequisites -- featured collections with Automation Hub links | Done | |
+| 5.3 | Prerequisites -- external systems table | Done | |
+| 5.4 | Prerequisites -- cost and resource notes | Done | Added: GPU, licensing, EDA sizing, AI endpoint |
+| 5.5 | Prerequisites -- operational impact (per-step or per-guide) | Done | Operational Impact per Stage table in Integration Architecture section |
+| 5.6 | Prerequisites -- KB article metadata (business value drivers, technical value drivers) | Done | Business value and Technical value paragraphs in Overview |
+| 6.1 | Workflow -- diagram (3-6 blocks) | Done | Two diagrams (Path A, Path B) |
+| 6.2 | Workflow -- narrative walkthrough (5-8 sentences) | Done | 5-paragraph prose narrative with per-path breakdown |
+| 6.3 | Workflow -- visual design patterns (tables, callouts, screenshots) | Done | |
+| 7.1 | Solution walkthrough -- numbered steps with headings | Done | |
+| 7.2 | Solution walkthrough -- featured code (key tasks, not full playbooks) | Done | |
+| 7.3 | Solution walkthrough -- AAP integration (job template config, credentials, RBAC) | Done | |
+| 8.1 | Validation -- concrete, executable test | Done | curl command with synthetic payload |
+| 8.2 | Validation -- expected result (actual output, not prose) | Done | |
+| 8.3 | Validation -- troubleshooting table (2-3+ common failures) | Done | 7 rows |
+| 9.1 | Maturity path -- crawl/walk/run with "What to Build" column | Done | Crawl step needs AI-recommended job template details update |
+| 9.2 | Related guides -- cross-links to next, prerequisite, and advanced guides | Done | |
+| 9.3 | ROI recap -- measurable outcome summary | Done | Added after Related Guides with "Automation reuse, not reinvention" lead |
 
 ### Pending Enhancements
 
-1. **Expand Instana AI capabilities in Background section** — add coverage of:
+1. **Expand Instana AI capabilities in Background section** -- add coverage of:
    - **Action catalog confidence scoring** (GA): text-similarity matching of event metadata against action metadata; recommends actions (including auto-imported AAP job templates) with confidence scores; no prior configuration needed
    - **Recommended actions vs. automation policies**: recommended actions are dynamic per-event (AI-driven, manual execution); automation policies are explicit mappings (can auto-trigger). Intended workflow: start with recommended actions for unknown issues, then codify as automation policies once validated.
-   - **Intelligent Remediation** (GA Oct 2024): 90+ pre-built curated remediation actions for containers, Elasticsearch, Host, JVM, Kafka, Kubernetes. Live AI generation via watsonx Granite LLM is public preview (not GA) — generates manual steps and Bash/Ansible scripts, but these require human review and are not auto-executed.
+   - **Intelligent Remediation** (GA Oct 2024): 90+ pre-built curated remediation actions for containers, Elasticsearch, Host, JVM, Kafka, Kubernetes. Live AI generation via watsonx Granite LLM is public preview (not GA) -- generates manual steps and Bash/Ansible scripts, but these require human review and are not auto-executed.
    - **Intelligent Incident Investigation** (GA Dec 2025): agentic AI for full incident investigation across dependency graphs. Produces root cause analysis, transparent reasoning, and remediation guidance. "Actions to Scripts" converts recommendations to Bash or Ansible scripts exportable to GitHub. Does not create AAP job templates directly.
    - **Key distinction**: Instana's native AI generates investigation guidance and suggested scripts. AAP provides the governed execution layer for trusted, existing automation. The two are complementary, not overlapping.
 
@@ -194,7 +194,7 @@ Every section below maps to the 9-step framework. Items marked **GAP** are missi
    - Step 2: Pass the job template list (names, descriptions, tags) + Instana event context to the LLM
    - Step 3: LLM selects the best matching existing job template (or responds "no matching automation")
    - Step 4: Workflow conditionally runs the selected job template
-   - This makes AI routing dynamic — as teams add new job templates, the AI automatically considers them
+   - This makes AI routing dynamic -- as teams add new job templates, the AI automatically considers them
    - The AI selects from existing templates; it does not generate new playbooks
    - Rename section from "AI Inference Enhancement" to "AI-Assisted Routing"
 
@@ -216,7 +216,7 @@ Every section below maps to the 9-step framework. Items marked **GAP** are missi
 
 ### 2. Overview
 
-**Problem statement**: Observability tools like IBM Instana detect thousands of infrastructure and application anomalies daily — but detection alone does not fix the problem. Most organizations still route alerts to human on-call engineers for manual triage and remediation, creating alert fatigue, inconsistent responses, and MTTR measured in hours instead of minutes. Red Hat Ansible Automation Platform bridges this gap as a **trusted, governed automation layer** that turns observability signals into consistent, auditable remediation actions. This guide demonstrates how to connect IBM Instana Observability to Ansible Automation Platform so that every high-signal Incident triggers the right remediation — automatically, with full RBAC control and audit trail.
+**Problem statement**: Observability tools like IBM Instana detect thousands of infrastructure and application anomalies daily -- but detection alone does not fix the problem. Most organizations still route alerts to human on-call engineers for manual triage and remediation, creating alert fatigue, inconsistent responses, and MTTR measured in hours instead of minutes. Red Hat Ansible Automation Platform bridges this gap as a **trusted, governed automation layer** that turns observability signals into consistent, auditable remediation actions. This guide demonstrates how to connect IBM Instana Observability to Ansible Automation Platform so that every high-signal Incident triggers the right remediation -- automatically, with full RBAC control and audit trail.
 
 Include:
 - Hero image placeholder
@@ -226,51 +226,51 @@ Include:
 
 ### 3. Background
 
-**The AIOps gap: detection without remediation.** Modern observability platforms excel at detecting anomalies, identifying root causes, and correlating events. But without an automation layer to act on those signals, organizations are left with dashboards and alert noise. The value of observability is only realized when it connects to remediation — and that remediation must be governed, auditable, and consistent across teams.
+**The AIOps gap: detection without remediation.** Modern observability platforms excel at detecting anomalies, identifying root causes, and correlating events. But without an automation layer to act on those signals, organizations are left with dashboards and alert noise. The value of observability is only realized when it connects to remediation -- and that remediation must be governed, auditable, and consistent across teams.
 
 **Why Ansible Automation Platform is the trusted automation layer.** AAP provides the capabilities that turn observability signals into safe, governed action:
-- **Automation controller** — centralized execution of job templates with full RBAC, ensuring only authorized teams can trigger remediation for their scope
-- **Event-Driven Ansible** — real-time event processing via rulebooks that match observability events to the correct remediation job template, eliminating manual triage
-- **Audit trail** — every job execution is logged with who triggered it, what changed, and whether it succeeded, satisfying compliance and change management requirements
-- **Approval workflows** — workflow job templates can include approval nodes so that high-impact remediations require human sign-off before execution
-- **Credential management** — secrets are stored in automation controller and injected at runtime, never exposed in playbooks or logs
-- **Execution environments** — containerized, reproducible runtime environments ensure remediation playbooks run identically in dev, staging, and production
+- **Automation controller** -- centralized execution of job templates with full RBAC, ensuring only authorized teams can trigger remediation for their scope
+- **Event-Driven Ansible** -- real-time event processing via rulebooks that match observability events to the correct remediation job template, eliminating manual triage
+- **Audit trail** -- every job execution is logged with who triggered it, what changed, and whether it succeeded, satisfying compliance and change management requirements
+- **Approval workflows** -- workflow job templates can include approval nodes so that high-impact remediations require human sign-off before execution
+- **Credential management** -- secrets are stored in automation controller and injected at runtime, never exposed in playbooks or logs
+- **Execution environments** -- containerized, reproducible runtime environments ensure remediation playbooks run identically in dev, staging, and production
 
 **IBM Instana Observability as the detection layer.** Instana is a full-stack observability platform with auto-discovery of 300+ technologies, 1-second data granularity, and Probable Root Cause analysis powered by causal AI. Instana provides the intelligent detection that feeds AAP's automation layer:
-- **Smart Alerts** with adaptive thresholds that learn seasonality — reducing false positives without manual threshold tuning
-- **Probable Root Cause** — identifies *why* something broke, not just *that* it broke, giving AAP the context needed to choose the right remediation
+- **Smart Alerts** with adaptive thresholds that learn seasonality -- reducing false positives without manual threshold tuning
+- **Probable Root Cause** -- identifies *why* something broke, not just *that* it broke, giving AAP the context needed to choose the right remediation
 - Three event types (**Change**, **Issue**, **Incident**) that map cleanly to EDA rulebook conditions
 
 **Instana's native AI capabilities.** Beyond detection, Instana includes its own AI-powered features that complement AAP's governed execution:
-- **Action catalog with confidence scoring** (GA) — when an event fires, Instana uses text-similarity matching to recommend relevant actions from the catalog (including auto-imported AAP job templates) with a confidence score. No prior configuration needed — start with recommended actions for unknown issues, then codify as automation policies once validated.
-- **Intelligent Remediation** (GA Oct 2024) — ships 90+ pre-built curated remediation actions for common technologies (containers, Elasticsearch, Host, JVM, Kafka, Kubernetes). Live AI generation of new actions via watsonx Granite LLM is public preview — generates manual steps and Bash/Ansible scripts that require human review before use.
-- **Intelligent Incident Investigation** (GA Dec 2025) — agentic AI that performs full incident investigation across dependency graphs, producing root cause analysis, transparent reasoning, and remediation guidance. The "Actions to Scripts" feature converts recommendations to Bash or Ansible scripts exportable to GitHub for review and promotion into AAP.
+- **Action catalog with confidence scoring** (GA) -- when an event fires, Instana uses text-similarity matching to recommend relevant actions from the catalog (including auto-imported AAP job templates) with a confidence score. No prior configuration needed -- start with recommended actions for unknown issues, then codify as automation policies once validated.
+- **Intelligent Remediation** (GA Oct 2024) -- ships 90+ pre-built curated remediation actions for common technologies (containers, Elasticsearch, Host, JVM, Kafka, Kubernetes). Live AI generation of new actions via watsonx Granite LLM is public preview -- generates manual steps and Bash/Ansible scripts that require human review before use.
+- **Intelligent Incident Investigation** (GA Dec 2025) -- agentic AI that performs full incident investigation across dependency graphs, producing root cause analysis, transparent reasoning, and remediation guidance. The "Actions to Scripts" feature converts recommendations to Bash or Ansible scripts exportable to GitHub for review and promotion into AAP.
 
-The key distinction: Instana's native AI generates investigation guidance and suggested scripts. AAP provides the governed execution layer for trusted, existing automation. The two are complementary — Instana identifies what to do, AAP ensures it is done safely and consistently.
+The key distinction: Instana's native AI generates investigation guidance and suggested scripts. AAP provides the governed execution layer for trusted, existing automation. The two are complementary -- Instana identifies what to do, AAP ensures it is done safely and consistently.
 
-**The IBM family advantage.** IBM owns both Instana and Red Hat. The `ibm.instana` Ansible Content Collection is available on Red Hat automation hub. Instana also monitors Ansible natively via a callback plugin — creating a bidirectional feedback loop where the automation layer is itself observed.
+**The IBM family advantage.** IBM owns both Instana and Red Hat. The `ibm.instana` Ansible Content Collection is available on Red Hat automation hub. Instana also monitors Ansible natively via a callback plugin -- creating a bidirectional feedback loop where the automation layer is itself observed.
 
 ---
 
 ### 4. Solution
 
-**Components (AAP — the automation layer):**
-- **[Red Hat Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible)** — Governed job template execution with RBAC, audit trail, approval workflows, and credential management via automation controller
-- **[Event-Driven Ansible](https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible)** — Real-time event processing: webhook listener, rulebook conditions, and automated job template triggering (Path A)
-- **`ibm.instana` Ansible Content Collection** — Dedicated `instana_webhook` EDA source plugin for parsing Instana webhook payloads
+**Components (AAP -- the automation layer):**
+- **[Red Hat Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible)** -- Governed job template execution with RBAC, audit trail, approval workflows, and credential management via automation controller
+- **[Event-Driven Ansible](https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible)** -- Real-time event processing: webhook listener, rulebook conditions, and automated job template triggering (Path A)
+- **`ibm.instana` Ansible Content Collection** -- Dedicated `instana_webhook` EDA source plugin for parsing Instana webhook payloads
 
-**Components (Instana — the detection layer):**
-- **[IBM Instana Observability](https://www.ibm.com/products/instana)** — Auto-discovery, Smart Alerts with adaptive thresholds, Probable Root Cause (causal AI)
-- **Instana automation framework** — In-product action catalog with AI-powered action recommendations and auto-trigger via automation policies (Path B)
+**Components (Instana -- the detection layer):**
+- **[IBM Instana Observability](https://www.ibm.com/products/instana)** -- Auto-discovery, Smart Alerts with adaptive thresholds, Probable Root Cause (causal AI)
+- **Instana automation framework** -- In-product action catalog with AI-powered action recommendations and auto-trigger via automation policies (Path B)
 
 **Optional:**
-- **AI inference endpoint** — Red Hat AI or any OpenAI-compatible API for enriched remediation recommendations
+- **AI inference endpoint** -- Red Hat AI or any OpenAI-compatible API for enriched remediation recommendations
 
 **Persona table:**
 
 | Persona | Challenge | What They Gain |
 |---------|-----------|---------------|
-| IT Ops Engineer / SRE | Alert fatigue from observability tools; manual triage and inconsistent remediation across shifts | AAP provides consistent, tested remediation via governed job templates — Instana Incidents trigger the right fix automatically, every time |
+| IT Ops Engineer / SRE | Alert fatigue from observability tools; manual triage and inconsistent remediation across shifts | AAP provides consistent, tested remediation via governed job templates -- Instana Incidents trigger the right fix automatically, every time |
 | Automation Architect | Need to connect observability signals to AAP with proper RBAC, credential management, and approval workflows | Two production-ready integration patterns with verified YAML, correct payload accessors, and automation controller configuration tables |
 | IT Manager / Director | MTTR measured in hours; no audit trail for incident response; difficult to justify observability spend | AAP's audit trail satisfies compliance; MTTR drops to minutes; observability investment becomes an active remediation trigger, not just dashboards |
 
@@ -307,7 +307,7 @@ The key distinction: Instana's native AI generates investigation guidance and su
 - Ansible Core >= 2.15.0
 - aiohttp >= 3.8.4 (for `ibm.instana` collection)
 
-**Operational Impact:** Medium — remediation playbooks modify production services. Test in non-prod first. Per-step impact ratings provided in the walkthrough.
+**Operational Impact:** Medium -- remediation playbooks modify production services. Test in non-prod first. Per-step impact ratings provided in the walkthrough.
 
 ---
 
@@ -388,7 +388,7 @@ extra_vars:
 
 ---
 
-#### Part 2: Path A — Event-Driven Ansible Integration
+#### Part 2: Path A -- Event-Driven Ansible Integration
 
 **Step 3: Configure Instana webhook alert channel**
 
@@ -400,7 +400,7 @@ Navigate to **Settings > Events & Alerts > Alert Channels > Add Alert Channel > 
 | **Webhook URL** | `https://eda.example.com:5000/instana` |
 | **Custom HTTP Headers** | (optional: `X-EDA-Token: <bearer-token>` for auth) |
 
-> **Note**: Instana states "The Instana Webhook format is not compatible with third-party tools expecting Incoming Webhooks in their format." This is expected — the EDA rulebook handles parsing.
+> **Note**: Instana states "The Instana Webhook format is not compatible with third-party tools expecting Incoming Webhooks in their format." This is expected -- the EDA rulebook handles parsing.
 
 Use the **Test Channel** button to verify delivery.
 
@@ -512,7 +512,7 @@ Using the dedicated `ibm.instana.instana_webhook` source plugin:
 
 ---
 
-#### Part 3: Path B — Instana Automation Framework (GA)
+#### Part 3: Path B -- Instana Automation Framework (GA)
 
 **Step 5: Configure the Automation Action Ansible sensor on the Instana host agent**
 
@@ -542,7 +542,7 @@ Once the sensor is enabled, it automatically imports all job templates and workf
 
 1. Navigate to **Automation > Action Catalog** in Instana
 2. Verify job templates appear as Ansible actions (auto-imported by sensor 1.0.74+)
-3. No manual action creation needed — templates sync automatically on sensor enable/reconfigure
+3. No manual action creation needed -- templates sync automatically on sensor enable/reconfigure
 4. Instana shows a **confidence score** for each action-event association based on text-similarity matching
 
 **Step 7: Create an automation policy for auto-trigger**
@@ -580,7 +580,7 @@ Once the sensor is enabled, it automatically imports all job templates and workf
 
 Instana detects response time exceeding the adaptive threshold on a microservice. A Smart Alert fires based on seasonality-adjusted latency thresholds (not static values). The EDA rulebook matches on `event.payload.issue.text` containing "Slow" or "latency" and triggers the remediation job template on automation controller.
 
-Remediation playbook — key tasks:
+Remediation playbook -- key tasks:
 
 ```yaml
 - name: Gather service state before restart
@@ -715,7 +715,7 @@ Instana detects a spike in erroneous call rate correlated with a recent deployme
 
 The three use cases above use deterministic EDA rulebook conditions to select the right job template. For most well-understood failure modes, deterministic routing is the right approach because it is predictable, testable, and auditable.
 
-For situations where the mapping is ambiguous — a novel failure mode, an alert that could match multiple existing playbooks, or an entity type your rulebook does not yet cover — add an AI inference step that dynamically selects from your existing job template catalog.
+For situations where the mapping is ambiguous -- a novel failure mode, an alert that could match multiple existing playbooks, or an entity type your rulebook does not yet cover -- add an AI inference step that dynamically selects from your existing job template catalog.
 
 This is a **workflow job template** pattern in automation controller: Event-Driven Ansible triggers a workflow that first queries the available job templates, passes them with the event context to an AI inference endpoint, and conditionally runs the recommended template.
 
@@ -781,11 +781,11 @@ This is a **workflow job template** pattern in automation controller: Event-Driv
     ai_recommendation: "{{ ai_response.json.choices[0].message.content | from_json }}"
 ```
 
-The AI selects from existing, tested job templates — it does not generate new playbooks. As teams add new job templates to automation controller, the AI automatically considers them without rulebook changes.
+The AI selects from existing, tested job templates -- it does not generate new playbooks. As teams add new job templates to automation controller, the AI automatically considers them without rulebook changes.
 
 **When to use AI-assisted routing vs. direct remediation:**
-- **Direct remediation** (no AI): Well-understood, recurring failures with a single correct response — deterministic rulebook routing to an existing job template
-- **AI-assisted routing**: Novel failure modes, ambiguous root causes, or alerts that could match multiple existing playbooks — LLM selects the best existing template from your catalog
+- **Direct remediation** (no AI): Well-understood, recurring failures with a single correct response -- deterministic rulebook routing to an existing job template
+- **AI-assisted routing**: Novel failure modes, ambiguous root causes, or alerts that could match multiple existing playbooks -- LLM selects the best existing template from your catalog
 - **Instana Probable Root Cause suggestion**: Direct remediation using the `suggestion` field to select the matching job template
 
 ---
@@ -806,7 +806,7 @@ The AI selects from existing, tested job templates — it does not generate new 
 | Remediation | Service/DB/deployment recovers | Target system returns to healthy state |
 | Instana annotation | Remediation event visible in Instana | Instana timeline shows Change event with AAP remediation details |
 
-**Test command** — send a synthetic Instana-format event to Event-Driven Ansible:
+**Test command** -- send a synthetic Instana-format event to Event-Driven Ansible:
 
 ```bash
 curl -X POST https://eda.example.com:5000/instana \
@@ -871,18 +871,18 @@ app-server-01.example.com : ok=4    changed=1    unreachable=0    failed=0
 
 | Maturity | Description | What to Build |
 |----------|-------------|---------------|
-| **Crawl** | Instana alerts forwarded to Event-Driven Ansible, which enriches and routes notifications — no remediation, human decides | Configure Instana webhook → EDA rulebook → `run_job_template` that sends a notification (Slack, email, or ITSM ticket) with Incident context, Instana link, and optionally an AI-recommended job template with suggested variables so the operator has a ready-to-execute recommendation. For full ITSM enrichment, see the [ServiceNow ITSM Ticket Enrichment](https://access.redhat.com/articles/7127603) guide. |
+| **Crawl** | Instana alerts forwarded to Event-Driven Ansible, which enriches and routes notifications -- no remediation, human decides | Configure Instana webhook → EDA rulebook → `run_job_template` that sends a notification (Slack, email, or ITSM ticket) with Incident context, Instana link, and optionally an AI-recommended job template with suggested variables so the operator has a ready-to-execute recommendation. For full ITSM enrichment, see the [ServiceNow ITSM Ticket Enrichment](https://access.redhat.com/articles/7127603) guide. |
 | **Walk** | Event-Driven Ansible triggers automation controller job templates with human approval gate before execution | Add `ask_variables_on_launch: true` on job templates; use automation controller approval workflow nodes; operator reviews before remediation runs |
 | **Run** | Fully automated closed-loop: Instana detects → Event-Driven Ansible triggers → automation controller remediates → Instana confirms resolution, no human in loop | Remove approval gates for well-understood failure patterns; add policy guardrails (e.g., max 3 auto-remediations per hour per service, business-hours-only for critical services) |
 
 **Related Guides:**
-- [AIOps automation with Ansible](README-AIOps.md) — tool-agnostic AIOps pattern (the generic foundation this guide builds on)
-- [AI Infrastructure automation with Ansible](README-IA.md) — deploy the AI inference backend if using the optional LLM enrichment step
-- [Get started with EDA](https://access.redhat.com/articles/7136720) — EDA fundamentals for teams new to Event-Driven Ansible
+- [AIOps automation with Ansible](README-AIOps.md) -- tool-agnostic AIOps pattern (the generic foundation this guide builds on)
+- [AI Infrastructure automation with Ansible](README-IA.md) -- deploy the AI inference backend if using the optional LLM enrichment step
+- [Get started with EDA](https://access.redhat.com/articles/7136720) -- EDA fundamentals for teams new to Event-Driven Ansible
 
 **ROI Recap:**
-- AAP transforms observability signals into governed, auditable remediation — every action logged, every credential managed, every scope controlled by RBAC
-- MTTR drops from hours (manual triage) to minutes (automated response) — consistent remediation regardless of which engineer is on call
+- AAP transforms observability signals into governed, auditable remediation -- every action logged, every credential managed, every scope controlled by RBAC
+- MTTR drops from hours (manual triage) to minutes (automated response) -- consistent remediation regardless of which engineer is on call
 - Alert fatigue reduction: Event-Driven Ansible filters and routes events so only truly novel or unresolvable Incidents escalate to humans
 - Instana observability investment shifts from passive monitoring to active remediation engine, with AAP providing the trusted execution layer
 
@@ -892,22 +892,22 @@ app-server-01.example.com : ok=4    changed=1    unreachable=0    failed=0
 
 | Source | URL |
 |--------|-----|
-| IBM Docs — Webhook alert channel | https://www.ibm.com/docs/en/instana-observability/current?topic=alerting-webhooks |
-| IBM Docs — Event types | https://www.ibm.com/docs/en/instana-observability/current?topic=references-event-types |
-| IBM Docs — Smart Alerts | https://www.ibm.com/docs/en/instana-observability/current?topic=applications-smart-alerts |
-| IBM Docs — Adaptive thresholds | https://www.ibm.com/docs/en/instana-observability/1.0.313?topic=instana-adaptive-thresholds-in-smart-alerts |
-| IBM Docs — Host Agent REST API | https://www.ibm.com/docs/en/instana-observability/current?topic=apis-host-agent-rest-api |
-| IBM Docs — Automation Action Ansible sensor | https://www.ibm.com/docs/en/instana-observability/current?topic=technologies-automation-action-ansible |
-| IBM Docs — Managing actions (v1.0.312) | https://www.ibm.com/docs/en/instana-observability/1.0.312?topic=instana-managing-actions |
-| IBM Docs — Probable Root Cause | https://www.ibm.com/new/announcements/introducing-probable-root-cause-enhancing-instanas-observability |
-| IBM Developer — Automation-Powered AIOps | https://developer.ibm.com/articles/automation-powered-aiops/ |
-| GitHub — ibm.instana EDA Collection | https://github.com/instana/ibm-instana-ansible |
-| GitHub — Intelligent Remediation Playbooks | https://github.com/instana/intelligent-remediation-ansible |
-| GitHub — Instana Ansible Callback Plugin | https://github.com/instana/instana-ansible |
-| Red Hat automation hub — ibm.instana | https://catalog.redhat.com/en/software/collection/ibm/instana |
-| Red Hat TV — EDA + Instana Demo | https://tv.redhat.com/en/detail/6365958260112/ |
-| Red Hat — Event-Driven Ansible | https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible |
-| Red Hat Docs — AAP 2.5 components | https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/planning_your_installation/ref-aap-components |
+| IBM Docs -- Webhook alert channel | https://www.ibm.com/docs/en/instana-observability/current?topic=alerting-webhooks |
+| IBM Docs -- Event types | https://www.ibm.com/docs/en/instana-observability/current?topic=references-event-types |
+| IBM Docs -- Smart Alerts | https://www.ibm.com/docs/en/instana-observability/current?topic=applications-smart-alerts |
+| IBM Docs -- Adaptive thresholds | https://www.ibm.com/docs/en/instana-observability/1.0.313?topic=instana-adaptive-thresholds-in-smart-alerts |
+| IBM Docs -- Host Agent REST API | https://www.ibm.com/docs/en/instana-observability/current?topic=apis-host-agent-rest-api |
+| IBM Docs -- Automation Action Ansible sensor | https://www.ibm.com/docs/en/instana-observability/current?topic=technologies-automation-action-ansible |
+| IBM Docs -- Managing actions (v1.0.312) | https://www.ibm.com/docs/en/instana-observability/1.0.312?topic=instana-managing-actions |
+| IBM Docs -- Probable Root Cause | https://www.ibm.com/new/announcements/introducing-probable-root-cause-enhancing-instanas-observability |
+| IBM Developer -- Automation-Powered AIOps | https://developer.ibm.com/articles/automation-powered-aiops/ |
+| GitHub -- ibm.instana EDA Collection | https://github.com/instana/ibm-instana-ansible |
+| GitHub -- Intelligent Remediation Playbooks | https://github.com/instana/intelligent-remediation-ansible |
+| GitHub -- Instana Ansible Callback Plugin | https://github.com/instana/instana-ansible |
+| Red Hat automation hub -- ibm.instana | https://catalog.redhat.com/en/software/collection/ibm/instana |
+| Red Hat TV -- EDA + Instana Demo | https://tv.redhat.com/en/detail/6365958260112/ |
+| Red Hat -- Event-Driven Ansible | https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible |
+| Red Hat Docs -- AAP 2.5 components | https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/planning_your_installation/ref-aap-components |
 
 ---
 
@@ -916,7 +916,7 @@ app-server-01.example.com : ok=4    changed=1    unreachable=0    failed=0
 1. Create `README-Instana-AIOps.md` using the structure above
 2. Write all 9 sections with full prose content (target 2,500-3,500 words)
 3. Include 7+ YAML code blocks: credential type (input + injector), sensor config, EDA rulebook, 3 remediation playbooks, AI inference task
-4. Include 2 workflow diagrams (ASCII) — one for each path
+4. Include 2 workflow diagrams (ASCII) -- one for each path
 5. Add all required tables: persona (3-col), collections, external systems, alert channel config, job template config, rulebook activation config, validation checklist, troubleshooting
 6. Update `README.md` to add a link to the new guide
 7. Ensure all terminology matches the reference tables above

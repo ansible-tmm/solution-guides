@@ -43,13 +43,13 @@
 <h2 id="background"></h2>
 ## Background
 
-This solution article demonstrates how Ansible can automate the provisioning and configuration of AI infrastructure—specifically using Red Hat Enterprise Linux AI (RHEL AI) and InstructLab on AWS as the featured infrastructure example in this guide. The principles and collections used are applicable across hybrid cloud environments. It walks through how to set up infrastructure, serve models, and validate them using Ansible playbooks built with enterprise-ready content.
+This solution article demonstrates how Ansible can automate the provisioning and configuration of AI infrastructure--specifically using Red Hat Enterprise Linux AI (RHEL AI) and InstructLab on AWS as the featured infrastructure example in this guide. The principles and collections used are applicable across hybrid cloud environments. It walks through how to set up infrastructure, serve models, and validate them using Ansible playbooks built with enterprise-ready content.
 
-More broadly, deploying AI infrastructure involves provisioning compute resources, applying system configurations, installing model runtimes, and securing environments—all of which are ideal for automation. Ansible helps standardize and scale this process by:
+More broadly, deploying AI infrastructure involves provisioning compute resources, applying system configurations, installing model runtimes, and securing environments--all of which are ideal for automation. Ansible helps standardize and scale this process by:
 
 - Automating infrastructure provisioning using cloud-native modules.
 - Applying repeatable configurations to install and configure model servers (like InstructLab).
-- Managing variables, playbooks, and roles as code—making automation shareable and auditable.
+- Managing variables, playbooks, and roles as code--making automation shareable and auditable.
 - Integrating with Ansible Automation Platform to operationalize deployments across teams and environments.
 
 While this guide focuses on AWS, RHEL AI, and InstructLab, the same automation principles apply across public clouds, virtual machines, OpenShift clusters, and edge environments. Ansible collections for cloud, networking, operating systems, and AI runtimes enable teams to scale infrastructure for AI workloads reliably and consistently.
@@ -64,7 +64,7 @@ This Ansible-based solution automates the key steps involved in setting up an AI
 - Serving an AI model: Deploys InstructLab, fetches a model, and launches an inference endpoint.
 - Validation: Verifies that the model server is accessible and working using test prompts.
 
-Together, these steps create a repeatable and auditable way to deploy AI infrastructure—from infrastructure provisioning to serving a model—using automation best practices. This automation can also be used to power the Ansible Lightspeed intelligent assistant by configuring Red Hat AI as a model provider and connecting Ansible Lightspeed to the hosted LLM.
+Together, these steps create a repeatable and auditable way to deploy AI infrastructure--from infrastructure provisioning to serving a model--using automation best practices. This automation can also be used to power the Ansible Lightspeed intelligent assistant by configuring Red Hat AI as a model provider and connecting Ansible Lightspeed to the hosted LLM.
 
 <h2 id="solution-overview"></h2>
 ## Solution Overview
@@ -216,7 +216,7 @@ This solution uses a Red Hat-supported large language model (LLM) designed speci
 
 Red Hat AI provides a variety of validated and optimized models for different purposes such as fine-tuning, training, or serving. You can explore the list of supported models in the [Red Hat Enterprise Linux AI documentation – Supported LLMs](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux_ai/1.4/html/building_and_maintaining_your_rhel_ai_environment/download_models#download_models).
 
-For this solution, the focus is on **inference**—deploying a model to serve responses to user queries. You can specify the model using the following variable in your configuration:
+For this solution, the focus is on **inference**--deploying a model to serve responses to user queries. You can specify the model using the following variable in your configuration:
 
 ```yaml
 - name: Download model

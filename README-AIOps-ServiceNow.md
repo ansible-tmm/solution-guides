@@ -15,15 +15,15 @@
 
 ## Overview
 
-When a ServiceNow incident is created — whether by a monitoring tool, a user report, or an automated process — it typically contains a title and a short description. The Tier 1 engineer assigned to it must then spend time gathering context: checking logs, verifying system health, identifying recent changes, and determining root cause. This manual triage process is **the largest contributor to mean time to resolution (MTTR)** in most enterprises.
+When a ServiceNow incident is created -- whether by a monitoring tool, a user report, or an automated process -- it typically contains a title and a short description. The Tier 1 engineer assigned to it must then spend time gathering context: checking logs, verifying system health, identifying recent changes, and determining root cause. This manual triage process is **the largest contributor to mean time to resolution (MTTR)** in most enterprises.
 
 Organizations handling hundreds or thousands of ServiceNow incidents per month cannot scale this human investigation process. The result is longer resolution times, escalation bottlenecks, and inconsistent diagnostic quality across shifts and teams.
 
-This guide demonstrates how to **automatically enrich ServiceNow incidents** using Ansible Automation Platform and AI inference. When an incident is created, Ansible gathers diagnostic context from the affected systems, sends it to Red Hat AI for root cause analysis, and writes the enriched diagnosis directly back into the ServiceNow ticket — before a human engineer even opens it.
+This guide demonstrates how to **automatically enrich ServiceNow incidents** using Ansible Automation Platform and AI inference. When an incident is created, Ansible gathers diagnostic context from the affected systems, sends it to Red Hat AI for root cause analysis, and writes the enriched diagnosis directly back into the ServiceNow ticket -- before a human engineer even opens it.
 
 > **This is the Crawl stage of AIOps.**
 >
-> Ticket enrichment is the lowest-risk, highest-value entry point for AIOps adoption. No production systems are modified — AI adds context to tickets, and humans still decide what to do. For the full self-healing pipeline (Crawl → Walk → Run), see [AIOps automation with Ansible](README-AIOps.md).
+> Ticket enrichment is the lowest-risk, highest-value entry point for AIOps adoption. No production systems are modified -- AI adds context to tickets, and humans still decide what to do. For the full self-healing pipeline (Crawl → Walk → Run), see [AIOps automation with Ansible](README-AIOps.md).
 
 - [Overview](#overview)
 - [Background](#background)
@@ -52,15 +52,15 @@ This guide demonstrates how to **automatically enrich ServiceNow incidents** usi
 
 ## Background
 
-**ServiceNow** is the enterprise standard for IT Service Management (ITSM). It serves as the system of record for incidents, problems, changes, and service requests across most large organizations. When something goes wrong in IT infrastructure, the resolution process almost always flows through ServiceNow — whether the ticket was created automatically by a monitoring tool or manually by an end user.
+**ServiceNow** is the enterprise standard for IT Service Management (ITSM). It serves as the system of record for incidents, problems, changes, and service requests across most large organizations. When something goes wrong in IT infrastructure, the resolution process almost always flows through ServiceNow -- whether the ticket was created automatically by a monitoring tool or manually by an end user.
 
-<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.servicenow.com/products/itsm.html">ServiceNow ITSM — servicenow.com</a>
+<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.servicenow.com/products/itsm.html">ServiceNow ITSM -- servicenow.com</a>
 
-The challenge is not ticket creation — most organizations have automated that. The challenge is **ticket context**. A newly created incident might say "web server down" but doesn't include which process failed, what the logs show, when the last change was made, or what similar incidents looked like. Engineers spend the first 15-30 minutes of every incident gathering this context manually.
+The challenge is not ticket creation -- most organizations have automated that. The challenge is **ticket context**. A newly created incident might say "web server down" but doesn't include which process failed, what the logs show, when the last change was made, or what similar incidents looked like. Engineers spend the first 15-30 minutes of every incident gathering this context manually.
 
-**Ticket enrichment** closes this gap by automatically attaching diagnostic context to incidents at creation time. AI inference takes it a step further — instead of just dumping raw logs into a ticket, an AI model analyzes the data and provides a human-readable root cause analysis and recommended next steps.
+**Ticket enrichment** closes this gap by automatically attaching diagnostic context to incidents at creation time. AI inference takes it a step further -- instead of just dumping raw logs into a ticket, an AI model analyzes the data and provides a human-readable root cause analysis and recommended next steps.
 
-<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.redhat.com/en/topics/ai/what-is-aiops">What is AIOps? — redhat.com</a>
+<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.redhat.com/en/topics/ai/what-is-aiops">What is AIOps? -- redhat.com</a>
 
 <h2 id="solution"></h2>
 
@@ -81,9 +81,9 @@ What makes up the solution?
 
 | Persona | Challenge | What They Gain |
 |---------|-----------|---------------|
-| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e0.png" width="20" style="vertical-align:text-bottom;"> **IT Ops Engineer / SRE** | Spending 15-30 minutes per incident manually gathering logs, checking system health, and identifying root cause before even starting remediation | Incidents arrive pre-enriched with diagnostic context, AI-generated root cause analysis, and recommended next steps — engineers start fixing instead of investigating |
+| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e0.png" width="20" style="vertical-align:text-bottom;"> **IT Ops Engineer / SRE** | Spending 15-30 minutes per incident manually gathering logs, checking system health, and identifying root cause before even starting remediation | Incidents arrive pre-enriched with diagnostic context, AI-generated root cause analysis, and recommended next steps -- engineers start fixing instead of investigating |
 | <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f5fa.png" width="20" style="vertical-align:text-bottom;"> **Automation Architect** | Integrating ServiceNow with Ansible requires understanding business rules, webhooks, the REST API, and credential management | A reference architecture with production-ready EDA rulebooks, ServiceNow business rule examples, and tested `servicenow.itsm` collection usage |
-| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4ca.png" width="20" style="vertical-align:text-bottom;"> **IT Manager / Director** | MTTR is high despite staffing investments; escalation rates are growing; diagnostic quality varies by shift | Consistent, AI-driven enrichment on every incident — measurable MTTR reduction, fewer escalations, and a foundation for further AIOps maturity |
+| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4ca.png" width="20" style="vertical-align:text-bottom;"> **IT Manager / Director** | MTTR is high despite staffing investments; escalation rates are growing; diagnostic quality varies by shift | Consistent, AI-driven enrichment on every incident -- measurable MTTR reduction, fewer escalations, and a foundation for further AIOps maturity |
 
 **Recommended Demos and Self-Paced Labs:**
 
@@ -95,7 +95,7 @@ What makes up the solution?
 
 ### Ansible Automation Platform
 
-- **Ansible Automation Platform 2.5+** — Required for enterprise Event-Driven Ansible (EDA Controller) support and webhook event sources.
+- **Ansible Automation Platform 2.5+** -- Required for enterprise Event-Driven Ansible (EDA Controller) support and webhook event sources.
 
 ### Featured Ansible Content Collections
 
@@ -108,7 +108,7 @@ What makes up the solution?
 
 > **The servicenow.itsm collection is key.**
 >
-> This certified collection provides native Ansible modules for ServiceNow — no raw REST API calls needed. It supports incidents, problems, changes, configuration items, and more. Install it from <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/servicenow/itsm/">Automation Hub</a>.
+> This certified collection provides native Ansible modules for ServiceNow -- no raw REST API calls needed. It supports incidents, problems, changes, configuration items, and more. Install it from <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/servicenow/itsm/">Automation Hub</a>.
 
 ### External Systems
 
@@ -128,19 +128,19 @@ What makes up the solution?
 
 The enrichment workflow has five stages:
 
-1. **ServiceNow Incident → EDA** — A new incident is created in ServiceNow. A Business Rule fires and sends a webhook to EDA Controller.
-2. **Gather Diagnostic Context** — Ansible connects to the affected host and collects logs, system status, and configuration data.
-3. **AI Analysis** — The gathered context is sent to Red Hat AI, which provides a root cause analysis and recommended next steps.
-4. **Enrich the Ticket** — Ansible writes the AI analysis, diagnostic data, and recommendations back into the ServiceNow incident as work notes.
-5. **Notify the Team** — The enriched incident is flagged in Slack/Mattermost so the assigned engineer knows it's ready for action.
+1. **ServiceNow Incident → EDA** -- A new incident is created in ServiceNow. A Business Rule fires and sends a webhook to EDA Controller.
+2. **Gather Diagnostic Context** -- Ansible connects to the affected host and collects logs, system status, and configuration data.
+3. **AI Analysis** -- The gathered context is sent to Red Hat AI, which provides a root cause analysis and recommended next steps.
+4. **Enrich the Ticket** -- Ansible writes the AI analysis, diagnostic data, and recommendations back into the ServiceNow incident as work notes.
+5. **Notify the Team** -- The enriched incident is flagged in Slack/Mattermost so the assigned engineer knows it's ready for action.
 
 ### Operational Impact per Stage
 
 | Stage | Operational Impact | Why |
 |-------|-------------------|-----|
-| **1. ServiceNow → EDA** | **None** | Read-only — ServiceNow fires a webhook, EDA receives it. No changes to systems. |
-| **2. Gather Context** | **None** | Read-only — Ansible collects logs and facts from the affected host. No modifications. |
-| **3. AI Analysis** | **None** | Read-only — data is sent to an AI API and a response is received. No infrastructure changes. |
+| **1. ServiceNow → EDA** | **None** | Read-only -- ServiceNow fires a webhook, EDA receives it. No changes to systems. |
+| **2. Gather Context** | **None** | Read-only -- Ansible collects logs and facts from the affected host. No modifications. |
+| **3. AI Analysis** | **None** | Read-only -- data is sent to an AI API and a response is received. No infrastructure changes. |
 | **4. Enrich Ticket** | **Low** | Writes work notes to the ServiceNow incident. No infrastructure changes. |
 | **5. Notify Team** | **Low** | Posts a message to Slack/Mattermost. No infrastructure changes. |
 
@@ -360,7 +360,7 @@ The final step writes the AI analysis and diagnostic data back into the ServiceN
             View in ServiceNow: https://{{ snow_instance }}/nav_to.do?uri=incident.do?sysparm_query=number={{ incident_number }}
 ```
 
-After this workflow completes, the engineer opening the ServiceNow incident sees a detailed diagnostic report in the work notes — including AI-generated root cause analysis, failed services, recent errors, disk and memory status — all gathered and analyzed automatically.
+After this workflow completes, the engineer opening the ServiceNow incident sees a detailed diagnostic report in the work notes -- including AI-generated root cause analysis, failed services, recent errors, disk and memory status -- all gathered and analyzed automatically.
 
 > **RBAC:** Scope the ServiceNow credential tightly.
 >
@@ -378,7 +378,7 @@ After this workflow completes, the engineer opening the ServiceNow incident sees
 | **4. Enrich Ticket** | Work notes were written to the ServiceNow incident | Open the incident in ServiceNow; **Work Notes** tab shows the AI-enriched diagnostic report |
 | **5. Notify Team** | Slack/Mattermost message was sent | Check the channel for the enrichment notification |
 
-**Quick validation test** — Create a test incident in ServiceNow and verify the enrichment:
+**Quick validation test** -- Create a test incident in ServiceNow and verify the enrichment:
 
 ```bash
 curl -s "https://your-instance.service-now.com/api/now/table/incident" \
@@ -432,7 +432,7 @@ After creating the incident, verify in ServiceNow that work notes have been popu
 
 ## Summary
 
-With automated ticket enrichment in place, your Tier 1 engineers no longer spend the first 15-30 minutes of every incident gathering context. ServiceNow incidents arrive pre-enriched with diagnostic data, AI-generated root cause analysis, and recommended next steps. This reduces MTTR, improves diagnostic consistency across shifts, and creates the foundation for further AIOps maturity — from enrichment (Crawl) to curated remediation (Walk) to full self-healing (Run).
+With automated ticket enrichment in place, your Tier 1 engineers no longer spend the first 15-30 minutes of every incident gathering context. ServiceNow incidents arrive pre-enriched with diagnostic data, AI-generated root cause analysis, and recommended next steps. This reduces MTTR, improves diagnostic consistency across shifts, and creates the foundation for further AIOps maturity -- from enrichment (Crawl) to curated remediation (Walk) to full self-healing (Run).
 
 ---
 

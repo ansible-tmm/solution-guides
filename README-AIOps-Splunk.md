@@ -15,18 +15,18 @@
 
 ## Overview
 
-Splunk is the system of record for security and operations visibility in many enterprises — ingesting logs, metrics, and events from thousands of sources. But when a critical Splunk alert fires, the response is still manual: an analyst reads the alert, opens a terminal, gathers context, and starts troubleshooting. This gap between **detection** and **resolution** is where MTTR lives. Organizations with hundreds of Splunk-generated alerts per day cannot scale human response to match.
+Splunk is the system of record for security and operations visibility in many enterprises -- ingesting logs, metrics, and events from thousands of sources. But when a critical Splunk alert fires, the response is still manual: an analyst reads the alert, opens a terminal, gathers context, and starts troubleshooting. This gap between **detection** and **resolution** is where MTTR lives. Organizations with hundreds of Splunk-generated alerts per day cannot scale human response to match.
 
-This guide demonstrates how to connect Splunk alerts directly to **Event-Driven Ansible (EDA)**, triggering an automated pipeline that enriches the alert with AI-driven analysis and remediates the issue — closing the loop from detection to resolution without requiring a human to interpret every alert manually.
+This guide demonstrates how to connect Splunk alerts directly to **Event-Driven Ansible (EDA)**, triggering an automated pipeline that enriches the alert with AI-driven analysis and remediates the issue -- closing the loop from detection to resolution without requiring a human to interpret every alert manually.
 
 The guide covers **two concrete use cases** that demonstrate the pattern across different infrastructure domains:
 
-- **RHEL Server Remediation** — Detect service failures, gather diagnostics, analyze with AI, and remediate
-- **Network AIOps (OSPF)** — Detect Cisco OSPF neighbor failures, enrich with AI-driven root cause analysis, and remediate with Lightspeed-generated playbooks
+- **RHEL Server Remediation** -- Detect service failures, gather diagnostics, analyze with AI, and remediate
+- **Network AIOps (OSPF)** -- Detect Cisco OSPF neighbor failures, enrich with AI-driven root cause analysis, and remediate with Lightspeed-generated playbooks
 
 > **This guide builds on the AIOps reference architecture.**
 >
-> For the full end-to-end AIOps pipeline — including AI inference, Lightspeed playbook generation, and the Crawl/Walk/Run maturity model — see [AIOps automation with Ansible](README-AIOps.md). This guide focuses specifically on using **Splunk** as the observability trigger.
+> For the full end-to-end AIOps pipeline -- including AI inference, Lightspeed playbook generation, and the Crawl/Walk/Run maturity model -- see [AIOps automation with Ansible](README-AIOps.md). This guide focuses specifically on using **Splunk** as the observability trigger.
 
 - [Overview](#overview)
 - [Background](#background)
@@ -42,14 +42,14 @@ The guide covers **two concrete use cases** that demonstrate the pattern across 
 - [Use Case A: RHEL Server Remediation](#use-case-a-rhel-server-remediation)
   - [A1. Configure Splunk Alert Action (Webhook)](#a1-configure-splunk-alert-action-webhook)
   - [A2. EDA Rulebook for Splunk Events](#a2-eda-rulebook-for-splunk-events)
-  - [A3. Enrichment Workflow — Gather Context and Analyze with AI](#a3-enrichment-workflow--gather-context-and-analyze-with-ai)
+  - [A3. Enrichment Workflow -- Gather Context and Analyze with AI](#a3-enrichment-workflow--gather-context-and-analyze-with-ai)
   - [A4. Notify and Remediate](#a4-notify-and-remediate)
-- [Use Case B: Network AIOps — OSPF Remediation](#use-case-b-network-aiops--ospf-remediation)
+- [Use Case B: Network AIOps -- OSPF Remediation](#use-case-b-network-aiops--ospf-remediation)
   - [B1. Configure Splunk for Network Event Detection](#b1-configure-splunk-for-network-event-detection)
   - [B2. EDA Rulebook for OSPF Events](#b2-eda-rulebook-for-ospf-events)
   - [B3. AI-Driven Ticket Enrichment](#b3-ai-driven-ticket-enrichment)
-  - [B4. Network AIOps Workflow — Lightspeed Remediation](#b4-network-aiops-workflow--lightspeed-remediation)
-  - [B5. Validation — Three OSPF Failure Scenarios](#b5-validation--three-ospf-failure-scenarios)
+  - [B4. Network AIOps Workflow -- Lightspeed Remediation](#b4-network-aiops-workflow--lightspeed-remediation)
+  - [B5. Validation -- Three OSPF Failure Scenarios](#b5-validation--three-ospf-failure-scenarios)
 - [Validation](#validation)
   - [Troubleshooting](#troubleshooting)
 - [Maturity Path](#maturity-path)
@@ -60,17 +60,17 @@ The guide covers **two concrete use cases** that demonstrate the pattern across 
 
 ## Background
 
-**Splunk** is a data platform that collects, indexes, and correlates machine-generated data — logs, metrics, traces, and events — from virtually any source across an organization's IT environment. Its search processing language (SPL) lets teams build saved searches and alerts that fire when conditions match predefined thresholds or patterns.
+**Splunk** is a data platform that collects, indexes, and correlates machine-generated data -- logs, metrics, traces, and events -- from virtually any source across an organization's IT environment. Its search processing language (SPL) lets teams build saved searches and alerts that fire when conditions match predefined thresholds or patterns.
 
-<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.splunk.com/en_us/products/splunk-enterprise.html">Splunk Enterprise — splunk.com</a>
+<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.splunk.com/en_us/products/splunk-enterprise.html">Splunk Enterprise -- splunk.com</a>
 
 In traditional operations, a Splunk alert fires and creates a ticket or sends an email. A human then investigates, determines root cause, and manually remediates. This model works at small scale but breaks down as alert volume grows. **Event-Driven Ansible** eliminates this bottleneck by consuming Splunk alerts programmatically and triggering automation workflows in real time.
 
-This applies equally to **server infrastructure** (service outages, resource exhaustion, configuration drift) and **network infrastructure** (OSPF adjacency failures, interface errors, routing misconfigurations). The same Splunk-to-EDA-to-AAP pipeline works across both domains — only the detection logic, diagnostics collection, and remediation tasks change.
+This applies equally to **server infrastructure** (service outages, resource exhaustion, configuration drift) and **network infrastructure** (OSPF adjacency failures, interface errors, routing misconfigurations). The same Splunk-to-EDA-to-AAP pipeline works across both domains -- only the detection logic, diagnostics collection, and remediation tasks change.
 
 The combination of Splunk's detection capabilities with Ansible's remediation capabilities creates a **closed-loop operations model**: Splunk detects, EDA responds, AI enriches, and Ansible fixes.
 
-<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.redhat.com/en/topics/ai/what-is-aiops">What is AIOps? — redhat.com</a>
+<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.redhat.com/en/topics/ai/what-is-aiops">What is AIOps? -- redhat.com</a>
 
 <h2 id="solution"></h2>
 
@@ -92,18 +92,18 @@ What makes up the solution?
 
 | Persona | Challenge | What They Gain |
 |---------|-----------|---------------|
-| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e0.png" width="20" style="vertical-align:text-bottom;"> **IT Ops Engineer / SRE** | Spending most of their day triaging Splunk alerts manually — reading logs, SSH-ing into servers, running diagnostic commands | Splunk alerts automatically trigger enrichment and remediation workflows — the fix starts before the engineer opens a terminal |
-| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f310.png" width="20" style="vertical-align:text-bottom;"> **Network Engineer** | Manually troubleshooting OSPF adjacency failures across dozens of routers — checking interface states, network types, and timers one device at a time | AI-driven diagnostics identify root cause automatically; Lightspeed generates targeted remediation playbooks with check-mode validation before execution |
-| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f5fa.png" width="20" style="vertical-align:text-bottom;"> **Automation Architect** | Connecting Splunk to Ansible requires custom scripting, webhook plumbing, and fragile integrations | A reference architecture with production-ready EDA rulebooks, Splunk webhook configs, and tested collection usage — applicable to both server and network domains |
-| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4ca.png" width="20" style="vertical-align:text-bottom;"> **IT Manager / Director** | Alert fatigue and growing MTTR despite investment in both Splunk and Ansible | Closed-loop automation that turns Splunk from a detection tool into a detection-and-resolution tool — with measurable MTTR reduction |
+| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e0.png" width="20" style="vertical-align:text-bottom;"> **IT Ops Engineer / SRE** | Spending most of their day triaging Splunk alerts manually -- reading logs, SSH-ing into servers, running diagnostic commands | Splunk alerts automatically trigger enrichment and remediation workflows -- the fix starts before the engineer opens a terminal |
+| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f310.png" width="20" style="vertical-align:text-bottom;"> **Network Engineer** | Manually troubleshooting OSPF adjacency failures across dozens of routers -- checking interface states, network types, and timers one device at a time | AI-driven diagnostics identify root cause automatically; Lightspeed generates targeted remediation playbooks with check-mode validation before execution |
+| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f5fa.png" width="20" style="vertical-align:text-bottom;"> **Automation Architect** | Connecting Splunk to Ansible requires custom scripting, webhook plumbing, and fragile integrations | A reference architecture with production-ready EDA rulebooks, Splunk webhook configs, and tested collection usage -- applicable to both server and network domains |
+| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4ca.png" width="20" style="vertical-align:text-bottom;"> **IT Manager / Director** | Alert fatigue and growing MTTR despite investment in both Splunk and Ansible | Closed-loop automation that turns Splunk from a detection tool into a detection-and-resolution tool -- with measurable MTTR reduction |
 
 **Recommended Demos and Self-Paced Labs:**
 
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3a5.png" width="20" style="vertical-align:text-bottom;"> [Hands-On AIOps Workshop — Part 2: Network Automation with Splunk](https://rhpds.github.io/ai-driven-automation-showroom/modules/index.html) covers Splunk integration with Cisco router remediation end-to-end
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3a5.png" width="20" style="vertical-align:text-bottom;"> [Hands-On AIOps Workshop -- Part 2: Network Automation with Splunk](https://rhpds.github.io/ai-driven-automation-showroom/modules/index.html) covers Splunk integration with Cisco router remediation end-to-end
 
 **Source Code:**
 
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4bb.png" width="20" style="vertical-align:text-bottom;"> [ansible-tmm/aiops-summitlab](https://github.com/ansible-tmm/aiops-summitlab) — Rulebooks, playbooks, and workflow definitions used in the network AIOps use case
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4bb.png" width="20" style="vertical-align:text-bottom;"> [ansible-tmm/aiops-summitlab](https://github.com/ansible-tmm/aiops-summitlab) -- Rulebooks, playbooks, and workflow definitions used in the network AIOps use case
 
 <h2 id="prerequisites"></h2>
 
@@ -111,18 +111,18 @@ What makes up the solution?
 
 ### Ansible Automation Platform
 
-- **Ansible Automation Platform 2.5+** — Required for enterprise Event-Driven Ansible (EDA Controller) support and webhook event sources.
+- **Ansible Automation Platform 2.5+** -- Required for enterprise Event-Driven Ansible (EDA Controller) support and webhook event sources.
 
 ### Featured Ansible Content Collections
 
 | Collection | Type | Purpose |
 |-----------|------|---------|
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/eda/">ansible.eda</a> | Certified | EDA event sources and filters (webhooks, Kafka, etc.) |
-| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/namespaces/splunk/">splunk.es</a> | Certified | Manage Splunk Enterprise Security resources — correlation searches, adaptive response actions, and data inputs |
+| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/namespaces/splunk/">splunk.es</a> | Certified | Manage Splunk Enterprise Security resources -- correlation searches, adaptive response actions, and data inputs |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller/">ansible.controller</a> | Certified | Automation Controller configuration as code (job templates, workflows, surveys) |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/ai">redhat.ai</a> | Certified | AI model inference using the OpenAI-compatible API via InstructLab |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/scm/">ansible.scm</a> | Certified | Git operations (commit and push generated playbooks) |
-| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/cisco/ios/">cisco.ios</a> | Certified | Cisco IOS device management — required for the network AIOps use case |
+| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/cisco/ios/">cisco.ios</a> | Certified | Cisco IOS device management -- required for the network AIOps use case |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/servicenow/itsm/">servicenow.itsm</a> | Certified | ServiceNow ITSM incident creation and enrichment |
 
 ### External Systems
@@ -142,16 +142,16 @@ What makes up the solution?
 
 The workflow has four stages, matching the [AIOps reference architecture](README-AIOps.md):
 
-1. **Splunk Alert -> EDA** — A saved search or alert in Splunk fires and sends a webhook payload to EDA Controller.
-2. **Enrichment Workflow** — AAP gathers additional context from the affected host or device, sends the enriched data to Red Hat AI for root cause analysis, and notifies the operations team.
-3. **Remediation Workflow** — Ansible Lightspeed generates a remediation playbook from the AI analysis, commits it to Git, and creates a Job Template.
-4. **Execute Remediation** — The generated playbook runs against the affected infrastructure, resolving the issue.
+1. **Splunk Alert -> EDA** -- A saved search or alert in Splunk fires and sends a webhook payload to EDA Controller.
+2. **Enrichment Workflow** -- AAP gathers additional context from the affected host or device, sends the enriched data to Red Hat AI for root cause analysis, and notifies the operations team.
+3. **Remediation Workflow** -- Ansible Lightspeed generates a remediation playbook from the AI analysis, commits it to Git, and creates a Job Template.
+4. **Execute Remediation** -- The generated playbook runs against the affected infrastructure, resolving the issue.
 
 ### Operational Impact per Stage
 
 | Stage | Operational Impact | Why |
 |-------|-------------------|-----|
-| **1. Splunk Alert -> EDA** | **None** | Read-only — Splunk fires a webhook, EDA receives it. No changes to systems. |
+| **1. Splunk Alert -> EDA** | **None** | Read-only -- Splunk fires a webhook, EDA receives it. No changes to systems. |
 | **2. Enrichment Workflow** | **Low** | Collects logs/diagnostics and system info, calls an AI API, posts to chat/ITSM. No infrastructure changes. |
 | **3. Remediation Workflow** | **Low** | Generates a playbook, commits to Git, creates a Job Template. Prepares the fix but does not touch production. |
 | **4. Execute Remediation** | **High** | Modifies production infrastructure. Should go through a change window or approval gate. |
@@ -166,7 +166,7 @@ Splunk Alert -> Webhook -> EDA Rulebook -> Enrichment Workflow -> AI Analysis ->
 
 > **Splunk replaces the Kafka/Filebeat layer.**
 >
-> In the AIOps reference architecture, Filebeat and Kafka handle event collection and transport. When using Splunk, it handles both — Splunk ingests the data and fires the alert directly to EDA via webhook, simplifying the architecture.
+> In the AIOps reference architecture, Filebeat and Kafka handle event collection and transport. When using Splunk, it handles both -- Splunk ingests the data and fires the alert directly to EDA via webhook, simplifying the architecture.
 
 ---
 
@@ -174,13 +174,13 @@ Splunk Alert -> Webhook -> EDA Rulebook -> Enrichment Workflow -> AI Analysis ->
 
 ## Use Case A: RHEL Server Remediation
 
-This use case demonstrates the Splunk-to-EDA pipeline for detecting and remediating RHEL server issues — such as a failed httpd service.
+This use case demonstrates the Splunk-to-EDA pipeline for detecting and remediating RHEL server issues -- such as a failed httpd service.
 
 ### A1. Configure Splunk Alert Action (Webhook)
 
 **Operational Impact:** None
 
-Splunk alerts can trigger a **webhook action** that sends an HTTP POST to any endpoint — including the EDA Controller webhook receiver. This is the bridge between Splunk's detection and Ansible's automation.
+Splunk alerts can trigger a **webhook action** that sends an HTTP POST to any endpoint -- including the EDA Controller webhook receiver. This is the bridge between Splunk's detection and Ansible's automation.
 
 In Splunk, navigate to **Settings -> Searches, reports, and alerts** and edit (or create) a saved search. Under **Trigger Actions**, add a webhook action pointing to your EDA Controller:
 
@@ -241,17 +241,17 @@ The EDA rulebook listens for incoming webhook events from Splunk and triggers th
             results_link: "{{ event.payload.results_link }}"
 ```
 
-The rulebook extracts key fields from the Splunk webhook payload — the search name, affected host, raw event data, and a link back to the Splunk results — and passes them as extra variables to the enrichment workflow.
+The rulebook extracts key fields from the Splunk webhook payload -- the search name, affected host, raw event data, and a link back to the Splunk results -- and passes them as extra variables to the enrichment workflow.
 
 > **Filtering by severity or search name.**
 >
 > In production, you will want more specific conditions to avoid triggering automation on every Splunk alert. Filter by search name patterns, severity fields, or custom fields that your Splunk alerts include.
 
-### A3. Enrichment Workflow — Gather Context and Analyze with AI
+### A3. Enrichment Workflow -- Gather Context and Analyze with AI
 
 **Operational Impact:** Low
 
-Once EDA triggers the enrichment workflow, Ansible gathers additional context from the affected host and sends everything to Red Hat AI for root cause analysis. This is the same pattern described in the [AIOps reference architecture — Log Enrichment and Prompt Generation Workflow](README-AIOps.md#2-log-enrichment-and-prompt-generation-workflow).
+Once EDA triggers the enrichment workflow, Ansible gathers additional context from the affected host and sends everything to Red Hat AI for root cause analysis. This is the same pattern described in the [AIOps reference architecture -- Log Enrichment and Prompt Generation Workflow](README-AIOps.md#2-log-enrichment-and-prompt-generation-workflow).
 
 **Step 3a: Gather additional context from the affected host**
 
@@ -312,13 +312,13 @@ The AI response includes a diagnosis and recommended remediation, which feeds in
 
 **Operational Impact:** Low (notification) -> **High** (remediation execution)
 
-The enrichment workflow posts the AI analysis to your team's communication channel and — depending on your maturity level — either queues a remediation playbook for human approval or executes it automatically.
+The enrichment workflow posts the AI analysis to your team's communication channel and -- depending on your maturity level -- either queues a remediation playbook for human approval or executes it automatically.
 
 ```yaml
     - name: Create enriched incident in ServiceNow with AI diagnosis
       servicenow.itsm.incident:
         state: new
-        short_description: "Service Alert — {{ alert_name }} — {{ affected_host }}"
+        short_description: "Service Alert -- {{ alert_name }} -- {{ affected_host }}"
         description: |
           Splunk alert: {{ alert_name }}
           Host: {{ affected_host }}
@@ -326,7 +326,7 @@ The enrichment workflow posts the AI analysis to your team's communication chann
           AI Root Cause Analysis:
           {{ ai_response.choice_0_text }}
 
-          Diagnostics collected automatically — see work notes for service status and logs.
+          Diagnostics collected automatically -- see work notes for service status and logs.
         urgency: high
         impact: high
         caller: "ansible-automation"
@@ -361,15 +361,15 @@ The enrichment workflow posts the AI analysis to your team's communication chann
 
 > **Closing the loop back to Splunk.**
 >
-> Updating the Splunk notable event with the AI analysis creates a full audit trail — the detection, diagnosis, and remediation are all visible in Splunk's incident review dashboard.
+> Updating the Splunk notable event with the AI analysis creates a full audit trail -- the detection, diagnosis, and remediation are all visible in Splunk's incident review dashboard.
 
-From here, the remediation follows the same pattern as the [AIOps Remediation Workflow](README-AIOps.md#3-remediation-workflow) — Lightspeed generates a playbook, it gets committed to Git, and a Job Template is created for execution.
+From here, the remediation follows the same pattern as the [AIOps Remediation Workflow](README-AIOps.md#3-remediation-workflow) -- Lightspeed generates a playbook, it gets committed to Git, and a Job Template is created for execution.
 
 ---
 
 <h2 id="use-case-b-network-aiops--ospf-remediation"></h2>
 
-## Use Case B: Network AIOps — OSPF Remediation
+## Use Case B: Network AIOps -- OSPF Remediation
 
 This use case demonstrates the Splunk-to-EDA pipeline for **network infrastructure**, using Cisco OSPF neighbor failure detection as the trigger. It adds AI-driven ticket enrichment and uses Ansible Lightspeed to generate remediation playbooks with a human approval gate.
 
@@ -420,8 +420,8 @@ The alert name `ospf-neighbor` is the key identifier that the EDA rulebook uses 
 **Operational Impact:** None
 
 The EDA Controller is configured with:
-- **Project**: `ai-eda` — syncs from [ansible-tmm/aiops-summitlab](https://github.com/ansible-tmm/aiops-summitlab)
-- **Rulebook Activation**: `OSPF Neighbor` — runs the `ospf.yml` rulebook
+- **Project**: `ai-eda` -- syncs from [ansible-tmm/aiops-summitlab](https://github.com/ansible-tmm/aiops-summitlab)
+- **Rulebook Activation**: `OSPF Neighbor` -- runs the `ospf.yml` rulebook
 - **Webhook Listener**: Listening on port 5000 for Splunk alerts
 
 The rulebook ([ospf.yml](https://github.com/ansible-tmm/aiops-summitlab/blob/main/rulebooks/ospf.yml)):
@@ -455,13 +455,13 @@ The rulebook ([ospf.yml](https://github.com/ansible-tmm/aiops-summitlab/blob/mai
                 webhook_payload: "{{ event.payload }}"
 ```
 
-The rulebook matches specifically on `search_name == 'ospf-neighbor'` — the exact alert name configured in Splunk. When matched, it launches the `Network-AIOps-Workflow` and passes the entire webhook payload as extra variables, making the event data available for subsequent automation steps.
+The rulebook matches specifically on `search_name == 'ospf-neighbor'` -- the exact alert name configured in Splunk. When matched, it launches the `Network-AIOps-Workflow` and passes the entire webhook payload as extra variables, making the event data available for subsequent automation steps.
 
 ### B3. AI-Driven Ticket Enrichment
 
 **Operational Impact:** Low
 
-When an OSPF neighbor goes down, the first thing a network engineer does is check the ITSM queue. If the ticket just says "OSPF neighbor down on cisco-rtr1," they still need to SSH in, run diagnostic commands, and figure out the root cause before they can act. This enrichment step eliminates that manual triage — by the time the engineer opens the ticket, it already contains the AI-analyzed root cause and a recommended fix.
+When an OSPF neighbor goes down, the first thing a network engineer does is check the ITSM queue. If the ticket just says "OSPF neighbor down on cisco-rtr1," they still need to SSH in, run diagnostic commands, and figure out the root cause before they can act. This enrichment step eliminates that manual triage -- by the time the engineer opens the ticket, it already contains the AI-analyzed root cause and a recommended fix.
 
 This follows the same pattern as the [RHEL enrichment workflow](#a3-enrichment-workflow--gather-context-and-analyze-with-ai) but uses network-specific diagnostics (`show` commands via `cisco.ios`) instead of RHEL diagnostics (`systemctl`, `journalctl`).
 
@@ -484,7 +484,7 @@ This follows the same pattern as the [RHEL enrichment workflow](#a3-enrichment-w
           - show interface Tunnel0
       register: interface_status
 
-    - name: Get OSPF interface details — network type, hello timer, cost
+    - name: Get OSPF interface details -- network type, hello timer, cost
       cisco.ios.ios_command:
         commands:
           - show ip ospf interface Tunnel0
@@ -533,7 +533,7 @@ The AI diagnosis is written back to both the ITSM system (so the engineer sees i
     - name: Create enriched incident in ServiceNow
       servicenow.itsm.incident:
         state: new
-        short_description: "OSPF Neighbor Down — {{ affected_router }} — Tunnel0"
+        short_description: "OSPF Neighbor Down -- {{ affected_router }} -- Tunnel0"
         description: |
           Splunk alert: {{ alert_name }}
           Router: {{ affected_router }}
@@ -541,7 +541,7 @@ The AI diagnosis is written back to both the ITSM system (so the engineer sees i
           AI Root Cause Analysis:
           {{ ai_response.choice_0_text }}
 
-          Diagnostics collected automatically — see work notes for full output.
+          Diagnostics collected automatically -- see work notes for full output.
         urgency: high
         impact: high
         caller: "ansible-automation"
@@ -569,7 +569,7 @@ The AI diagnosis is written back to both the ITSM system (so the engineer sees i
         body_format: json
         body:
           text: |
-            *OSPF Neighbor Down — {{ affected_router }}*
+            *OSPF Neighbor Down -- {{ affected_router }}*
             *AI Diagnosis:* {{ ai_response.choice_0_text }}
             *Incident:* {{ snow_incident.record.number }}
             *Action:* Remediation workflow pending approval in AAP.
@@ -577,9 +577,9 @@ The AI diagnosis is written back to both the ITSM system (so the engineer sees i
 
 > **Why enrich before remediating?**
 >
-> By the time the network engineer sees the ServiceNow ticket, it already contains the AI-analyzed root cause, the collected diagnostics, and a link to the pending remediation workflow. Instead of spending 20 minutes SSH-ing into routers and running `show` commands, they can review the diagnosis and approve the fix in AAP — or escalate if the AI analysis doesn't look right. The Splunk notable event also gets the diagnosis, creating a full audit trail from detection through resolution.
+> By the time the network engineer sees the ServiceNow ticket, it already contains the AI-analyzed root cause, the collected diagnostics, and a link to the pending remediation workflow. Instead of spending 20 minutes SSH-ing into routers and running `show` commands, they can review the diagnosis and approve the fix in AAP -- or escalate if the AI analysis doesn't look right. The Splunk notable event also gets the diagnosis, creating a full audit trail from detection through resolution.
 
-### B4. Network AIOps Workflow — Lightspeed Remediation
+### B4. Network AIOps Workflow -- Lightspeed Remediation
 
 **Operational Impact:** Low (generation) -> **High** (execution)
 
@@ -593,7 +593,7 @@ Create Playbook AI -> Sync Project -> Playbook-Check-Mode -> [Human Approval] ->
 
 **Step 4a: Generate remediation playbook with Lightspeed**
 
-The `Create Playbook AI` job template calls the Lightspeed API with a natural language prompt written by the network engineer. Here is the prompt for Scenario 1 (interface shutdown) — the simplest case:
+The `Create Playbook AI` job template calls the Lightspeed API with a natural language prompt written by the network engineer. Here is the prompt for Scenario 1 (interface shutdown) -- the simplest case:
 
 ```yaml
 ---
@@ -609,7 +609,7 @@ The `Create Playbook AI` job template calls the Lightspeed API with a natural la
      when stdout contains 'administratively down'"
 ```
 
-For Scenarios 2 and 3, the prompt grows incrementally — adding conditional checks for OSPF network type and hello timer mismatches. The full cumulative prompt covering all three scenarios is in the [network_aiops.yml playbook on GitHub](https://github.com/ansible-tmm/aiops-summitlab/blob/main/playbooks/network_aiops.yml).
+For Scenarios 2 and 3, the prompt grows incrementally -- adding conditional checks for OSPF network type and hello timer mismatches. The full cumulative prompt covering all three scenarios is in the [network_aiops.yml playbook on GitHub](https://github.com/ansible-tmm/aiops-summitlab/blob/main/playbooks/network_aiops.yml).
 
 Lightspeed generates the YAML playbook, which is saved to the Gitea repository and made available for the next workflow steps:
 
@@ -648,14 +648,14 @@ The `Playbook-Check-Mode` job template runs the generated playbook with `--check
 **Step 4c: Human approval gate**
 
 The workflow pauses at an approval node. The operator reviews the check-mode output and either:
-- **Approves** — the workflow continues to run mode
-- **Denies** — the workflow stops without modifying the router
+- **Approves** -- the workflow continues to run mode
+- **Denies** -- the workflow stops without modifying the router
 
 **Step 4d: Run mode execution**
 
 The `Playbook-Run-Mode` job template applies the fix to the router. After execution, the operator verifies the OSPF neighbor has returned to FULL adjacency in both the router CLI and the Splunk Cisco Networks dashboard.
 
-### B5. Validation — Three OSPF Failure Scenarios
+### B5. Validation -- Three OSPF Failure Scenarios
 
 Each scenario demonstrates a progressively more complex OSPF failure, requiring a more detailed Lightspeed prompt. This mirrors the Crawl/Walk/Run maturity path.
 
@@ -674,8 +674,8 @@ Each scenario demonstrates a progressively more complex OSPF failure, requiring 
 | | Details |
 |---|--------|
 | **Trigger** | SSH to cisco-rtr1: `config t` -> `int tu 0` -> `ip ospf network non-broadcast` -> `end` |
-| **Detection** | Interface stays up but OSPF neighbor goes down — Splunk fires alert |
-| **AI Diagnosis** | "OSPF network type mismatch — configured as non-broadcast, expected point-to-point" |
+| **Detection** | Interface stays up but OSPF neighbor goes down -- Splunk fires alert |
+| **AI Diagnosis** | "OSPF network type mismatch -- configured as non-broadcast, expected point-to-point" |
 | **Lightspeed Fix** | Check interface is up; check OSPF network type; if not `POINT_TO_POINT`, configure `ip ospf network type point_to_point` |
 | **Verification** | `show ip ospf neighbor` shows `FULL`; `show ip ospf int tu0` shows `Network Type POINT_TO_POINT` |
 
@@ -685,7 +685,7 @@ Each scenario demonstrates a progressively more complex OSPF failure, requiring 
 |---|--------|
 | **Trigger** | SSH to cisco-rtr1: `config t` -> `int tu 0` -> `ip ospf hello-interval 30` -> `end` |
 | **Detection** | Interface up, correct network type, but OSPF neighbor down after dead timer expires |
-| **AI Diagnosis** | "OSPF hello timer mismatch — configured as 30s, peer expects 10s" |
+| **AI Diagnosis** | "OSPF hello timer mismatch -- configured as 30s, peer expects 10s" |
 | **Lightspeed Fix** | Check interface is up; check network type is correct; check hello timer; if not `Hello 10`, configure `ip ospf hello-interval 10` |
 | **Verification** | `show ip ospf neighbor` shows `FULL`; `show ip ospf int tu0` shows `Hello 10` |
 
@@ -706,7 +706,7 @@ Each scenario demonstrates a progressively more complex OSPF failure, requiring 
 | **3. Remediation Workflow** | Playbook was generated and committed (network) or service was restarted (RHEL) | New playbook file exists in the Git repository; Job Template was created |
 | **4. Execute Remediation** | The fix was applied | Service returns to steady state; Splunk stops firing the alert; OSPF neighbor shows FULL adjacency |
 
-**Quick validation test** — Send a test webhook to EDA to simulate a Splunk alert:
+**Quick validation test** -- Send a test webhook to EDA to simulate a Splunk alert:
 
 ```bash
 # Test RHEL use case
@@ -743,13 +743,13 @@ curl -H "Content-Type: application/json" \
 |---------|-------------|-----|
 | Splunk alert fires but EDA doesn't trigger | Webhook URL is wrong or EDA port is blocked by firewall | Verify the EDA webhook endpoint is reachable from the Splunk server; check `eda-server` logs |
 | EDA receives event but condition doesn't match | Splunk payload structure doesn't match rulebook condition | Use `debug` action in the rulebook to print `event.payload` and compare against your conditions |
-| EDA matches but `search_name` is wrong | Splunk alert title doesn't match the condition (e.g., `ospf-neighbor` vs `OSPF-Neighbor`) | Ensure the Splunk alert title matches the rulebook condition exactly — matching is case-sensitive |
+| EDA matches but `search_name` is wrong | Splunk alert title doesn't match the condition (e.g., `ospf-neighbor` vs `OSPF-Neighbor`) | Ensure the Splunk alert title matches the rulebook condition exactly -- matching is case-sensitive |
 | Enrichment workflow runs but AI response is empty | Prompt is too vague or AI endpoint is unreachable | Verify the Red Hat AI server is running; test with a simple prompt first |
-| Network diagnostics fail — "unable to connect" | SSH/NETCONF credentials missing or router unreachable | Verify the Cisco IOS credential in AAP; test connectivity with `ansible -m ping` against the router inventory |
+| Network diagnostics fail -- "unable to connect" | SSH/NETCONF credentials missing or router unreachable | Verify the Cisco IOS credential in AAP; test connectivity with `ansible -m ping` against the router inventory |
 | Splunk notable event not updated | Incorrect Splunk API credentials or endpoint URL | Verify Splunk REST API access at `https://splunk:8089/services`; check credentials |
 | Lightspeed-generated playbook doesn't fix the issue | AI prompt doesn't cover the failure scenario | Review and extend the Lightspeed prompt to include additional conditional checks for the failure mode |
 | Check mode shows no changes | Generated playbook conditions don't match the actual router state | Review the `show` command output in the check-mode job log; adjust the prompt's conditional language |
-| Remediation playbook doesn't fix the issue (RHEL) | AI diagnosis was inaccurate or Lightspeed prompt was too generic | Review the AI prompt — ensure host logs and service status were included in the context |
+| Remediation playbook doesn't fix the issue (RHEL) | AI diagnosis was inaccurate or Lightspeed prompt was too generic | Review the AI prompt -- ensure host logs and service status were included in the context |
 
 <h2 id="maturity-path"></h2>
 
@@ -773,15 +773,15 @@ curl -H "Content-Type: application/json" \
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9e0.png" width="20" style="vertical-align:text-bottom;"> **Need to deploy the AI backend?** See [AI Infrastructure automation with Ansible](README-IA.md) for automating Red Hat AI provisioning with the `infra.ai` and `redhat.ai` collections.
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **New to Event-Driven Ansible?** See [Get started with EDA (Ansible Rulebook)](https://access.redhat.com/articles/7136720) for the fundamentals of rulebooks, event sources, and actions.
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:text-bottom;"> **Looking for ServiceNow integration?** See [Reducing MTTR with Automated ServiceNow Ticket Enrichment](README-AIOps-ServiceNow.md) for ticket enrichment and ITSM-driven remediation.
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3a5.png" width="20" style="vertical-align:text-bottom;"> **Want to try this hands-on?** The [Hands-On AIOps Workshop — Part 2](https://rhpds.github.io/ai-driven-automation-showroom/modules/index.html) walks through Splunk integration with Cisco router remediation in a live lab.
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3a5.png" width="20" style="vertical-align:text-bottom;"> **Want to try this hands-on?** The [Hands-On AIOps Workshop -- Part 2](https://rhpds.github.io/ai-driven-automation-showroom/modules/index.html) walks through Splunk integration with Cisco router remediation in a live lab.
 
 ---
 
 ## Summary
 
-With Splunk alerts connected to Event-Driven Ansible, your operations team no longer needs to manually triage every alert. Whether the alert is a failed httpd service on a RHEL server or an OSPF neighbor down on a Cisco router, the same pipeline applies: Splunk detects the issue, EDA triggers the response, Red Hat AI diagnoses the root cause, and Ansible remediates — reducing MTTR from hours of manual investigation to minutes of automated resolution.
+With Splunk alerts connected to Event-Driven Ansible, your operations team no longer needs to manually triage every alert. Whether the alert is a failed httpd service on a RHEL server or an OSPF neighbor down on a Cisco router, the same pipeline applies: Splunk detects the issue, EDA triggers the response, Red Hat AI diagnoses the root cause, and Ansible remediates -- reducing MTTR from hours of manual investigation to minutes of automated resolution.
 
-The network AIOps use case adds AI-driven ticket enrichment and Lightspeed playbook generation with check-mode validation and human approval gates — demonstrating how the same Splunk investment can power closed-loop automation across both server and network infrastructure.
+The network AIOps use case adds AI-driven ticket enrichment and Lightspeed playbook generation with check-mode validation and human approval gates -- demonstrating how the same Splunk investment can power closed-loop automation across both server and network infrastructure.
 
 ---
 
