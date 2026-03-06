@@ -845,6 +845,11 @@ b {
   display: block;
 }
 
+.card-foundational {
+  background-color: #f0f4f8 !important;
+  border-left: 3px solid #0066cc;
+}
+
 @media screen and (max-width: 600px) {
   .cards-hero h1 {
     font-size: 28px;

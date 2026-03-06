@@ -11,6 +11,12 @@ patternfly: true
       <button id="filter-clear" class="cards-sidebar__clear">Clear filters</button>
     </div>
     <div class="cards-sidebar__section">
+      <h4 class="cards-sidebar__title">Type</h4>
+      <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="foundational"> Foundational
+      </label>
+    </div>
+    <div class="cards-sidebar__section">
       <h4 class="cards-sidebar__title">Partners</h4>
       <label class="cards-sidebar__checkbox">
         <input type="checkbox" value="instana"> IBM Instana
@@ -31,8 +37,8 @@ patternfly: true
     <p id="guide-search-count" class="cards-search__count"></p>
 
     <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="main-gallery">
-      <a href="{{ '/README-AIOps' | relative_url }}" class="card-link" data-partners="">
-        <div class="pf-v6-c-card">
+      <a href="{{ '/README-AIOps' | relative_url }}" class="card-link" data-partners="foundational">
+        <div class="pf-v6-c-card card-foundational">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-green">
               <span class="pf-v6-c-label__content">
@@ -46,6 +52,9 @@ patternfly: true
           </div>
           <div class="pf-v6-c-card__body">
             Self-healing infrastructure using Event-Driven Ansible, Red Hat AI inference, and Ansible Lightspeed to detect, diagnose, and remediate incidents automatically.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
           </div>
         </div>
       </a>
@@ -154,6 +163,9 @@ patternfly: true
           <div class="pf-v6-c-card__body">
             Provision and configure Red Hat AI infrastructure -- from GPU instances to serving models -- using the infra.ai and redhat.ai collections.
           </div>
+          <div class="pf-v6-c-card__footer">
+            <img src="{{ '/assets/images/redhat-ai-logo.png' | relative_url }}" alt="Red Hat AI" class="card-partner-logo">
+          </div>
         </div>
       </a>
 
@@ -172,6 +184,9 @@ patternfly: true
           </div>
           <div class="pf-v6-c-card__body">
             Deploy and configure a self-hosted LLM using Red Hat AI Inference Server on RHEL with GPU acceleration to power the Ansible Lightspeed intelligent assistant in AAP.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <img src="{{ '/assets/images/redhat-ai-logo.png' | relative_url }}" alt="Red Hat AI" class="card-partner-logo">
           </div>
         </div>
       </a>
