@@ -15,6 +15,9 @@ patternfly: true
       <label class="cards-sidebar__checkbox">
         <input type="checkbox" value="foundational"> Foundational
       </label>
+      <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="integration"> Integration
+      </label>
     </div>
     <div class="cards-sidebar__section">
       <h4 class="cards-sidebar__title">Partners</h4>
@@ -59,7 +62,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-Instana-AIOps' | relative_url }}" class="card-link" data-partners="instana">
+      <a href="{{ '/README-Instana-AIOps' | relative_url }}" class="card-link" data-partners="instana,integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-orange">
@@ -81,7 +84,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-AIOps-Splunk' | relative_url }}" class="card-link" data-partners="splunk">
+      <a href="{{ '/README-AIOps-Splunk' | relative_url }}" class="card-link" data-partners="splunk,integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-orange">
@@ -103,7 +106,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}" class="card-link" data-partners="servicenow">
+      <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}" class="card-link" data-partners="servicenow,integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-orange">
@@ -125,7 +128,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-AIOps-Azure-Service-Bus' | relative_url }}" class="card-link" data-partners="azure">
+      <a href="{{ '/README-AIOps-Azure-Service-Bus' | relative_url }}" class="card-link" data-partners="azure,integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-orange">
@@ -147,7 +150,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-IA' | relative_url }}" class="card-link" data-partners="">
+      <a href="{{ '/README-IA' | relative_url }}" class="card-link" data-partners="integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-green">
@@ -169,7 +172,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-Intelligent-Assistant-RHAIIS' | relative_url }}" class="card-link" data-partners="">
+      <a href="{{ '/README-Intelligent-Assistant-RHAIIS' | relative_url }}" class="card-link" data-partners="integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-green">
