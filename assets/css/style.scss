@@ -328,26 +328,28 @@ header {
 .header-link {
   text-decoration: none !important;
   cursor: pointer;
-  text-transform: uppercase;
-  font-size: 12px;
+  font-size: 13px;
   font-family: 'Red Hat Text', sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   white-space: nowrap;
-  padding: 7px 10px;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  padding: 8px 10px 6px;
+  transition: all 0.2s ease;
   color: white !important;
-  letter-spacing: 0.25px;
-  border: 1px solid transparent;
+  letter-spacing: 0.15px;
+  border-bottom: 3px solid transparent;
+  position: relative;
 }
 
 .header-link:hover {
-  background-color: #ee0000 !important;
   color: white !important;
   text-decoration: none !important;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(238, 0, 0, 0.4);
-  border-color: #ee0000;
+  border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.header-link--active {
+  border-image: linear-gradient(90deg, #ee0000, #5e40be) 1;
+  border-bottom-width: 3px;
+  border-bottom-style: solid;
 }
 
 // Header search bar
@@ -848,6 +850,97 @@ b {
 .card-foundational {
   background-color: #f0f4f8 !important;
   border-left: 3px solid #0066cc;
+}
+
+.guide-layout {
+  display: flex;
+  gap: 0;
+  max-width: 100%;
+}
+
+.guide-layout > section {
+  flex: 1;
+  min-width: 0;
+}
+
+.guide-sidebar {
+  width: 240px;
+  min-width: 240px;
+  padding: 20px 16px 20px 0;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  max-height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid #e0e0e0;
+  margin-right: 24px;
+}
+
+.guide-sidebar__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0066cc;
+  text-decoration: none;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  width: 100%;
+}
+
+.guide-sidebar__back:hover {
+  color: #004080;
+  text-decoration: underline;
+}
+
+.guide-sidebar__title {
+  display: block;
+  font-family: 'Red Hat Display', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6a6e73;
+  margin-bottom: 8px;
+}
+
+.guide-sidebar__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.guide-sidebar__list li {
+  margin: 0;
+  padding: 0;
+}
+
+.guide-sidebar__link {
+  display: block;
+  font-size: 13px;
+  color: #555;
+  text-decoration: none;
+  padding: 5px 0 5px 12px;
+  border-left: 2px solid transparent;
+  line-height: 1.4;
+}
+
+.guide-sidebar__link:hover {
+  color: #0066cc;
+}
+
+.guide-sidebar__link--active {
+  color: #0066cc;
+  font-weight: 600;
+  border-left-color: #0066cc;
+}
+
+@media screen and (max-width: 900px) {
+  .guide-sidebar {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 600px) {

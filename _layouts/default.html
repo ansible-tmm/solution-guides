@@ -45,10 +45,10 @@
               AIOps
             </a>
             <a class="header-link" href="{{ '/README-best-practices' | relative_url }}">
-              Best Practices
+              Best practices
             </a>
             <a class="header-link" target="_new" href="https://github.com/ansible-tmm/solution-guides/issues/new">
-              Open an Issue
+              Open an issue
             </a>
             <div class="header-search">
               <i class="fas fa-search header-search__icon"></i>
@@ -113,6 +113,91 @@
             });
           });
         });
+      });
+    </script>
+
+    <!-- Active nav link indicator -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var path = window.location.pathname.replace(/\/$/, '').replace(/\/index\.html$/, '');
+        document.querySelectorAll('.header-link').forEach(function(link) {
+          var href = link.getAttribute('href').replace(/\/$/, '');
+          if (path === href || (href !== '{{ "/" | relative_url }}'.replace(/\/$/, '') && path.indexOf(href) === 0)) {
+            link.classList.add('header-link--active');
+          }
+        });
+      });
+    </script>
+
+    <!-- Guide sidebar navigation (auto-generated TOC) -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var section = document.querySelector('.wrapper > section');
+        if (!section) return;
+
+        var isIndex = window.location.pathname === '{{ "/" | relative_url }}'
+          || window.location.pathname === '{{ "/" | relative_url }}index.html'
+          || document.querySelector('.cards-layout');
+        if (isIndex) return;
+
+        var headings = section.querySelectorAll('h2[id]');
+        if (headings.length < 2) return;
+
+        var sidebar = document.createElement('aside');
+        sidebar.className = 'guide-sidebar';
+
+        var backLink = document.createElement('a');
+        backLink.href = '{{ "/" | relative_url }}';
+        backLink.className = 'guide-sidebar__back';
+        backLink.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Solution Guides';
+        sidebar.appendChild(backLink);
+
+        var nav = document.createElement('nav');
+        nav.className = 'guide-sidebar__nav';
+        var title = document.createElement('span');
+        title.className = 'guide-sidebar__title';
+        title.textContent = 'On this page';
+        nav.appendChild(title);
+
+        var ul = document.createElement('ul');
+        ul.className = 'guide-sidebar__list';
+        headings.forEach(function(h) {
+          if (h.textContent.trim() === '') return;
+          var li = document.createElement('li');
+          var a = document.createElement('a');
+          a.href = '#' + h.id;
+          a.className = 'guide-sidebar__link';
+          a.textContent = h.textContent.replace(/\s+/g, ' ').trim();
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+        nav.appendChild(ul);
+        sidebar.appendChild(nav);
+
+        var wrapper = document.createElement('div');
+        wrapper.className = 'guide-layout';
+        section.parentNode.insertBefore(wrapper, section);
+        wrapper.appendChild(sidebar);
+        wrapper.appendChild(section);
+
+        var activeLink = null;
+        var sidebarLinks = ul.querySelectorAll('.guide-sidebar__link');
+        function updateActive() {
+          var scrollPos = window.scrollY + 100;
+          var current = null;
+          headings.forEach(function(h) {
+            if (h.offsetTop <= scrollPos) current = h.id;
+          });
+          sidebarLinks.forEach(function(link) {
+            if (link.getAttribute('href') === '#' + current) {
+              link.classList.add('guide-sidebar__link--active');
+            } else {
+              link.classList.remove('guide-sidebar__link--active');
+            }
+          });
+        }
+        window.addEventListener('scroll', updateActive);
+        updateActive();
       });
     </script>
 
