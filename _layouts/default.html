@@ -116,6 +116,19 @@
       });
     </script>
 
+    <!-- External links open in new tabs -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var host = window.location.hostname;
+        document.querySelectorAll('a[href]').forEach(function(link) {
+          if (link.hostname && link.hostname !== host) {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+          }
+        });
+      });
+    </script>
+
     <!-- Konami Code Easter Egg -->
     <img id="konami-easter-egg" style="
       position: fixed;

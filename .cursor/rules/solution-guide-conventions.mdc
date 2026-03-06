@@ -23,6 +23,24 @@ Blockquotes must use a short first line (under 12 words) followed by a blank quo
 
 Accepted label prefixes: `**Tip:**`, `**Warning:**`, `**Why [tool]?:**`, `**Example ...**`, `**RBAC:**`, or any short bold descriptor.
 
+## External Links Open in New Tabs
+
+All links to external sites (anything not on this GitHub Pages site) must open in a new tab. The Jekyll layout includes a script that handles this automatically for the rendered site, but when writing new HTML `<a>` tags with external URLs, always include `target="_blank"`:
+
+```html
+# Good
+<a target="_blank" href="https://www.redhat.com/...">Red Hat</a>
+
+# Bad -- missing target
+<a href="https://www.redhat.com/...">Red Hat</a>
+```
+
+Internal cross-references between solution guides should use plain markdown links without `target="_blank"`:
+
+```markdown
+See [AIOps automation with Ansible](README-AIOps.md) for the full pipeline.
+```
+
 ## Solution Guide Structure
 
 All solution guides must follow the framework in `README-best-practices.md`. The framework section names map 1:1 to the section names in every guide:
