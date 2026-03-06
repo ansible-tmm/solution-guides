@@ -67,7 +67,7 @@ patternfly: true
             Closed-loop incident remediation integrating IBM Instana observability with Event-Driven Ansible for automatic detection, AI-driven job template routing, and self-healing infrastructure.
           </div>
           <div class="pf-v6-c-card__footer">
-            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Instana</span></span>
+            <img src="{{ '/assets/images/instana-logo.png' | relative_url }}" alt="Instana" class="card-partner-logo">
           </div>
         </div>
       </a>
@@ -89,7 +89,7 @@ patternfly: true
             Connect Splunk alerts to Event-Driven Ansible for closed-loop detection and remediation — from webhook configuration to AI-enriched response.
           </div>
           <div class="pf-v6-c-card__footer">
-            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Splunk</span></span>
+            <img src="{{ '/assets/images/splunk-logo.png' | relative_url }}" alt="Splunk" class="card-partner-logo">
           </div>
         </div>
       </a>
@@ -111,7 +111,7 @@ patternfly: true
             Automatically enrich ServiceNow incidents with diagnostic data and AI-driven root cause analysis — the lowest-risk entry point for AIOps.
           </div>
           <div class="pf-v6-c-card__footer">
-            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">ServiceNow</span></span>
+            <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">
           </div>
         </div>
       </a>
@@ -133,7 +133,7 @@ patternfly: true
             Connect Azure Service Bus Queues to Event-Driven Ansible for real-time event consumption, AI-driven diagnosis, and automated remediation across hybrid Azure infrastructure.
           </div>
           <div class="pf-v6-c-card__footer">
-            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Azure</span></span>
+            <img src="{{ '/assets/images/azure-logo.png' | relative_url }}" alt="Azure" class="card-partner-logo">
           </div>
         </div>
       </a>
@@ -205,7 +205,7 @@ patternfly: true
               Automate ServiceNow ticket creation and enrich incidents with CVE data from Red Hat Insights.
             </div>
             <div class="pf-v6-c-card__footer">
-              <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">ServiceNow</span></span>
+              <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">
             </div>
           </div>
         </a>

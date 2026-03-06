@@ -838,6 +838,13 @@ b {
   padding: 16px 0 0;
 }
 
+.card-partner-logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
 @media screen and (max-width: 600px) {
   .cards-hero h1 {
     font-size: 28px;
