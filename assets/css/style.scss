@@ -389,6 +389,18 @@ header {
   width: 200px;
 }
 
+// Hamburger button (hidden on desktop)
+.header-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 6px 10px;
+  margin-left: auto;
+}
+
 // Responsive header adjustments
 @media screen and (max-width: 1200px) {
   .header-nav {
@@ -422,13 +434,60 @@ header {
 }
 
 @media screen and (max-width: 768px) {
+  .header-hamburger {
+    display: block;
+  }
+
   .header-nav {
-    gap: 8px;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #1a1a1a;
+    flex-direction: column;
+    padding: 12px 20px 16px;
+    gap: 0;
+    z-index: 1000;
+    border-top: 1px solid #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .header-nav--open {
+    display: flex;
+  }
+
+  .header-container {
+    position: relative;
   }
 
   .header-link {
-    font-size: 9px;
-    padding: 5px 6px;
+    font-size: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+    width: 100%;
+  }
+
+  .header-link:last-of-type {
+    border-bottom: none;
+  }
+
+  .header-link:hover {
+    border-bottom-color: #333;
+  }
+
+  .header-link--active {
+    border-bottom-color: #ee0000;
+    border-image: none;
+  }
+
+  .header-search {
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  .header-search__input {
+    width: 100%;
   }
 
   .header-title {
@@ -583,7 +642,7 @@ b {
 .cards-sidebar {
   width: 200px;
   flex-shrink: 0;
-  padding-top: 4px;
+  padding-top: 14px;
 }
 
 .cards-sidebar__header {
@@ -648,20 +707,60 @@ b {
 @media screen and (max-width: 768px) {
   .cards-layout {
     flex-direction: column;
+    padding: 0 12px;
+    gap: 12px;
   }
 
   .cards-sidebar {
     width: 100%;
+    padding-top: 8px;
+  }
+
+  .cards-sidebar__header {
+    cursor: pointer;
+    margin-bottom: 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .cards-sidebar__header::after {
+    content: '\f078';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: 12px;
+    color: #6a6e73;
+    transition: transform 0.2s ease;
+  }
+
+  .cards-sidebar.sidebar--open .cards-sidebar__header::after {
+    transform: rotate(180deg);
   }
 
   .cards-sidebar__section {
-    display: flex;
+    display: none;
     flex-wrap: wrap;
     gap: 4px 16px;
+    padding-top: 8px;
+  }
+
+  .cards-sidebar.sidebar--open .cards-sidebar__section {
+    display: flex;
   }
 
   .cards-sidebar__title {
     width: 100%;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .cards-sidebar__checkbox {
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .cards-layout {
+    padding: 0 8px;
   }
 }
 
@@ -749,8 +848,12 @@ b {
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
   .cards-gallery {
+    grid-template-columns: 1fr !important;
+  }
+
+  #main-gallery {
     grid-template-columns: 1fr !important;
   }
 }
