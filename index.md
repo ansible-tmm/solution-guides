@@ -84,28 +84,6 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-AIOps-Splunk' | relative_url }}" class="card-link" data-partners="splunk,integration">
-        <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header">
-            <span class="pf-v6-c-label pf-m-orange">
-              <span class="pf-v6-c-label__content">
-                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
-                Work in Progress
-              </span>
-            </span>
-          </div>
-          <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">Triggering Automated Remediation from Splunk Alerts</h3>
-          </div>
-          <div class="pf-v6-c-card__body">
-            Connect Splunk alerts to Event-Driven Ansible for closed-loop detection and remediation -- from webhook configuration to AI-enriched response.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <img src="{{ '/assets/images/splunk-logo.png' | relative_url }}" alt="Splunk" class="card-partner-logo">
-          </div>
-        </div>
-      </a>
-
       <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}" class="card-link" data-partners="servicenow,integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
