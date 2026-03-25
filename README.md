@@ -8,6 +8,7 @@ Solution guides for AI-driven automation with Ansible Automation Platform.
 | Solution Guide | Guide | Knowledge Base |
 |----------------|-------|----------------|
 | AIOps automation with Ansible | [README-AIOps.md](README-AIOps.md) | [access.redhat.com](https://access.redhat.com/articles/7119667) |
+| AIOps with Splunk and Event-Driven Ansible | [README-AIOps-Splunk-ITSI.md](README-AIOps-Splunk-ITSI.md) | |
 | AIOps with AWS SQS and Event-Driven Ansible | [README-SQS.md](README-SQS.md) | |
 | AI Infrastructure automation with Ansible | [README-IA.md](README-IA.md) | [access.redhat.com](https://access.redhat.com/articles/7118390) |
 | Automation Dashboard and Analytics | | [access.redhat.com](https://access.redhat.com/articles/7136383) |
