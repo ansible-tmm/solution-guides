@@ -193,10 +193,7 @@ Instead of waiting for a static threshold to breach and paging an on-call engine
 
 ### Architecture Diagram
 
-```
-<img src="assets/images/aiops_splunk_predict.png" alt="Predictive AIOPS Pattern">
-
-```
+<img src="assets/images/aiops_splunk_predict.png" alt="Predictive AIOps with Splunk ITSI">
 
 ### A1. Predictive Detection with MLTK
 
@@ -483,7 +480,7 @@ Use Cases B and C below use **Splunk webhook alerts** (rather than the ITSI Red 
 Splunk Alert -> Webhook -> EDA Rulebook -> Enrichment Workflow -> AI Analysis -> Remediation Workflow -> Execute Fix
 ```
 
-<a target="_blank" href="https://github.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/blob/main/solution_images/overview_diagram.png"><img src="https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/overview_diagram.png"></a>
+<img src="assets/images/aiops_splunk_predict.png" alt="Splunk Webhook Alert Pipeline">
 
 > **Splunk replaces the Kafka/Filebeat layer.**
 >
