@@ -150,6 +150,28 @@ patternfly: true
         </div>
       </a>
 
+      <a href="{{ '/README-AIOps-Splunk-ITSI' | relative_url }}" class="card-link" data-partners="splunk,integration">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-orange">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                Work in Progress
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">AIOps with Splunk and Event-Driven Ansible</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Three use cases for closed-loop AIOps: ITSI predictive anomaly detection with MLTK, RHEL server remediation with AI-enriched diagnostics, and network OSPF remediation with Lightspeed-generated playbooks.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <img src="{{ '/assets/images/splunk-logo.png' | relative_url }}" alt="Splunk" class="card-partner-logo">
+          </div>
+        </div>
+      </a>
+
       <a href="{{ '/README-IA' | relative_url }}" class="card-link" data-partners="integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
