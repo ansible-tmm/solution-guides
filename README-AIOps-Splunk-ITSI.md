@@ -124,7 +124,7 @@ What makes up the solution?
 
 **Source Code:**
 
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4bb.png" width="20" style="vertical-align:text-bottom;"> [nmartins0611/aiops-splunk-eda](https://github.com/nmartins0611/aiops-splunk-eda) -- EDA rulebook and remediation playbook for the Splunk ITSI predictive AIOps pipeline (Use Case A)
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4bb.png" width="20" style="vertical-align:text-bottom;"> [ansible-tmm/aiops-splunk-eda](https://github.com/ansible-tmm/aiops-splunk-eda) -- EDA rulebook and remediation playbook for the Splunk ITSI predictive AIOps pipeline (Use Case A)
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4bb.png" width="20" style="vertical-align:text-bottom;"> [ansible-tmm/aiops-summitlab](https://github.com/ansible-tmm/aiops-summitlab) -- Rulebooks, playbooks, and workflow definitions for the network AIOps use case (Use Case C)
 
 <h2 id="prerequisites"></h2>
@@ -194,52 +194,8 @@ Instead of waiting for a static threshold to breach and paging an on-call engine
 ### Architecture Diagram
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                      SPLUNK ITSI PLATFORM                          │
-│                                                                     │
-│  ┌─────────────────┐    ┌──────────────────────┐                   │
-│  │ KPI Data Stream  │───▶│ MLTK Correlation     │                   │
-│  │ (itsi_summary)   │    │ Search (every 1 min)  │                   │
-│  │                  │    │                        │                   │
-│  │ Infrastructure   │    │ • Kalman Filter LLP5   │                   │
-│  │ metrics from     │    │ • Outlier detection    │                   │
-│  │ monitored hosts  │    │ • Forecast breach      │                   │
-│  └─────────────────┘    └──────────┬─────────────┘                   │
-│                                     │ Notable Event                   │
-│                                     ▼ (severity=Critical)             │
-│                          ┌──────────────────────┐                     │
-│                          │ Aggregation Policy    │                     │
-│                          │ (Rules Engine)        │──────────┐         │
-│                          └──────────────────────┘           │         │
-└──────────────────────────────────────────────────────────────┼─────────┘
-                                            HTTP POST (webhook)│
-                                                               ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│              RED HAT ANSIBLE AUTOMATION PLATFORM                    │
-│                                                                     │
-│  EDA Controller → Rulebook Activation → Job Template                │
-│  → Playbook: remediate, comment, close episode                      │
-└─────────────────────────────────────────────────────────────────────┘
-```
+<img src="assets/images/aiops_splunk_predict.png" alt="Predictive AIOPS Pattern">
 
-### Incident Response Timeline
-
-```
-┌───────────────────────────────────────────────────────────────────┐
-│ INCIDENT LIFECYCLE                                                │
-├───────────────────────────────────────────────────────────────────┤
-│                                                                   │
-│  t+0       Network throughput starts climbing                    │
-│  t+1–5 min MLTK correlation search detects anomaly               │
-│            Notable event generated → episode created              │
-│  t+5 min   Action rule fires → webhook to EDA Controller         │
-│            EDA rulebook matches → launches job template           │
-│  t+5–7 min Playbook executes remediation                         │
-│  t+7 min   Episode commented and closed by Ansible               │
-│            Service health returns to Normal (green)               │
-│                                                                   │
-│  MTTD: ~5 min  │  MTTR: ~7 min  │  Total: ~12 min               │
-└───────────────────────────────────────────────────────────────────┘
 ```
 
 ### A1. Predictive Detection with MLTK
@@ -346,7 +302,7 @@ Restart Splunk after adding this stanza.
 
 **Operational Impact:** None -- the EDA Controller receives the webhook and evaluates rulebook conditions.
 
-**EDA Rulebook** ([`network_load.yml`](https://github.com/nmartins0611/aiops-splunk-eda/blob/main/extensions/eda/rulebooks/network_load.yml)):
+**EDA Rulebook**:
 
 ```yaml
 - name: Network AIOPS
@@ -389,7 +345,7 @@ The rulebook matches on `sourcetype == "itsi_notable:group"` and the specific `i
 
 The playbook follows a four-phase pattern: **fix -> wait -> document -> close**.
 
-**Remediation Playbook** ([`remediate_network_throughput.yml`](https://github.com/nmartins0611/aiops-splunk-eda/blob/main/playbooks/remediate_network_throughput.yml)):
+**Remediation Playbook** ([`remediate_network_throughput.yml`](https://github.com/ansible-tmm/aiops-splunk-eda/blob/main/playbooks/remediate_network_throughput.yml)):
 
 ```yaml
 ---
@@ -400,31 +356,24 @@ The playbook follows a four-phase pattern: **fix -> wait -> document -> close**.
   vars:
     splunk_base_url: "https://{{ ansible_host }}:{{ ansible_httpapi_port }}"
     episode_id: "{{ ansible_eda.event.payload.itsi_group_id }}"
-    normalization_wait_minutes: 2
+    normalization_wait_minutes: 10
 
   tasks:
-    - name: Execute network remediation
-      ansible.builtin.uri:
-        url: "{{ splunk_base_url }}/servicesNS/admin/search/saved/searches/..."
-        method: POST
-        user: "{{ ansible_user }}"
-        password: "{{ ansible_httpapi_pass }}"
-        force_basic_auth: true
-        validate_certs: false
-        body_format: form-urlencoded
-        body:
-          action: "scale"
-      delegate_to: localhost
+    # ── Phase 1: Apply remediation ──
+    ... <See examples below>
 
+    # ── Phase 2: Wait for KPI normalization ──
     - name: Wait for infrastructure to stabilize
       ansible.builtin.pause:
         minutes: "{{ normalization_wait_minutes }}"
 
+    # ── Phase 3: Document the remediation ──
     - name: Add remediation comment to episode
       splunk.itsi.itsi_add_episode_comments:
         episode_key: "{{ episode_id }}"
         comment: "Auto-remediated by Ansible - Network infrastructure scaled"
 
+    # ── Phase 4: Close the incident ──
     - name: Close episode - mark resolved
       splunk.itsi.itsi_update_episode_details:
         episode_id: "{{ episode_id }}"
@@ -434,11 +383,81 @@ The playbook follows a four-phase pattern: **fix -> wait -> document -> close**.
         instruction: "Auto-remediated by Ansible - Network infrastructure scaled"
 ```
 
-The `episode_id` variable (`ansible_eda.event.payload.itsi_group_id`) targets the exact episode from the EDA event -- no need to query or filter. In production, Phase 1 would be a real remediation action (e.g., `cisco.ios.ios_config`, load balancer API, or cloud scaling API).
+The `episode_id` variable (`ansible_eda.event.payload.itsi_group_id`) targets the exact episode from the EDA event -- no need to query or filter episodes at runtime.
 
 > **Adapting the remediation to your environment.**
 >
-> The four-phase pattern (fix, wait, document, close) stays the same regardless of what the remediation action is. Replace Phase 1 with whatever infrastructure change resolves the root cause in your environment.
+> The reference implementation uses Phase 1 to interact with the Splunk REST API. In production, Phase 1 would be a real infrastructure change. Below are three examples of what that could look like depending on your environment. The four-phase pattern (fix, wait, document, close) stays the same regardless.
+
+**Example: Increase bandwidth on a Cisco router interface**
+
+If the root cause is a bandwidth constraint on the database network path, the playbook can push a configuration change directly to the router:
+
+```yaml
+    - name: Increase interface bandwidth to relieve throughput bottleneck
+      cisco.ios.ios_config:
+        lines:
+          - bandwidth 10000
+          - no shutdown
+        parents: interface GigabitEthernet0/1
+      delegate_to: "{{ db_gateway_router }}"
+
+    - name: Verify interface is operational
+      cisco.ios.ios_command:
+        commands:
+          - show interface GigabitEthernet0/1 | include BW|line protocol
+      delegate_to: "{{ db_gateway_router }}"
+      register: interface_check
+```
+
+**Example: Scale an F5 load balancer pool**
+
+If the throughput spike is caused by uneven traffic distribution, the playbook can add a member to the load balancer pool:
+
+```yaml
+    - name: Add standby server to database load balancer pool
+      f5networks.f5_modules.bigip_pool_member:
+        provider: "{{ f5_provider }}"
+        pool: db_backend_pool
+        host: "{{ standby_db_host }}"
+        port: 5432
+        state: present
+        ratio: 1
+
+    - name: Verify pool member is healthy
+      f5networks.f5_modules.bigip_pool_member:
+        provider: "{{ f5_provider }}"
+        pool: db_backend_pool
+        host: "{{ standby_db_host }}"
+        port: 5432
+        state: present
+      register: pool_status
+```
+
+**Example: Scale network bandwidth in AWS**
+
+If the database service runs in AWS and the bottleneck is a VPC network limit, the playbook can modify the instance's network configuration:
+
+```yaml
+    - name: Upgrade instance to higher network bandwidth tier
+      amazon.aws.ec2_instance:
+        instance_ids:
+          - "{{ db_instance_id }}"
+        instance_type: "m5.2xlarge"
+        state: running
+        wait: true
+
+    - name: Update VPC security group to allow higher throughput
+      amazon.aws.ec2_security_group:
+        name: db-tier-sg
+        vpc_id: "{{ vpc_id }}"
+        rules:
+          - proto: tcp
+            from_port: 5432
+            to_port: 5432
+            cidr_ip: "{{ app_subnet_cidr }}"
+        state: present
+```
 
 ---
 
