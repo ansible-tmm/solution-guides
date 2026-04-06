@@ -1,0 +1,45 @@
+---
+- name: Simulated workload that always fails
+  hosts: localhost
+  gather_facts: true
+  connection: local
+
+  tasks:
+    - name: Gathering system information
+      ansible.builtin.debug:
+        msg: "Running on {{ ansible_hostname }} ({{ ansible_distribution }} {{ ansible_distribution_version }})"
+
+    - name: Checking service dependencies
+      ansible.builtin.debug:
+        msg: "Verifying connectivity to upstream services..."
+
+    - name: Validating configuration files
+      ansible.builtin.debug:
+        msg: "Configuration syntax check passed for /etc/app/config.yml"
+
+    - name: Querying inventory for affected hosts
+      ansible.builtin.debug:
+        msg: "Found {{ ansible_processor_vcpus }} vCPUs and {{ ansible_memtotal_mb }} MB memory on target host"
+
+    - name: Running pre-flight health checks
+      ansible.builtin.debug:
+        msg: "Health check endpoint returned HTTP 200 -- service is responsive"
+
+    - name: Analyzing application logs for anomalies
+      ansible.builtin.debug:
+        msg: "Parsed 2,847 log entries -- 3 warnings detected, 0 critical errors so far"
+
+    - name: Comparing running configuration against desired state
+      ansible.builtin.debug:
+        msg: "Configuration drift detected on 1 parameter -- initiating remediation"
+
+    - name: Applying remediation patch
+      ansible.builtin.debug:
+        msg: "Patch payload prepared -- submitting to target system..."
+
+    - name: This task is going to fail on purpose using the ansible.builtin.fail task
+      ansible.builtin.fail:
+        msg: >-
+          INTENTIONAL FAILURE -- This playbook is designed to always fail at this step.
+          It is used for testing job template failure handling, alerting pipelines,
+          and Event-Driven Ansible error response workflows.
