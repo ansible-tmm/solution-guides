@@ -7,8 +7,6 @@
   }
 </style>
 
-<h2 id="overview"></h2>
-
 ## Overview
 
 When a ServiceNow incident is created -- whether by a monitoring tool, a user report, or an automated process -- it typically contains a title and a short description. The Tier 1 engineer assigned to it must then spend time gathering context: checking logs, verifying system health, identifying recent changes, and determining root cause. This manual triage process is **the largest contributor to mean time to resolution (MTTR)** in most enterprises.

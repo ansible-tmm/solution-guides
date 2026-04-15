@@ -7,8 +7,6 @@
   }
 </style>
 
-<h2 id="overview"></h2>
-
 ## Overview
 
 Operations teams spend their days reacting -- triaging alerts, investigating dashboards, and manually remediating issues that have already impacted users. When a critical service degrades at 3 AM, the response starts with a page, continues with an investigation, and ends with a fix applied long after customers have noticed. This reactive model cannot scale as infrastructure complexity grows and the cost of downtime increases.

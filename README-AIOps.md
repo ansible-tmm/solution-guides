@@ -7,8 +7,6 @@
   }
 </style>
 
-<h2 id="overview"></h2>
-
 ## Overview
 
 ![aiops](https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/aiops.png)
@@ -43,8 +41,8 @@ AIOps breaks this linear relationship by inserting **AI inference** between the 
   - [Example Walkthrough for EDA Response](#example-walkthrough-for-eda-response)
   - [1. **IT infrastructure event**:](#1-it-infrastructure-event)
     - [ Application-Level Events](#-application-level-events)
-    - [ Infrastructure \& Platform Events](#-infrastructure--platform-events)
-    - [ Network \& Security Events](#-network--security-events)
+    - [ Infrastructure & Platform Events](#-infrastructure--platform-events)
+    - [ Network & Security Events](#-network--security-events)
     - [Observability-Driven Triggers](#observability-driven-triggers)
   - [2. **Observability tool picks up event**:](#2-observability-tool-picks-up-event)
     - [Filebeat](#filebeat)

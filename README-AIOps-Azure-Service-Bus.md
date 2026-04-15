@@ -7,8 +7,6 @@
   }
 </style>
 
-<h2 id="overview"></h2>
-
 ## Overview
 
 Organizations running workloads on Microsoft Azure use **Azure Service Bus** as their enterprise messaging backbone -- routing events, alerts, and telemetry between services, monitoring tools, and operational systems. When Azure Monitor, Defender for Cloud, or a custom application publishes a critical event to a Service Bus queue or topic, the response today is manual: an engineer reads the message, investigates the affected resource, and remediates by hand.

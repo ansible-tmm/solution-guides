@@ -7,8 +7,6 @@
   }
 </style>
 
-<h2 id="overview"></h2>
-
 ## Overview
 
 ![aiops](https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/aiops.png)
