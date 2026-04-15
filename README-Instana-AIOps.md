@@ -1,10 +1,6 @@
 {% raw %}
 # Automated Incident Remediation with IBM Instana and Ansible Automation Platform - Solution Guide <!-- omit in toc -->
 
-> **Knowledge Base Article**: [https://access.redhat.com/articles/XXXXXXX](https://access.redhat.com/articles/XXXXXXX)
->
-> While this Solution Guide can be found on the customer portal, this document is the source of truth.
-
 <style>
   div#toc {
     display: none;

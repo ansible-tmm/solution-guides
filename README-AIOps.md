@@ -1,10 +1,6 @@
 {% raw %}
 # AIOps automation with Ansible - Solution Guide <!-- omit in toc -->
 
-> **Knowledge Base Article**: [https://access.redhat.com/articles/7119667](https://access.redhat.com/articles/7119667)
->
-> While this Solution Guide can be found on the customer portal, this document is the source of truth.
-
 <style>
   div#toc {
     display: none;
