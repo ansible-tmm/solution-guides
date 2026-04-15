@@ -9,7 +9,7 @@ A framework for creating enterprise-grade solution guides for Ansible Automation
 
 ## Who This Framework Is For
 
-This framework is for **Ansible Automation Platform field teams, solution architects, and technical content authors** who create customer-facing technical content. If you are writing a solution guide that will be published on [access.redhat.com](https://access.redhat.com) as a Knowledge Base article, this document defines the structure, quality bar, and review process you should follow.
+This framework is for **Ansible Automation Platform field teams, solution architects, and technical content authors** who create customer-facing technical content. Solution guides are authored and maintained as markdown in GitHub -- not as Knowledge Base articles on the customer portal. This approach enables AI-assisted fact-checking, version-controlled collaboration, and continuous improvement that the KB workflow on access.redhat.com cannot support. This document defines the structure, quality bar, and review process you should follow.
 
 ### Who We Write For
 
@@ -30,11 +30,11 @@ Solution guides are a specific content type -- they are not the only way Red Hat
 | Content Type | Where It Lives | Audience | Purpose | Depth |
 |-------------|----------------|----------|---------|-------|
 | **KB Solution** | access.redhat.com | Customer hitting a specific error | Fix a single, known issue (e.g., "Error X when upgrading AAP") | Narrow -- one problem, one fix |
-| **KB Article** | access.redhat.com | Customer evaluating or implementing a solution | Explain how to solve an operational problem end-to-end using AAP | Deep -- architecture, code, validation, maturity path |
+| **Solution Guide** | GitHub (this repo) | Customer evaluating or implementing a solution | Explain how to solve an operational problem end-to-end using AAP | Deep -- architecture, code, validation, maturity path |
 | **Blog Post** | redhat.com/blog | Broad technical audience | Announce, evangelize, or explain a concept or release | Medium -- narrative-driven, light on executable detail |
 | **Learning Path** | developers.redhat.com | Developer or admin learning a skill | Teach a tool or technology through progressive, hands-on exercises | Deep -- tutorial-oriented, step-by-step skill building |
 
-**Solution guides are KB Articles** -- the second row. They solve a real operational problem, not a single error (that's a KB Solution). They include executable automation, not just narrative (that's a blog). They are outcome-oriented, not skill-oriented (that's a learning path).
+**Solution guides are the second row.** They are maintained in GitHub, not on the customer portal. They solve a real operational problem, not a single error (that's a KB Solution). They include executable automation, not just narrative (that's a blog). They are outcome-oriented, not skill-oriented (that's a learning path). Hosting them in GitHub enables version control, AI-assisted review, and collaboration workflows that static KB articles cannot provide.
 
 > **When not to write a solution guide.**
 >
@@ -52,7 +52,7 @@ These sections map 1:1 to the section names in every solution guide. When review
 | 2 | [Overview](#2-overview) | Problem statement, hero image, table of contents |
 | 3 | [Background](#3-background) | Domain context -- what the topic is and why it matters |
 | 4 | [Solution](#4-solution) | Components, persona mapping, demos/videos |
-| 5 | [Prerequisites](#5-prerequisites) | AAP version, collections, external systems, KB metadata |
+| 5 | [Prerequisites](#5-prerequisites) | AAP version, collections, external systems, guide metadata |
 | 6 | [Workflow and Architecture](#6-workflow-and-architecture) | Diagrams, narrative walkthrough, visual patterns |
 | 7 | [Solution Walkthrough](#7-solution-walkthrough) | Featured code, AAP integration, step-by-step technical depth |
 | 8 | [Validation](#8-validation) | Concrete tests, expected output, troubleshooting |
@@ -69,14 +69,14 @@ These sections map 1:1 to the section names in every solution guide. When review
 
 **Rule:** Titles must describe an operational outcome, not a product feature.
 
-Solution guides published on access.redhat.com follow the convention `[Topic] - Solution Guide`. Within that convention, the topic portion should still be outcome-oriented whenever possible.
+Solution guides follow the convention `[Topic] - Solution Guide`. Within that convention, the topic portion should still be outcome-oriented whenever possible.
 
 **Bad:**
 
 - "Using the ServiceNow Collection"
 - "Ansible EDA Overview"
 
-**Good (KB title format):**
+**Good (standard format):**
 
 - "ServiceNow ITSM Ticket Enrichment Automation - Solution Guide"
 - "AIOps automation with Ansible - Solution Guide"
@@ -88,7 +88,7 @@ Solution guides published on access.redhat.com follow the convention `[Topic] - 
 
 > **Tip:** When in doubt, use the standard format.
 >
-> Use `[Topic] - Solution Guide` for the KB article title, but lead the guide itself with an outcome-oriented subtitle or problem statement in the Overview section.
+> Use `[Topic] - Solution Guide` for the title, but lead the guide itself with an outcome-oriented subtitle or problem statement in the Overview section.
 
 **Solution vs. Tutorial:** A solution guide must solve an operational problem, not teach how to use a tool. If your guide could be titled "Getting started with X" or "How to use Y," it is a tutorial, not a solution. Reframe it around the outcome: what real-world problem does this automation solve?
 
@@ -107,7 +107,7 @@ The Overview is the first thing a reader sees. It must frame the guide strategic
 
 ### 2.1 Problem Statement
 
-Define the operational pain in 2-4 sentences max. Quantify if possible (time, cost, risk, compliance). This goes directly after the hero image or KB article link.
+Define the operational pain in 2-4 sentences max. Quantify if possible (time, cost, risk, compliance). This goes directly after the hero image.
 
 **Example format:**
 
@@ -225,9 +225,9 @@ State the impact level. If it varies per step, note it per step rather than per 
 | **Medium** | Configuration changes, test first |
 | **High** | Production mutation, requires change advisory board (CAB) |
 
-### 5.6 KB Article Metadata
+### 5.6 Guide Metadata
 
-Published solution guides on access.redhat.com follow a structured metadata pattern. Include these fields near the top of each guide, directly after the overview:
+Include these fields near the top of each guide, directly after the overview:
 
 - **Operational Impact** -- State the impact level per step if it varies, not just per guide (None / Low / Medium / High).
 - **Business Value Drivers** -- 2-3 bullet points framing the business outcome (e.g., reduced downtime, improved compliance posture).
@@ -564,8 +564,6 @@ Copy this skeleton when creating a new solution guide. Replace all placeholder t
 
 ````markdown
 # [Topic] - Solution Guide
-
-> **Knowledge Base Article**: [https://access.redhat.com/articles/XXXXXXX](https://access.redhat.com/articles/XXXXXXX)
 
 ## Overview
 
