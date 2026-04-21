@@ -281,6 +281,11 @@ User → GLB → HAProxy(DC1) → AAP Containers(DC1) → VIP(DC1) → PostgreSQ
 
 ### Component Specifications
 
+**Quick reference:** 26 VMs total (13 per datacenter), 68 vCPU / 272GB RAM per datacenter
+
+<details>
+<summary><strong>View detailed component specifications →</strong></summary>
+
 #### AAP Component VMs (Per Datacenter)
 
 | Component | Specification | Count | Resource per VM | Total Resources |
@@ -346,6 +351,8 @@ WAN Connectivity:
 ```
 
 > **Why HAProxy instead of pgBouncer?** AAP 2.6 has specific connection pooling requirements that make HAProxy the recommended approach for database connection routing. HAProxy routes AAP containers to the EFM-managed PostgreSQL VIP without connection pooling. See the source architecture documentation's "HAProxy vs pgBouncer Architectural Analysis" for complete design rationale.
+
+</details>
 
 ---
 
@@ -413,6 +420,11 @@ Port: 7800-7810/tcp
 **Operational Impact:** Low -- database installation and replication setup, no production traffic
 
 **Duration:** Week 3-4
+
+**Key tasks:** Install EDB Postgres Advanced Server, configure primary database with streaming replication, initialize AAP databases, set up local and cross-datacenter standbys, install and configure EDB Failover Manager
+
+<details>
+<parameter name="summary"><strong>View detailed database setup steps →</strong></summary>
 
 #### Step 1: Install EDB Postgres Advanced Server
 
@@ -616,6 +628,8 @@ barman-cloud-wal-archive --cloud-provider aws-s3 \
   s3://aap-wal-dc1 edb-cluster /tmp/test.wal
 ```
 
+</details>
+
 ---
 
 ### Phase 3: AAP Installation
@@ -623,6 +637,11 @@ barman-cloud-wal-archive --cloud-provider aws-s3 \
 **Operational Impact:** Medium -- installs AAP services, requires database connectivity
 
 **Duration:** Week 5-6
+
+**Key tasks:** Download AAP containerized installer, configure inventory for 16 AAP VMs across both datacenters, run installer, verify installation, stop DC2 services for standby mode
+
+<details>
+<summary><strong>View detailed AAP installation steps →</strong></summary>
 
 #### Step 8: Download AAP containerized installer
 
@@ -897,6 +916,8 @@ Start HAProxy:
 sudo systemctl enable --now haproxy
 ```
 
+</details>
+
 ---
 
 ### Phase 4: Integration and Automation
@@ -904,6 +925,11 @@ sudo systemctl enable --now haproxy
 **Operational Impact:** Medium -- failover automation configuration
 
 **Duration:** Week 7-8
+
+**Key tasks:** Create EFM post-promotion script for AAP activation, configure global load balancer, set up monitoring and alerting, create operational runbooks
+
+<details>
+<parameter name="summary"><strong>View detailed integration and automation steps →</strong></summary>
 
 #### Step 13: Create EFM post-promotion script for AAP activation
 
@@ -1060,6 +1086,8 @@ groups:
           summary: "Replication stopped on {{ $labels.instance }}"
 ```
 
+</details>
+
 ---
 
 ### Phase 5: Testing and Validation
@@ -1067,6 +1095,11 @@ groups:
 **Operational Impact:** High during failover tests -- production traffic should be drained before testing
 
 **Duration:** Week 9-10
+
+**Key tasks:** Test local database failover, test cross-datacenter failover, test AAP failover activation, test failback procedure, measure and validate RTO/RPO targets
+
+<details>
+<summary><strong>View detailed testing and validation steps →</strong></summary>
 
 #### Step 16: Test local database failover (within DC1)
 
@@ -1127,6 +1160,8 @@ Document actual failover times:
 - GLB detection: ~30 seconds
 - **Total RTO:** ~240 seconds (under 5-minute target)
 
+</details>
+
 ---
 
 ### Phase 6: Production Cutover
@@ -1134,6 +1169,8 @@ Document actual failover times:
 **Operational Impact:** High -- production migration
 
 **Duration:** Week 11-12
+
+**Key tasks:** Final configuration review, production data migration, user acceptance testing, go-live planning
 
 #### Step 20: Final configuration review
 
@@ -1235,7 +1272,10 @@ fi
 
 ### Failback Procedure (DC2 → DC1)
 
-After DC1 infrastructure is restored:
+**When to use:** After DC1 infrastructure is restored and you want to return to normal Active-Passive configuration (DC1 active, DC2 standby)
+
+<details>
+<summary><strong>View detailed failback procedure →</strong></summary>
 
 ```bash
 # 1. Rebuild DC1 as standby of DC2
@@ -1295,6 +1335,8 @@ done
 # 10. Verify normal operations
 curl -k https://aap.example.com/api/v2/ping/
 ```
+
+</details>
 
 ### Troubleshooting
 
