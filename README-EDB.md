@@ -13,6 +13,8 @@ When Ansible Automation Platform becomes mission-critical infrastructure -- orch
 
 This guide demonstrates how to deploy Red Hat Ansible Automation Platform 2.6 with a **multi-datacenter Active-Passive disaster recovery architecture** using EDB Postgres Advanced Server and EDB Failover Manager (EFM). The result is a resilient automation platform capable of surviving datacenter failures with **Recovery Time Objective (RTO) under 5 minutes** and **Recovery Point Objective (RPO) under 5 seconds** -- ensuring automation continuity for mission-critical operations.
 
+**Implementation approach:** This solution leverages Red Hat's AAP 2.6 Container Enterprise Topology deployed via a **single unified installation** across both datacenters, with DC2 AAP services intentionally stopped post-installation to maintain the Active-Passive configuration. The database layer and HAProxy connection routing are **fully supported by EDB**, while the AAP platform follows Red Hat's tested enterprise topology.
+
 **Business value:** Guaranteed automation availability for mission-critical workflows. Reduced risk of extended outages blocking change management, compliance enforcement, or incident response. Automated failover eliminates manual intervention during datacenter failures, reducing downtime from hours (manual DR procedures) to minutes (automated database promotion and AAP activation).
 
 **Technical value:** Proven enterprise topology for production AAP deployments. Streaming replication with sub-5-second RPO protects against data loss. EFM-managed automated failover orchestrates database promotion and AAP service activation without operator intervention. Full implementation roadmap from infrastructure provisioning through testing and production cutover.
@@ -274,16 +276,27 @@ User → GLB → HAProxy(DC1) → AAP Containers(DC1) → VIP(DC1) → PostgreSQ
    Route traffic to DC2
    Time: T+200s
 
-6. Failover Complete
-   RTO Target: <300s (5 minutes)
-   Actual RTO: ~240s (4 minutes)
+6. DNS TTL Expiration
+   Clients resolve aap.example.com to DC2
+   Time: T+200s to T+260s (assuming 60s TTL)
+
+7. Failover Complete
+   Platform RTO: ~240s (4 minutes)
+   User-facing RTO: ~300s (5 minutes including DNS TTL)
 ```
+
+**Important operational impacts:**
+
+- **User sessions lost** -- all users must re-authenticate after failover; browser sessions tied to DC1 will be invalidated
+- **In-flight jobs lost** -- any jobs running at failover time will be marked as failed and must be manually resubmitted
+- **EDA activations require manual restart** -- rulebook activations must be manually restarted in DC2 after failover (not automated by post-promotion script)
+- **DNS propagation affects user experience** -- actual user-facing downtime = platform failover time + DNS TTL (recommend 30-60s TTL for GLB)
 
 ### Component Specifications
 
 **Quick reference:** 26 VMs total (13 per datacenter), 68 vCPU / 272GB RAM per datacenter
 
-<details>
+<details markdown="1">
 <summary><strong>View detailed component specifications →</strong></summary>
 
 #### AAP Component VMs (Per Datacenter)
@@ -303,6 +316,15 @@ User → GLB → HAProxy(DC1) → AAP Containers(DC1) → VIP(DC1) → PostgreSQ
 |------|-------|---------------|
 | **Primary + 2 Standby (DC1)** | 3 | 8 vCPU, 32GB RAM, 500GB SSD |
 | **Designated Primary + 2 Standby (DC2)** | 3 | 8 vCPU, 32GB RAM, 500GB SSD |
+
+**EFM Quorum Requirements:**
+
+- **Minimum cluster size:** 3 nodes (1 primary + 2 standbys) to achieve quorum for automated failover
+- **Witness node:** Optional dedicated witness node recommended for production deployments to prevent split-brain scenarios during network partitions
+- **Quorum calculation:** Majority of configured nodes must be reachable for failover to proceed (e.g., 2 of 3 nodes, or 3 of 5 with witness)
+- **Split-brain prevention:** EFM requires majority consensus before promoting a standby to prevent multiple primaries
+
+> **Production recommendation:** Deploy a lightweight witness node (2 vCPU, 4GB RAM) in a third location or availability zone to maintain quorum during single-datacenter failures. This guide uses 3-node clusters per DC for simplicity; add witness nodes for production deployments requiring maximum availability.
 
 #### AAP Databases (4 databases per PostgreSQL instance)
 
@@ -349,6 +371,16 @@ WAN Connectivity:
   - Latency: < 100ms required for streaming replication
   - Encryption: IPsec or TLS
 ```
+
+**Important notes on hostname conventions:**
+
+- **DC-specific hostnames are intentional:** Hostnames like `gateway1-dc1` and `pg-dc2-1` explicitly identify which datacenter hosts each VM
+- **User-facing endpoint is datacenter-agnostic:** Users access `https://aap.example.com` (GLB manages routing)
+- **During failover, DC2 hostnames remain unchanged:** When DC2 becomes active, nodes retain their `-dc2` suffix -- this is expected and correct
+- **Internal references use VIPs or HAProxy:** AAP components connect to database via HAProxy (`10.1.1.20` or `10.2.1.20`), which routes to the datacenter-local PostgreSQL VIP
+- **Why not use datacenter-agnostic names?** Explicit DC identifiers in hostnames aid troubleshooting, capacity planning, and operational awareness of which datacenter is serving traffic
+
+> **Production consideration:** Some organizations prefer datacenter-agnostic hostnames (e.g., `gateway1-a`, `gateway1-b`) to avoid confusion. This guide uses explicit DC identifiers for operational clarity, but either approach works as long as the GLB provides the user-facing abstraction.
 
 > **Why HAProxy instead of pgBouncer?** AAP 2.6 has specific connection pooling requirements that make HAProxy the recommended approach for database connection routing. HAProxy routes AAP containers to the EFM-managed PostgreSQL VIP without connection pooling. See the source architecture documentation's "HAProxy vs pgBouncer Architectural Analysis" for complete design rationale.
 
@@ -423,7 +455,7 @@ Port: 7800-7810/tcp
 
 **Key tasks:** Install EDB Postgres Advanced Server, configure primary database with streaming replication, initialize AAP databases, set up local and cross-datacenter standbys, install and configure EDB Failover Manager
 
-<details>
+<details markdown="1">
 <parameter name="summary"><strong>View detailed database setup steps →</strong></summary>
 
 #### Step 1: Install EDB Postgres Advanced Server
@@ -640,7 +672,7 @@ barman-cloud-wal-archive --cloud-provider aws-s3 \
 
 **Key tasks:** Download AAP containerized installer, configure inventory for 16 AAP VMs across both datacenters, run installer, verify installation, stop DC2 services for standby mode
 
-<details>
+<details markdown="1">
 <summary><strong>View detailed AAP installation steps →</strong></summary>
 
 #### Step 8: Download AAP containerized installer
@@ -928,7 +960,7 @@ sudo systemctl enable --now haproxy
 
 **Key tasks:** Create EFM post-promotion script for AAP activation, configure global load balancer, set up monitoring and alerting, create operational runbooks
 
-<details>
+<details markdown="1">
 <parameter name="summary"><strong>View detailed integration and automation steps →</strong></summary>
 
 #### Step 13: Create EFM post-promotion script for AAP activation
@@ -993,6 +1025,7 @@ done
 
 # Send notifications
 logger -t efm-failover "AAP activated in $DATACENTER"
+echo "WARNING: EDA rulebook activations require MANUAL restart via AAP UI or API" | logger -t efm-failover
 ```
 
 Make executable and configure SSH keys:
@@ -1006,6 +1039,15 @@ chmod +x /usr/edb/efm-4.7/bin/efm-orchestrated-failover.sh
 
 #### Step 14: Configure Global Load Balancer
 
+**Critical DNS Configuration:**
+
+- **TTL recommendation:** 30-60 seconds for the GLB record
+  - Lower TTL (30s) = faster client failover, higher DNS query load
+  - Higher TTL (60s) = reduced DNS queries, slower client convergence after failover
+- **User-facing RTO calculation:** Platform failover time (4 min) + DNS TTL (30-60s) = ~5 minutes total
+- **Health check interval:** 10 seconds with 2 consecutive failures before marking unhealthy
+- **Health check timeout:** 5 seconds
+
 Example Route53 configuration:
 
 ```json
@@ -1018,14 +1060,11 @@ Example Route53 configuration:
         "ResourceRecordSet": {
           "Name": "aap.example.com",
           "Type": "A",
+          "TTL": 60,
           "SetIdentifier": "DC1-Primary",
           "Failover": "PRIMARY",
           "HealthCheckId": "health-check-dc1",
-          "AliasTarget": {
-            "HostedZoneId": "Z1234567890ABC",
-            "DNSName": "aap-dc1.example.com",
-            "EvaluateTargetHealth": true
-          }
+          "ResourceRecords": [{"Value": "10.1.1.100"}]
         }
       },
       {
@@ -1033,14 +1072,11 @@ Example Route53 configuration:
         "ResourceRecordSet": {
           "Name": "aap.example.com",
           "Type": "A",
+          "TTL": 60,
           "SetIdentifier": "DC2-Secondary",
           "Failover": "SECONDARY",
           "HealthCheckId": "health-check-dc2",
-          "AliasTarget": {
-            "HostedZoneId": "Z1234567890ABC",
-            "DNSName": "aap-dc2.example.com",
-            "EvaluateTargetHealth": true
-          }
+          "ResourceRecords": [{"Value": "10.2.1.100"}]
         }
       }
     ]
@@ -1048,7 +1084,21 @@ Example Route53 configuration:
 }
 ```
 
-Health check endpoint: `https://aap-dc1.example.com/api/v2/ping/`
+**Health check configuration:**
+
+```json
+{
+  "Type": "HTTPS",
+  "ResourcePath": "/api/v2/ping/",
+  "FullyQualifiedDomainName": "aap-dc1.example.com",
+  "Port": 443,
+  "RequestInterval": 10,
+  "FailureThreshold": 2,
+  "MeasureLatency": true
+}
+```
+
+> **Important:** DNS TTL directly impacts user-facing RTO. A 60-second TTL means clients may continue attempting to reach DC1 for up to 60 seconds after GLB has switched to DC2. For mission-critical deployments, consider 30-second TTL or client-side connection retry logic.
 
 #### Step 15: Set up monitoring and alerting
 
@@ -1098,7 +1148,7 @@ groups:
 
 **Key tasks:** Test local database failover, test cross-datacenter failover, test AAP failover activation, test failback procedure, measure and validate RTO/RPO targets
 
-<details>
+<details markdown="1">
 <summary><strong>View detailed testing and validation steps →</strong></summary>
 
 #### Step 16: Test local database failover (within DC1)
@@ -1274,7 +1324,7 @@ fi
 
 **When to use:** After DC1 infrastructure is restored and you want to return to normal Active-Passive configuration (DC1 active, DC2 standby)
 
-<details>
+<details markdown="1">
 <summary><strong>View detailed failback procedure →</strong></summary>
 
 ```bash
@@ -1392,7 +1442,37 @@ done
 
 # Update Global Load Balancer
 echo "Update GLB to route to DC2"
+
+# CRITICAL: Manually restart EDA activations
+echo "MANUAL INTERVENTION REQUIRED: Restart EDA rulebook activations via AAP UI"
 ```
+
+### Post-Failover EDA Activation Restart
+
+**EDA rulebook activations do NOT automatically restart after failover.** You must manually restart each activation:
+
+```bash
+# Option 1: Via AAP UI
+# 1. Log in to https://aap.example.com
+# 2. Navigate to Event-Driven Ansible → Rulebook Activations
+# 3. For each activation in "Stopped" state, click "Restart"
+
+# Option 2: Via API
+AAP_TOKEN="<your_token>"
+AAP_URL="https://aap.example.com"
+
+# List all activations
+curl -k -H "Authorization: Bearer ${AAP_TOKEN}" \
+  "${AAP_URL}/api/eda/v1/activations/" | jq '.results[] | {id, name, is_enabled}'
+
+# Restart specific activation by ID
+ACTIVATION_ID=42
+curl -k -X POST -H "Authorization: Bearer ${AAP_TOKEN}" \
+  "${AAP_URL}/api/eda/v1/activations/${ACTIVATION_ID}/restart/"
+```
+
+**Why manual restart is required:** EDA activations maintain stateful connections to event sources (webhooks, Kafka topics, etc.). Automated restart during failover could cause duplicate event processing or message loss. Manual verification ensures event source connectivity and state consistency before resuming.
+
 
 ### Rolling Restart of AAP Component
 
