@@ -296,7 +296,7 @@ User → GLB → HAProxy(DC1) → AAP Containers(DC1) → VIP(DC1) → PostgreSQ
 
 **Quick reference:** 26 VMs total (13 per datacenter), 68 vCPU / 272GB RAM per datacenter
 
-<details>
+<details markdown="1">
 <summary><strong>View detailed component specifications →</strong></summary>
 
 #### AAP Component VMs (Per Datacenter)
@@ -455,7 +455,7 @@ Port: 7800-7810/tcp
 
 **Key tasks:** Install EDB Postgres Advanced Server, configure primary database with streaming replication, initialize AAP databases, set up local and cross-datacenter standbys, install and configure EDB Failover Manager
 
-<details>
+<details markdown="1">
 <parameter name="summary"><strong>View detailed database setup steps →</strong></summary>
 
 #### Step 1: Install EDB Postgres Advanced Server
@@ -672,7 +672,7 @@ barman-cloud-wal-archive --cloud-provider aws-s3 \
 
 **Key tasks:** Download AAP containerized installer, configure inventory for 16 AAP VMs across both datacenters, run installer, verify installation, stop DC2 services for standby mode
 
-<details>
+<details markdown="1">
 <summary><strong>View detailed AAP installation steps →</strong></summary>
 
 #### Step 8: Download AAP containerized installer
@@ -960,7 +960,7 @@ sudo systemctl enable --now haproxy
 
 **Key tasks:** Create EFM post-promotion script for AAP activation, configure global load balancer, set up monitoring and alerting, create operational runbooks
 
-<details>
+<details markdown="1">
 <parameter name="summary"><strong>View detailed integration and automation steps →</strong></summary>
 
 #### Step 13: Create EFM post-promotion script for AAP activation
@@ -1148,7 +1148,7 @@ groups:
 
 **Key tasks:** Test local database failover, test cross-datacenter failover, test AAP failover activation, test failback procedure, measure and validate RTO/RPO targets
 
-<details>
+<details markdown="1">
 <summary><strong>View detailed testing and validation steps →</strong></summary>
 
 #### Step 16: Test local database failover (within DC1)
@@ -1324,7 +1324,7 @@ fi
 
 **When to use:** After DC1 infrastructure is restored and you want to return to normal Active-Passive configuration (DC1 active, DC2 standby)
 
-<details>
+<details markdown="1">
 <summary><strong>View detailed failback procedure →</strong></summary>
 
 ```bash
