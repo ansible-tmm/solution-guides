@@ -33,6 +33,9 @@ patternfly: true
       <label class="cards-sidebar__checkbox">
         <input type="checkbox" value="azure"> Azure
       </label>
+      <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="edb"> EDB PostgreSQL
+      </label>
     </div>
   </aside>
 
@@ -190,6 +193,28 @@ patternfly: true
           </div>
           <div class="pf-v6-c-card__footer">
             <img src="{{ '/assets/images/redhat-ai-logo.png' | relative_url }}" alt="Red Hat AI" class="card-partner-logo">
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ '/README-EDB' | relative_url }}" class="card-link" data-partners="edb,integration">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-orange">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                Work in Progress
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">High-Availability AAP with EDB PostgreSQL DR</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Multi-datacenter Active-Passive disaster recovery for Ansible Automation Platform using EDB Postgres Advanced Server and EDB Failover Manager with sub-5-minute RTO.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">EDB PostgreSQL</span></span>
           </div>
         </div>
       </a>
