@@ -104,7 +104,7 @@ EDB is a trusted PostgreSQL partner with deep integration into Red Hat's ecosyst
 | Persona | Challenge | What They Gain |
 |---------|-----------|---------------|
 | **IT Ops Engineer / SRE** | AAP downtime blocks critical automation; manual DR procedures require coordinating database restore, service startup, and health validation across 16+ VMs | Automated failover orchestration via EFM; tested recovery procedures with concrete validation commands; complete operational runbook for daily health checks and emergency failover |
-| **Automation Architect** | Uncertainty about how to design production-ready AAP for mission-critical use cases; existing single-datacenter deployments lack disaster recovery capability | Production-validated reference architecture based on Red Hat's Container Enterprise Topology; detailed component specifications, network topology, and firewall rules; clear guidance on when to use this 26-VM enterprise design vs. smaller growth topologies |
+| **Automation Architect** | Uncertainty about how to design production-ready AAP for mission-critical use cases; existing single-datacenter deployments lack disaster recovery capability | Production-validated reference architecture based on Red Hat's Container Enterprise Topology; detailed component specifications, network topology, and firewall rules; complete implementation guidance for this 26-VM enterprise design |
 | **IT Manager / Director** | Business justification required for DR investment; inability to commit to SLA targets without proven recovery procedures | Measurable RTO/RPO targets (5 minutes / 5 seconds); infrastructure scale and resource planning guidance; implementation roadmap with clear phase gates from planning through production cutover |
 
 ### Recommended Demos and Self-Paced Labs
@@ -149,8 +149,6 @@ EDB is a trusted PostgreSQL partner with deep integration into Red Hat's ecosyst
 - **68 vCPU, 272GB RAM per datacenter**
 - **500GB SSD per PostgreSQL node** (3000 IOPS minimum)
 - **WAN bandwidth:** 100 Mbps minimum, 1 Gbps recommended for replication
-
-> **Note:** This is Red Hat's enterprise-scale Container Topology extended to multi-datacenter Active-Passive. For smaller deployments, see the 3-node Growth Topology variant referenced in the source architecture documentation.
 
 ### Cost and Resource Notes
 
@@ -456,7 +454,7 @@ Port: 7800-7810/tcp
 **Key tasks:** Install EDB Postgres Advanced Server, configure primary database with streaming replication, initialize AAP databases, set up local and cross-datacenter standbys, install and configure EDB Failover Manager
 
 <details markdown="1">
-<parameter name="summary"><strong>View detailed database setup steps →</strong></summary>
+<summary><strong>View detailed database setup steps →</strong></summary>
 
 #### Step 1: Install EDB Postgres Advanced Server
 
@@ -961,7 +959,7 @@ sudo systemctl enable --now haproxy
 **Key tasks:** Create EFM post-promotion script for AAP activation, configure global load balancer, set up monitoring and alerting, create operational runbooks
 
 <details markdown="1">
-<parameter name="summary"><strong>View detailed integration and automation steps →</strong></summary>
+<summary><strong>View detailed integration and automation steps →</strong></summary>
 
 #### Step 13: Create EFM post-promotion script for AAP activation
 
