@@ -454,7 +454,7 @@ Port: 7800-7810/tcp
 **Key tasks:** Install EDB Postgres Advanced Server, configure primary database with streaming replication, initialize AAP databases, set up local and cross-datacenter standbys, install and configure EDB Failover Manager
 
 <details markdown="1">
-<parameter name="summary"><strong>View detailed database setup steps →</strong></summary>
+<summary><strong>View detailed database setup steps →</strong></summary>
 
 #### Step 1: Install EDB Postgres Advanced Server
 
@@ -959,7 +959,7 @@ sudo systemctl enable --now haproxy
 **Key tasks:** Create EFM post-promotion script for AAP activation, configure global load balancer, set up monitoring and alerting, create operational runbooks
 
 <details markdown="1">
-<parameter name="summary"><strong>View detailed integration and automation steps →</strong></summary>
+<summary><strong>View detailed integration and automation steps →</strong></summary>
 
 #### Step 13: Create EFM post-promotion script for AAP activation
 
