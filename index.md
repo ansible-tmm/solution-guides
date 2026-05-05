@@ -20,21 +20,33 @@ patternfly: true
       </label>
     </div>
     <div class="cards-sidebar__section">
+      <h4 class="cards-sidebar__title">Status</h4>
+      <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="wip"> Work in Progress
+      </label>
+    </div>
+    <div class="cards-sidebar__section">
       <h4 class="cards-sidebar__title">Partners</h4>
       <label class="cards-sidebar__checkbox">
-        <input type="checkbox" value="instana"> IBM Instana
-      </label>
-      <label class="cards-sidebar__checkbox">
-        <input type="checkbox" value="servicenow"> ServiceNow
-      </label>
-      <label class="cards-sidebar__checkbox">
-        <input type="checkbox" value="splunk"> Splunk
+        <input type="checkbox" value="aws"> AWS
       </label>
       <label class="cards-sidebar__checkbox">
         <input type="checkbox" value="azure"> Azure
       </label>
       <label class="cards-sidebar__checkbox">
         <input type="checkbox" value="edb"> EDB PostgreSQL
+      </label>
+      <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="instana"> IBM Instana
+      </label>
+      <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="redhat-ai"> Red Hat AI
+      </label>
+      <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="servicenow"> ServiceNow
+      </label>
+      <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="splunk"> Splunk
       </label>
     </div>
   </aside>
@@ -43,6 +55,28 @@ patternfly: true
     <p id="guide-search-count" class="cards-search__count"></p>
 
     <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="main-gallery">
+      <a href="{{ '/README-EDB' | relative_url }}" class="card-link" data-partners="edb,integration">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-green">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">High-Availability AAP with EDB PostgreSQL DR</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Multi-datacenter Active-Passive disaster recovery for Ansible Automation Platform using EDB Postgres Advanced Server and EDB Failover Manager with sub-5-minute RTO.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">EDB PostgreSQL</span></span>
+          </div>
+        </div>
+      </a>
+
       <a href="{{ '/README-AIOps' | relative_url }}" class="card-link" data-partners="foundational">
         <div class="pf-v6-c-card card-foundational">
           <div class="pf-v6-c-card__header">
@@ -87,29 +121,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}" class="card-link" data-partners="servicenow,integration">
-        <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header">
-            <span class="pf-v6-c-label pf-m-orange">
-              <span class="pf-v6-c-label__content">
-                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
-                Work in Progress
-              </span>
-            </span>
-          </div>
-          <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">Reducing MTTR with ServiceNow Ticket Enrichment</h3>
-          </div>
-          <div class="pf-v6-c-card__body">
-            Automatically enrich ServiceNow incidents with diagnostic data and AI-driven root cause analysis -- the lowest-risk entry point for AIOps.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">
-          </div>
-        </div>
-      </a>
-
-      <a href="{{ '/README-AIOps-Azure-Service-Bus' | relative_url }}" class="card-link" data-partners="azure,integration">
+      <a href="{{ '/README-IA' | relative_url }}" class="card-link" data-partners="redhat-ai,integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-green">
@@ -120,13 +132,35 @@ patternfly: true
             </span>
           </div>
           <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">Event-Driven Remediation with Azure Service Bus</h3>
+            <h3 class="pf-v6-c-card__title-text">AI Infrastructure automation with Ansible</h3>
           </div>
           <div class="pf-v6-c-card__body">
-            Connect Azure Service Bus Queues to Event-Driven Ansible for real-time event consumption, AI-driven diagnosis, and automated remediation across hybrid Azure infrastructure.
+            Provision and configure Red Hat AI infrastructure -- from GPU instances to serving models -- using the infra.ai and redhat.ai collections.
           </div>
           <div class="pf-v6-c-card__footer">
-            <img src="{{ '/assets/images/azure-logo.png' | relative_url }}" alt="Azure" class="card-partner-logo">
+            <img src="{{ '/assets/images/redhat-ai-logo.png' | relative_url }}" alt="Red Hat AI" class="card-partner-logo">
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ '/README-Intelligent-Assistant-RHAIIS' | relative_url }}" class="card-link" data-partners="redhat-ai,integration">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-green">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Intelligent Assistant with Red Hat AI Inference Server</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Deploy and configure a self-hosted LLM using Red Hat AI Inference Server on RHEL with GPU acceleration to power the Ansible Lightspeed intelligent assistant in AAP.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <img src="{{ '/assets/images/redhat-ai-logo.png' | relative_url }}" alt="Red Hat AI" class="card-partner-logo">
           </div>
         </div>
       </a>
@@ -152,72 +186,77 @@ patternfly: true
           </div>
         </div>
       </a>
+    </div>
 
-      <a href="{{ '/README-IA' | relative_url }}" class="card-link" data-partners="integration">
-        <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header">
-            <span class="pf-v6-c-label pf-m-green">
-              <span class="pf-v6-c-label__content">
-                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
-                Solution Guide
+    <div class="cards-wip-section">
+      <h2>Work in Progress</h2>
+      <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="wip-gallery">
+        <a href="{{ '/README-SQS' | relative_url }}" class="card-link" data-partners="aws,integration,wip">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__header">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
               </span>
-            </span>
+            </div>
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">AIOps with AWS SQS and Event-Driven Ansible</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              Connect Amazon SQS to Event-Driven Ansible so CloudWatch, EventBridge, and other AWS events trigger AI diagnosis and automated remediation without custom polling or Lambda glue code.
+            </div>
+            <div class="pf-v6-c-card__footer">
+              <img src="{{ '/assets/images/aws-logo.png' | relative_url }}" alt="AWS" class="card-partner-logo">
+            </div>
           </div>
-          <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">AI Infrastructure automation with Ansible</h3>
-          </div>
-          <div class="pf-v6-c-card__body">
-            Provision and configure Red Hat AI infrastructure -- from GPU instances to serving models -- using the infra.ai and redhat.ai collections.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <img src="{{ '/assets/images/redhat-ai-logo.png' | relative_url }}" alt="Red Hat AI" class="card-partner-logo">
-          </div>
-        </div>
-      </a>
+        </a>
 
-      <a href="{{ '/README-Intelligent-Assistant-RHAIIS' | relative_url }}" class="card-link" data-partners="integration">
-        <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header">
-            <span class="pf-v6-c-label pf-m-green">
-              <span class="pf-v6-c-label__content">
-                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
-                Solution Guide
+        <a href="{{ '/README-AIOps-Azure-Service-Bus' | relative_url }}" class="card-link" data-partners="azure,integration,wip">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__header">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
               </span>
-            </span>
+            </div>
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">Event-Driven Remediation with Azure Service Bus</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              Connect Azure Service Bus Queues to Event-Driven Ansible for real-time event consumption, AI-driven diagnosis, and automated remediation across hybrid Azure infrastructure.
+            </div>
+            <div class="pf-v6-c-card__footer">
+              <img src="{{ '/assets/images/azure-logo.png' | relative_url }}" alt="Azure" class="card-partner-logo">
+            </div>
           </div>
-          <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">Intelligent Assistant with Red Hat AI Inference Server</h3>
-          </div>
-          <div class="pf-v6-c-card__body">
-            Deploy and configure a self-hosted LLM using Red Hat AI Inference Server on RHEL with GPU acceleration to power the Ansible Lightspeed intelligent assistant in AAP.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <img src="{{ '/assets/images/redhat-ai-logo.png' | relative_url }}" alt="Red Hat AI" class="card-partner-logo">
-          </div>
-        </div>
-      </a>
+        </a>
 
-      <a href="{{ '/README-EDB' | relative_url }}" class="card-link" data-partners="edb,integration">
-        <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header">
-            <span class="pf-v6-c-label pf-m-green">
-              <span class="pf-v6-c-label__content">
-                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
-                Solution Guide
+        <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}" class="card-link" data-partners="servicenow,integration,wip">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__header">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
               </span>
-            </span>
+            </div>
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">Reducing MTTR with ServiceNow Ticket Enrichment</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              Automatically enrich ServiceNow incidents with diagnostic data and AI-driven root cause analysis -- the lowest-risk entry point for AIOps.
+            </div>
+            <div class="pf-v6-c-card__footer">
+              <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">
+            </div>
           </div>
-          <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">High-Availability AAP with EDB PostgreSQL DR</h3>
-          </div>
-          <div class="pf-v6-c-card__body">
-            Multi-datacenter Active-Passive disaster recovery for Ansible Automation Platform using EDB Postgres Advanced Server and EDB Failover Manager with sub-5-minute RTO.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">EDB PostgreSQL</span></span>
-          </div>
-        </div>
-      </a>
+        </a>
+      </div>
     </div>
 
     <div class="cards-contributing">
