@@ -68,10 +68,10 @@ patternfly: true
       <a href="{{ '/README-Instana-AIOps' | relative_url }}" class="card-link" data-partners="instana,integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
-            <span class="pf-v6-c-label pf-m-orange">
+            <span class="pf-v6-c-label pf-m-green">
               <span class="pf-v6-c-label__content">
-                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
-                Work in Progress
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
               </span>
             </span>
           </div>
@@ -112,10 +112,10 @@ patternfly: true
       <a href="{{ '/README-AIOps-Azure-Service-Bus' | relative_url }}" class="card-link" data-partners="azure,integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
-            <span class="pf-v6-c-label pf-m-orange">
+            <span class="pf-v6-c-label pf-m-green">
               <span class="pf-v6-c-label__content">
-                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
-                Work in Progress
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
               </span>
             </span>
           </div>
@@ -134,10 +134,10 @@ patternfly: true
       <a href="{{ '/README-AIOps-Splunk-ITSI' | relative_url }}" class="card-link" data-partners="splunk,integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
-            <span class="pf-v6-c-label pf-m-orange">
+            <span class="pf-v6-c-label pf-m-green">
               <span class="pf-v6-c-label__content">
-                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
-                Work in Progress
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
               </span>
             </span>
           </div>
@@ -200,10 +200,10 @@ patternfly: true
       <a href="{{ '/README-EDB' | relative_url }}" class="card-link" data-partners="edb,integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
-            <span class="pf-v6-c-label pf-m-orange">
+            <span class="pf-v6-c-label pf-m-green">
               <span class="pf-v6-c-label__content">
-                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
-                Work in Progress
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
               </span>
             </span>
           </div>
