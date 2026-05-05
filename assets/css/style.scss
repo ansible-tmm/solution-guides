@@ -671,6 +671,10 @@ b {
   text-decoration: underline;
 }
 
+.cards-sidebar__section + .cards-sidebar__section {
+  margin-top: 22px;
+}
+
 .cards-sidebar__title {
   font-family: 'Red Hat Display', sans-serif;
   font-weight: 600;
@@ -745,6 +749,10 @@ b {
 
   .cards-sidebar.sidebar--open .cards-sidebar__section {
     display: flex;
+  }
+
+  .cards-sidebar.sidebar--open .cards-sidebar__section + .cards-sidebar__section {
+    margin-top: 18px;
   }
 
   .cards-sidebar__title {
@@ -843,7 +851,8 @@ b {
 }
 
 @media screen and (max-width: 1100px) {
-  #main-gallery {
+  #main-gallery,
+  #wip-gallery {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
@@ -853,9 +862,22 @@ b {
     grid-template-columns: 1fr !important;
   }
 
-  #main-gallery {
+  #main-gallery,
+  #wip-gallery {
     grid-template-columns: 1fr !important;
   }
+}
+
+.cards-wip-section {
+  margin: 32px 0 0;
+  width: 100% !important;
+}
+
+.cards-wip-section h2 {
+  font-family: 'Red Hat Display', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 16px;
 }
 
 .cards-gallery > * {
