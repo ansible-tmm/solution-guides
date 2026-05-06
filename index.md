@@ -13,10 +13,13 @@ patternfly: true
     <div class="cards-sidebar__section">
       <h4 class="cards-sidebar__title">Type</h4>
       <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="aiops"> AIOps
+      </label>
+      <label class="cards-sidebar__checkbox">
         <input type="checkbox" value="foundational"> Foundational
       </label>
       <label class="cards-sidebar__checkbox">
-        <input type="checkbox" value="integration"> Integration
+        <input type="checkbox" value="infrastructure"> Infrastructure
       </label>
     </div>
     <div class="cards-sidebar__section">
@@ -58,7 +61,7 @@ patternfly: true
     <p id="guide-search-count" class="cards-search__count"></p>
 
     <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="main-gallery">
-      <a href="{{ '/README-AIOps' | relative_url }}" class="card-link" data-partners="foundational,published">
+      <a href="{{ '/README-AIOps' | relative_url }}" class="card-link" data-partners="aiops,foundational,published">
         <div class="pf-v6-c-card card-foundational">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-green">
@@ -80,7 +83,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-EDB' | relative_url }}" class="card-link" data-partners="edb,integration,published">
+      <a href="{{ '/README-EDB' | relative_url }}" class="card-link" data-partners="edb,infrastructure,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-green">
@@ -102,7 +105,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-Instana-AIOps' | relative_url }}" class="card-link" data-partners="instana,integration,published">
+      <a href="{{ '/README-Instana-AIOps' | relative_url }}" class="card-link" data-partners="instana,aiops,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-green">
@@ -124,7 +127,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-IA' | relative_url }}" class="card-link" data-partners="redhat-ai,integration,published">
+      <a href="{{ '/README-IA' | relative_url }}" class="card-link" data-partners="redhat-ai,aiops,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-green">
@@ -146,7 +149,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-Intelligent-Assistant-RHAIIS' | relative_url }}" class="card-link" data-partners="redhat-ai,integration,published">
+      <a href="{{ '/README-Intelligent-Assistant-RHAIIS' | relative_url }}" class="card-link" data-partners="redhat-ai,aiops,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-green">
@@ -168,7 +171,29 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-AIOps-Splunk-ITSI' | relative_url }}" class="card-link" data-partners="splunk,integration,published">
+      <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}" class="card-link" data-partners="servicenow,aiops,published">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-green">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Reducing MTTR with ServiceNow Ticket Enrichment</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Automatically enrich ServiceNow incidents with diagnostic data and AI-driven root cause analysis -- the lowest-risk entry point for AIOps.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ '/README-AIOps-Splunk-ITSI' | relative_url }}" class="card-link" data-partners="splunk,aiops,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-green">
@@ -194,7 +219,7 @@ patternfly: true
     <div class="cards-wip-section">
       <h2>Work in Progress</h2>
       <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="wip-gallery">
-        <a href="{{ '/README-SQS' | relative_url }}" class="card-link" data-partners="aws,integration,wip">
+        <a href="{{ '/README-SQS' | relative_url }}" class="card-link" data-partners="aws,aiops,wip">
           <div class="pf-v6-c-card">
             <div class="pf-v6-c-card__header">
               <span class="pf-v6-c-label pf-m-orange">
@@ -216,7 +241,7 @@ patternfly: true
           </div>
         </a>
 
-        <a href="{{ '/README-AIOps-Azure-Service-Bus' | relative_url }}" class="card-link" data-partners="azure,integration,wip">
+        <a href="{{ '/README-AIOps-Azure-Service-Bus' | relative_url }}" class="card-link" data-partners="azure,aiops,wip">
           <div class="pf-v6-c-card">
             <div class="pf-v6-c-card__header">
               <span class="pf-v6-c-label pf-m-orange">

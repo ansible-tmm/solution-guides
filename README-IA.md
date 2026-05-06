@@ -74,7 +74,9 @@ This solution guide helps Ansible Automation Platform (AAP) customers automate t
 - **Validated Collection**: [**infra.ai**](https://console.redhat.com/ansible/automation-hub/repo/validated/infra/ai) – Provisions RHEL AI infrastructure.
 - **Certified Collection**: [**redhat.ai**](https://console.redhat.com/ansible/automation-hub/repo/published/redhat/ai) – Configures and serves an AI model on a provisioned RHEL AI host using InstructLab.
 
-> 💡 Note: This solution guide demonstrates automating the deployment and configuration of RHEL AI using Ansible Automation Platform, specifically focusing on AWS as an example infrastructure platform. The `infra.ai` validated collection, however, supports provisioning AI infrastructure on various platforms.
+> **Note:** This guide uses AWS as the example platform.
+>
+> This solution guide demonstrates automating the deployment and configuration of RHEL AI using Ansible Automation Platform, specifically focusing on AWS as an example infrastructure platform. The `infra.ai` validated collection, however, supports provisioning AI infrastructure on various platforms.
 
 <h3 id="components"></h3>
 ### Components
@@ -133,12 +135,14 @@ Pass the obtained AMI ID into your playbook using the variable:
 rhelai_aws_rhelai_ami: ami-xxxxxxxxxxxxxxxxx
 ```
 
->💡 Note: These steps detail provisioning on AWS using the infra.ai AWS content. When targeting other platforms like Azure, Google Cloud, or bare metal, you would utilize the corresponding content provided by the infra.ai collection and configure your inventory accordingly.
+> **Note:** Other platforms use the matching infra.ai modules.
+>
+> These steps detail provisioning on AWS using the infra.ai AWS content. When targeting other platforms like Azure, Google Cloud, or bare metal, you would utilize the corresponding content provided by the infra.ai collection and configure your inventory accordingly.
 
 <h2 id="setting-up-the-inventory"></h2>
 ## Setting up the inventory
 
-After provisioning the AWS instance, you need to create or sync an inventory that targets your RHEL AI host. You can do this via the Ansible CLI or Ansible Automation Controller.
+After provisioning the AWS instance, you need to create or sync an inventory that targets your RHEL AI host. You can do this via the Ansible CLI or Ansible Automation Platform.
 
 <h3 id="option-1-cli-based-inventory"></h3>
 ### Option 1: CLI-Based Inventory
@@ -170,20 +174,22 @@ For workflows within Ansible Automation Platform, configure a dynamic inventory 
 
 This dynamic inventory sync ensures your infrastructure is always up to date and aligns well with controller workflows.
 
-> ✅ Tip: Use dynamic inventory sync in AAP to scale automation and keep environments consistent.
+> **Tip:** Sync inventory dynamically in automation controller.
+>
+> Use dynamic inventory sync in AAP to scale automation and keep environments consistent.
 
 
 <h2 id="visualizing-the-workflow-in-ansible-automation-platform"></h2>
 ## Visualizing the workflow in Ansible Automation Platform
 
-You can also orchestrate this automation through **Ansible Automation Controller** by creating a workflow template. The example below shows a simple two-step workflow:
+You can also orchestrate this automation through **Ansible Automation Platform** by creating a workflow template. The example below shows a simple two-step workflow:
 
 1. **Provision RHEL AI** – Launches an EC2 instance with the required network, security groups, and AMI.
 2. **Configure InstructLab** – Connects to the provisioned instance and installs InstructLab along with the model-serving components.
 
 This visual representation can help teams manage hand-offs between infrastructure and AI platform configuration, enforce approvals or triggers, and re-use this workflow across environments.
 
-![Automation Controller Workflow Example](https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/ia-workflow-template.png)
+![AAP Workflow Example](https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/ia-workflow-template.png)
 
 <h2 id="included-playbooks"></h2>
 ## Included playbooks
@@ -306,7 +312,7 @@ This integration enables you to leverage generative AI for Ansible Automation Pl
 - This solution offers a scalable foundation for automating AI infrastructure provisioning and model serving using Ansible Automation Platform.
 - While the current setup focuses on RHEL AI deployments on AWS, the approach is extensible to other public clouds (Azure, GCP) and platforms like OpenShift.
 - The validated (`infra.ai`) and certified (`redhat.ai`) collections used here are maintained by Red Hat and provide a reliable starting point for both experimentation and production.
-- Customers can customize these playbooks to fit their organization’s infrastructure policies, integrate them into CI/CD pipelines, or use them within Automation Controller for governance and reuse.
+- Customers can customize these playbooks to fit their organization’s infrastructure policies, integrate them into CI/CD pipelines, or use them within Ansible Automation Platform for governance and reuse.
 - As Red Hat AI evolves, this automation will help ensure consistency, reduce manual effort, and streamline Day 0 to Day 2 operations for AI model serving.
 
 We recommend checking for updates to these collections regularly on [Automation Hub](https://console.redhat.com/ansible/automation-hub/) for the latest features and improvements.

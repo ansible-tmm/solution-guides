@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 {% seo %}
+    <link rel="icon" type="image/png" href="{{ '/assets/images/favicon.png' | relative_url }}">
+    <link rel="apple-touch-icon" href="{{ '/assets/images/favicon.png' | relative_url }}">
     <script src="{{ '/assets/js/scale.fix.js' | relative_url }}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
@@ -82,6 +84,8 @@
             <a href="https://www.ansible.com/security?hsLang=en-us" class="footer-link">Security disclosure</a>
             <span class="footer-linkSpacer">|</span>
             <a href="https://www.redhat.com/en/about/all-policies-guidelines" class="footer-link">All policies and guidelines</a>
+            <span class="footer-linkSpacer">|</span>
+            <a href="{{ '/opus-review' | relative_url }}" class="footer-link">Review</a>
           </div>
         </div>
       </footer>

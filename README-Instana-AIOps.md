@@ -49,7 +49,7 @@ The challenge is not writing more playbooks. It is connecting the right playbook
 
 Red Hat Ansible Automation Platform solves this by turning your existing automation library into a governed remediation catalog that observability tools can trigger directly:
 
-- **Automation controller** -- centralizes your existing job templates with full RBAC, so observability-triggered remediation runs with the same governance as operator-initiated automation
+- **Ansible Automation Platform** -- centralizes your existing job templates with full RBAC, so observability-triggered remediation runs with the same governance as operator-initiated automation
 - **Event-Driven Ansible** -- the foundation of the AIOps pipeline. EDA matches observability events to the correct existing job template via rulebook conditions, replacing manual triage with deterministic routing. Organizations that have adopted EDA for change management, GitOps workflows, or ticket enrichment already have the foundation in place to extend into automated remediation
 - **Audit trail** -- every execution is logged with who triggered it, what changed, and whether it succeeded -- the same audit trail whether a human or Instana initiated the job
 - **Approval workflows** -- workflow job templates can include approval nodes so that high-impact remediations require human sign-off before execution, even when triggered automatically
@@ -131,7 +131,7 @@ IBM owns both Instana and Red Hat, which means tighter integration than third-pa
 | System | Required | Notes |
 |--------|----------|-------|
 | IBM Instana (SaaS or self-hosted) | Yes | API token with "Configuration of alert channels" permission |
-| Automation controller | Yes | Job template execute permissions for EDA service account |
+| Ansible Automation Platform | Yes | Job template execute permissions for EDA service account |
 | Event-Driven Ansible controller | Yes (Path A) | Must be reachable from Instana SaaS for webhook delivery |
 | AI inference endpoint | Optional | For LLM enrichment step only |
 
@@ -162,7 +162,7 @@ The end-to-end flow starts the same way in both paths: an Instana Smart Alert fi
 
 **In Path B**, the alert stays inside Instana. An automation policy evaluates the trigger conditions and selects an action from the action catalog. The Automation Action Ansible sensor on the Instana host agent forwards that action to automation controller for execution -- no Event-Driven Ansible infrastructure required.
 
-From this point, both paths converge. Automation controller executes the remediation playbook with full RBAC scoping and credential injection. The playbook performs the fix -- restart a service, recycle database connections, or roll back a deployment -- and posts an annotation back to Instana via the Host Agent REST API. Instana displays this annotation as a Change event on the Incident timeline, closing the feedback loop so operators can see exactly what automation did and when.
+From this point, both paths converge. Ansible Automation Platform executes the remediation playbook with full RBAC scoping and credential injection. The playbook performs the fix -- restart a service, recycle database connections, or roll back a deployment -- and posts an annotation back to Instana via the Host Agent REST API. Instana displays this annotation as a Change event on the Incident timeline, closing the feedback loop so operators can see exactly what automation did and when.
 
 ### Operational Impact per Stage
 
@@ -183,8 +183,8 @@ Instana Smart Alert fires
   -> Instana webhook alert channel sends HTTP POST
   -> Event-Driven Ansible controller receives event via ibm.instana.instana_webhook source
   -> Rulebook condition matches on event.payload.issue.severity, .text, .type
-  -> run_job_template action triggers automation controller job template
-  -> Automation controller executes remediation playbook (RBAC-scoped, credential-injected)
+  -> run_job_template action triggers AAP job template
+  -> AAP executes remediation playbook (RBAC-scoped, credential-injected)
   -> Playbook posts annotation back to Instana via Host Agent REST API
   -> Instana timeline shows remediation Change event alongside the Incident
 ```
@@ -196,8 +196,8 @@ Instana Smart Alert or event fires
   -> Instana automation policy evaluates trigger conditions
   -> Policy triggers action automatically (or operator triggers manually)
   -> Instana AI recommends best action from action catalog (confidence score)
-  -> Automation Action Ansible sensor connects to automation controller
-  -> Automation controller executes remediation job template (same RBAC, same audit trail)
+  -> Automation Action Ansible sensor connects to AAP
+  -> AAP executes remediation job template (same RBAC, same audit trail)
   -> Action output reported back to Instana Incident timeline
 ```
 
@@ -217,7 +217,9 @@ In both paths, Instana's built-in alert channels can simultaneously notify colla
 
 **Together:** Both paths share the same automation content -- build your remediation once, execute through either path based on operational needs.
 
-> **Tip:** Both paths converge on automation controller for execution. The RBAC policies, credential types, audit trail, and approval workflows are identical regardless of which path triggers the job template.
+> **Tip:** Both paths use automation controller for execution.
+>
+> The RBAC policies, credential types, audit trail, and approval workflows are identical regardless of which path triggers the job template.
 
 ---
 
@@ -237,6 +239,8 @@ In both paths, Instana's built-in alert channels can simultaneously notify colla
 
 **Operational Impact:** None
 
+> **Tip:** This credential step is optional for the playbooks in this guide.
+>
 > Only needed if your playbooks call the Instana backend API (e.g., `POST /api/releases` for deployment markers). The remediation playbooks in this guide use the [Host Agent REST API](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-host-agent-rest-api) on `localhost:42699`, which requires no authentication.
 
 Input configuration:
@@ -279,7 +283,9 @@ Navigate to **Settings > Events & Alerts > Alert Channels > Add Alert Channel > 
 | **Webhook URL** | `https://eda.example.com:5000/instana` |
 | **Custom HTTP Headers** | (optional: `X-EDA-Token: <bearer-token>` for auth) |
 
-> **Note:** Instana states "The Instana Webhook format is not compatible with third-party tools expecting Incoming Webhooks in their format." This is expected -- the `ibm.instana.instana_webhook` source plugin handles parsing.
+> **Note:** The Instana webhook payload is Instana-specific.
+>
+> Instana states "The Instana Webhook format is not compatible with third-party tools expecting Incoming Webhooks in their format." This is expected -- the `ibm.instana.instana_webhook` source plugin handles parsing.
 
 Use the **Test Channel** button to verify delivery before proceeding.
 
@@ -403,7 +409,7 @@ Create a rulebook activation in the Event-Driven Ansible controller:
 | **Project** | `Instana AIOps` (Git repo containing rulebooks) |
 | **Rulebook** | `instana_remediation.yml` |
 | **Decision environment** | Custom image with `ibm.instana` and `aiohttp>=3.8.4` installed |
-| **Credential** | Automation controller credential (for `run_job_template`) |
+| **Credential** | AAP credential (for `run_job_template`) |
 | **Restart policy** | `Always` |
 
 ---
@@ -537,7 +543,7 @@ The Host Agent REST API annotation (severity `-1` = Change) creates a visible ma
 
 **Operational Impact:** Medium
 
-Instana detects slow query execution times or connection pool exhaustion on a monitored MySQL database. The `entity` field in the webhook payload matches database-related patterns. Automation controller runs a job template that identifies and kills idle connections.
+Instana detects slow query execution times or connection pool exhaustion on a monitored MySQL database. The `entity` field in the webhook payload matches database-related patterns. AAP runs a job template that identifies and kills idle connections.
 
 **Remediation playbook -- featured tasks:**
 
@@ -576,7 +582,9 @@ Instana detects slow query execution times or connection pool exhaustion on a mo
     status_code: [200, 201, 204]
 ```
 
-> **Tip:** Store database credentials in an automation controller credential type -- never hardcode `db_admin_user` or `db_admin_password` in playbook variables. Use injectors to pass them as extra variables or environment variables at runtime.
+> **Tip:** Store database credentials in controller, not in playbooks.
+>
+> Store database credentials in an automation controller credential type -- never hardcode `db_admin_user` or `db_admin_password` in playbook variables. Use injectors to pass them as extra variables or environment variables at runtime.
 
 ---
 
@@ -584,9 +592,11 @@ Instana detects slow query execution times or connection pool exhaustion on a mo
 
 **Operational Impact:** High
 
-Instana detects a spike in erroneous call rate correlated with a recent deployment Change event. Probable Root Cause identifies the deployment as the likely cause. Automation controller runs a job template that triggers a Kubernetes rollback.
+Instana detects a spike in erroneous call rate correlated with a recent deployment Change event. Probable Root Cause identifies the deployment as the likely cause. AAP runs a job template that triggers a Kubernetes rollback.
 
-> **Warning:** This use case has **high** operational impact -- a rollback reverts production code. Use automation controller approval workflow nodes (see [Maturity Path](#maturity-path)) until this pattern is validated in your environment.
+> **Warning:** Rollbacks here affect production Kubernetes workloads.
+>
+> This use case has **high** operational impact -- a rollback reverts production code. Use automation controller approval workflow nodes (see [Maturity Path](#maturity-path)) until this pattern is validated in your environment.
 
 **Remediation playbook -- featured tasks:**
 
@@ -627,7 +637,9 @@ Instana detects a spike in erroneous call rate correlated with a recent deployme
     status_code: [200, 201, 204]
 ```
 
-> **Tip:** For Kubernetes remediation, store the `kubeconfig` in an automation controller credential of type "OpenShift or Kubernetes API Bearer Token" and ensure the execution environment includes the `kubernetes.core` Ansible Certified Content Collection.
+> **Tip:** Put `kubeconfig` in a Kubernetes API credential type.
+>
+> For Kubernetes remediation, store the `kubeconfig` in an automation controller credential of type "OpenShift or Kubernetes API Bearer Token" and ensure the execution environment includes the `kubernetes.core` Ansible Certified Content Collection.
 
 ---
 
@@ -707,9 +719,13 @@ As teams add new job templates to automation controller, the AI automatically co
 | Novel failure mode or alert that could match multiple existing playbooks | AI-assisted routing -- LLM selects the best existing job template from your catalog |
 | Instana Probable Root Cause provides a clear suggestion | Direct remediation using the `suggestion` field to select the matching job template |
 
-> **Tip:** The AI recommendation includes the exact template name, confidence level, reasoning, and suggested variables -- enough detail for an operator to execute immediately or for a workflow to run conditionally based on confidence threshold.
+> **Tip:** AI output includes template, confidence, and variables.
+>
+> The AI recommendation includes the exact template name, confidence level, reasoning, and suggested variables -- enough detail for an operator to execute immediately or for a workflow to run conditionally based on confidence threshold.
 
-> **Tip:** The generic [AIOps automation with Ansible](README-AIOps.md) guide covers the AI inference pattern in depth, including how to use Red Hat AI, OpenAI, or any OpenAI-compatible endpoint.
+> **Tip:** Deeper AI inference examples are in the main AIOps guide.
+>
+> The generic [AIOps automation with Ansible](README-AIOps.md) guide covers the AI inference pattern in depth, including how to use Red Hat AI, OpenAI, or any OpenAI-compatible endpoint.
 
 ---
 
@@ -725,7 +741,7 @@ As teams add new job templates to automation controller, the AI automatically co
 | Rulebook activation | Activation is running | Event-Driven Ansible controller shows status **Running** |
 | Webhook delivery | Instana event reaches Event-Driven Ansible | Rulebook activation log shows received event JSON |
 | Condition match | Correct rule fires for test event | Activation log shows matched rule name |
-| Job template launch | Job template triggered by Event-Driven Ansible | Automation controller job history shows new job |
+| Job template launch | Job template triggered by Event-Driven Ansible | AAP job history shows new job |
 | Remediation | Service/DB/deployment recovers | Target system returns to healthy state |
 | Instana annotation | Remediation visible in Instana | Timeline shows Change event with AAP remediation details |
 
@@ -829,13 +845,15 @@ Start capturing these metrics before enabling automated remediation -- having a 
 | **Mean time to resolution (MTTR)** | Time from Instana Incident open to close, before and after automation | Instana Incident timeline; automation controller job duration |
 | **Mean time to remediate (MTTR-auto)** | Time from alert firing to successful remediation completion | EDA activation logs (event received timestamp) vs. automation controller job completion |
 | **Alert-to-action ratio** | Percentage of alerts that trigger automated remediation vs. manual escalation | EDA activation logs (matched rules vs. unmatched debug events) |
-| **Remediation success rate** | Percentage of automated remediations that resolve the Incident without human intervention | Automation controller job status (successful vs. failed); Instana Incident auto-close |
-| **Change success rate** | Percentage of automated changes that complete without rollback | Automation controller job history; deployment revision history |
+| **Remediation success rate** | Percentage of automated remediations that resolve the Incident without human intervention | AAP job status (successful vs. failed); Instana Incident auto-close |
+| **Change success rate** | Percentage of automated changes that complete without rollback | AAP job history; deployment revision history |
 | **Repeat Incidents** | Number of recurring Incidents for the same service or failure pattern | Instana Incident history filtered by entity and alert type |
 | **On-call escalation volume** | Number of Incidents that still require human triage after automation is enabled | PagerDuty/OpsGenie/Instana alert channel delivery counts |
 | **SLA compliance** | Service uptime percentage for mission-critical applications | Instana Smart Alert history; service-level objectives dashboard |
 
-> **Tip:** Identify 3-5 metrics most relevant to your environment and begin capturing baselines during the Crawl stage. Organizations that define success metrics before enabling automation can demonstrate measurable impact within the first quarter.
+> **Tip:** Define a small metric set before you scale automation.
+>
+> Identify 3-5 metrics most relevant to your environment and begin capturing baselines during the Crawl stage. Organizations that define success metrics before enabling automation can demonstrate measurable impact within the first quarter.
 
 ---
 

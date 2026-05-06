@@ -897,6 +897,11 @@ b {
   cursor: pointer;
 }
 
+/* PatternFly uses --spacer--lg above titles; tightens badge + title without shrinking legacy cards (no header). */
+.card-link .pf-v6-c-card__header + .pf-v6-c-card__title {
+  padding-block-start: 0;
+}
+
 .card-link .pf-v6-c-card:hover {
   border-color: #ee0000;
   box-shadow: 0 4px 16px rgba(238, 0, 0, 0.12);

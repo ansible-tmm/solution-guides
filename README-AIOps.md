@@ -113,13 +113,18 @@ There are three major parts of AIOps:
 What makes up the solution?
 
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9e0.png" width="20" style="vertical-align:text-bottom;"> **Red Hat AI** for understanding service issues <a target="_blank" href="https://www.redhat.com/en/products/ai">[Link]</a>
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2728.png" width="20" style="vertical-align:text-bottom;"> **Ansible Lightspeed** to generate remediation playbooks <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/ansible-lightspeed">[Link]</a>
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2728.png" width="20" style="vertical-align:text-bottom;"> **Automation code assistant** to generate remediation playbooks <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/ansible-lightspeed">[Link]</a>
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f50d.png" width="20" style="vertical-align:text-bottom;"> **Red Hat Lightspeed** for CVE and Advisor remediation playbooks <a target="_blank" href="https://console.redhat.com">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f501.png" width="20" style="vertical-align:text-bottom;"> **Ansible Automation Platform (AAP)** workflows for orchestration <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **Event-Driven Ansible (EDA)** to listen to real-time service events <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible">[Link]</a>
 
 > **EDA is part of Ansible Automation Platform.**
 >
-> It is referred to separately sometimes depending on the workflow. EDA uses rulebooks to monitor events, then executes specified job templates or workflows based on the event. Think of it simply as inputs and outputs. EDA is an automatic way for inputs into Ansible Automation Platform, where Automation controller / Automation execution is the output (running a job template or workflow).
+> It is referred to separately sometimes depending on the workflow. EDA uses rulebooks to monitor events, then executes specified job templates or workflows based on the event. Think of it simply as inputs and outputs. EDA is an automatic way for inputs into Ansible Automation Platform, where Ansible Automation Platform is the output (running a job template or workflow).
+
+> **Terminology update -- Lightspeed rebranding.**
+>
+> Red Hat has consolidated its AI-powered services under the **Lightspeed** brand. **Ansible Lightspeed Code Assistant** is now **Automation code assistant** (supports Gemini, Red Hat AI, or IBM watsonx). **Ansible Lightspeed Intelligent Assistant** is now **Automation intelligent assistant**. **Red Hat Insights** (console.redhat.com) is now **Red Hat Lightspeed**. The functionality is the same -- only the branding has changed. This guide uses both old and new names where they appear in existing code and screenshots.
 
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3a5.png" width="20" style="vertical-align:text-bottom;"> [YouTube video (~2 min)](https://youtu.be/a3fCHd2vTXU?si=L_5jGYZFtb3SzCJq)
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e2.png" width="20" style="vertical-align:text-bottom;"> [Please consider subscribing to the Ansible Team!](https://youtube.com/ansibleautomation?sub_confirmation=1)
@@ -145,7 +150,7 @@ What makes up the solution?
 | Collection | Type | Purpose |
 |-----------|------|---------|
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/eda/">ansible.eda</a> | Certified | EDA event sources and filters (Kafka, webhooks, etc.) |
-| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller/">ansible.controller</a> | Certified | Automation Controller configuration as code (job templates, workflows, surveys) |
+| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller/">ansible.controller</a> | Certified | AAP configuration as code (job templates, workflows, surveys) |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/scm/">ansible.scm</a> | Certified | Git operations (commit and push generated playbooks) |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/validated/infra/ai">infra.ai</a> | Validated | Provisions RHEL AI infrastructure (AWS, Azure, GCP, bare metal) |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/ai">redhat.ai</a> | Certified | Configures and serves AI models using InstructLab |
@@ -161,7 +166,8 @@ What makes up the solution?
 | Observability tool | Yes | Filebeat, IBM Instana, Splunk, Dynatrace, Prometheus |
 | Message queue | Optional (depends on observability tool) | Apache Kafka, AWS SQS, Azure Service Bus |
 | AI inference endpoint | Yes | Red Hat AI (RHEL AI + InstructLab) or any OpenAI-compatible API |
-| Ansible Lightspeed | Yes | Ansible Lightspeed with IBM watsonx Code Assistant |
+| Automation code assistant | Yes | Automation code assistant (formerly Ansible Lightspeed) with Gemini, Red Hat AI, or IBM watsonx |
+| Red Hat Lightspeed | Recommended | CVE and Advisor remediation playbooks via console.redhat.com (formerly Red Hat Insights) |
 | Git repository | Yes | GitHub, GitLab, Gitea |
 | Chat or ITSM tool | Recommended | Mattermost, Slack, ServiceNow |
 
@@ -222,7 +228,7 @@ This is a workflow **example** from our hands-on workshop **Introduction to AI-D
 
 The first part of the AIOps workflow is the **Event-Driven Ansible (EDA) Response**.  Here is a breakdown of the four main components:
 
-<a target="_blank" href="https://github.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/blob/main/solution_images/eda_response.png"><img src="https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/eda_response.png"></a>
+<a target="_blank" href="https://github.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/blob/main/solution_images/eda_response.png"><img src="https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/eda_response.png" width="50%"></a>
 
   1. IT infrastructure event
   2. Observability tool picks up event
@@ -828,6 +834,23 @@ This guide covers the self-healing infrastructure use case, which has its own ma
 
 The workflow in this guide demonstrates the **Run** stage -- AI generates a remediation playbook that didn't exist before. But organizations can start at **Crawl** by using only the Enrichment Workflow (parts 1-2) and stopping before the Remediation Workflow. Each stage reuses the same underlying architecture; the difference is how far down the pipeline you automate.
 
+### Where Do Good Playbooks Come From?
+
+The AIOps pipeline in this guide uses Automation code assistant to generate remediation playbooks on-the-fly. But AI-generated code is not the only source of production-quality automation. Organizations should draw from multiple playbook sources depending on the use case:
+
+| Source | Description |
+|--------|-------------|
+| **CVE Remediation (Red Hat Lightspeed)** | <a target="_blank" href="https://console.redhat.com">Red Hat Lightspeed</a> (formerly Red Hat Insights) identifies vulnerabilities affecting your RHEL fleet and generates targeted playbooks to patch them. These are based on Red Hat's Security Data API and errata -- not AI-generated, but battle-tested remediation from Red Hat Support. |
+| **Advisor Recommendations (Red Hat Lightspeed)** | Lightspeed flags misconfigurations and best-practice violations (e.g., SELinux policy issues, SSH configurations that won't survive a reboot) and generates playbooks to fix them proactively. Think of CVEs as *reactive* -- patching known vulnerabilities. Advisor recommendations are *proactive* -- fixing misconfigurations before they become incidents. |
+| **RHEL System Roles** | Officially supported, pre-built Ansible roles shipped with RHEL that provide a stable, version-independent interface for common configuration tasks (NTP, networking, storage, SELinux, firewall). A playbook using  works the same on RHEL 8 and RHEL 9. |
+| **AI-assisted authoring (Automation code assistant)** | Developers use Automation code assistant in the IDE to accelerate playbook creation. The AI generates a first draft from natural language, then a human reviews, refines, and validates before committing. Supports Google Gemini, Red Hat AI, and IBM watsonx as backends. |
+
+> **Human-in-the-loop is what makes it production-ready.**
+>
+> Whether a playbook was generated by Red Hat Lightspeed, written with AI assistance, or hand-crafted, the same review and approval process applies: Git as source of truth, project sync in AAP, Job Templates with guardrails (credentials, inventory limits, surveys), and optional approval gates. The IDE is where the review happens; AAP is where the gatekeeping happens.
+
+Each source has its place in the AIOps maturity journey. At the **Crawl** stage, Red Hat Lightspeed CVE and Advisor playbooks give you ready-made, trusted content. At **Walk**, curated RHEL System Roles and pre-approved playbook libraries provide governed automation. At **Run**, Automation code assistant generates new playbooks on-the-fly within policy boundaries.
+
 <h2 id="related-guides"></h2>
 
 ## Related Guides
@@ -841,7 +864,7 @@ The workflow in this guide demonstrates the **Run** stage -- AI generates a reme
 
 ## Summary
 
-With this workflow in place, your team moves from manually triaging every alert to AI-diagnosed, dynamically remediated incidents. Instead of writing hundreds of rules to match hundreds of failure modes, a single AIOps pipeline uses AI inference to diagnose issues and Ansible Lightspeed to generate remediation playbooks on-the-fly. The result is faster mean time to resolution (MTTR), less operational toil, and an automation strategy that scales with your environment rather than against it.
+With this workflow in place, your team moves from manually triaging every alert to AI-diagnosed, dynamically remediated incidents. Instead of writing hundreds of rules to match hundreds of failure modes, a single AIOps pipeline uses AI inference to diagnose issues and Automation code assistant to generate remediation playbooks on-the-fly. Combined with pre-built remediation from Red Hat Lightspeed (CVE and Advisor playbooks) and RHEL System Roles, organizations have multiple sources of trusted automation at every stage of the maturity journey. The result is faster mean time to resolution (MTTR), less operational toil, and an automation strategy that scales with your environment rather than against it.
 
 ---
 

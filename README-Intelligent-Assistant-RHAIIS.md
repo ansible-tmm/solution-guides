@@ -1,7 +1,9 @@
 {% raw %}
 # Configuring Ansible Lightspeed intelligent assistant with Red Hat AI Inference Server on RHEL <!-- omit in toc -->
 
-> **Knowledge Base Article**: [https://access.redhat.com/articles/7130595](https://access.redhat.com/articles/7130595)
+> **Knowledge Base Article**
+>
+> Customer portal: [access.redhat.com article 7130595](https://access.redhat.com/articles/7130595)
 
 <!--ARCADE EMBED START--><div style="position: relative; padding-bottom: calc(56.4263% + 41px); height: 0px; width: 100%;"><iframe src="https://demo.arcade.software/VIH1fhi64QjLKTnOc9ri?embed&embed_mobile=tab&embed_desktop=inline&show_copy_link=true" title="Plugging Red Hat AI Inference Server into Ansible Lightspeed intelligent assistant" frameborder="0" loading="lazy" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="clipboard-write" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; color-scheme: light;" ></iframe></div><!--ARCADE EMBED END-->
 

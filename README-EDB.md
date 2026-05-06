@@ -322,7 +322,9 @@ User → GLB → HAProxy(DC1) → AAP Containers(DC1) → VIP(DC1) → PostgreSQ
 - **Quorum calculation:** Majority of configured nodes must be reachable for failover to proceed (e.g., 2 of 3 nodes, or 3 of 5 with witness)
 - **Split-brain prevention:** EFM requires majority consensus before promoting a standby to prevent multiple primaries
 
-> **Production recommendation:** Deploy a lightweight witness node (2 vCPU, 4GB RAM) in a third location or availability zone to maintain quorum during single-datacenter failures. This guide uses 3-node clusters per DC for simplicity; add witness nodes for production deployments requiring maximum availability.
+> **Production recommendation:** Use a witness node outside a failed DC for quorum.
+>
+> Deploy a lightweight witness node (2 vCPU, 4GB RAM) in a third location or availability zone to maintain quorum during single-datacenter failures. This guide uses 3-node clusters per DC for simplicity; add witness nodes for production deployments requiring maximum availability.
 
 #### AAP Databases (4 databases per PostgreSQL instance)
 
@@ -378,9 +380,13 @@ WAN Connectivity:
 - **Internal references use VIPs or HAProxy:** AAP components connect to database via HAProxy (`10.1.1.20` or `10.2.1.20`), which routes to the datacenter-local PostgreSQL VIP
 - **Why not use datacenter-agnostic names?** Explicit DC identifiers in hostnames aid troubleshooting, capacity planning, and operational awareness of which datacenter is serving traffic
 
-> **Production consideration:** Some organizations prefer datacenter-agnostic hostnames (e.g., `gateway1-a`, `gateway1-b`) to avoid confusion. This guide uses explicit DC identifiers for operational clarity, but either approach works as long as the GLB provides the user-facing abstraction.
+> **Production consideration:** Hostname style is an operational tradeoff.
+>
+> Some organizations prefer datacenter-agnostic hostnames (e.g., `gateway1-a`, `gateway1-b`) to avoid confusion. This guide uses explicit DC identifiers for operational clarity, but either approach works as long as the GLB provides the user-facing abstraction.
 
-> **Why HAProxy instead of pgBouncer?** AAP 2.6 has specific connection pooling requirements that make HAProxy the recommended approach for database connection routing. HAProxy routes AAP containers to the EFM-managed PostgreSQL VIP without connection pooling. See the source architecture documentation's "HAProxy vs pgBouncer Architectural Analysis" for complete design rationale.
+> **Why HAProxy instead of pgBouncer?**
+>
+> AAP 2.6 has specific connection pooling requirements that make HAProxy the recommended approach for database connection routing. HAProxy routes AAP containers to the EFM-managed PostgreSQL VIP without connection pooling. See the source architecture documentation's "HAProxy vs pgBouncer Architectural Analysis" for complete design rationale.
 
 </details>
 
@@ -798,7 +804,9 @@ eda1-dc2.example.com eda_pg_host='10.2.1.20' eda_pg_port='5432'
 eda2-dc2.example.com eda_pg_host='10.2.1.20' eda_pg_port='5432'
 ```
 
-> **Critical:** DC2 nodes will be STOPPED after installation. All admin passwords and database credentials must match between DC1 and DC2 for seamless failover.
+> **Critical:** DC2 nodes will be STOPPED after installation.
+>
+> All admin passwords and database credentials must match between DC1 and DC2 for seamless failover.
 
 #### Step 10: Install AAP on DC1 (active)
 
@@ -1096,7 +1104,9 @@ Example Route53 configuration:
 }
 ```
 
-> **Important:** DNS TTL directly impacts user-facing RTO. A 60-second TTL means clients may continue attempting to reach DC1 for up to 60 seconds after GLB has switched to DC2. For mission-critical deployments, consider 30-second TTL or client-side connection retry logic.
+> **Important:** DNS TTL directly affects client failover timing.
+>
+> A 60-second TTL means clients may continue attempting to reach DC1 for up to 60 seconds after GLB has switched to DC2. For mission-critical deployments, consider 30-second TTL or client-side connection retry logic.
 
 #### Step 15: Set up monitoring and alerting
 

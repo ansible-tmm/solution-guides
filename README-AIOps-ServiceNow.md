@@ -25,7 +25,7 @@ This guide describes a practical AIOps pattern that bridges those teams using **
 >
 > This pattern is closest to **Walk/Run** depending on how you gate execution: LEAP can recommend and launch governed automation from an ITSM context, rather than stopping at ticket commentary alone. For a broader Crawl → Walk → Run framing, see [AIOps automation with Ansible](README-AIOps.md).
 
-**Interactive walkthrough (source narrative for this guide):** [Unlock AIOps with ServiceNow LEAP and Ansible MCP server | Arcade](https://app.arcade.software/share/UAt0jBV2NHwrV3rgaTQr?ref=share-link)
+**Interactive walkthrough (source narrative for this guide):** [Unlock AIOps with ServiceNow LEAP and Ansible MCP server](https://app.arcade.software/share/UAt0jBV2NHwrV3rgaTQr?ref=share-link)
 
 - [Overview](#overview)
 - [Background](#background)
@@ -97,6 +97,8 @@ The Arcade walkthrough summarizes the story as:
 - **LEAP calls MCP server for AAP** and **surfaces an AAP playbook**
 - **AAP runs the playbook** (governed: RBAC + audit)
 - **ServiceNow LEAP updates** as the remediation proceeds/completes
+
+<img src="{{ '/assets/images/servicenow-architecture.png' | relative_url }}" alt="ServiceNow LEAP and Ansible MCP architecture" style="max-width:100%;height:auto;width:80%">
 
 **Logical flow:**
 
@@ -184,9 +186,9 @@ Place the **Ansible Automation Platform MCP server** where your organization rou
 
 ### Ansible Automation Platform
 
-- **Ansible Automation Platform 2.4+** (2.5+ recommended) with Automation Controller available to run job templates and workflow job templates
-- A **dedicated integration user** or **team-scoped service account** with permission only for the job templates LEAP is allowed to run
-- The **Ansible Automation Platform MCP server** deployed and reachable from ServiceNow (reverse proxy, IP allow lists, health checks)
+- **Ansible Automation Platform 2.6+** with Automation Controller and the **MCP server for Ansible Automation Platform** (confirm supported versions in your AAP release notes; older supported trains may allow **2.5+**)
+- A **dedicated integration user** or **team-scoped service account** with permission only for the job templates LEAP is allowed to run; prefer **short-lived tokens** and narrowly scoped permissions
+- The **Ansible Automation Platform MCP server endpoint** deployed and reachable from ServiceNow (reverse proxy, mTLS, IP allow lists, health checks)
 
 ### ServiceNow
 
@@ -204,7 +206,9 @@ Place the **Ansible Automation Platform MCP server** where your organization rou
 
 ## Solution Walkthrough
 
-> **Note:** UI labels below mirror the Arcade guidance. Adapt naming to your organization’s ServiceNow profiles, workspaces, and connector menus.
+> **Note:** UI labels mirror the Arcade guidance.
+>
+> Adapt naming to your organization’s ServiceNow profiles, workspaces, and connector menus.
 
 ### 1. Create an AAP API token for the MCP integration
 
