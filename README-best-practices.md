@@ -83,7 +83,7 @@ Solution guides follow the convention `[Topic] - Solution Guide`. Within that co
 
 **Better (outcome-oriented):**
 
-- "Reducing MTTR with Automated ServiceNow Ticket Enrichment - Solution Guide"
+- "Unlock AIOps with ServiceNow LEAP and Ansible MCP server - Solution Guide"
 - "Triggering Automated Remediation from Splunk Alerts with Event-Driven Ansible - Solution Guide"
 
 > **Tip:** When in doubt, use the standard format.

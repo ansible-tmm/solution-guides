@@ -249,10 +249,10 @@ patternfly: true
               </span>
             </div>
             <div class="pf-v6-c-card__title">
-              <h3 class="pf-v6-c-card__title-text">Reducing MTTR with ServiceNow Ticket Enrichment</h3>
+              <h3 class="pf-v6-c-card__title-text">Unlock AIOps with ServiceNow LEAP and Ansible MCP server</h3>
             </div>
             <div class="pf-v6-c-card__body">
-              Automatically enrich ServiceNow incidents with diagnostic data and AI-driven root cause analysis -- the lowest-risk entry point for AIOps.
+              Bridge ITSM and Automation Controller: LEAP prioritizes opportunities, the Ansible MCP server surfaces approved playbooks, and governed remediation closes incidents with full audit trail.
             </div>
             <div class="pf-v6-c-card__footer">
               <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">

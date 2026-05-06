@@ -93,7 +93,7 @@ All solution guides follow a standardized framework defined in the [Best Practic
 | Guide | GitHub Pages | Partners |
 |-------|-------------|----------|
 | AIOps with Splunk and Event-Driven Ansible | [README-AIOps-Splunk-ITSI](README-AIOps-Splunk-ITSI.md) | Splunk |
-| Reducing MTTR with ServiceNow Ticket Enrichment | [README-AIOps-ServiceNow](README-AIOps-ServiceNow.md) | ServiceNow |
+| Unlock AIOps with ServiceNow LEAP and Ansible MCP server | [README-AIOps-ServiceNow](README-AIOps-ServiceNow.md) | ServiceNow |
 | Event-Driven Remediation with Azure Service Bus | [README-AIOps-Azure-Service-Bus](README-AIOps-Azure-Service-Bus.md) | Azure |
 | Automated Incident Remediation with IBM Instana | [README-Instana-AIOps](README-Instana-AIOps.md) | IBM Instana |
 | AIOps with AWS SQS and Event-Driven Ansible | [README-SQS](README-SQS.md) | AWS |
