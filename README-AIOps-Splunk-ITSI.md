@@ -101,7 +101,7 @@ What makes up the solution?
 
 > **EDA is part of Ansible Automation Platform.**
 >
-> EDA uses rulebooks to monitor events, then executes specified job templates or workflows based on the event. Think of it simply as inputs and outputs. EDA is an automatic way for inputs into Ansible Automation Platform, where Automation controller is the output (running a job template or workflow).
+> EDA uses rulebooks to monitor events, then executes specified job templates or workflows based on the event. Think of it simply as inputs and outputs. EDA is an automatic way for inputs into Ansible Automation Platform, where Ansible Automation Platform is the output (running a job template or workflow).
 
 ### Who Benefits
 
@@ -137,7 +137,7 @@ What makes up the solution?
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/namespaces/splunk/">splunk.itsi</a> | Certified | ITSI episode management -- query episodes, add comments, update status, and close incidents programmatically (Use Case A) |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/namespaces/splunk/">splunk.es</a> | Certified | Manage Splunk Enterprise Security resources -- correlation searches, adaptive response actions, and data inputs |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/ai">redhat.ai</a> | Certified | AI model inference using the OpenAI-compatible API via InstructLab (Use Cases B, C) |
-| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller/">ansible.controller</a> | Certified | Automation Controller configuration as code -- job templates, workflows, surveys |
+| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller/">ansible.controller</a> | Certified | AAP configuration as code -- job templates, workflows, surveys |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/scm/">ansible.scm</a> | Certified | Git operations -- commit and push generated playbooks (Use Case C) |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/cisco/ios/">cisco.ios</a> | Certified | Cisco IOS device management -- required for the network AIOps use case (Use Case C) |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/servicenow/itsm/">servicenow.itsm</a> | Certified | ServiceNow ITSM incident creation and enrichment |

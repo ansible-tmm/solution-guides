@@ -84,6 +84,8 @@ The Arcade walkthrough summarizes the story as:
 - **AAP runs the playbook** (governed: RBAC + audit)
 - **ServiceNow LEAP updates** as the remediation proceeds/completes
 
+<img src="{{ '/assets/images/servicenow-architecture.png' | relative_url }}" alt="ServiceNow LEAP and Ansible MCP architecture" width="80%">
+
 **End-to-end flow (logical):**
 
 ```
@@ -100,7 +102,7 @@ ServiceNow Incident/Operations context
 
 ### Ansible Automation Platform
 
-- **Ansible Automation Platform 2.4+** (2.5+ recommended) with Automation Controller available to run job templates/workflows
+- **Ansible Automation Platform 2.6+** with MCP server for Ansible Automation Platform
 - A **service account** model for integration (prefer short-lived tokens + narrowly scoped permissions)
 - The **Ansible Automation Platform MCP server endpoint** deployed and reachable from ServiceNow (org-standard: reverse proxy, mTLS, IP allow lists, etc.)
 
