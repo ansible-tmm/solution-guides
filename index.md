@@ -168,6 +168,28 @@ patternfly: true
         </div>
       </a>
 
+      <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}" class="card-link" data-partners="servicenow,integration,published">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-green">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Reducing MTTR with ServiceNow Ticket Enrichment</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Automatically enrich ServiceNow incidents with diagnostic data and AI-driven root cause analysis -- the lowest-risk entry point for AIOps.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">
+          </div>
+        </div>
+      </a>
+
       <a href="{{ '/README-AIOps-Splunk-ITSI' | relative_url }}" class="card-link" data-partners="splunk,integration,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
@@ -234,28 +256,6 @@ patternfly: true
             </div>
             <div class="pf-v6-c-card__footer">
               <img src="{{ '/assets/images/azure-logo.png' | relative_url }}" alt="Azure" class="card-partner-logo">
-            </div>
-          </div>
-        </a>
-
-        <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}" class="card-link" data-partners="servicenow,integration,wip">
-          <div class="pf-v6-c-card">
-            <div class="pf-v6-c-card__header">
-              <span class="pf-v6-c-label pf-m-orange">
-                <span class="pf-v6-c-label__content">
-                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
-                  Work in Progress
-                </span>
-              </span>
-            </div>
-            <div class="pf-v6-c-card__title">
-              <h3 class="pf-v6-c-card__title-text">Reducing MTTR with ServiceNow Ticket Enrichment</h3>
-            </div>
-            <div class="pf-v6-c-card__body">
-              Automatically enrich ServiceNow incidents with diagnostic data and AI-driven root cause analysis -- the lowest-risk entry point for AIOps.
-            </div>
-            <div class="pf-v6-c-card__footer">
-              <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">
             </div>
           </div>
         </a>
