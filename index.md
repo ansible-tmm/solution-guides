@@ -16,6 +16,9 @@ patternfly: true
         <input type="checkbox" value="aiops"> AIOps
       </label>
       <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="foundational"> Foundational
+      </label>
+      <label class="cards-sidebar__checkbox">
         <input type="checkbox" value="infrastructure"> Infrastructure
       </label>
     </div>
@@ -58,7 +61,7 @@ patternfly: true
     <p id="guide-search-count" class="cards-search__count"></p>
 
     <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="main-gallery">
-      <a href="{{ '/README-AIOps' | relative_url }}" class="card-link" data-partners="aiops,published">
+      <a href="{{ '/README-AIOps' | relative_url }}" class="card-link" data-partners="aiops,foundational,published">
         <div class="pf-v6-c-card card-foundational">
           <div class="pf-v6-c-card__header">
             <span class="pf-v6-c-label pf-m-green">
