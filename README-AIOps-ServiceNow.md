@@ -17,7 +17,7 @@ This guide describes a practical AIOps pattern that bridges those teams using **
 >
 > This pattern is closest to **Walk/Run** depending on how you gate execution: LEAP can recommend and launch governed automation from an ITSM context, rather than stopping at ticket commentary alone. For a broader Crawl → Walk → Run framing, see [AIOps automation with Ansible](README-AIOps.md).
 
-**Interactive walkthrough (source narrative for this guide):** [Unlock AIOps with ServiceNow LEAP and Ansible MCP server | Arcade](https://app.arcade.software/share/UAt0jBV2NHwrV3rgaTQr?ref=share-link)
+**Interactive walkthrough (source narrative for this guide):** [Unlock AIOps with ServiceNow LEAP and Ansible MCP server](https://app.arcade.software/share/UAt0jBV2NHwrV3rgaTQr?ref=share-link)
 
 - [Overview](#overview)
 - [Background](#background)
