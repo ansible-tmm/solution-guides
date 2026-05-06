@@ -178,6 +178,8 @@ From this point, both paths converge. Ansible Automation Platform executes the r
 
 ### Path A: Event-Driven Ansible
 
+<img src="assets/images/instana_path_a_eda.png" alt="Path A: Event-Driven Ansible integration with IBM Instana">
+
 ```
 Instana Smart Alert fires
   -> Instana webhook alert channel sends HTTP POST
@@ -190,6 +192,8 @@ Instana Smart Alert fires
 ```
 
 ### Path B: Instana Automation Framework
+
+<img src="assets/images/instana_path_b_api.png" alt="Path B: Instana Automation Framework with API integration to Ansible Automation Platform">
 
 ```
 Instana Smart Alert or event fires
