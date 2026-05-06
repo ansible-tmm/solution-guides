@@ -122,7 +122,9 @@ These aren’t mandatory for the LEAP/MCP integration itself, but they’re comm
 
 ## Solution Walkthrough
 
-> **Note:** UI labels below mirror the Arcade guidance. Adapt naming to your organization’s ServiceNow profiles, workspaces, and connector menus.
+> **Note:** UI labels mirror the Arcade guidance.
+>
+> Adapt naming to your organization’s ServiceNow profiles, workspaces, and connector menus.
 
 ### 1. Create an AAP API token for the MCP integration
 
