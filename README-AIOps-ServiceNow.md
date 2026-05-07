@@ -1,10 +1,6 @@
 {% raw %}
 # Unlock AIOps with ServiceNow LEAP and Ansible MCP server - Solution Guide <!-- omit in toc -->
 
-> **Knowledge Base Article**: [https://access.redhat.com/articles/7127603](https://access.redhat.com/articles/7127603)
->
-> While related automation patterns appear on the customer portal, **this repository document is the source of truth** for the LEAP + Ansible MCP integration narrative. The KB article focuses on ITSM ticket enrichment; this guide extends the story to **governed playbook execution** from ServiceNow via MCP.
-
 <style>
   div#toc {
     display: none;
