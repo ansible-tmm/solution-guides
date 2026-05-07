@@ -1,7 +1,5 @@
 # ServiceNow ITSM Ticket Enrichment Automation - Solution Guide <!-- omit in toc -->
 
-> **Knowledge Base Article:** [access.redhat.com/articles/7127603](https://access.redhat.com/articles/7127603)
-
 - [Overview](#overview)
 - [Background](#background)
 - [Solution](#solution)
