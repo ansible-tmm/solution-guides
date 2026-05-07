@@ -7,6 +7,8 @@
   }
 </style>
 
+<img src="assets/images/edb-hero.png" alt="Ansible + EDB PostgreSQL" width="400">
+
 ## Overview
 
 When Ansible Automation Platform becomes mission-critical infrastructure -- orchestrating network changes, managing security compliance, or coordinating multi-cloud deployments -- downtime is not an option. A database failure, datacenter outage, or unplanned maintenance window can halt automation across the enterprise, blocking change tickets, delaying deployments, and leaving teams unable to respond to incidents.
