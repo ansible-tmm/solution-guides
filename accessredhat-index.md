@@ -14,11 +14,11 @@ Browse all solution guides, filter by partner or type, and find contributing gui
 **AI + Ansible Automation Platform**
 
 - [AI Infrastructure automation with Ansible - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-IA)
-- [AIOps automation with Ansible - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-AIOps)
 - [Configuring Ansible Lightspeed intelligent assistant with Red Hat AI Inference Server on RHEL - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-Intelligent-Assistant-RHAIIS)
 
 **AIOps Integrations**
 
+- [AIOps automation with Ansible - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-AIOps) (Foundational)
 - [AIOps with Splunk and Event-Driven Ansible - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-AIOps-Splunk-ITSI)
 - [Automated Incident Remediation with IBM Instana - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-Instana-AIOps)
 - [Unlock AIOps with ServiceNow LEAP and Ansible MCP server - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-AIOps-ServiceNow)
