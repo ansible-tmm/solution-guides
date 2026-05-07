@@ -1,9 +1,6 @@
 
 # AI Infrastructure Automation with Ansible – Solution Guide
 
-> **Knowledge Base Article**: [https://access.redhat.com/articles/7118390](https://access.redhat.com/articles/7118390)
->
-> While this Solution Guide can be found on the customer portal, this document is the source of truth.
 
 <style>
   div#toc {
