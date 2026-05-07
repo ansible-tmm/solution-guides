@@ -285,7 +285,7 @@ patternfly: true
             </div>
           </div>
         </a>
-        <a href="https://access.redhat.com/articles/7127603" class="card-link" target="_blank" data-partners="servicenow,published">
+        <a href="{{ '/README-ServiceNow-ITSM' | relative_url }}" class="card-link" data-partners="servicenow,published">
           <div class="pf-v6-c-card">
             <div class="pf-v6-c-card__title">
               <h3 class="pf-v6-c-card__title-text">ServiceNow ITSM Ticket Enrichment</h3>
