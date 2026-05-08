@@ -30,6 +30,20 @@
     {% endif %}
     <link rel="stylesheet" href="{{ '/assets/css/prism-vsc-dark-plus.css' | relative_url}}">
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: false, theme: 'default' });
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function (codeEl) {
+          var pre = codeEl.parentElement;
+          var div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = codeEl.textContent;
+          pre.parentNode.replaceChild(div, pre);
+        });
+        mermaid.run();
+      });
+    </script>
   </head>
   <body>
     <script src="{{ '/assets/prism.js' | relative_url }}"></script>
