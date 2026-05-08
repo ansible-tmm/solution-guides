@@ -108,9 +108,6 @@ ServiceNow Incident / Service Operations context
         → Outcomes and status feed back into the ServiceNow / LEAP experience
 ```
 
-<details>
-<summary>Optional: same topology as a Mermaid diagram (GitHub renders this)</summary>
-
 ```mermaid
 flowchart LR
   SN[ServiceNow LEAP / Connectors]
@@ -121,8 +118,6 @@ flowchart LR
 
   SN -->|HTTPS TLS| GW -->|HTTPS| MCP -->|REST OAuth RBAC| AAP -->|SSH WinRM APIs| TGT
 ```
-
-</details>
 
 ### Operational impact by stage
 
