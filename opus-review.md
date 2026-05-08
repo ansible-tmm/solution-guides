@@ -11,7 +11,7 @@
 | 2 | [Automated Incident Remediation with IBM Instana](#2-automated-incident-remediation-with-ibm-instana) | 8.9/10 | Dual-path architecture (EDA vs native); per-use-case operational impact and unusually complete validation |
 | 3 | [High-Availability AAP with EDB PostgreSQL DR](#3-high-availability-aap-with-edb-postgresql-dr) | 8.7/10 | Reference-grade DR architecture with diagrams, runbooks, and failback procedures |
 | 4 | [AIOps automation with Ansible](#4-aiops-automation-with-ansible) | 8.5/10 | Strong foundational reference architecture; best systems narrative, observability catalog, and playbook source mapping |
-| 5 | [Unlock AIOps with ServiceNow LEAP and Ansible MCP server](#5-unlock-aiops-with-servicenow-leap-and-ansible-mcp-server) | 8.5/10 | Strong LEAP/MCP governance story with multi-agent visibility, YAML artifacts, verification commands, and full framework alignment |
+| 5 | [Unlock AIOps with ServiceNow LEAP and Ansible MCP server](#5-unlock-aiops-with-servicenow-leap-and-ansible-mcp-server) | 8.7/10 | Strong LEAP/MCP governance story with MTTR focus, customer evidence, multi-agent visibility, and full framework alignment |
 | 6 | [AI Infrastructure automation with Ansible](#6-ai-infrastructure-automation-with-ansible) | 7.3/10 | Clear two-collection story (infra.ai + redhat.ai); needs framework alignment and deeper validation |
 | 7 | [Intelligent Assistant with Red Hat AI Inference Server](#7-intelligent-assistant-with-red-hat-ai-inference-server) | 6.9/10 | Strong hands-on RHAIIS + Lightspeed hookup; weakest framework alignment of published guides |
 
@@ -187,16 +187,16 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 ### 5. Unlock AIOps with ServiceNow LEAP and Ansible MCP server
 
 **File:** [README-AIOps-ServiceNow.md](README-AIOps-ServiceNow.md)
-**Score: 8.5 / 10** *(updated May 2026 after major content expansion and servicenow.itsm upgrade from optional to recommended with multi-agent rationale)*
+**Score: 8.7 / 10** *(updated May 2026 -- MTTR-focused card, customer reference, multi-agent rationale, servicenow.itsm recommended)*
 
 | Category | Score |
 |----------|-------|
-| Outcome Clarity (20%) | 4.5 |
+| Outcome Clarity (20%) | 5 |
 | Architecture Clarity (20%) | 4.5 |
 | Technical Executability (25%) | 4 |
 | Validation/Testability (15%) | 4 |
 | Production Readiness (10%) | 5 |
-| Business Framing (10%) | 4.5 |
+| Business Framing (10%) | 5 |
 
 **Stats:** ~3,800 words | 2 YAML blocks | 1 hero image + 1 SVG architecture diagram + 1 Mermaid diagram | 4 walkthrough steps + 4 verification artifacts
 
@@ -210,10 +210,11 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 - Strong security/governance section treating integration as production automation with least privilege, change controls, and audit completeness
 - Operational impact table by stage and measurable success metrics table with quantifiable indicators
 - Arcade walkthrough embed as interactive companion to the written guide
+- Real-world customer reference (Mutua Madrileña: 50% incident reduction with EDA + Dynatrace) validates the AIOps pattern even though LEAP is new
 
 **Weaknesses:**
 - Walkthrough steps are UI-navigation-oriented (click paths) rather than API/CLI-oriented -- harder to reproduce without exact ServiceNow instance configuration
-- Guide title changed from the original "Reducing MTTR" framing; the new title is more accurate but the card description could better highlight the MTTR outcome
+- Guide title changed from the original "Reducing MTTR" framing; the new title is more accurate and the card now leads with MTTR reduction
 - Multi-agent visibility narrative is strong but could benefit from a concrete example showing two agents updating the same incident
 
 **Suggestions:**
@@ -316,6 +317,6 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 - Splunk and Instana tie at 8.9 but Splunk edges ahead on breadth (three use cases) while Instana leads on validation rigor
 - EDB at 8.7 is the deepest single-topic guide with the most operational runbook content; ASCII diagrams now replaced with Mermaid
 - AIOps at 8.5 is the strongest foundational reference with the best systems narrative and playbook source mapping
-- ServiceNow at 8.5 made the biggest jump (from 7.1) after adding YAML artifacts, verification commands, multi-agent visibility narrative, and full framework alignment
+- ServiceNow at 8.7 made the biggest jump (from 7.1) after adding YAML artifacts, verification commands, multi-agent visibility, customer evidence, and MTTR-focused framing
 - IA (7.3) is solid but needs framework alignment and more executable artifacts
 - RHAIIS (6.9) is the most hands-on procedural guide but weakest on framework structure

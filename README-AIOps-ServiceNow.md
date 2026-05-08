@@ -84,6 +84,10 @@ What makes up the solution?
 | <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f5fa.png" width="20" style="vertical-align:text-bottom;"> **Automation Architect / Platform** | Fragile one-off integrations; hard-to-audit execution; unclear RBAC boundaries | A standard connector model (MCP) and AAP-native audit/RBAC for what actually runs |
 | <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4ca.png" width="20" style="vertical-align:text-bottom;"> **IT Leader** | High MTTR and repeat incidents; automation exists but isn’t operationalized | Faster resolution, reuse of trusted playbooks, and measurable governance |
 
+> **Real-world impact: 50% fewer IT incidents.**
+>
+> Spanish insurance leader <a target="_blank" href="https://www.redhat.com/en/about/press-releases/mutua-madrilena-adopts-red-hat-ansible-automation-platform-manage-its-automation-and-observability-strategy">Mutua Madrileña</a> paired Dynatrace observability with Event-Driven Ansible to automate incident resolution across 60+ platforms -- cutting IT incidents by half while expanding self-healing to new departments. The LEAP + MCP pattern in this guide follows the same architecture: intelligent detection feeds governed, deterministic automation.
+
 <h2 id="workflow"></h2>
 
 ## Workflow

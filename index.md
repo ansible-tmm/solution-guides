@@ -185,7 +185,7 @@ patternfly: true
             <h3 class="pf-v6-c-card__title-text">Unlock AIOps with ServiceNow LEAP and Ansible MCP server</h3>
           </div>
           <div class="pf-v6-c-card__body">
-            Bridge ITSM and Automation: LEAP prioritizes opportunities, the Ansible MCP server surfaces approved playbooks, and governed remediation closes incidents with full audit trail.
+            Cut incident MTTR from hours to minutes: LEAP identifies remediation opportunities, the Ansible MCP server surfaces approved playbooks, and governed execution closes incidents with full audit trail.
           </div>
           <div class="pf-v6-c-card__footer">
             <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">
