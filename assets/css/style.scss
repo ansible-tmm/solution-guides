@@ -69,6 +69,8 @@ section > ul, section > ol {
 section > blockquote {
   background: #E6F9E6;
   border-top: 30px solid rgba(92, 184, 92, 0.8);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 blockquote p:first-child {
@@ -158,36 +160,61 @@ img {
 
 // table tweaks
 
-table, th, td {
-  border: 1px solid #999;
-  border-collapse: collapse;
+table {
+  border: 1px solid #c0c4ca;
+  border-radius: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  width: 100%;
+}
+
+thead th {
+  background-color: #2d3039;
+  color: #fff;
+  border-bottom: 2px solid #c0c4ca;
+  padding: 10px 14px;
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f4f5f7;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #ffffff;
 }
 
 td, th {
-  min-width: 100px;
+  border-right: 1px solid #d0d3d8;
+  border-bottom: 1px solid #d0d3d8;
+  padding: 10px 14px;
+  min-width: 80px;
+}
+
+td:last-child,
+th:last-child {
+  border-right: none;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+td {
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 14px;
 }
 
 @media screen and (max-width: 550px) {
   td, th {
     min-width: initial;
-    width: 25%;
+    padding: 8px 10px;
   }
-}
-
-th {
-  font-family: 'Red Hat Display';
-  vertical-align: middle;
-  font-weight: 700;
-  font-size: 16px;
-}
-
-td {
-  font-family: 'Red Hat Text';
-  background: #f2f2f2;
-}
-
-tr:nth-child(odd) td {
-  background-color: #ffffff;
 }
 
 // copy-to-clipboard button
