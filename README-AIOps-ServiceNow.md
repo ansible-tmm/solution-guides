@@ -131,36 +131,18 @@ flowchart LR
 
 Place the **Ansible Automation Platform MCP server** where your organization routes all third-party SaaS integrations: typically **behind an HTTPS ingress** (reverse proxy, API gateway, or load balancer) with **TLS termination**, **allow lists**, and optional **mTLS** between proxy and MCP. ServiceNow holds the **integration identity** (API token or OAuth secret); the MCP server never stores broad admin passwords in clear text -- align with your vault and rotation policy.
 
-```
-                    +---------------------------+
-                    |   ServiceNow (LEAP UI)    |
-                    |   Connectors / assistant  |
-                    +-------------+-------------+
-                                  |
-                         HTTPS (TLS, org egress)
-                                  |
-                    +-------------v-------------+
-                    |  Ingress / API gateway     |
-                    |  (WAF, rate limit, mTLS)   |
-                    +-------------+-------------+
-                                  |
-                    +-------------v-------------+
-                    | Ansible AAP MCP server     |
-                    | (Model Context Protocol)   |
-                    +-------------+-------------+
-                                  |
-                    REST API, OAuth / token (RBAC)
-                                  |
-                    +-------------v-------------+
-                    |  Ansible Automation Platform |
-                    |   Job templates, audit    |
-                    +-------------+-------------+
-                                  |
-                    Inventory, credentials, EE
-                                  |
-                    +-------------v-------------+
-                    |   Managed endpoints       |
-                    +---------------------------+
+```mermaid
+flowchart TD
+  SN["ServiceNow (LEAP UI)\nConnectors / assistant"]
+  GW["Ingress / API gateway\n(WAF, rate limit, mTLS)"]
+  MCP["Ansible AAP MCP server\n(Model Context Protocol)"]
+  AAP["Ansible Automation Platform\nJob templates, audit"]
+  TGT["Managed endpoints"]
+
+  SN -->|"HTTPS (TLS, org egress)"| GW
+  GW --> MCP
+  MCP -->|"REST API, OAuth / token (RBAC)"| AAP
+  AAP -->|"Inventory, credentials, EE"| TGT
 ```
 
 **Trust boundaries to document in your runbook:** who can create API tokens, which job templates the integration user may launch, whether **survey** or **limit** is mandatory, and where job output is allowed to be copied back into ServiceNow (work notes vs system fields).
