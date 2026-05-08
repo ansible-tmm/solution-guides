@@ -1,7 +1,7 @@
 
 # Review: Published Solution Guides
 
-*Reviewed: May 6, 2026*
+*Reviewed: May 7, 2026*
 
 ## Scorecard
 
@@ -52,7 +52,7 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 | Production Readiness (10%) | 4 |
 | Business Framing (10%) | 5 |
 
-**Stats:** ~6,800 words | 15 YAML blocks | 1 architecture image + 2 textual flow diagrams | 17 walkthrough subsections
+**Stats:** ~6,800 words | 15 YAML blocks | 1 hero image + 1 architecture image | 17 walkthrough subsections
 
 **Strengths:**
 - Three integration patterns (ITSI/MLTK, generic webhook, network OSPF) in a single guide with a repeatable story
@@ -88,7 +88,7 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 | Production Readiness (10%) | 4 |
 | Business Framing (10%) | 5 |
 
-**Stats:** ~4,300 words | 8 YAML blocks | 2 ASCII flow diagrams | 8 numbered steps + 3 use cases + optional AI section
+**Stats:** ~4,300 words | 8 YAML blocks | 1 hero image + 2 architecture diagrams | 8 numbered steps + 3 use cases + optional AI section
 
 **Strengths:**
 - Two integration patterns (EDA webhook vs Instana native automation framework) with "when to use which" comparison table
@@ -101,12 +101,12 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 - "Integration Architecture" section name deviates from the framework's standard "[Topic] Workflow" convention
 - Minor typo: "an governed" should be "a governed" in the Overview
 - DB idle-connection playbook excerpt stops short of showing the full kill-query step
-- Relies on ASCII diagrams only -- a formal architecture image would aid readability
+- Architecture diagrams are present but no Mermaid renderings for interactive exploration on the site
 
 **Suggestions:**
 1. Fix the "an governed" typo in the Overview
 2. Add a subtitle or alias so "Integration Architecture" maps to the framework's Workflow section for reviewers
-3. Add one formal diagram image (even a simple Mermaid export) for the dual-path topology
+3. Consider adding a Mermaid version of the dual-path topology for inline rendering on GitHub Pages
 
 ---
 
@@ -124,10 +124,10 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 | Production Readiness (10%) | 4 |
 | Business Framing (10%) | 4.5 |
 
-**Stats:** ~7,130 words | 1 YAML block | 4 major ASCII diagrams | 6 phases, 23 titled substeps
+**Stats:** ~7,130 words | 1 YAML block | 3 Mermaid diagrams (architecture, data flow, failover sequence) | 6 phases, 23 titled substeps
 
 **Strengths:**
-- Reference-grade architecture: layered diagrams (dual-DC topology, steady-state data flow, failover timeline, network layout) plus sizing and component tables
+- Reference-grade architecture: Mermaid diagrams (dual-DC topology, steady-state data flow, failover sequence) plus sizing and component tables
 - Operational honesty about failover impact on sessions, in-flight jobs, EDA activations, and DNS TTL
 - End-to-end scope from infrastructure provisioning through production cutover, plus an Operational Runbook section
 - Strong validation surface: per-stage checklist, health-check scripts, failback procedure, and troubleshooting table
@@ -198,12 +198,12 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 | Production Readiness (10%) | 4.5 |
 | Business Framing (10%) | 4 |
 
-**Stats:** ~3,500 words | 2 YAML blocks | 1 PNG architecture image + 1 SVG reference diagram + 1 Mermaid diagram + 1 ASCII topology | 4 walkthrough steps + 4 verification artifacts
+**Stats:** ~3,500 words | 2 YAML blocks | 1 hero image + 1 SVG architecture diagram + 2 Mermaid diagrams | 4 walkthrough steps + 4 verification artifacts
 
 **Strengths:**
 - Complete framework alignment: Overview, Background, Solution, Workflow, Prerequisites, Solution Walkthrough, Validation, Maturity Path, and Related Guides all present
 - Two executable YAML artifacts: `ansible.controller.job_template` for governed template-as-code and `servicenow.itsm.incident` for optional correlation follow-up
-- Multi-format architecture coverage: PNG reference image, SVG diagram, collapsible Mermaid, and ASCII topology with trust boundary documentation
+- Multi-format architecture coverage: hero image, SVG diagram, and Mermaid flowcharts with trust boundary documentation
 - Dedicated MCP deployment topology section with explicit trust boundaries, TLS/mTLS, and token rotation guidance
 - Verbatim `curl` verification artifacts for each validation checkpoint (template visibility, job launch, job status, ITSM correlation)
 - Strong security/governance section treating integration as production automation with least privilege, change controls, and audit completeness
@@ -297,6 +297,7 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 ## Cross-Cutting Observations
 
 **Patterns that work well across guides:**
+- AIOps blog post link replaces generic product page across all four AIOps guides, adding real narrative context
 - Automation Hub links for every collection mentioned
 - Per-step operational impact ratings (EDB, Instana, Splunk)
 - Persona mapping by stakeholder role (AIOps, Instana, ServiceNow, EDB)
@@ -308,11 +309,11 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 2. **Verbatim validation output** -- Most guides describe success indicators but do not show literal expected output
 3. **Framework section naming** -- Several guides rename or omit canonical section names (Workflow, Solution Walkthrough, Prerequisites)
 4. **YAML copy-paste fidelity** -- Some guides embed HTML, emoji, or formatting in YAML that breaks literal reuse
-5. **Architecture diagrams** -- ASCII flows are common; formal diagram images are rare outside AIOps and EDB
+5. **Architecture diagrams** -- Published guides now use Mermaid or image diagrams; remaining WIP guides (SQS, Azure) still have ASCII flows to convert
 
 **Ranking rationale:**
 - Splunk and Instana tie at 8.9 but Splunk edges ahead on breadth (three use cases) while Instana leads on validation rigor
-- EDB at 8.7 is the deepest single-topic guide with the most operational runbook content
+- EDB at 8.7 is the deepest single-topic guide with the most operational runbook content; ASCII diagrams now replaced with Mermaid
 - AIOps at 8.5 is the strongest foundational reference with the best systems narrative and playbook source mapping
 - ServiceNow at 8.3 made the biggest jump (from 7.1) after adding YAML artifacts, verification commands, multi-format architecture diagrams, and full framework alignment
 - IA (7.3) is solid but needs framework alignment and more executable artifacts

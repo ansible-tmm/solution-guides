@@ -85,7 +85,7 @@ IBM owns both Instana and Red Hat, which means tighter integration than third-pa
 
 **Ansible Automation Platform -- the automation layer:**
 
-- **[Red Hat Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible)** -- governed job template execution with RBAC, audit trail, approval workflows, and credential management via automation controller
+- **[Red Hat Ansible Automation Platform](https://www.redhat.com/en/blog/aiops-and-ansible-automation-platform-where-ai-intelligence-meets-trusted-execution)** -- governed job template execution with RBAC, audit trail, approval workflows, and credential management via automation controller
 - **[Event-Driven Ansible](https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible)** -- real-time event processing: webhook listener, rulebook conditions, and automated job template triggering (Path A)
 - **[`ibm.instana`](https://catalog.redhat.com/en/software/collection/ibm/instana) Ansible Content Collection** -- dedicated `instana_webhook` EDA source plugin for parsing Instana webhook payloads
 
@@ -865,7 +865,7 @@ Start capturing these metrics before enabling automated remediation -- having a 
 
 ## Sources
 
-- [Red Hat Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible)
+- [AIOps and Ansible Automation Platform: Where AI intelligence meets trusted execution](https://www.redhat.com/en/blog/aiops-and-ansible-automation-platform-where-ai-intelligence-meets-trusted-execution)
 - [Red Hat -- Event-Driven Ansible](https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible)
 - [Red Hat Automation Hub -- ibm.instana](https://catalog.redhat.com/en/software/collection/ibm/instana)
 - [IBM Instana Observability](https://www.ibm.com/products/instana)

@@ -165,124 +165,72 @@ EDB is a trusted PostgreSQL partner with deep integration into Red Hat's ecosyst
 
 ### High-Level Architecture
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        GLOBAL LOAD BALANCER                            │
-│                      (F5 / HAProxy / Route53)                          │
-│                    https://aap.example.com                             │
-│                                                                        │
-│  Health Checks: /api/v2/ping/ every 10s                                │
-│  Active-Passive Routing: DC1 (Priority 100) → DC2 (Priority 50)        │
-└──────────────┬────────────────────────────────┬────────────────────────┘
-               │ (Active - 100% traffic)        │ (Passive - 0% traffic)
-               │                                │
-┌──────────────▼─────────────────┐   ┌──────────▼──────────────────────┐
-│      DATACENTER 1 (Active)     │   │    DATACENTER 2 (Standby)       │
-│                                │   │                                 │
-│  ┌──────────────────────────┐  │   │  ┌──────────────────────────┐   │
-│  │  AAP Component Layer     │  │   │  │  AAP Component Layer     │   │
-│  │  (8 VMs - Active)        │  │   │  │  (8 VMs - STOPPED)       │   │
-│  │                          │  │   │  │                          │   │
-│  │  gateway1-dc1            │  │   │  │  gateway1-dc2            │   │
-│  │  gateway2-dc1            │  │   │  │  gateway2-dc2            │   │
-│  │    + Redis colocated     │  │   │  │    + Redis (stopped)     │   │
-│  │                          │  │   │  │                          │   │
-│  │  controller1-dc1         │  │   │  │  controller1-dc2         │   │
-│  │  controller2-dc1         │  │   │  │  controller2-dc2         │   │
-│  │    (dedicated VMs)       │  │   │  │    (stopped)             │   │
-│  │                          │  │   │  │                          │   │
-│  │  hub1-dc1                │  │   │  │  hub1-dc2                │   │
-│  │  hub2-dc1                │  │   │  │  hub2-dc2                │   │
-│  │    + Redis colocated     │  │   │  │    + Redis (stopped)     │   │
-│  │                          │  │   │  │                          │   │
-│  │  eda1-dc1                │  │   │  │  eda1-dc2                │   │
-│  │  eda2-dc1                │  │   │  │  eda2-dc2                │   │
-│  │    + Redis colocated     │  │   │  │    + Redis (stopped)     │   │
-│  └──────────────────────────┘  │   │  └──────────────────────────┘   │
-│  ┌───────────────────────────┐ │   │  ┌───────────────────────────┐  │
-│  │  HAProxy Load Balancer    │ │   │  │  HAProxy Load Balancer    │  │
-│  │  vip-dc1.example.com      │ │   │  │  vip-dc2.example.com      │  │
-│  └────────┬──────────────────┘ │   │  └────────┬──────────────────┘  │
-│           │                    │   │           │                     │         
-│  ┌────────▼───────────────────┐│   │  ┌────────▼───────────────────┐ │
-│  │ PostgreSQL Cluster (3)     ││   │  │ PostgreSQL Cluster (3)     │ │
-│  │ (EDB Postgres Advanced 16) ││   │  │ (EDB Postgres Advanced 16) │ │
-│  │                            ││   │  │                            │ │
-│  │ pg-dc1-1 (PRIMARY)         ││   │  │ pg-dc2-1 (STANDBY/DP)      │ │
-│  │   - awx                    ││   │  │   - awx (replica)          │ │
-│  │   - automationhub          ││   │  │   - automationhub          │ │
-│  │   - automationedacontroller││   │  │   - automationedacontroller│ │
-│  │   - automationgateway      ││   │  │   - automationgateway      │ │
-│  │                            ││   │  │                            │ │
-│  │ pg-dc1-2 (STANDBY)         ││   │  │ pg-dc2-2 (STANDBY)         │ │
-│  │ pg-dc1-3 (STANDBY)         ││   │  │ pg-dc2-3 (STANDBY)         │ │
-│  │                            ││   │  │                            │ │
-│  │ VIP: 10.1.2.100 (EFM)      ││   │  │ VIP: 10.2.2.100 (EFM)      │ │
-│  └────────┬───────────────────┘│   │  └────────┬───────────────────┘ │
-│           │                    │   │           │                     │
-│  ┌────────▼──────────────────┐ │   │  ┌────────▼───────────────────┐ │
-│  │ Barman Backup Server      │ │   │  │ Barman Backup Server       │ │
-│  │ + WAL Archive (NFS/S3)    │ │   │  │ + WAL Archive (NFS/S3)     │ │
-│  └───────────────────────────┘ │   │  └────────────────────────────┘ │
-└───────────┬────────────────────┘   └────────────┬────────────────────┘
-            │                                     │
-            │      Streaming Replication (SSL)    │
-            │      5432 (direct or VPN tunnel)    │
-            └─────────────────────────────────────┘
-                     (Asynchronous)
+```mermaid
+flowchart TD
+    GLB["Global Load Balancer\n(F5 / HAProxy / Route53)\nhttps://aap.example.com\nHealth Checks: /api/v2/ping/ every 10s"]
+
+    GLB -- "Active\n100% traffic" --> DC1
+    GLB -. "Passive\n0% traffic" .-> DC2
+
+    subgraph DC1["Datacenter 1 (Active)"]
+        AAP1["AAP Component Layer (8 VMs - Active)\ngateway1/2-dc1 + Redis\ncontroller1/2-dc1\nhub1/2-dc1 + Redis\neda1/2-dc1 + Redis"]
+        HAP1["HAProxy Load Balancer\nvip-dc1.example.com"]
+        PG1["PostgreSQL Cluster (EDB Postgres Advanced 16)\npg-dc1-1 (PRIMARY): awx, automationhub,\nautomationedacontroller, automationgateway\npg-dc1-2 (STANDBY) · pg-dc1-3 (STANDBY)\nVIP: 10.1.2.100 (EFM)"]
+        BAR1["Barman Backup Server\n+ WAL Archive (NFS/S3)"]
+        AAP1 --> HAP1 --> PG1 --> BAR1
+    end
+
+    subgraph DC2["Datacenter 2 (Standby)"]
+        AAP2["AAP Component Layer (8 VMs - STOPPED)\ngateway1/2-dc2 + Redis (stopped)\ncontroller1/2-dc2 (stopped)\nhub1/2-dc2 + Redis (stopped)\neda1/2-dc2 + Redis (stopped)"]
+        HAP2["HAProxy Load Balancer\nvip-dc2.example.com"]
+        PG2["PostgreSQL Cluster (EDB Postgres Advanced 16)\npg-dc2-1 (STANDBY/Designated Primary)\npg-dc2-2 (STANDBY) · pg-dc2-3 (STANDBY)\nVIP: 10.2.2.100 (EFM)"]
+        BAR2["Barman Backup Server\n+ WAL Archive (NFS/S3)"]
+        AAP2 --> HAP2 --> PG2 --> BAR2
+    end
+
+    PG1 -- "Streaming Replication (SSL)\nPort 5432 · Asynchronous" --> PG2
 ```
 
 ### Data Flow During Normal Operations (DC1 Active)
 
-```
-User → GLB → HAProxy(DC1) → AAP Containers(DC1) → VIP(DC1) → PostgreSQL PRIMARY(DC1)
-                                                                      │
-                                    ┌─────────────────────────────────┼───────────────┐
-                                    │                                 │               │
-                                    ▼                                 ▼               ▼
-                            PG Standby DC1-2                  PG Standby DC1-3    S3/Barman
-                                                                      │
-                                                        Streaming Replication (WAN)
-                                                                      │
-                                                                      ▼
-                                                          PG Designated Primary DC2-1
-                                                                      │
-                                            ┌─────────────────────────┼──────────────┐
-                                            │                         │              │
-                                            ▼                         ▼              ▼
-                                    PG Standby DC2-2          PG Standby DC2-3   S3/Barman
+```mermaid
+flowchart LR
+    User --> GLB["Global LB"] --> HAProxy["HAProxy\n(DC1)"] --> AAP["AAP\n(DC1)"] --> VIP["VIP\n(DC1)"] --> PG1["PostgreSQL\nPRIMARY (DC1)"]
+
+    PG1 --> PG1S2["PG Standby\nDC1-2"]
+    PG1 --> PG1S3["PG Standby\nDC1-3"]
+    PG1 --> BAR1["S3 / Barman"]
+
+    PG1 -- "Streaming Replication\n(WAN)" --> PG2DP["PG Designated\nPrimary DC2-1"]
+
+    PG2DP --> PG2S2["PG Standby\nDC2-2"]
+    PG2DP --> PG2S3["PG Standby\nDC2-3"]
+    PG2DP --> BAR2["S3 / Barman"]
 ```
 
 ### Automated Failover Sequence (DC1 Failure)
 
-```
-1. EFM Detects Primary Failure (pg-dc1-1)
-   Time: T+0s
+```mermaid
+sequenceDiagram
+    participant EFM as EFM Agent
+    participant DC2PG as pg-dc2-1 (Designated Primary)
+    participant DC2VIP as VIP (DC2)
+    participant DC2AAP as AAP Containers (DC2)
+    participant GLB as Global Load Balancer
+    participant DNS as DNS / Clients
 
-2. EFM Promotes DC2 Designated Primary (pg-dc2-1)
-   Command: pg_ctl promote
-   Time: T+15s
-
-3. EFM Updates VIP (DC2)
-   VIP 10.2.2.100 moved to pg-dc2-1
-   Time: T+20s
-
-4. EFM Executes Post-Promotion Script
-   Script starts AAP containers in DC2
-   Time: T+25s to T+180s
-
-5. Global Load Balancer Detects DC2 Healthy
-   Health checks to DC2: PASSING
-   Route traffic to DC2
-   Time: T+200s
-
-6. DNS TTL Expiration
-   Clients resolve aap.example.com to DC2
-   Time: T+200s to T+260s (assuming 60s TTL)
-
-7. Failover Complete
-   Platform RTO: ~240s (4 minutes)
-   User-facing RTO: ~300s (5 minutes including DNS TTL)
+    Note over EFM: T+0s — Detects primary failure (pg-dc1-1)
+    EFM->>DC2PG: pg_ctl promote
+    Note over DC2PG: T+15s — Promoted to PRIMARY
+    EFM->>DC2VIP: Move VIP 10.2.2.100 to pg-dc2-1
+    Note over DC2VIP: T+20s — VIP updated
+    EFM->>DC2AAP: Post-promotion script starts AAP containers
+    Note over DC2AAP: T+25s–T+180s — Containers starting
+    GLB->>GLB: Health checks to DC2: PASSING
+    Note over GLB: T+200s — Route traffic to DC2
+    DNS->>DNS: Clients resolve aap.example.com to DC2
+    Note over DNS: T+200s–T+260s — DNS TTL expiration (60s)
+    Note over GLB,DNS: Failover complete · Platform RTO ~240s (4 min) · User-facing RTO ~300s (5 min)
 ```
 
 **Important operational impacts:**
