@@ -1,16 +1,32 @@
-# Ansible Development Tools - Solution Guide
+# Consistent Automation Developer Experience with Ansible Development Tools - Solution Guide
 
 ## Overview
 
-Setting up a consistent Ansible development environment across a team is harder than it sounds. Developers spend hours installing and configuring individual tools, only to find that versions conflict, linting rules differ, or molecule tests pass on one workstation but fail on another. These inconsistencies slow down onboarding, introduce subtle bugs, and make it difficult to enforce quality standards across automation content.
+Onboarding a new automation developer takes anywhere from 1 to 3 months when done manually: waiting for laptop provisioning, requesting access permissions, installing the right Python version, resolving dependency conflicts, configuring linting rules to match the team's standards, and debugging why molecule tests pass on a colleague's machine but fail on theirs. Multiply that across a team of 10 or 15 engineers, and the cost of inconsistent development environments becomes significant: delayed projects, "works on my machine" bugs, and quality standards that exist on paper but not in practice.
 
-**Ansible Development Tools (ADT)** solves this by bundling essential CLI tools into a single, versioned package that runs on a developer's workstation -- no Ansible Automation Platform installation required. ADT is available through multiple delivery methods to fit any workflow, from a developer laptop to a cloud-based workspace.
+**Ansible Development Tools (ADT)** solves this by bundling essential CLI tools into a single, versioned package -- no Ansible Automation Platform installation required. ADT is available through four delivery methods that represent an evolution from individual setup to enterprise-governed environments:
 
-This guide walks through four approaches to install and run ADT, compares their trade-offs, and helps you choose the right one for your team.
+```mermaid
+graph LR
+    A["uv/pip<br/><b>Individual</b><br/>~30 min"] -->|standardize| B["RPM<br/><b>Managed</b><br/>~15 min"]
+    B -->|containerize| C["Dev Container<br/><b>Standardized</b><br/>~10 min"]
+    C -->|centralize| D["Dev Spaces<br/><b>Governed</b><br/>~2 min"]
+```
+
+| Method | Onboarding | Consistency | Who manages it |
+|--------|-----------|-------------|---------------|
+| **uv/pip** | ~30 min, but developers must manually coordinate versions with their team and troubleshoot conflicts on their own | Low: each developer manages their own environment, drift is inevitable | Developer |
+| **RPM** | ~15 min if Satellite is available, but requires IT to include it in laptop provisioning workflows | Medium: same package version across RHEL systems, but no IDE or linting config | IT / Platform team |
+| **Dev Container** | ~10 min (first image pull), then instant for subsequent projects. Requires permissions to run containers on the workstation | High: same image, same tools, same config. Adding `.devcontainer/` to a repo is all it takes | Team lead / repo owner |
+| **Dev Spaces** | ~2 min. Open a browser, click create, start coding | Highest: centrally managed, browser-only, zero local dependencies | Platform team / IT |
+
+The goal is to move every automation developer in your organization onto the same toolchain, with the same versions, the same linting rules, and the same testing frameworks. Dev containers and Dev Spaces are the recommended enterprise options: they require an initial investment in image management to account for different project scenarios, but once that setup is done, the environment is completely transparent to developers.
+
+> **Example:** A network automation team of 12 engineers across three offices adopts Dev Spaces. A new engineer joins on Monday, opens a browser, navigates to the Dev Spaces URL, and clicks "Create Workspace" on the team's Git repository. Two minutes later they have a full VS Code environment with ansible-lint, molecule, ansible-navigator, and the team's linting profile, identical to every other engineer on the team. No local installs, no "which Python version do I need," no VPN issues with package mirrors.
 
 ---
 
-- [Ansible Development Tools - Solution Guide](#ansible-development-tools---solution-guide)
+- [Consistent Automation Developer Experience with Ansible Development Tools - Solution Guide](#consistent-automation-developer-experience-with-ansible-development-tools---solution-guide)
   - [Overview](#overview)
   - [Background](#background)
   - [Solution](#solution)
@@ -38,9 +54,11 @@ This guide walks through four approaches to install and run ADT, compares their 
 
 ## Background
 
-The Ansible content lifecycle -- **Create, Test, Deploy** -- requires a set of specialized tools at each stage. Historically, developers installed these tools individually, leading to version mismatches, broken integrations, and "works on my machine" issues.
+The Ansible content lifecycle -- **Create, Test, Deploy** -- requires a set of specialized tools at each stage. When each developer installs and maintains these tools individually, environment drift is inevitable: one developer runs ansible-lint 24.x while another has 25.x, molecule tests pass on Linux but fail on macOS because of a missing dependency, and the new hire spends their first week troubleshooting Python conflicts instead of writing automation.
 
-ADT addresses this by providing a single installable package (or container image) that bundles known-good versions of all essential tools. Whether you install via uv/pip, RPM, or use a containerized environment, you get the same toolchain with the same integration guarantees.
+This drift compounds across teams. A role that passes CI on one developer's machine may fail on another's. Linting rules that are enforced locally may not match the CI pipeline. When something breaks in production, the first question is always "which version were you running?" instead of "what changed?"
+
+ADT addresses this by providing a single installable package (or container image) that bundles known-good versions of all essential tools. Whether you install via uv/pip, RPM, or use a containerized environment, you get the same toolchain with the same integration guarantees. The container-based methods (dev containers and Dev Spaces) go further: they guarantee not just the same tool versions but the same OS, the same Python, the same VS Code extensions, and the same linting configuration for every developer.
 
 > **Why a bundle instead of individual installs?**
 >
@@ -72,10 +90,10 @@ ADT includes ten tools covering the full content lifecycle:
 
 | Persona | Challenge | What They Gain |
 |---------|-----------|----------------|
-| **Automation Developer** | Spending time assembling and maintaining individual tools instead of writing automation | A single install that provides all tools in known-good, compatible versions |
-| **Platform Engineer / SRE** | Inconsistent environments across developers causing "works on my machine" issues | Containerized workspaces that guarantee identical toolchains for every developer |
-| **Automation Architect** | Enforcing development standards and testing practices across multiple teams | Standardized tooling that embeds linting profiles, testing frameworks, and signing into the workflow |
-| **Engineering Manager** | Slow onboarding -- new developers take days to set up a working environment | One-click workspace provisioning via Dev Spaces or dev containers with zero local setup |
+| **Automation Developer** | Spending days or weeks assembling tools, resolving conflicts, and matching versions with the rest of the team instead of writing automation | A single install (or a container they never have to configure) that provides all tools in known-good, compatible versions |
+| **Platform Engineer / SRE** | Inconsistent environments across developers causing "works on my machine" failures that waste CI cycles and delay releases | Containerized workspaces that guarantee identical toolchains for every developer, eliminating environment as a variable |
+| **Automation Architect** | Enforcing development standards and testing practices across multiple teams when each team manages tools differently | Standardized tooling embedded in the project repo (`.devcontainer/`) or the platform (Dev Spaces), so standards are inherited, not documented |
+| **Engineering Manager** | New developers take 1 to 3 months to become productive, with most of that time spent on environment setup and troubleshooting | Onboarding drops to minutes with dev containers or Dev Spaces. New hires open a browser or VS Code and start contributing on day one |
 
 ### Recommended Resources
 
@@ -361,18 +379,19 @@ components:
 
 | Dimension | uv/pip | RPM | Dev Container | Dev Spaces |
 |-----------|--------|-----|---------------|------------|
-| **Setup time** | ~5 min | ~5 min | ~10 min (first pull) | ~5 min (workspace start) |
+| **New developer onboarding** | ~30 min (manual coordination) | ~15 min (if Satellite provisioned) | ~10 min (first image pull) | ~2 min (browser, click, code) |
+| **Team consistency** | Low (each dev manages their own) | Medium (same RPM, no IDE config) | High (same image, tools, config) | Highest (centrally managed) |
 | **Local install required** | Python 3.10+ | RHEL + subscription | VS Code + container runtime | Browser only |
-| **Team consistency** | Low (varies by env) | Medium (same RPM version) | High (same image) | Highest (centrally managed) |
+| **Who manages it** | Developer | IT / Platform team | Team lead / repo owner | Platform team / IT |
+| **Image management needed** | No | No | Yes (initial investment) | Yes (initial investment) |
 | **Nested containers** | N/A (use host runtime) | N/A (use host runtime) | Yes (with capabilities) | Yes (OCP user namespaces) |
 | **Offline / air-gapped** | PyPI mirror | Satellite | Registry mirror | Internal registry |
 | **Vendor support** | Community | Red Hat (AAP sub) | Community | Red Hat (OCP + Dev Spaces) |
-| **CI/CD integration** | Excellent | Good (RHEL runners) | Excellent (GitHub Codespaces) | Limited (workspace-oriented) |
 | **Cost** | Free | AAP subscription | Free (+ runtime license) | OCP + Dev Spaces subscription |
 
-> **Start here:** Choose by use case.
+> **Start here:** Think about your team, not just yourself.
 >
-> For individual exploration, use **uv/pip**. For team standardization, use **dev containers**. For enterprise governance and zero-trust environments, use **Dev Spaces**. For RHEL shops with Red Hat subscriptions that need supported packages, use **RPM**.
+> For individual exploration, start with **uv/pip**. For RHEL shops that need supported packages and managed updates, add **RPM** via Satellite. For team-wide consistency with minimal effort, adopt **dev containers** in your project repos. For enterprise governance with zero local dependencies, deploy **Dev Spaces**. The container-based methods are the long-term target.
 
 ---
 
@@ -430,13 +449,16 @@ ansible-lint
 
 ## Maturity Path
 
-| Maturity | What You Do | Automation Autonomy |
-|----------|-------------|---------------------|
-| **Crawl** | Install ADT via uv/pip on individual workstations. Run `ansible-lint` manually. Use `ansible-creator` to scaffold projects. | Manual -- developer runs tools on demand |
-| **Walk** | Standardize on dev containers or RPMs. Add `ansible-lint` and `molecule` to CI pipelines. Share a common `.devcontainer/` across repos. | Semi-automated -- CI enforces standards, developers use consistent environments |
-| **Run** | Deploy Dev Spaces for the entire team. Define workspace images and devfiles centrally. Integrate `ansible-sign` for content verification. Build custom EEs with `ansible-builder` in CI/CD. | Fully governed -- platform team manages tooling, signing, and testing centrally |
+| Maturity | Method | What You Do | Environment Consistency |
+|----------|--------|-------------|------------------------|
+| **Crawl** | uv/pip | Individual developers install ADT on their own workstations. Each developer manages their own Python version, venv, and tool upgrades. Teams coordinate versions manually via chat or documentation. | Low. Works for individual contributors and early exploration, but drift across the team is inevitable. |
+| **Walk** | RPM | IT includes ADT in the standard RHEL laptop provisioning via Satellite. All developers on RHEL get the same RPM version. Add `ansible-lint` and `molecule` to CI pipelines for a second layer of consistency. | Medium. Same tool versions across RHEL systems, but no guarantee of IDE config, linting profiles, or Python library alignment. |
+| **Run** | Dev Container | Add a `.devcontainer/` directory to every Ansible project repo. Developers open the repo in VS Code and get the full environment automatically. The platform team manages a base container image; teams can extend it for project-specific needs. | High. Same OS, same Python, same tools, same VS Code extensions, same linting config. Requires container runtime permissions on the workstation. |
+| **Fly** | Dev Spaces | Deploy Dev Spaces on OpenShift for the entire organization. Developers open a browser, click create, and start coding. The platform team manages workspace images, resource limits, and access centrally. | Highest. Zero local dependencies, zero configuration, fully governed. Developers only need a browser and credentials. |
 
-> **Start with Crawl.** Get one developer comfortable with ADT, then scale to the team. The container-based methods (Walk/Run) build on the same tools -- the investment in learning the CLI transfers directly.
+> **Tip:** Dev containers and Dev Spaces are the target.
+>
+> The uv/pip and RPM methods are stepping stones. They get individual developers productive quickly, but they don't solve the consistency problem at scale. Invest in a base container image early. Once that image exists, both dev containers and Dev Spaces use it, and every developer gets an identical environment from day one.
 
 ---
 

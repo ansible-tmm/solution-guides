@@ -299,10 +299,10 @@ patternfly: true
               </span>
             </div>
             <div class="pf-v6-c-card__title">
-              <h3 class="pf-v6-c-card__title-text">Ansible Development Tools</h3>
+              <h3 class="pf-v6-c-card__title-text">Consistent Automation Developer Experience with ADT</h3>
             </div>
             <div class="pf-v6-c-card__body">
-              Install and configure the Ansible Development Tools (ADT) bundle via uv/pip, RPM, dev containers, or OpenShift Dev Spaces for a consistent Create, Test, Deploy toolchain.
+              Standardize your automation developer experience across the organization using Ansible Development Tools, from individual uv/pip installs to enterprise-governed Dev Spaces with 2-minute onboarding.
             </div>
             <div class="pf-v6-c-card__footer">
               <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
