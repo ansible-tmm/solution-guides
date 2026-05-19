@@ -1,3 +1,4 @@
+{% raw %}
 # Event-Driven Network Configuration with NetBox and Ansible Automation Platform - Solution Guide
 
 ## Overview
@@ -706,3 +707,4 @@ The unifying pattern is **NetBox as the single source of both inventory and desi
 - [netbox.netbox Ansible Collection](https://galaxy.ansible.com/ui/repo/published/netbox/netbox/)
 - [Event-Driven Ansible](https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible)
 - [EDA + NetBox Workshop](https://github.com/rhpds/zt-ans-bu-eda-netbox)
+{% endraw %}

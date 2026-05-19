@@ -1,3 +1,4 @@
+{% raw %}
 # Automated WAN Circuit Failover with NetBox and Ansible Automation Platform - Solution Guide
 
 ## Overview
@@ -533,3 +534,4 @@ The unifying pattern across both use cases is **NetBox as the single source of t
 - [netbox.netbox Ansible Collection](https://galaxy.ansible.com/ui/repo/published/netbox/netbox/)
 - [Event-Driven Ansible](https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible)
 - [Source Code](https://github.com/leogallego/summit-netbox-circuits-demo)
+{% endraw %}
