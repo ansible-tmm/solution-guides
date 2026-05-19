@@ -21,7 +21,7 @@ This guide walks through four approaches to install and run ADT, compares their 
     - [Ansible Automation Platform](#ansible-automation-platform)
     - [System Requirements](#system-requirements)
   - [Installation Methods](#installation-methods)
-    - [Method A: pip (Python Package)](#method-a-pip-python-package)
+    - [Method A: Python Package (uv)](#method-a-python-package-uv)
     - [Method B: RPM (Red Hat Subscription)](#method-b-rpm-red-hat-subscription)
     - [Method C: Dev Container (VS Code)](#method-c-dev-container-vs-code)
     - [Method D: Red Hat OpenShift Dev Spaces](#method-d-red-hat-openshift-dev-spaces)
@@ -40,7 +40,7 @@ This guide walks through four approaches to install and run ADT, compares their 
 
 The Ansible content lifecycle -- **Create, Test, Deploy** -- requires a set of specialized tools at each stage. Historically, developers installed these tools individually, leading to version mismatches, broken integrations, and "works on my machine" issues.
 
-ADT addresses this by providing a single installable package (or container image) that bundles known-good versions of all essential tools. Whether you install via pip, RPM, or use a containerized environment, you get the same toolchain with the same integration guarantees.
+ADT addresses this by providing a single installable package (or container image) that bundles known-good versions of all essential tools. Whether you install via uv/pip, RPM, or use a containerized environment, you get the same toolchain with the same integration guarantees.
 
 > **Why a bundle instead of individual installs?**
 >
@@ -93,13 +93,13 @@ ADT includes ten tools covering the full content lifecycle:
 
 ### Ansible Automation Platform
 
-- **pip/container methods:** No AAP subscription required -- these use the upstream community packages.
+- **uv/pip/container methods:** No AAP subscription required -- these use the upstream community packages.
 - **RPM method:** Requires an AAP or Ansible Developer subscription and RHEL 9 registered with Red Hat Subscription Manager.
 - **Dev Spaces method:** Requires an OpenShift cluster with Red Hat OpenShift Dev Spaces operator installed.
 
 ### System Requirements
 
-| Requirement | pip | RPM | Dev Container | Dev Spaces |
+| Requirement | uv/pip | RPM | Dev Container | Dev Spaces |
 |-------------|-----|-----|---------------|------------|
 | **Python** | 3.10+ | 3.10+ (included in RHEL 9+) | N/A (in container) | N/A (in container) |
 | **OS** | Linux, macOS, WSL | RHEL 9 | Any (VS Code + container runtime) | Browser only |
@@ -111,23 +111,24 @@ ADT includes ten tools covering the full content lifecycle:
 
 ## Installation Methods
 
-### Method A: pip (Python Package)
+### Method A: Python Package (uv)
 
 **Operational Impact:** None -- local workstation only
 
 **Best for:** Individual developers, quick setup on Linux/macOS/WSL, CI pipelines.
 
-**Step 1:** Create and activate a virtual environment:
+**Step 1:** Install [uv](https://docs.astral.sh/uv/) if you don't have it:
 
 ```bash
-python3 -m venv ~/ansible-dev-venv
-source ~/ansible-dev-venv/bin/activate
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-**Step 2:** Install ADT:
+**Step 2:** Create a virtual environment and install ADT:
 
 ```bash
-pip install ansible-dev-tools
+uv venv ~/ansible-dev-venv
+source ~/ansible-dev-venv/bin/activate
+uv add ansible-dev-tools
 ```
 
 **Step 3:** Verify the installation:
@@ -138,18 +139,22 @@ adt --version
 
 > **Tip:** Always use a virtual environment.
 >
-> Installing ADT system-wide can conflict with OS-packaged Python modules, especially on RHEL/Fedora where `ansible-core` may already be installed via RPM.
+> Installing ADT system-wide can conflict with OS-packaged Python modules. On macOS 14+ and newer Linux distributions, the system Python is externally managed (PEP 668) and direct installs will fail. Using `uv` with a venv avoids this entirely.
+
+> **Tip:** `pip` works too.
+>
+> If you prefer `pip`, replace `uv venv` with `python3 -m venv` and `uv add` with `pip install`. The rest of the workflow is identical.
 
 **Upgrading:**
 
 ```bash
-pip install --upgrade ansible-dev-tools
+uv add --upgrade ansible-dev-tools
 ```
 
 **Pinning a specific version:**
 
 ```bash
-pip install ansible-dev-tools==26.4.6
+uv add ansible-dev-tools==26.4.6
 ```
 
 ---
@@ -188,7 +193,7 @@ sudo dnf install ansible-dev-tools
 adt --version
 ```
 
-> **Why RPM over pip?**
+> **Why RPM over uv/pip?**
 >
 > The RPM packages are built and tested by Red Hat, receive security errata through the standard RHEL advisory process, and are supported under a Red Hat subscription. This is the recommended method for enterprises that need vendor-backed support and predictable update cycles.
 
@@ -219,16 +224,19 @@ Pre-built container images with all ADT tools, the Ansible VS Code extension, an
 - [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) (`ms-vscode-remote.remote-containers`)
 - A container runtime: [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman Desktop](https://podman-desktop.io/)
 
-**Step 2:** Scaffold a new project with a devcontainer (recommended):
+**Step 2:** Add a devcontainer to your project using one of these methods:
+
+**Option A: CLI.** Run `ansible-creator` to scaffold devcontainer files into an existing project:
 
 ```bash
-pip install ansible-creator
-ansible-creator init collection myns.mycollection --init-path ./my-collection
+ansible-creator add resource devcontainer /path/to/your/project
 ```
 
-`ansible-creator` automatically generates a `.devcontainer/` directory with both Docker and Podman configurations.
+This generates a `.devcontainer/` directory with both Docker and Podman configurations.
 
-**Or** add a devcontainer manually. Create `.devcontainer/devcontainer.json` in your project:
+**Option B: VS Code UI.** Open the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and run **Ansible: Add devcontainer configuration**. The Ansible extension generates the same `.devcontainer/` directory.
+
+**Option C: Manual.** Create `.devcontainer/devcontainer.json` in your project:
 
 ```json
 {
@@ -351,8 +359,8 @@ components:
 
 ## Comparison
 
-| Dimension | pip | RPM | Dev Container | Dev Spaces |
-|-----------|-----|-----|---------------|------------|
+| Dimension | uv/pip | RPM | Dev Container | Dev Spaces |
+|-----------|--------|-----|---------------|------------|
 | **Setup time** | ~5 min | ~5 min | ~10 min (first pull) | ~5 min (workspace start) |
 | **Local install required** | Python 3.10+ | RHEL + subscription | VS Code + container runtime | Browser only |
 | **Team consistency** | Low (varies by env) | Medium (same RPM version) | High (same image) | Highest (centrally managed) |
@@ -364,7 +372,7 @@ components:
 
 > **Start here:** Choose by use case.
 >
-> For individual exploration, use **pip**. For team standardization, use **dev containers**. For enterprise governance and zero-trust environments, use **Dev Spaces**. For RHEL shops with Red Hat subscriptions that need supported packages, use **RPM**.
+> For individual exploration, use **uv/pip**. For team standardization, use **dev containers**. For enterprise governance and zero-trust environments, use **Dev Spaces**. For RHEL shops with Red Hat subscriptions that need supported packages, use **RPM**.
 
 ---
 
@@ -410,13 +418,13 @@ ansible-lint
 
 | Symptom | Likely Cause | Fix |
 |---------|-------------|-----|
-| `command not found: adt` | Virtual environment not activated (pip install) | Run `source ~/ansible-dev-venv/bin/activate` |
-| `pip install` fails with dependency conflicts | System Python has conflicting packages | Use a clean virtual environment -- never install into system Python |
+| `command not found: adt` | Virtual environment not activated | Run `source ~/ansible-dev-venv/bin/activate` |
+| `uv add` or `pip install` fails with dependency conflicts | System Python has conflicting packages or is externally managed (PEP 668) | Use `uv venv` to create a clean virtual environment. On macOS 14+, `uv` handles PEP 668 automatically |
 | `dnf install` says package not found | AAP repo not enabled or subscription not attached | Run `subscription-manager repos --list \| grep ansible` to verify repo availability |
 | Dev container fails to start | Container runtime not running | Start Docker Desktop or Podman Desktop, then retry |
 | Molecule tests fail with "permission denied" | Missing container capabilities for nested Podman | Add `--cap-add=SYS_ADMIN --cap-add=SYS_RESOURCE --device /dev/fuse` flags |
 | Dev Spaces workspace stuck starting | Resource limits exceeded or image pull failure | Check OpenShift events with `oc get events -n <workspace-ns>` |
-| `ansible-lint` shows different results across team | Different ADT versions installed | Pin the version (`pip install ansible-dev-tools==26.4.6`) or use container-based methods |
+| `ansible-lint` shows different results across team | Different ADT versions installed | Pin the version (`uv add ansible-dev-tools==26.4.6`) or use container-based methods |
 
 ---
 
@@ -424,7 +432,7 @@ ansible-lint
 
 | Maturity | What You Do | Automation Autonomy |
 |----------|-------------|---------------------|
-| **Crawl** | Install ADT via pip on individual workstations. Run `ansible-lint` manually. Use `ansible-creator` to scaffold projects. | Manual -- developer runs tools on demand |
+| **Crawl** | Install ADT via uv/pip on individual workstations. Run `ansible-lint` manually. Use `ansible-creator` to scaffold projects. | Manual -- developer runs tools on demand |
 | **Walk** | Standardize on dev containers or RPMs. Add `ansible-lint` and `molecule` to CI pipelines. Share a common `.devcontainer/` across repos. | Semi-automated -- CI enforces standards, developers use consistent environments |
 | **Run** | Deploy Dev Spaces for the entire team. Define workspace images and devfiles centrally. Integrate `ansible-sign` for content verification. Build custom EEs with `ansible-builder` in CI/CD. | Fully governed -- platform team manages tooling, signing, and testing centrally |
 
