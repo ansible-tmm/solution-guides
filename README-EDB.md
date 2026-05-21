@@ -87,7 +87,7 @@ EDB is a trusted PostgreSQL partner with deep integration into Red Hat's ecosyst
 
 - **[Red Hat Ansible Automation Platform 2.6](https://www.redhat.com/en/technologies/management/ansible)** -- containerized deployment on RHEL 9.4+ using Podman
 - **AAP Container Enterprise Topology** -- 8-VM component architecture per datacenter (2 gateway, 2 controller, 2 hub, 2 EDA)
-- **Redis HA** -- colocated on gateway, hub, and EDA nodes for session storage and job queue management
+- **Redis cluster** -- colocated on gateway, hub, and EDA nodes (`redis_mode='cluster'`) for session storage and job queue management
 
 **EDB PostgreSQL -- the database layer:**
 
@@ -165,30 +165,73 @@ EDB is a trusted PostgreSQL partner with deep integration into Red Hat's ecosyst
 
 ### High-Level Architecture
 
-```mermaid
-flowchart TD
-    GLB["Global Load Balancer\n(F5 / HAProxy / Route53)\nhttps://aap.example.com\nHealth Checks: /api/v2/ping/ every 10s"]
+![High-Level Active-Passive DR Architecture](assets/images/AAP_EDB-EDB_AAP.drawio.png)
 
-    GLB -- "Active\n100% traffic" --> DC1
-    GLB -. "Passive\n0% traffic" .-> DC2
-
-    subgraph DC1["Datacenter 1 (Active)"]
-        AAP1["AAP Component Layer (8 VMs - Active)\ngateway1/2-dc1 + Redis\ncontroller1/2-dc1\nhub1/2-dc1 + Redis\neda1/2-dc1 + Redis"]
-        HAP1["HAProxy Load Balancer\nvip-dc1.example.com"]
-        PG1["PostgreSQL Cluster (EDB Postgres Advanced 16)\npg-dc1-1 (PRIMARY): awx, automationhub,\nautomationedacontroller, automationgateway\npg-dc1-2 (STANDBY) · pg-dc1-3 (STANDBY)\nVIP: 10.1.2.100 (EFM)"]
-        BAR1["Barman Backup Server\n+ WAL Archive (NFS/S3)"]
-        AAP1 --> HAP1 --> PG1 --> BAR1
-    end
-
-    subgraph DC2["Datacenter 2 (Standby)"]
-        AAP2["AAP Component Layer (8 VMs - STOPPED)\ngateway1/2-dc2 + Redis (stopped)\ncontroller1/2-dc2 (stopped)\nhub1/2-dc2 + Redis (stopped)\neda1/2-dc2 + Redis (stopped)"]
-        HAP2["HAProxy Load Balancer\nvip-dc2.example.com"]
-        PG2["PostgreSQL Cluster (EDB Postgres Advanced 16)\npg-dc2-1 (STANDBY/Designated Primary)\npg-dc2-2 (STANDBY) · pg-dc2-3 (STANDBY)\nVIP: 10.2.2.100 (EFM)"]
-        BAR2["Barman Backup Server\n+ WAL Archive (NFS/S3)"]
-        AAP2 --> HAP2 --> PG2 --> BAR2
-    end
-
-    PG1 -- "Streaming Replication (SSL)\nPort 5432 · Asynchronous" --> PG2
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        GLOBAL LOAD BALANCER                            │
+│                      (F5 / HAProxy / Route53)                          │
+│                    https://aap.example.com                             │
+│                                                                        │
+│  Health Checks: /api/v2/ping/ every 10s                                │
+│  Active-Passive Routing: DC1 (Priority 100) → DC2 (Priority 50)        │
+└──────────────┬────────────────────────────────┬────────────────────────┘
+               │ (Active - 100% traffic)        │ (Passive - 0% traffic)
+               │                                │
+┌──────────────▼─────────────────┐   ┌──────────▼──────────────────────┐
+│      DATACENTER 1 (Active)     │   │    DATACENTER 2 (Standby)       │
+│                                │   │                                 │
+│  ┌──────────────────────────┐  │   │  ┌──────────────────────────┐   │
+│  │  AAP Component Layer     │  │   │  │  AAP Component Layer     │   │
+│  │  (8 VMs - Active)        │  │   │  │  (8 VMs - STOPPED)       │   │
+│  │                          │  │   │  │                          │   │
+│  │  gateway1-dc1            │  │   │  │  gateway1-dc2            │   │
+│  │  gateway2-dc1            │  │   │  │  gateway2-dc2            │   │
+│  │    + Redis colocated     │  │   │  │    + Redis (stopped)     │   │
+│  │                          │  │   │  │                          │   │
+│  │  controller1-dc1         │  │   │  │  controller1-dc2         │   │
+│  │  controller2-dc1         │  │   │  │  controller2-dc2         │   │
+│  │    (dedicated VMs)       │  │   │  │    (stopped)             │   │
+│  │                          │  │   │  │                          │   │
+│  │  hub1-dc1                │  │   │  │  hub1-dc2                │   │
+│  │  hub2-dc1                │  │   │  │  hub2-dc2                │   │
+│  │    + Redis colocated     │  │   │  │    + Redis (stopped)     │   │
+│  │                          │  │   │  │                          │   │
+│  │  eda1-dc1                │  │   │  │  eda1-dc2                │   │
+│  │  eda2-dc1                │  │   │  │  eda2-dc2                │   │
+│  │    + Redis colocated     │  │   │  │    + Redis (stopped)     │   │
+│  └──────────────────────────┘  │   │  └──────────────────────────┘   │
+│  ┌───────────────────────────┐ │   │  ┌───────────────────────────┐  │
+│  │  HAProxy Load Balancer    │ │   │  │  HAProxy Load Balancer    │  │
+│  │  vip-dc1.example.com      │ │   │  │  vip-dc2.example.com      │  │
+│  └────────┬──────────────────┘ │   │  └────────┬──────────────────┘  │
+│           │                    │   │           │                     │         
+│  ┌────────▼───────────────────┐│   │  ┌────────▼───────────────────┐ │
+│  │ PostgreSQL Cluster (3)     ││   │  │ PostgreSQL Cluster (3)     │ │
+│  │ (EDB Postgres Advanced 16) ││   │  │ (EDB Postgres Advanced 16) │ │
+│  │                            ││   │  │                            │ │
+│  │ pg-dc1-1 (PRIMARY)         ││   │  │ pg-dc2-1 (STANDBY/DP)      │ │
+│  │   - awx                    ││   │  │   - awx (replica)          │ │
+│  │   - automationhub          ││   │  │   - automationhub          │ │
+│  │   - automationedacontroller││   │  │   - automationedacontroller│ │
+│  │   - automationgateway      ││   │  │   - automationgateway      │ │
+│  │                            ││   │  │                            │ │
+│  │ pg-dc1-2 (STANDBY)         ││   │  │ pg-dc2-2 (STANDBY)         │ │
+│  │ pg-dc1-3 (STANDBY)         ││   │  │ pg-dc2-3 (STANDBY)         │ │
+│  │                            ││   │  │                            │ │
+│  │ VIP: 10.1.2.100 (EFM)      ││   │  │ VIP: 10.2.2.100 (EFM)      │ │
+│  └────────┬───────────────────┘│   │  └────────┬───────────────────┘ │
+│           │                    │   │           │                     │
+│  ┌────────▼──────────────────┐ │   │  ┌────────▼───────────────────┐ │
+│  │ Barman Backup Server      │ │   │  │ Barman Backup Server       │ │
+│  │ + WAL Archive (NFS/S3)    │ │   │  │ + WAL Archive (NFS/S3)     │ │
+│  └───────────────────────────┘ │   │  └────────────────────────────┘ │
+└───────────┬────────────────────┘   └────────────┬────────────────────┘
+            │                                     │
+            │      Streaming Replication (SSL)    │
+            │      5432 (direct or VPN tunnel)    │
+            └─────────────────────────────────────┘
+                     (Asynchronous)
 ```
 
 ### Data Flow During Normal Operations (DC1 Active)
@@ -698,8 +741,8 @@ postgresql_admin_password='<set your own>'
 registry_username='<your RHN username>'
 registry_password='<your RHN password>'
 
-# Redis Configuration
-redis_mode='standalone'
+# Redis Configuration (cluster across all [redis] hosts)
+redis_mode='cluster'
 
 # Platform Gateway Configuration
 gateway_admin_password='<set your own>'
