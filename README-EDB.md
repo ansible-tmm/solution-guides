@@ -85,7 +85,7 @@ EDB is a trusted PostgreSQL partner with deep integration into Red Hat's ecosyst
 
 - **[Red Hat Ansible Automation Platform 2.6](https://www.redhat.com/en/technologies/management/ansible)** -- containerized deployment on RHEL 9.4+ using Podman
 - **AAP Container Enterprise Topology** -- 8-VM component architecture per datacenter (2 gateway, 2 controller, 2 hub, 2 EDA)
-- **Redis HA** -- colocated on gateway, hub, and EDA nodes for session storage and job queue management
+- **Redis cluster** -- colocated on gateway, hub, and EDA nodes (`redis_mode='cluster'`) for session storage and job queue management
 
 **EDB PostgreSQL -- the database layer:**
 
@@ -742,8 +742,8 @@ postgresql_admin_password='<set your own>'
 registry_username='<your RHN username>'
 registry_password='<your RHN password>'
 
-# Redis Configuration
-redis_mode='standalone'
+# Redis Configuration (cluster across all [redis] hosts)
+redis_mode='cluster'
 
 # Platform Gateway Configuration
 gateway_admin_password='<set your own>'
