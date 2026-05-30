@@ -1,4 +1,4 @@
-# Consistent Automation Developer Experience with Ansible Development Tools - Solution Guide
+# AI-Assisted Ansible Developer Experience - Solution Guide
 
 ## Overview
 
@@ -26,7 +26,7 @@ The goal is to move every automation developer in your organization onto the sam
 
 ---
 
-- [Consistent Automation Developer Experience with Ansible Development Tools - Solution Guide](#consistent-automation-developer-experience-with-ansible-development-tools---solution-guide)
+- [AI-Assisted Ansible Developer Experience - Solution Guide](#ai-assisted-ansible-developer-experience---solution-guide)
   - [Overview](#overview)
   - [Background](#background)
   - [Solution](#solution)
@@ -42,6 +42,9 @@ The goal is to move every automation developer in your organization onto the sam
     - [Method C: Dev Container (VS Code)](#method-c-dev-container-vs-code)
     - [Method D: Red Hat OpenShift Dev Spaces](#method-d-red-hat-openshift-dev-spaces)
   - [Comparison](#comparison)
+  - [AI-Assisted Ansible Development](#ai-assisted-ansible-development)
+    - [Ansible Devtools MCP Server](#ansible-devtools-mcp-server)
+    - [Connecting to Ansible Automation Platform](#connecting-to-ansible-automation-platform)
   - [Validation](#validation)
     - [Verify the Installation](#verify-the-installation)
     - [Quick Smoke Test](#quick-smoke-test)
@@ -393,6 +396,110 @@ components:
 > **Start here:** Think about your team, not just yourself.
 >
 > For individual exploration, start with **uv/pip**. For RHEL shops that need supported packages and managed updates, add **RPM** via Satellite. For team-wide consistency with minimal effort, adopt **dev containers** in your project repos. For enterprise governance with zero local dependencies, deploy **Dev Spaces**. The container-based methods are the long-term target.
+
+---
+
+## AI-Assisted Ansible Development
+
+The Model Context Protocol (MCP) is an open standard that enables AI coding assistants to interact with external tools through a unified interface. The Ansible ecosystem provides two MCP servers that enhance the developer experience when used with AI assistants like Claude Code, VS Code Copilot Chat, or Cursor:
+
+- **Ansible Devtools MCP Server** -- gives AI assistants direct access to ADT tools (lint, scaffold, navigate, build) so they can create, validate, and fix Ansible content on your behalf.
+- **Ansible Automation Platform MCP Server** -- gives AI assistants access to your AAP instance (inventory, job templates, workflows) so they can query platform state and launch automation during development and testing.
+
+Together, these turn your AI assistant into an Ansible-aware pair programmer that can scaffold a collection, lint it, run it against a development AAP instance, and troubleshoot the results -- all within a single conversation.
+
+> **Tip:** Both MCP servers are currently available as a technology preview.
+
+### Ansible Devtools MCP Server
+
+The <a href="https://docs.ansible.com/projects/vscode-ansible/mcp/" target="_blank">Ansible Devtools MCP Server</a> (`@ansible/ansible-mcp-server`) exposes ADT tools to any MCP-compatible AI client. It provides capabilities for playbook and collection scaffolding, automated linting with fix suggestions, execution environment building, and playbook execution via ansible-navigator.
+
+**Installation options:**
+
+| Method | Command | Requirements |
+|--------|---------|-------------|
+| **npm** | `npx -y @ansible/ansible-mcp-server --stdio` | Node.js 24+ |
+| **Container** | `ghcr.io/ansible/devtools-mcp-server:latest` | Docker or Podman |
+| **VS Code extension** | Enable `ansible.mcpServer.enabled` in settings | Ansible VS Code extension |
+
+**Adding to Claude Code:**
+
+```bash
+claude mcp add ansible -- npx -y @ansible/ansible-mcp-server --stdio
+```
+
+**Adding to Claude Code (container):**
+
+```bash
+claude mcp add ansible -- podman run --rm -i \
+  -v /path/to/your/ansible/project:/workspace \
+  -e WORKSPACE_ROOT=/workspace \
+  ghcr.io/ansible/devtools-mcp-server:latest --stdio
+```
+
+**Adding to VS Code Copilot Chat** (in `.vscode/settings.json`):
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "ansible": {
+        "command": "npx",
+        "args": ["-y", "@ansible/ansible-mcp-server", "--stdio"],
+        "env": {
+          "WORKSPACE_ROOT": "${workspaceFolder}"
+        }
+      }
+    }
+  }
+}
+```
+
+When using the Ansible VS Code extension, the MCP server can be started automatically -- no manual configuration is required. Set `ansible.mcpServer.enabled` to `true` in your extension settings.
+
+### Connecting to Ansible Automation Platform
+
+When developing against a development or staging AAP instance, the <a href="https://www.redhat.com/en/blog/it-automation-agentic-ai-introducing-mcp-server-red-hat-ansible-automation-platform" target="_blank">AAP MCP server</a> allows your AI assistant to query inventories, inspect job templates, launch jobs, and monitor results -- all without leaving your editor. This is particularly useful for iterating on automation content: write a playbook, push it to your dev AAP instance, run it, and troubleshoot failures in a single workflow.
+
+The AAP gateway (starting with AAP 2.6.4) exposes MCP endpoints for six service areas:
+
+| Service | Endpoint | What It Provides |
+|---------|----------|------------------|
+| **Job Management** | `/job_management/mcp` | Launch, monitor, and inspect job runs |
+| **Inventory Management** | `/inventory_management/mcp` | Query hosts, groups, and inventory sources |
+| **System Monitoring** | `/system_monitoring/mcp` | Check platform health and capacity |
+| **User Management** | `/user_management/mcp` | Inspect users, teams, and organizations |
+| **Security & Compliance** | `/security_compliance/mcp` | Review RBAC policies and credentials |
+| **Platform Configuration** | `/platform_configuration/mcp` | Inspect settings and configuration |
+
+**Adding AAP MCP to Claude Code** (using a `.mcp.json` file in your project root):
+
+```json
+{
+  "mcpServers": {
+    "aap-mcp-job-management": {
+      "type": "http",
+      "url": "https://aap-gateway.example.com:8448/job_management/mcp",
+      "headersHelper": "echo '{\"Authorization\": \"Bearer '\"$MCP_AAP_TOKEN\"'\"}'"
+    },
+    "aap-mcp-inventory-management": {
+      "type": "http",
+      "url": "https://aap-gateway.example.com:8448/inventory_management/mcp",
+      "headersHelper": "echo '{\"Authorization\": \"Bearer '\"$MCP_AAP_TOKEN\"'\"}'"
+    }
+  }
+}
+```
+
+> **Tip:** Start with just the services you need.
+>
+> You don't have to configure all six AAP MCP services at once. For content development, `job_management` and `inventory_management` are typically the most useful -- they let your AI assistant launch test runs and inspect target hosts.
+
+Authentication uses an AAP personal access token passed via `MCP_AAP_TOKEN`. The MCP server inherits the user's RBAC permissions, so the AI assistant can only access what the token owner is authorized to see. Tokens can be scoped as read-only or read-write, providing an additional layer of control -- a read-only token lets the AI assistant query inventories, inspect job results, and review platform configuration without being able to launch jobs or modify state. Note that job execution requires a write-scoped token.
+
+> **Warning:** Use development or staging AAP instances for AI-assisted workflows.
+>
+> AI assistants can launch jobs and modify platform state through the AAP MCP server. Always point MCP configurations at non-production instances during development, and use a read-only token unless you specifically need the AI assistant to launch jobs.
 
 ---
 
