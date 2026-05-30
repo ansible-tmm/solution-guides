@@ -17,7 +17,7 @@ graph LR
 |--------|-----------|-------------|---------------|
 | **uv/pip** | ~30 min, but developers must manually coordinate versions with their team and troubleshoot conflicts on their own | Low: each developer manages their own environment, drift is inevitable | Developer |
 | **RPM** | ~15 min if Satellite is available, but requires IT to include it in laptop provisioning workflows | Medium: same package version across RHEL systems, but no IDE or linting config | IT / Platform team |
-| **Dev Container** | ~10 min (first image pull), then instant for subsequent projects. Requires permissions to run containers on the workstation | High: same image, same tools, same config. Adding `.devcontainer/` to a repo is all it takes | Team lead / repo owner |
+| **Dev Container** | ~10 min (first image pull), then instant for subsequent projects. Requires permissions to run containers on the workstation. Available as community (free) or supported (AAP subscription) image | High: same image, same tools, same config. Adding `.devcontainer/` to a repo is all it takes | Team lead / repo owner |
 | **Dev Spaces** | ~2 min. Open a browser, click create, start coding | Highest: centrally managed, browser-only, zero local dependencies | Platform team / IT |
 
 The goal is to move every automation developer in your organization onto the same toolchain, with the same versions, the same linting rules, and the same testing frameworks. Dev containers and Dev Spaces are the recommended enterprise options: they require an initial investment in image management to account for different project scenarios, but once that setup is done, the environment is completely transparent to developers.
@@ -111,7 +111,8 @@ ADT includes ten tools covering the full content lifecycle:
 
 ### Ansible Automation Platform
 
-- **uv/pip/container methods:** No AAP subscription required -- these use the upstream community packages.
+- **uv/pip methods:** No AAP subscription required -- these use the upstream community packages.
+- **Dev container method:** Available in two variants -- a free upstream community image (no subscription required) and a supported downstream image from `registry.redhat.io` (requires an AAP or Ansible Developer subscription).
 - **RPM method:** Requires an AAP or Ansible Developer subscription and RHEL 9 registered with Red Hat Subscription Manager.
 - **Dev Spaces method:** Requires an OpenShift cluster with Red Hat OpenShift Dev Spaces operator installed.
 
@@ -123,7 +124,7 @@ ADT includes ten tools covering the full content lifecycle:
 | **OS** | Linux, macOS, WSL | RHEL 9 | Any (VS Code + container runtime) | Browser only |
 | **Container runtime** | Optional (for molecule, builder) | Optional (for molecule, builder) | Docker or Podman | Managed by OpenShift |
 | **Disk space** | ~500 MB | ~500 MB | ~2 GB (image) | Managed by cluster |
-| **Subscription** | None | Red Hat AAP or Ansible Developer | None | OpenShift + Dev Spaces |
+| **Subscription** | None | Red Hat AAP or Ansible Developer | None (community) or AAP/Ansible Developer (supported) | OpenShift + Dev Spaces |
 
 ---
 
@@ -386,8 +387,8 @@ components:
 | **Image management needed** | No | No | Yes (initial investment) | Yes (initial investment) |
 | **Nested containers** | N/A (use host runtime) | N/A (use host runtime) | Yes (with capabilities) | Yes (OCP user namespaces) |
 | **Offline / air-gapped** | PyPI mirror | Satellite | Registry mirror | Internal registry |
-| **Vendor support** | Community | Red Hat (AAP sub) | Community | Red Hat (OCP + Dev Spaces) |
-| **Cost** | Free | AAP subscription | Free (+ runtime license) | OCP + Dev Spaces subscription |
+| **Vendor support** | Community | Red Hat (AAP sub) | Community or Red Hat (AAP sub) | Red Hat (OCP + Dev Spaces) |
+| **Cost** | Free | AAP subscription | Free (community) or AAP subscription (supported) | OCP + Dev Spaces subscription |
 
 > **Start here:** Think about your team, not just yourself.
 >
