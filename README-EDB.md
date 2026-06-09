@@ -85,7 +85,7 @@ EDB is a trusted PostgreSQL partner with deep integration into Red Hat's ecosyst
 
 **Ansible Automation Platform -- the automation layer:**
 
-- **[Red Hat Ansible Automation Platform 2.6](https://www.redhat.com/en/technologies/management/ansible)** -- containerized deployment on RHEL 9.4+ using Podman
+- **[Red Hat Ansible Automation Platform 2.6+](https://www.redhat.com/en/technologies/management/ansible)** -- containerized deployment on RHEL 9.4+ using Podman
 - **AAP Container Enterprise Topology** -- 8-VM component architecture per datacenter (2 gateway, 2 controller, 2 hub, 2 EDA)
 - **Redis cluster** -- colocated on gateway, hub, and EDA nodes (`redis_mode='cluster'`) for session storage and job queue management
 
@@ -825,13 +825,6 @@ systemctl enable --now redis
 
 ```bash
 # On DC2 nodes
-cd /opt/ansible-automation-platform-containerized-setup-2.6-1
-
-# CRITICAL: Ensure SECRET_KEY matches DC1
-# Copy /etc/tower/SECRET_KEY from DC1 to DC2 before install
-
-# Run installer
-./setup.sh
 
 # IMMEDIATELY STOP all AAP containers (standby mode)
 systemctl stop automation-controller-web automation-controller-task
