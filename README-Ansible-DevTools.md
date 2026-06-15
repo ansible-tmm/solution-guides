@@ -438,6 +438,21 @@ The Model Context Protocol (MCP) is an open standard that enables AI coding assi
 
 Together, these turn your AI assistant into an Ansible-aware pair programmer that can scaffold a collection, lint it, run it against a development AAP instance, and troubleshoot the results -- all within a single conversation.
 
+```mermaid
+graph TD
+    IDE["<b>VS Code / AI Assistant</b><br/>Claude Code, Copilot Chat, Cursor"]
+    IDE -->|MCP| DT["<b>Devtools MCP Server</b>"]
+    IDE -->|MCP| AAP["<b>AAP MCP Server</b>"]
+    DT --> S["ansible-creator<br/><i>Scaffold</i>"]
+    DT --> L["ansible-lint<br/><i>Validate</i>"]
+    DT --> N["ansible-navigator<br/><i>Run locally</i>"]
+    DT --> B["ansible-builder<br/><i>Build EEs</i>"]
+    AAP --> J["Job Management<br/><i>Launch & monitor</i>"]
+    AAP --> I["Inventory Management<br/><i>Query hosts</i>"]
+    AAP --> M["System Monitoring<br/><i>Platform health</i>"]
+    AAP --> R["Security & Compliance<br/><i>RBAC & credentials</i>"]
+```
+
 > **Tip:** Both MCP servers are currently available as a technology preview.
 
 ### Ansible Devtools MCP Server
