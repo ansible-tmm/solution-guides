@@ -75,6 +75,12 @@ ADT addresses this by providing a single installable package (or container image
 
 ADT includes ten tools covering the full content lifecycle:
 
+```mermaid
+graph LR
+    A["<b>Create</b><br/>ansible-creator<br/>ansible-dev-environment<br/>ansible-core"] -->|validate| B["<b>Test</b><br/>ansible-lint<br/>molecule<br/>pytest-ansible<br/>tox-ansible"]
+    B -->|package & run| C["<b>Deploy</b><br/>ansible-builder<br/>ansible-navigator<br/>ansible-sign"]
+```
+
 | Stage | Tool | Purpose |
 |-------|------|---------|
 | **Create** | `ansible-creator` | Scaffold collections, roles, playbooks, and plugins |
@@ -91,6 +97,18 @@ ADT includes ten tools covering the full content lifecycle:
 
 ### Who Benefits
 
+**Business Value Drivers:**
+
+- **Faster onboarding** -- new automation developers go from zero to productive in minutes instead of weeks, directly reducing time-to-value for automation initiatives.
+- **Reduced support burden** -- eliminating "works on my machine" failures frees senior engineers from troubleshooting environment issues and lets them focus on building automation.
+- **Lower risk of inconsistent deployments** -- when every developer uses the same toolchain, the gap between what passes locally and what runs in production shrinks to zero.
+
+**Technical Value Drivers:**
+
+- **Deterministic environments** -- containerized workspaces guarantee identical OS, Python, tool versions, linting rules, and VS Code extensions across every developer.
+- **Governed toolchain updates** -- platform teams control image versions centrally, rolling out upgrades and security patches without requiring action from individual developers.
+- **Integrated content lifecycle** -- Create, Test, and Deploy tools are pre-integrated and version-locked, eliminating dependency conflicts and broken tool interactions.
+
 | Persona | Challenge | What They Gain |
 |---------|-----------|----------------|
 | **Automation Developer** | Spending days or weeks assembling tools, resolving conflicts, and matching versions with the rest of the team instead of writing automation | A single install (or a container they never have to configure) that provides all tools in known-good, compatible versions |
@@ -103,10 +121,10 @@ ADT includes ten tools covering the full content lifecycle:
 - **Source code:** [ansible/ansible-dev-tools](https://github.com/ansible/ansible-dev-tools) on GitHub
 - **Documentation (upstream):** [Ansible Development Tools](https://docs.ansible.com/projects/dev-tools/) official docs
 - **Documentation (downstream):** [Developing automation content (AAP 2.6)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/developing_automation_content/devtools-intro) on Red Hat docs
-- **Container image:** [community-ansible-dev-tools](https://github.com/ansible/community-ansible-dev-tools/pkgs/container/community-ansible-dev-tools) on GHCR
+- **Community container image:** [community-ansible-dev-tools](https://github.com/ansible/community-ansible-dev-tools/pkgs/container/community-ansible-dev-tools) on GHCR
+- **Supported container image:** [ansible-dev-tools-rhel9](https://catalog.redhat.com/software/containers/ansible-automation-platform-26/ansible-dev-tools-rhel9/) on Red Hat Ecosystem Catalog (requires AAP or Ansible Developer subscription)
 - **VS Code extension:** [Ansible extension for VS Code](https://marketplace.visualstudio.com/items?itemName=redhat.ansible)
-- **Community:** [Matrix #devtools:ansible.com](https://matrix.to/#/#devtools:ansible.com)
-- **Hands-on workshop:** Coming soon
+- **Community:** [Ansible Forum (devtools)](https://forum.ansible.com/tags/devtools)
 
 ---
 
@@ -258,26 +276,37 @@ This generates a `.devcontainer/` directory with both Docker and Podman configur
 
 **Option B: VS Code UI.** Open the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and run **Ansible: Add devcontainer configuration**. The Ansible extension generates the same `.devcontainer/` directory.
 
-**Option C: Manual.** Create `.devcontainer/devcontainer.json` in your project:
+**Option C: Manual.** Create `.devcontainer/devcontainer.json` in your project. This example matches the output of `ansible-creator` for a Podman-based setup:
 
 ```json
 {
-  "name": "Ansible Dev Tools",
+  "name": "ansible-dev-container-podman",
   "image": "ghcr.io/ansible/community-ansible-dev-tools:latest",
+  "containerUser": "root",
+  "runArgs": [
+    "--cap-add=SYS_ADMIN",
+    "--cap-add=SYS_RESOURCE",
+    "--device", "/dev/fuse",
+    "--security-opt", "seccomp=unconfined",
+    "--security-opt", "label=disable",
+    "--security-opt", "apparmor=unconfined",
+    "--userns=host",
+    "--hostname=ansible-dev-container"
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
-        "redhat.ansible"
-      ],
-      "settings": {
-        "ansible.validation.lint.enabled": true,
-        "ansible.executionEnvironment.containerEngine": "podman"
-      }
+        "redhat.ansible",
+        "redhat.vscode-redhat-account"
+      ]
     }
-  },
-  "remoteUser": "podman"
+  }
 }
 ```
+
+> **Tip:** Using the supported downstream image.
+>
+> To use the Red Hat supported image instead of the community one, replace the `image` value in your `devcontainer.json` with `registry.redhat.io/ansible-automation-platform-26/ansible-dev-tools-rhel9:latest`. You must authenticate to `registry.redhat.io` first -- run `podman login registry.redhat.io` (or `docker login`) with your Red Hat account credentials. See [Red Hat Registry Authentication](https://access.redhat.com/RegistryAuthentication) for details.
 
 **Step 3:** Open your project in VS Code, and when prompted, click **Reopen in Container** (or run the command `Dev Containers: Reopen in Container` from the command palette).
 
@@ -539,7 +568,11 @@ cd /tmp/testcol
 ansible-lint
 ```
 
-**Expected result:** `ansible-lint` should complete with no errors on the scaffolded collection.
+**Expected output:**
+
+```
+Passed with production profile: 0 failure(s), 0 warning(s) on 5 files.
+```
 
 ### Troubleshooting
 
@@ -568,15 +601,25 @@ ansible-lint
 >
 > The uv/pip and RPM methods are stepping stones. They get individual developers productive quickly, but they don't solve the consistency problem at scale. Invest in a base container image early. Once that image exists, both dev containers and Dev Spaces use it, and every developer gets an identical environment from day one.
 
+By standardizing on ADT, your organization eliminates environment drift as a source of CI failures, reduces developer onboarding from weeks to minutes, and ensures that every automation artifact is created, tested, and deployed with the same governed toolchain. The investment shifts from individual troubleshooting to platform management -- a one-time image setup that scales across every team and project without requiring action from individual developers.
+
 ---
 
 ## Related Guides
+
+**Solution guides in this collection:**
+
+- **Database automation:** The [EDB Postgres automation guide](README-EDB.md) demonstrates a multi-role deployment that benefits from consistent dev environments -- teams working on complex database automation can use ADT dev containers to ensure every contributor has the same linting rules and molecule test setup.
+- **ITSM integration:** The [ServiceNow ITSM guide](README-ServiceNow-ITSM.md) and [RHEL patching guide](README-Patching-RHEL.md) show production automation workflows where environment consistency directly reduces "works on my machine" failures in CI/CD pipelines.
+- **AI-assisted operations:** The [Intelligent Assistant with RHAIIS guide](README-Intelligent-Assistant-RHAIIS.md) extends the AI-assisted development theme -- once your dev environment includes the Ansible MCP server, the same AI assistant that helps you write automation can also interact with your AAP instance.
+- **Network automation:** The [NetBox + AAP guide](README-NetBox-AAP-Solution-Guide.md) and [NetBox + EDA guide](README-NetBox-EDA-Config-Solution-Guide.md) are examples of multi-tool integrations where standardized dev environments prevent version conflicts across collections.
+
+**External documentation:**
 
 - **Execution Environments:** See the [Ansible Builder documentation](https://docs.ansible.com/projects/dev-tools/container/) for building custom EEs on top of the ADT container image.
 - **Content Testing:** See [Molecule documentation](https://ansible.readthedocs.io/projects/molecule/) for comprehensive testing strategies with ADT.
 - **Content Signing:** See [ansible-sign documentation](https://docs.ansible.com/projects/sign/) for signing and verifying Ansible content in CI/CD.
 - **Dev Spaces Administration:** See the [Red Hat OpenShift Dev Spaces docs](https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/) for cluster setup and operator configuration.
-- **Hands-on workshop:** Coming soon
 
 ---
 

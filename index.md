@@ -299,7 +299,7 @@ patternfly: true
               </span>
             </div>
             <div class="pf-v6-c-card__title">
-              <h3 class="pf-v6-c-card__title-text">Consistent Automation Developer Experience with ADT</h3>
+              <h3 class="pf-v6-c-card__title-text">AI-Assisted Ansible Developer Experience</h3>
             </div>
             <div class="pf-v6-c-card__body">
               Standardize your automation developer experience across the organization using Ansible Development Tools, from individual uv/pip installs to enterprise-governed Dev Spaces with 2-minute onboarding.
