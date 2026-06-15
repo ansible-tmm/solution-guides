@@ -45,6 +45,7 @@ The goal is to move every automation developer in your organization onto the sam
   - [AI-Assisted Ansible Development](#ai-assisted-ansible-development)
     - [Ansible Devtools MCP Server](#ansible-devtools-mcp-server)
     - [Connecting to Ansible Automation Platform](#connecting-to-ansible-automation-platform)
+    - [End-to-End Development Workflow](#end-to-end-development-workflow)
   - [Validation](#validation)
     - [Verify the Installation](#verify-the-installation)
     - [Quick Smoke Test](#quick-smoke-test)
@@ -529,6 +530,28 @@ Authentication uses an AAP personal access token passed via `MCP_AAP_TOKEN`. The
 > **Warning:** Use development or staging AAP instances for AI-assisted workflows.
 >
 > AI assistants can launch jobs and modify platform state through the AAP MCP server. Always point MCP configurations at non-production instances during development, and use a read-only token unless you specifically need the AI assistant to launch jobs.
+
+### End-to-End Development Workflow
+
+When both MCP servers are configured together, your AI assistant has access to the full content lifecycle -- from scaffolding automation content locally to validating it against a real AAP instance. Instead of switching between your editor, terminal, and AAP UI, the entire develop-test-validate loop happens in a single conversation:
+
+```mermaid
+graph LR
+    A["<b>Scaffold</b><br/>ansible-creator"] -->|lint & fix| B["<b>Validate locally</b><br/>ansible-lint"]
+    B -->|query targets| C["<b>Check inventory</b><br/>AAP MCP"]
+    C -->|launch job| D["<b>Run on AAP</b><br/>AAP MCP"]
+    D -->|inspect results| E["<b>Troubleshoot</b><br/>Devtools + AAP MCP"]
+```
+
+1. **Scaffold** -- the AI assistant uses the Devtools MCP server to create a new role or playbook with `ansible-creator`, pre-configured with the correct structure and metadata.
+2. **Validate locally** -- the assistant runs `ansible-lint` through the Devtools MCP server, identifies issues, and applies fixes automatically before the code ever reaches AAP.
+3. **Check inventory** -- the assistant queries the AAP inventory through the AAP MCP server to verify target hosts, groups, and variables match what the playbook expects.
+4. **Run on AAP** -- the assistant launches the playbook as a job on a development AAP instance, using the correct job template, credentials, and survey variables.
+5. **Troubleshoot** -- if the job fails, the assistant inspects the job output through AAP MCP, correlates it with the playbook logic it can read locally through Devtools MCP, and proposes a fix. The cycle repeats from step 2 until the job succeeds.
+
+This workflow is particularly valuable for teams onboarding new automation developers. A developer who is still learning Ansible conventions can ask the AI assistant to scaffold a role, explain why the linter flagged a particular rule, fix it, and then run the corrected playbook against a real environment -- building understanding of both the toolchain and the platform in context rather than in isolation.
+
+> **Example:** A developer asks the AI assistant to create a role that configures NTP on RHEL hosts. The assistant scaffolds the role with `ansible-creator`, lints it, queries the AAP development instance to confirm the RHEL inventory group exists and has the expected hosts, launches a test job, and discovers that the `chrony` package is already installed but the configuration file differs. The assistant updates the template, re-runs the job, and confirms idempotency -- all within the same conversation, without the developer opening the AAP UI once.
 
 ---
 
