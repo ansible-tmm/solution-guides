@@ -584,7 +584,7 @@ adt --version
 
 ```
 ansible-builder                 3.1.1
-ansible-core                    2.21.0
+ansible-core                    2.20.5
 ansible-creator                 26.4.3
 ansible-dev-environment         26.4.0
 ansible-dev-tools               26.4.6
@@ -593,7 +593,7 @@ ansible-navigator               26.4.0
 ansible-sign                    0.1.5
 molecule                        26.4.0
 pytest-ansible                  26.4.0
-tox-ansible                     26.6.0
+tox-ansible                     26.3.0
 ```
 
 ### Quick Smoke Test
