@@ -354,6 +354,20 @@ patternfly: true
           </div>
         </a>
 
+        <a href="{{ '/README-OpenShift-EDA-Kafka' | relative_url }}" class="card-link" data-partners="infrastructure">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">Consuming OpenShift API Resources with EDA and Kafka</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              Capture OpenShift Namespace lifecycle events via Knative APIServerSource, stream them through Kafka, and surface them in Event-Driven Ansible for logging and downstream automation.
+            </div>
+            <div class="pf-v6-c-card__footer">
+              <img src="{{ '/assets/images/kafka_logo.webp' | relative_url }}" alt="Kafka" class="card-partner-logo">
+            </div>
+          </div>
+        </a>
+
       </div>
     </div>
 
