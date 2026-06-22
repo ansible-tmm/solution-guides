@@ -354,8 +354,16 @@ patternfly: true
           </div>
         </a>
 
-        <a href="{{ '/README-OpenShift-EDA-Kafka' | relative_url }}" class="card-link" data-partners="infrastructure">
+        <a href="{{ '/README-OpenShift-EDA-Kafka' | relative_url }}" class="card-link" data-partners="infrastructure,wip">
           <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__header">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
+              </span>
+            </div>
             <div class="pf-v6-c-card__title">
               <h3 class="pf-v6-c-card__title-text">Consuming OpenShift API Resources with EDA and Kafka</h3>
             </div>
