@@ -310,6 +310,28 @@ patternfly: true
           </div>
         </a>
 
+        <a href="{{ '/README-Windows-Cert-Rotation' | relative_url }}" class="card-link" data-partners="servicenow,aiops,wip">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__header">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
+              </span>
+            </div>
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">Windows Certificate Rotation with AI Risk Analysis</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              Automate Windows certificate rotation end-to-end: Event-Driven Ansible detects expiring certs, AI evaluates risk and timing, Ansible performs the rotation, and ServiceNow documents the full audit trail.
+            </div>
+            <div class="pf-v6-c-card__footer">
+              <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">
+            </div>
+          </div>
+        </a>
+
         <a href="{{ '/README-NetBox-EDA-Config-Solution-Guide' | relative_url }}" class="card-link" data-partners="netbox,aiops,wip">
           <div class="pf-v6-c-card">
             <div class="pf-v6-c-card__header">
