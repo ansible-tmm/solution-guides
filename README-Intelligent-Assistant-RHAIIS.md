@@ -119,7 +119,7 @@ $ podman run --rm -it \
 -v ./rhaiis-cache:/opt/app-root/src/.cache \
 registry.redhat.io/rhaiis/vllm-cuda-rhel9:3.0.0 \
 --model RedHatAI/granite-3.3-8b-instruct \
---max-model-len 8192
+--max-model-len 8192 \
 --enable-auto-tool-choice \
 --tool-call-parser granite
 ~~~
