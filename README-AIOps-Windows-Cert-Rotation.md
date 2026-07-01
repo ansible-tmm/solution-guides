@@ -41,9 +41,9 @@ This guide automates both the execution and the judgment. Event-Driven Ansible d
 
 Windows Server environments rely on IIS for hosting internal portals, APIs, and web applications. These servers use TLS certificates to encrypt traffic, and those certificates expire. Manually renewing and rebinding them to IIS is tedious, error-prone, and detrimental to your services when it doesn't happen on time.
 
-Automating the rotation itself is straightforward: find the replacement cert, rebind IIS, remove the old cert, verify HTTPS. Ansible handles this reliably. However, blind automation can create its own risks. Rotating a certificate during peak trading hours on a financial portal, or while a dependent service is mid-deployment, or during a compliance audit freeze, can cause more disruption than the expiring cert itself. A load balancer health check that flaps during rebind can mark the node as down and redirect all traffic, turning a routine rotation into a P1 incident. Letting the cert sit too long without acting means the certificate expires and causes the very outage you were trying to prevent.
+Automating the rotation itself is straightforward: find the replacement cert, rebind IIS, remove the old cert, verify HTTPS. Ansible handles this reliably. However, blind automation can create its own risks. Rotating a certificate during peak trading hours on a financial portal, or while a dependent service is mid-deployment, or during a compliance audit freeze, can cause more disruption than the expiring cert itself. Letting the cert sit too long without acting means the certificate expires and causes the very outage you were trying to prevent.
 
-The challenge is the decision: should we rotate now, schedule it for the maintenance window, or flag it for human review? That decision depends on variables that change constantly: current time of day, service dependencies, change history, compliance requirements, concurrent incidents. This is where AI adds value. It evaluates the full risk picture for every expiry event and determines the optimal action, not a one-size-fits-all rule.
+The challenge is in the decision: should we rotate now, schedule it for the maintenance window, or flag it for human review? That decision depends on variables that change constantly, such as current time of day, service dependencies, change history, compliance requirements, concurrent incidents. This is where AI adds value. It evaluates the full risk picture for every expiry event and determines the optimal action, not a one-size-fits-all rule.
 
 ---
 
@@ -60,14 +60,14 @@ The challenge is the decision: should we rotate now, schedule it for the mainten
 
 | Persona | Challenge | What They Gain |
 |---------|-----------|---------------|
-| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e0.png" width="20" style="vertical-align:text-bottom;"> **Windows Admin** | Certificate rotation is manual, repetitive, and easy to get wrong: find the right replacement cert, rebind IIS, remove the old cert, verify HTTPS, update the ticket. Doing it at the wrong time is worse: load balancer health checks flap, downstream APIs reject connections, and a routine rotation becomes a P1. | Ansible automates rotation mechanics to ensure consistency and reliability, while AI evaluates timing, dependencies, and risk to determine the safest moment to rotate. |
-| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f5fa.png" width="20" style="vertical-align:text-bottom;"> **Security / Compliance** | Manual rotations are inconsistent and poorly documented. Compliance audits require evidence that certificate changes were risk-assessed before execution, but manual processes rarely produce a meaningful audit trail. | Every rotation follows the same verified process and is documented in ITSM with AI risk assessment, decision rationale, old/new cert thumbprints, and HTTPS verification. Compliance evidence is generated automatically. |
+| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e0.png" width="20" style="vertical-align:text-bottom;"> **Windows Admin** | Certificate rotation is manual, repetitive, and easy to get wrong. Find the right replacement cert, rebind IIS, remove the old cert, verify HTTPS, update the ticket. Rotating too late causes an outage. Rotating at the wrong time, during peak load, an active deployment, or a change freeze, risks creating one. | Ansible automates rotation mechanics to ensure consistency and reliability, while AI evaluates timing, dependencies, and risk to determine the safest moment to rotate. |
+| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f5fa.png" width="20" style="vertical-align:text-bottom;"> **Security / Compliance** | Manual rotations produce inconsistent documentation, if any. Compliance audits require evidence that certificate changes were risk-assessed before execution, but manual processes rarely produce a meaningful audit trail. | Every rotation follows the same verified process and is documented in ITSM with AI risk assessment, decision rationale, old/new cert thumbprints, and HTTPS verification. Compliance evidence is generated automatically. |
 | <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4ca.png" width="20" style="vertical-align:text-bottom;"> **IT Manager** | Certificate outages are preventable but keep happening. Rotations depend on individual knowledge and availability, with no visibility into what was done, when, or why. | Consistent, automated rotation eliminates single points of failure. Measurable MTTR reduction, proactive rotation with intelligent scheduling, human-in-the-loop escalation for edge cases. Dashboard-ready metrics from ITSM. |
 
 ### Demos
 
 - Interactive walkthrough: [Try the interactive Arcade demo](https://app.arcade.software/flows/1v4CnAXAopRJhJ4AUBF1/view)
-- Demo video: [Watch the full demo]() <!-- TODO: Add video URL -->
+- Demo video: [Video link coming soon]() <!-- TODO: Add video URL -->
 
 <!-- TODO: Replace with a thumbnail screenshot from the demo video. Clicking links to the full video -->
 [![Watch the demo](assets/images/cert-rotation-demo-thumbnail.png)]() <!-- TODO: Add video URL -->
@@ -82,7 +82,7 @@ Certificate monitoring that can send webhook alerts when certificates are approa
 
 ### Red Hat Ansible Automation Platform
 
-**Ansible Automation Platform 2.5+** with Event-Driven Ansible controller (GA). Required for webhook event sources and `run_job_template` actions in EDA rulebooks.
+**Ansible Automation Platform 2.5+** with Event-Driven Ansible controller (GA).
 
 > **New to Ansible?**
 >
@@ -154,7 +154,7 @@ The workflow starts when your existing certificate monitoring detects a certific
 
 EDA matches the event against a rulebook condition and triggers the "AI Certificate Risk Analysis" job template. This playbook runs on localhost, calls an AI inference endpoint with certificate details and service context (CMDB data, dependencies, compliance requirements, change history), and produces a PROCEED, SCHEDULE, or ESCALATE decision.
 
-For PROCEED, the playbook launches the "Rotate Windows Certificate" job template immediately via the controller API. For SCHEDULE, it creates a one-time schedule on the same job template for the next maintenance window, so the rotation is guaranteed to happen at the optimal time rather than left unresolved. For ESCALATE, it updates the ITSM ticket to high priority and stops. Escalation is the right path when the risk picture is too complex for automated action: a wildcard cert affecting dozens of services, a compliance audit freeze, conflicting dependencies, or a host with a history of failed rotations. If the AI service is unavailable, the playbook's rescue block automatically escalates for human review via a high-priority ITSM ticket, and the rotation job template remains available for the on-call team to launch manually.
+For PROCEED, the playbook launches the "Rotate Windows Certificate" job template immediately via the controller API. For SCHEDULE, it creates a one-time schedule on the same job template for the next maintenance window, so the rotation is guaranteed to happen at the optimal time rather than left unresolved. For ESCALATE, it updates the ITSM ticket to high priority and stops. Escalation is the right path when the risk picture is too complex for automated action. (A wildcard cert affecting dozens of services, a compliance audit freeze, conflicting dependencies, or a host with a history of failed rotations.) If the AI service is unavailable, the playbook's rescue block automatically escalates for human review via a high-priority ITSM ticket, and the rotation job template remains available for the on-call team to launch manually.
 
 The rotation playbook connects to the Windows host via WinRM, finds a valid replacement certificate, rebinds IIS, removes the old cert, verifies HTTPS, and resolves the ITSM incident with the full rotation details.
 
@@ -171,14 +171,16 @@ Your existing certificate monitoring sends webhook events to the EDA event strea
 | Field | Description | Example |
 |-------|-------------|---------|
 | `event_type` | Event classification | `cert_expiring` |
-| `host` | Windows host private IP (for AAP inventory) | `172.31.30.162` |
-| `thumbprint` | Certificate thumbprint to rotate | `92495AD495E5...` |
+| `host` | Windows host private IP (for AAP inventory) | `<WINDOWS_HOST_IP>` |
+| `thumbprint` | Certificate thumbprint to rotate | `<CERT_THUMBPRINT>` |
 | `days_left` | Days until expiry | `5` |
-| `subject` | Certificate subject name | `CN=demo.contoso.com` |
+| `subject` | Certificate subject name | `CN=<YOUR_CERT_DNS_NAME>` |
 
 The rulebook listens for these events and triggers the AI risk analysis job template. The `days_left <= 7` condition acts as a final gate, but your monitoring system's alert schedule determines when events arrive. Adjust this threshold to match your environment.
 
-> **Tip:** Consider configuring multiple EDA rules at different thresholds to take different actions as expiry approaches. For example, create an informational ITSM ticket at 30 days, trigger AI risk analysis at 7 days, and force immediate rotation at 1 day. Align these thresholds with the intervals your monitoring system is already alerting on.
+> **Tip:** Consider configuring multiple EDA rules at different thresholds to take different actions as expiry approaches. 
+>
+>For example, create an informational ITSM ticket at 30 days, trigger AI risk analysis at 7 days, and force immediate rotation at 1 day. Align these thresholds with the intervals your monitoring system is already alerting on.
 
 ```yaml
 ---
@@ -227,7 +229,7 @@ The AI doesn't just look at how many days are left. It considers:
 - **Current timing**: Is it during peak business hours? Is the maintenance window coming up?
 - **Dependencies**: Will the F5 load balancer health check flap? Will SSRS embedded reports break?
 - **Change history**: Has this host had failed rotations before?
-- **Compliance**: Are there HIPAA or SOX requirements for encryption continuity?
+- **Compliance**: Are there regulatory requirements for encryption continuity?
 - **Operational context**: Is there a change freeze or concurrent incident?
 
 **Featured task: AI inference call**
@@ -271,7 +273,7 @@ The AI returns a structured JSON response:
 | `rationale` | 2-3 sentence explanation of the decision |
 | `impact_analysis` | Detailed analysis covering dependencies, compliance, timing, and history |
 | `precautions` | List of specific precautions to take during rotation |
-| `scheduled_window` | (SCHEDULE only) Recommended maintenance window |
+| `scheduled_time` | (SCHEDULE only) Recommended maintenance window datetime in `YYYYMMDDTHHMMSSZ` format |
 | `escalation_contacts` | (ESCALATE only) Who should review and why |
 
 After receiving the AI decision, the playbook creates an ITSM incident with the full risk assessment before acting on the decision:
@@ -315,7 +317,7 @@ After receiving the AI decision, the playbook creates an ITSM incident with the 
 | **Project** | `Windows Cert Rotation` |
 | **Playbook** | `playbooks/ai_risk_analysis.yml` |
 | **Credentials** | Machine credential (Windows admin) |
-| **Extra variables** | `cert_dns_name: demo.contoso.com` |
+| **Extra variables** | `cert_dns_name: <YOUR_CERT_DNS_NAME>` |
 | **Prompt on launch** | Extra variables enabled (receives `target_host`, `cert_thumbprint`, `days_left` from EDA) |
 
 > **Tip:** Store AI and ITSM credentials in automation controller.
@@ -362,7 +364,7 @@ When the AI decides PROCEED, the risk analysis playbook launches the "Rotate Win
 
 - name: Verify HTTPS is still working
   ansible.windows.win_uri:
-    url: "https://localhost"
+    url: "https://{{ cert_dns_name }}"
   register: verify_result
 
 - name: Assert HTTPS is healthy
@@ -374,9 +376,6 @@ When the AI decides PROCEED, the risk analysis playbook launches the "Rotate Win
 
 The playbook expects a valid replacement certificate to already exist in the Windows certificate store. How that certificate gets there depends on your environment: ADCS auto-enrollment, a Venafi policy, HashiCorp Vault, or a manual renewal process. The rotation playbook handles the lifecycle from that point forward: find the replacement, rebind IIS, remove the old cert, verify HTTPS, and document everything in ITSM.
 
-> **Warning:** Rotation causes a brief HTTPS interruption.
->
-> The IIS HTTPS binding is unavailable for a few seconds during rebind. If an F5 or other load balancer health check fires during this window, it may temporarily mark the node as down. The change history in the demo shows this happened during a 2025-11 emergency rotation (45s of F5 health check flapping, 12 failed requests). Pre-draining the node from the load balancer before rotation eliminates this risk.
 
 **Job template configuration in automation controller:**
 
@@ -387,12 +386,11 @@ The playbook expects a valid replacement certificate to already exist in the Win
 | **Project** | `Windows Cert Rotation` |
 | **Playbook** | `playbooks/rotate_certificate.yml` |
 | **Credentials** | Machine credential (Windows admin) |
-| **Extra variables** | `cert_dns_name: demo.contoso.com` |
+| **Extra variables** | `cert_dns_name: <YOUR_CERT_DNS_NAME>` |
 | **Prompt on launch** | Extra variables enabled (receives `cert_thumbprint`, `target_host`, `snow_incident_sys_id` from risk analysis) |
 
 ![Rotation job output](assets/images/cert-rotation-job.png)
 
-![Windows certificate store before and after rotation](assets/images/mmc-cert-store.png)
 
 ### Step 3b: Schedule for maintenance window (SCHEDULE path)
 
@@ -403,21 +401,6 @@ When the AI decides SCHEDULE, the risk analysis playbook creates a one-time sche
 The AI may choose SCHEDULE over PROCEED for several reasons: the current time falls within peak business hours and the cert has enough runway to wait, a change freeze is in effect (quarter-end close, compliance audit), a high-risk upstream dependency like an F5 or ARR reverse proxy would be impacted by a rebind during active traffic, or a dependent service is mid-deployment and needs to stabilize first.
 
 ```yaml
-- name: Calculate next maintenance window start time
-  ansible.builtin.shell:
-    cmd: |
-      python3 -c "
-      from datetime import datetime, timedelta
-      now = datetime.utcnow()
-      days_until = ({{ maintenance_window_day }} - now.weekday()) % 7
-      if days_until == 0 and now.hour >= {{ maintenance_window_hour_utc }}:
-          days_until = 7
-      target = now + timedelta(days=days_until)
-      scheduled = target.replace(hour={{ maintenance_window_hour_utc }}, minute=0, second=0)
-      print(scheduled.strftime('%Y%m%dT%H%M%SZ'))
-      "
-  register: scheduled_time_result
-
 - name: Schedule rotation job for maintenance window
   ansible.builtin.uri:
     url: "https://{{ aap_hostname }}/api/controller/v2/job_templates/{{ rotation_jt_id }}/schedules/"
@@ -429,7 +412,7 @@ The AI may choose SCHEDULE over PROCEED for several reasons: the current time fa
     body_format: json
     body:
       name: "Scheduled cert rotation - {{ cert_thumbprint[:12] }}"
-      rrule: "DTSTART:{{ scheduled_rotation_time }} RRULE:FREQ=MINUTELY;INTERVAL=1;COUNT=1"
+      rrule: "DTSTART:{{ ai_decision.scheduled_time }} RRULE:FREQ=MINUTELY;INTERVAL=1;COUNT=1"
       extra_data:
         cert_thumbprint: "{{ cert_thumbprint }}"
         target_host: "{{ target_host }}"
@@ -500,29 +483,19 @@ The ITSM incident now has the full story: the AI risk assessment from Step 2 (as
 Send a test certificate expiry event to the EDA event stream:
 
 ```bash
-source .env.demo
 curl -X POST "${EDA_EVENT_STREAM_URL}" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${EDA_TOKEN}" \
   -d '{
     "event_type": "cert_expiring",
-    "host": "'"${WINDOWS_PRIVATE_IP}"'",
-    "thumbprint": "'"$(grep old_cert vars/cert_thumbprints.yml | cut -d\" -f2)"'",
-    "days_left": 5,
-    "subject": "CN=demo.contoso.com"
+    "host": "<WINDOWS_HOST_IP>",
+    "thumbprint": "<EXPIRING_CERT_THUMBPRINT>",
+    "days_left": 3,
+    "subject": "CN=<YOUR_CERT_DNS_NAME>"
   }'
 ```
 
-Or use the included test script:
-
-```bash
-source .env.demo
-bash scripts/send_test_event.sh
-```
-
-### Expected Result (PROCEED)
-
-The AI Risk Analysis job output:
+Expected output (AI Risk Analysis job):
 
 ```
 TASK [Display AI decision] *****************************************************
@@ -530,70 +503,62 @@ ok: [localhost] => {
     "msg": [
         "DECISION: PROCEED",
         "RISK LEVEL: HIGH",
-        "RATIONALE: With only 3 days until expiry and the current time being after
-         peak business hours, immediate rotation is necessary as waiting for the
-         Saturday maintenance window would leave insufficient buffer time."
+        "RATIONALE: With only 3 days until expiry and conditions clear for rotation,
+         immediate action is necessary. Waiting for the next maintenance window would
+         leave insufficient buffer time."
     ]
 }
 
 TASK [Display ServiceNow incident] *********************************************
 ok: [localhost] => {
-    "msg": "ServiceNow incident created: INC0021680 (PROCEED)"
+    "msg": "ServiceNow incident created: INC<NUMBER> (PROCEED)"
 }
 
 TASK [Display launched job] ****************************************************
 ok: [localhost] => {
     "msg": [
         "Rotation job launched successfully.",
-        "AAP Job ID: 19511",
-        "Job URL: https://aap-nostromo.demoredhat.com/#/jobs/19511/output"
+        "AAP Job ID: <JOB_ID>",
+        "Job URL: https://<AAP_HOST>/#/jobs/<JOB_ID>/output"
     ]
 }
-
-PLAY RECAP *********************************************************************
-localhost                  : ok=21   changed=2    unreachable=0    failed=0    skipped=8
 ```
 
-The Rotate Windows Certificate job output:
+Expected output (Rotate Windows Certificate job):
 
 ```
 TASK [Confirm replacement certificate found] ***********************************
-ok: [172.31.30.162] => {
-    "msg": "Found replacement certificate: A1FEA1A2A6F90F523925B1B3DBD2B3FD39C4916F"
+ok: [<WINDOWS_HOST_IP>] => {
+    "msg": "Found replacement certificate: <NEW_THUMBPRINT>"
 }
 
 TASK [Assert HTTPS is healthy] *************************************************
-ok: [172.31.30.162] => {
+ok: [<WINDOWS_HOST_IP>] => {
     "msg": "IIS is serving HTTPS with the new certificate!"
 }
 
 TASK [Rotation complete] *******************************************************
-ok: [172.31.30.162] => {
-    "msg": "Certificate rotation complete. Old: 88898BD165E4307215BB51C50149B6A2D12CE40D
-     -> New: A1FEA1A2A6F90F523925B1B3DBD2B3FD39C4916F. HTTPS verified.
-     ServiceNow: INC0021680"
+ok: [<WINDOWS_HOST_IP>] => {
+    "msg": "Certificate rotation complete. Old: <OLD_THUMBPRINT>
+     -> New: <NEW_THUMBPRINT>. HTTPS verified. ServiceNow: INC<NUMBER>"
 }
-
-PLAY RECAP *********************************************************************
-172.31.30.162              : ok=15   changed=4    unreachable=0    failed=0    skipped=0
 ```
 
 ### Test: SCHEDULE Path
 
-To test the SCHEDULE path, pass `additional_context` with a change freeze or peak-hours constraint:
+To test the SCHEDULE path, pass `additional_context` indicating peak business hours with enough runway for the cert to wait:
 
 ```bash
-source .env.demo
 curl -X POST "${EDA_EVENT_STREAM_URL}" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${EDA_TOKEN}" \
   -d '{
     "event_type": "cert_expiring",
-    "host": "'"${WINDOWS_PRIVATE_IP}"'",
-    "thumbprint": "'"$(grep old_cert vars/cert_thumbprints.yml | cut -d\" -f2)"'",
+    "host": "<WINDOWS_HOST_IP>",
+    "thumbprint": "<EXPIRING_CERT_THUMBPRINT>",
     "days_left": 5,
-    "subject": "CN=demo.contoso.com",
-    "additional_context": "MANDATORY change freeze in effect until end of business Friday. No production changes permitted."
+    "subject": "CN=<YOUR_CERT_DNS_NAME>",
+    "additional_context": "Currently peak business hours with high active user load. Maintenance window available in 2 days."
   }'
 ```
 
@@ -605,44 +570,37 @@ ok: [localhost] => {
     "msg": [
         "DECISION: SCHEDULE",
         "RISK LEVEL: MEDIUM",
-        "RATIONALE: Certificate has 5 days until expiry and the next maintenance window
-         (Saturday 02:00-06:00 US-Eastern) occurs within 4 days, providing safe margin.
-         Currently in peak business hours with 8600 active users and $2.1M daily
-         revenue impact makes immediate rotation too risky."
+        "RATIONALE: Certificate has 5 days until expiry and a maintenance window is
+         available within 2 days, providing a safe margin. Current peak load makes
+         immediate rotation too risky."
     ]
 }
 
 TASK [Display scheduled rotation] **********************************************
 ok: [localhost] => {
     "msg": [
-        "Rotation scheduled in AAP for: 20260627T060000Z",
-        "Schedule name: Scheduled cert rotation - 40298730226293",
+        "Rotation scheduled in AAP for: <MAINTENANCE_WINDOW_DATETIME>",
+        "Schedule name: Scheduled cert rotation - <THUMBPRINT_PREFIX>",
         "The rotation job will execute automatically during the maintenance window."
     ]
 }
-
-PLAY RECAP *********************************************************************
-localhost                  : ok=23   changed=2    unreachable=0    failed=0    skipped=6
 ```
-
-![AI risk analysis SCHEDULE decision](assets/images/ai-risk-analysis-schedule.png)
 
 ### Test: ESCALATE Path
 
-To test the ESCALATE path, pass `additional_context` with a hard constraint that creates a conflict the AI cannot safely resolve on its own:
+To test the ESCALATE path, pass `additional_context` with a hard conflict the AI cannot resolve — the certificate expires before the freeze lifts:
 
 ```bash
-source .env.demo
 curl -X POST "${EDA_EVENT_STREAM_URL}" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${EDA_TOKEN}" \
   -d '{
     "event_type": "cert_expiring",
-    "host": "'"${WINDOWS_PRIVATE_IP}"'",
-    "thumbprint": "'"$(grep old_cert vars/cert_thumbprints.yml | cut -d\" -f2)"'",
-    "days_left": 5,
-    "subject": "CN=demo.contoso.com",
-    "additional_context": "MANDATORY change freeze in effect until end of business Friday. No production changes permitted."
+    "host": "<WINDOWS_HOST_IP>",
+    "thumbprint": "<EXPIRING_CERT_THUMBPRINT>",
+    "days_left": 3,
+    "subject": "CN=<YOUR_CERT_DNS_NAME>",
+    "additional_context": "Mandatory compliance audit freeze in effect for 14 days. No production changes permitted under any circumstances. Certificate expires before the freeze lifts."
   }'
 ```
 
@@ -654,24 +612,22 @@ ok: [localhost] => {
     "msg": [
         "DECISION: ESCALATE",
         "RISK LEVEL: HIGH",
-        "RATIONALE: Certificate expires in 5 days but mandatory change freeze prohibits
-         production changes until end of business Friday. This creates a conflict between
-         compliance requirements and operational necessity that requires management review."
+        "RATIONALE: Certificate expires in 3 days but the compliance audit freeze
+         prohibits any production changes for 14 days. The certificate will expire
+         before automation can safely act. Human review is required."
     ]
 }
 
 TASK [Display workflow summary] ************************************************
 ok: [localhost] => {
-    "msg": "Risk analysis complete. Decision: ESCALATE. ServiceNow: INC0021691"
+    "msg": "Risk analysis complete. Decision: ESCALATE. ServiceNow: INC<NUMBER>"
 }
-
-PLAY RECAP *********************************************************************
-localhost                  : ok=21   changed=2    unreachable=0    failed=0    skipped=8
 ```
 
-![AI risk analysis ESCALATE decision](assets/images/ai-risk-analysis-escalate.png)
 
-> **Note:** The AI generates unique rationale text on each run. The decision structure and fields remain consistent, but the wording will vary. The same `additional_context` may produce different decisions depending on timing and how the AI weighs the constraints.
+> **Note:** The AI generates unique rationale text on each run. 
+>
+> The decision structure and fields remain consistent, but the wording will vary. The same `additional_context` may produce different decisions depending on timing and how the AI weighs the constraints.
 
 ### Troubleshooting
 
@@ -712,7 +668,7 @@ By connecting certificate monitoring to Event-Driven Ansible with AI-informed de
 - **Intelligent scheduling**: When conditions are not ideal (peak hours, change freezes, high-risk dependencies), the AI schedules rotation for the next maintenance window rather than taking unnecessary risk. The rotation is guaranteed to happen at the optimal time, not left unresolved
 - **Compliance evidence**: Every rotation is documented in ITSM with the AI risk assessment, old and new certificate thumbprints, and HTTPS verification status. This supports change management and encryption controls across common compliance frameworks.
 - **Graceful fallback**: If the AI service is unavailable, the workflow escalates for human review via a high-priority ITSM ticket. The rotation job template remains available for manual launch, preserving human oversight when automated risk assessment is not possible
-- **Automation reuse**: The rotation playbook can be launched manually for planned rotations, testing, or one-off hosts, bypassing the AI gate entirely. One playbook, two entry points.
+- **Manual override**: The rotation playbook can be launched manually for planned rotations, testing, or one-off hosts, bypassing the AI gate entirely. One playbook, two entry points.
 
 ### Measuring Success
 
