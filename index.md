@@ -310,7 +310,7 @@ patternfly: true
           </div>
         </a>
 
-        <a href="{{ '/README-Windows-Cert-Rotation' | relative_url }}" class="card-link" data-partners="windows,aiops,wip">
+        <a href="{{ '/README-AIOps-Windows-Cert-Rotation' | relative_url }}" class="card-link" data-partners="windows,aiops,wip">
           <div class="pf-v6-c-card">
             <div class="pf-v6-c-card__header">
               <span class="pf-v6-c-label pf-m-orange">
