@@ -7,7 +7,7 @@
   }
 </style>
 
-<img src="assets/images/cert-rotation-hero.png" alt="Windows Certificate Rotation with AI Risk Analysis" style="max-width:400px">
+<img src="assets/images/windows-hero.png" alt="Windows Certificate Rotation with AI Risk Analysis" style="max-width:400px">
 
 ## Overview
 
@@ -66,6 +66,7 @@ The challenge is the decision: should we rotate now, schedule it for the mainten
 
 ### Demos
 
+- Interactive walkthrough: [Try the interactive Arcade demo](https://app.arcade.software/flows/1v4CnAXAopRJhJ4AUBF1/view)
 - Demo video: [Watch the full demo]() <!-- TODO: Add video URL -->
 
 <!-- TODO: Replace with a thumbnail screenshot from the demo video. Clicking links to the full video -->
