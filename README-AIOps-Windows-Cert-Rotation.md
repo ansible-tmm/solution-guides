@@ -67,10 +67,9 @@ The challenge is in the decision: should we rotate now, schedule it for the main
 ### Demos
 
 - Interactive walkthrough: [Try the interactive Arcade demo](https://app.arcade.software/flows/1v4CnAXAopRJhJ4AUBF1/view)
-- Demo video: [Video link coming soon]() <!-- TODO: Add video URL -->
+- Demo video: [Watch the demo](https://youtu.be/pX_PzMyYUk4)
 
-<!-- TODO: Replace with a thumbnail screenshot from the demo video. Clicking links to the full video -->
-[![Watch the demo](assets/images/cert-rotation-demo-thumbnail.png)]() <!-- TODO: Add video URL -->
+<iframe width="560" height="315" src="https://www.youtube.com/embed/pX_PzMyYUk4" frameborder="0" allowfullscreen></iframe>
 
 ---
 
