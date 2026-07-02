@@ -69,9 +69,7 @@ The challenge is in the decision: should we rotate now, schedule it for the main
 - Interactive walkthrough: [Try the interactive Arcade demo](https://app.arcade.software/flows/1v4CnAXAopRJhJ4AUBF1/view)
 - Demo video: [Watch the demo](https://youtu.be/pX_PzMyYUk4)
 
-<div style="max-width: 400px; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-  <iframe src="https://www.youtube.com/embed/pX_PzMyYUk4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen></iframe>
-</div>
+<iframe src="https://www.youtube.com/embed/pX_PzMyYUk4" style="width: 100%; max-width: 400px; aspect-ratio: 16/9; display: block;" frameborder="0" allowfullscreen></iframe>
 
 <iframe width="400" height="250" src="https://demo.arcade.software/1v4CnAXAopRJhJ4AUBF1?embed" frameborder="0" loading="lazy" allowfullscreen></iframe>
 
