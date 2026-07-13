@@ -108,6 +108,28 @@ patternfly: true
         </div>
       </a>
 
+      <a href="{{ '/README-ZTA' | relative_url }}" class="card-link" data-partners="foundational,infrastructure,netbox,published">
+        <div class="pf-v6-c-card card-foundational">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-green">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Zero Trust Architecture with Ansible Automation Platform</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Orchestrate identity, secrets, policy, and network controls with AAP as the central layer -- dynamic credentials, policy-as-code, SPIFFE workload identity, and event-driven security response.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
+          </div>
+        </div>
+      </a>
+
       <a href="{{ '/README-Instana-AIOps' | relative_url }}" class="card-link" data-partners="instana,aiops,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">

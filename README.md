@@ -11,6 +11,7 @@ Solution guides for AI-driven automation with Ansible Automation Platform.
 | AIOps with Splunk and Event-Driven Ansible | [README-AIOps-Splunk-ITSI.md](README-AIOps-Splunk-ITSI.md) | |
 | AIOps with AWS SQS and Event-Driven Ansible | [README-SQS.md](README-SQS.md) | |
 | AI Infrastructure automation with Ansible | [README-IA.md](README-IA.md) | [access.redhat.com](https://access.redhat.com/articles/7118390) |
+| Zero Trust Architecture with Ansible Automation Platform | [README-ZTA.md](README-ZTA.md) | |
 | Automation Dashboard and Analytics | | [access.redhat.com](https://access.redhat.com/articles/7136383) |
 | Get started with EDA (Ansible Rulebook) | | [access.redhat.com](https://access.redhat.com/articles/7136720) |
 | Configuring Ansible Lightspeed intelligent assistant with Red Hat AI Inference Server on RHEL | | [access.redhat.com](https://access.redhat.com/articles/7130595) |
