@@ -23,13 +23,14 @@ This implementation guide shows how to deploy **AAP 2.7 (operator-based) on two 
 - [Prerequisites](#prerequisites)
 - [HA/DR Architecture](#hadr-architecture)
 - [Solution Walkthrough](#solution-walkthrough)
-  - [Install the Operators](#2-install-the-operators)
-  - [Configure External Secrets](#3-configure-external-secrets)
-  - [Deploy the CloudNativePG Cluster](#4-deploy-the-cloudnativepg-cluster)
-  - [Deploy AAP](#5-deploy-aap)
-  - [Failover Procedures](#7-failover-procedures)
+  - [Install the Operators](#1-install-the-operators)
+  - [Configure External Secrets](#2-configure-external-secrets)
+  - [Deploy the CloudNativePG Cluster](#3-deploy-the-cloudnativepg-cluster)
+  - [Deploy AAP](#4-deploy-aap)
+  - [Failover Procedures](#6-failover-procedures)
 - [Validation](#validation)
-- [Day 2 Operations](#9-day-2-operations)
+- [Validated Test Scenarios and Observed SLAs](#validated-test-scenarios-and-observed-slas)
+- [Day 2 Operations](#8-day-2-operations)
 - [Known Issues](#known-issues)
 - [Maturity Path](#maturity-path)
 - [Related Guides](#related-guides)
@@ -240,11 +241,11 @@ Each cluster needs three types of worker nodes. Use MachineSet/MachinePool to cr
 
 ## Solution Walkthrough
 
-## 2. Install the Operators
+## 1. Install the Operators
 
 Three operators are required on each cluster. Install them via Subscription CRs (or through the OperatorHub UI).
 
-### 2.1 AAP Operator
+### 1.1 AAP Operator
 
 ```yaml
 apiVersion: v1
@@ -276,7 +277,7 @@ spec:
 
 **User action:** Change source to match your catalog source. For pre-release testing, point to a custom CatalogSource.
 
-### 2.2 CloudNativePG Operator
+### 1.2 CloudNativePG Operator
 
 ```yaml
 apiVersion: operators.coreos.com/v1alpha1
@@ -292,7 +293,7 @@ spec:
   installPlanApproval: Automatic
 ```
 
-### 2.3 External Secrets Operator
+### 1.3 External Secrets Operator
 
 ```yaml
 apiVersion: v1
@@ -345,11 +346,11 @@ oc get csv -n aap
 oc get csv -n external-secrets-operator
 ```
 
-## 3. Configure External Secrets
+## 2. Configure External Secrets
 
 Before deploying any workloads, configure ESO to sync secrets from your central store to both clusters.
 
-### 3.1 ClusterSecretStore
+### 2.1 ClusterSecretStore
 
 Create a ClusterSecretStore that points to your secrets backend. This example uses AWS Secrets Manager with IRSA authentication:
 
@@ -378,7 +379,7 @@ oc annotate sa external-secrets -n external-secrets \
   eks.amazonaws.com/role-arn=arn:aws:iam::ACCOUNT:role/YOUR-ESO-ROLE
 ```
 
-### 3.2 Required Secrets
+### 2.2 Required Secrets
 
 The following secrets must exist in your secrets store. All ExternalSecret CRs reference the ClusterSecretStore created above.
 
@@ -471,7 +472,7 @@ Cross-cluster streaming replication requires mutual TLS. Generate a CA and per-c
 | aap-manifest | AAP subscription manifest (manifest.zip) |
 | Image pull secret(s) | Pull secrets for your container registry |
 
-### 3.3 ExternalSecret CRs
+### 2.3 ExternalSecret CRs
 
 Create an ExternalSecret for each secret. Example pattern:
 
@@ -532,9 +533,9 @@ oc get externalsecrets -n aap
 # All should show Status: SecretSynced
 ```
 
-## 4. Deploy the CloudNativePG Cluster
+## 3. Deploy the CloudNativePG Cluster
 
-### 4.1 Primary Cluster (Cluster A)
+### 3.1 Primary Cluster (Cluster A)
 
 ```yaml
 apiVersion: postgresql.cnpg.io/v1
@@ -750,7 +751,7 @@ spec:
 **User action:** Replace all `<!-- your ... -->` style comments and YOUR-* placeholders with your actual values.
 **Important:** The bootstrap section is **immutable** after first creation. To change it, you must delete and recreate the cluster.
 
-### 4.2 Replication Load Balancer Service
+### 3.2 Replication Load Balancer Service
 
 Each cluster needs a LoadBalancer Service exposing the CNPG primary on port 5432 so the other cluster can stream from it:
 
@@ -778,7 +779,7 @@ spec:
 
 After this Service is created, note the load balancer hostname (`oc get svc aap-postgres-replication -n aap`) and use it as the connectionParameters.host in the externalClusters entries on the *other* cluster.
 
-### 4.3 DR Cluster (Cluster B)
+### 3.3 DR Cluster (Cluster B)
 
 Cluster B's CNPG Cluster CR is nearly identical to Cluster A, with two differences:
 Bootstrap from Cluster A (instead of initdb):
@@ -800,7 +801,7 @@ replica:
 
 Everything else (storage, resources, certificates, externalClusters, backup, affinity) stays the same, with Cluster B's own S3 bucket and load balancer hostname.
 
-### 4.4 Verify Replication
+### 3.4 Verify Replication
 
 ```bash
 # On Cluster A -- check cluster status
@@ -814,9 +815,9 @@ oc get cluster aap-postgres -n aap
 oc exec -n aap aap-postgres-1 -- psql -c "SELECT * FROM pg_stat_replication;"
 ```
 
-## 5. Deploy AAP
+## 4. Deploy AAP
 
-### 5.1 The AnsibleAutomationPlatform CR
+### 4.1 The AnsibleAutomationPlatform CR
 
 This is the core CR that defines the entire AAP deployment. Apply this on **both clusters**, with the idle_aap field controlling which one is active.
 
@@ -1118,7 +1119,7 @@ spec:
 * postgres_admin_secret -- required for the metrics service workaround (see Known Issues)
 * Resource requests should be tuned to your workload
 
-### 5.2 DR Standby Cluster
+### 4.2 DR Standby Cluster
 
 On the DR standby cluster, apply the same CR with these changes:
 
@@ -1134,7 +1135,7 @@ spec:
 
 When idle_aap: true, the operator sets all component replicas to 0 but keeps the CR and operator in place, ready for instant activation.
 
-### 5.3 Verify Deployment
+### 4.3 Verify Deployment
 
 ```bash
 # Check all pods are running
@@ -1147,7 +1148,7 @@ oc get ansibleautomationplatform aap -n aap -o yaml | grep -A10 status
 curl -sk https://aap.example.com/api/gateway/v1/status/
 ```
 
-## 6. Component Replica and Scheduling Summary
+## 5. Component Replica and Scheduling Summary
 
 | Component | Replicas | Node Pool | Topology Spread | Anti-Affinity |
 | :---- | :---- | :---- | :---- | :---- |
@@ -1161,9 +1162,9 @@ curl -sk https://aap.example.com/api/gateway/v1/status/
 | CNPG PostgreSQL | 3 | postgres | zone (maxSkew=1) | enablePodAntiAffinity: true (1/node) |
 | Redis (platform + hub + eda) | 1 each | controlplane | -- | -- |
 
-## 7. Failover Procedures
+## 6. Failover Procedures
 
-### 7.1 Planned Switchover (Controlled)
+### 6.1 Planned Switchover (Controlled)
 
 Use this procedure for scheduled maintenance or DR testing when **both clusters are healthy and reachable**.
 Before you begin:
@@ -1251,7 +1252,7 @@ oc --context=<cluster-b-context> get pods -n aap
 curl -sk https://aap.example.com/api/gateway/v1/status/?format=json
 ```
 
-### 7.2 Disaster Recovery (Emergency Failover)
+### 6.2 Disaster Recovery (Emergency Failover)
 
 Use this procedure only when the old primary site is **unreachable or unusable**. This is an uncontrolled failover because no demotion token is available.
 Before you begin:
@@ -1292,7 +1293,7 @@ curl -sk https://aap.example.com/api/gateway/v1/status/?format=json
 **RTO:** Typically minutes, depending on operator reconciliation, AAP startup time, and DNS/GSLB propagation.
 **Important:** After an emergency failover, do not allow the old primary site to resume replication without rebuilding it from the new primary. The old timeline is no longer authoritative.
 
-### 7.3 Failback
+### 6.3 Failback
 
 Failback depends on how the active role moved in the first place.
 **If the active role moved via a controlled switchover:**
@@ -1314,7 +1315,7 @@ bootstrap:
     source: cluster-b
 ```
 
-## 8. What the User Must Provide
+## 7. What the User Must Provide
 
 This section summarizes everything that must be customized for your environment. Nothing in the CRs above works as-is without filling in these values.
 
@@ -1358,7 +1359,7 @@ This section summarizes everything that must be customized for your environment.
 | Storage class names | CNPG Cluster CR | Your cluster's SSD storage class |
 | Resource requests/limits | Both CRs | Tuned to your node sizes and workload |
 
-## 9. Day 2 Operations
+## 8. Day 2 Operations
 
 ### Backup and Restore
 
@@ -1405,7 +1406,7 @@ oc annotate cluster aap-postgres -n aap \
   kubectl.kubernetes.io/restartedAt="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ```
 
-## 10. Monitoring
+## 9. Monitoring
 
 ### Recommended Monitoring Stack
 
@@ -1508,7 +1509,7 @@ oc --context=<active-context> get pods -n aap
 curl -sk "https://aap.example.com/api/gateway/v1/status/?format=json"
 ```
 
-For a controlled switchover rehearsal, follow [7.1 Planned Switchover](#71-planned-switchover-controlled), then re-run the same checks on the new primary.
+For a controlled switchover rehearsal, follow [6.1 Planned Switchover](#61-planned-switchover-controlled), then re-run the same checks on the new primary.
 
 ### Expected Result
 
@@ -1533,6 +1534,29 @@ Example status check (shape varies by version):
 | Login fails after switchover | Stale gateway OAuth2 secret | Delete `aap-gateway-oauth2-token-secret` on the new primary and let the operator recreate it |
 | Metrics service will not reconcile | External Postgres admin secret not passed through | Apply the Known Issues workaround for `postgres-admin-credentials` |
 | Replication not Streaming on Cluster B | NLB hostname, mTLS certs, or `streaming_replica` password mismatch | Verify `externalClusters` connectionParameters, shared CA, and replication TLS secrets |
+
+## Validated Test Scenarios and Observed SLAs
+
+The following scenarios were executed against this architecture and **passed** for the outcomes described below. Times are **observed averages rounded to the nearest second** -- use them to set recovery expectations, not as contractual SLAs. Environment sizing, node `tolerationSeconds`, DNS/GSLB behavior, and workload mix will change results.
+
+| Test type | Scenario | Failure and recovery expectation | Observed SLA |
+|-----------|----------|----------------------------------|--------------|
+| Pod recovery | Hub API pod failure during active sessions / collection sync | Surviving Hub replicas continue serving; failed pod restarts; sessions re-auth as needed; no Hub DB data loss | **59 seconds** average recovery |
+| Pod recovery | Hub Worker pod failure during content operations | Worker restarts; collection sync continues after restart | **8 seconds** average recovery |
+| Pod recovery | Gateway pod failure under active API traffic | Surviving gateway replicas absorb traffic; brief 503s during the fault window; automatic recovery | **38 seconds** average recovery |
+| Pod recovery | EDA activation-worker pod failure while processing events | Worker restarts; event processing resumes on the restarted pod | **6 seconds** average recovery; events not captured during failure |
+| Cache recovery | Gateway or Hub Redis pod failure | Gateway falls back to non-cached auth without permanent auth failures; Hub continues serving on cache miss; no split-brain after Redis returns | Degraded latency during outage |
+| DB failover | CNPG primary pod failure under load | Local replica promoted; Controller reconnects; queued jobs retained; no duplicate dispatch; short jobs see transient impact, long jobs largely unaffected | **33 seconds** average until CNPG Ready; **44 seconds** average Controller reconnect |
+| Node failure | Single worker node failure ( control / execution planes) | Pods reschedule to surviving nodes/AZs; gateway continues via surviving replicas; zero data loss for control-plane sessions | **~7 minutes** average controller-task Ready (dominated by node `tolerationSeconds`, often 300s minimum) |
+| Node failure | Full availability-zone outage | Workloads reschedule to the surviving AZ; platform remains usable when anti-affinity spreads replicas across AZs | **~5 minutes** average until pods ready with minimal user disruption |
+| Network failure | Partition between AAP pods and the database | No split-brain; platform recovers when connectivity returns; job dispatch resumes | **~4 minutes** recovery after a ~90 second full partition (job launcher / SLO recovery often longer than DB reconnect alone) |
+| Network failure | Partition on the Receptor / execution-node path | In-flight ansible-runner jobs continue locally; new dispatch pauses; on reconnect, orphaned jobs are marked failed and can be re-run; Receptor backs off and reconnects | Automatic reconnect (backoff up to ~5 minutes); **no duplicate dispatch** observed |
+| Network failure | Gateway network isolation | Cached JWT allows brief continued auth; after cache expiry downstream auth fails; restore of network recovers auth without manual intervention for core platform | Automatic recovery after network restore |
+| Full region DR | Cross-region failover, in-flight job handling, and failback | Force-promote standby DB; activate idle AAP; users login and dispatch; surviving exec-node jobs complete; failback re-establishes replication and re-idles the former DR site | **11 seconds** average DB force-promote; **79 seconds** average until DR control plane responds |
+
+> **Tip:** Treat node and AZ times as infrastructure-bound.
+>
+> OpenShift eviction and `tolerationSeconds` often set a floor (commonly ~5 minutes) before pods reschedule. Tune those values if your RTO target for node/AZ loss is tighter than the averages above.
 
 ## Maturity Path
 
