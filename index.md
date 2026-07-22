@@ -239,6 +239,28 @@ patternfly: true
           </div>
         </div>
       </a>
+
+      <a href="{{ '/README-AIOps-Windows-Cert-Rotation' | relative_url }}" class="card-link" data-partners="windows,aiops,published">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-green">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Windows Certificate Rotation with AI Risk Analysis</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Automate Windows certificate rotation end-to-end: Event-Driven Ansible detects expiring certs, AI evaluates risk and timing, Ansible performs the rotation, and ITSM documents the full audit trail.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <img src="{{ '/assets/images/windows-logo.png' | relative_url }}" alt="Windows" class="card-partner-logo">
+          </div>
+        </div>
+      </a>
     </div>
 
     <div class="cards-wip-section">
@@ -328,28 +350,6 @@ patternfly: true
             </div>
             <div class="pf-v6-c-card__footer">
               <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
-            </div>
-          </div>
-        </a>
-
-        <a href="{{ '/README-AIOps-Windows-Cert-Rotation' | relative_url }}" class="card-link" data-partners="windows,aiops,wip">
-          <div class="pf-v6-c-card">
-            <div class="pf-v6-c-card__header">
-              <span class="pf-v6-c-label pf-m-orange">
-                <span class="pf-v6-c-label__content">
-                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
-                  Work in Progress
-                </span>
-              </span>
-            </div>
-            <div class="pf-v6-c-card__title">
-              <h3 class="pf-v6-c-card__title-text">Windows Certificate Rotation with AI Risk Analysis</h3>
-            </div>
-            <div class="pf-v6-c-card__body">
-              Automate Windows certificate rotation end-to-end: Event-Driven Ansible detects expiring certs, AI evaluates risk and timing, Ansible performs the rotation, and your ITSM platform documents the full audit trail.
-            </div>
-            <div class="pf-v6-c-card__footer">
-              <img src="{{ '/assets/images/windows-logo.png' | relative_url }}" alt="Windows" class="card-partner-logo">
             </div>
           </div>
         </a>

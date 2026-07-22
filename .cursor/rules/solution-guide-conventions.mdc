@@ -62,7 +62,7 @@ Key non-negotiables:
 - **Minimum depth**: At least 3 walkthrough steps, 2 YAML code blocks, 1 diagram, ~800 words.
 - **Validation section is mandatory**: Include a concrete test, verbatim expected output, and a troubleshooting table.
 - **Automation Hub links**: Every Ansible collection referenced must link to its Automation Hub page.
-- **KB article link**: Include the `access.redhat.com` article link in a blockquote directly under the title.
+- **KB article link (legacy only)**: If a corresponding article exists on access.redhat.com, include the link in a blockquote under the title. New guides do not require a KB article.
 
 ## Scoring and Reviewing Guides
 
