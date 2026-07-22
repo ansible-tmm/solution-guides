@@ -15,9 +15,15 @@ Certificate rotation on Windows servers is manual, error-prone, and context-depe
 
 This guide automates both the execution and the judgment. Event-Driven Ansible detects expiring certificates via webhook. AI evaluates the risk (timing, dependencies, change freezes, compliance requirements) and determines whether to rotate now, schedule for the maintenance window, or escalate for human review. Ansible performs the rotation and documents everything in ITSM with a full audit trail.
 
-**Business value:** MTTR drops from hours of manual triage to under 2 minutes of automated response. Certificate-related outages from missed renewals are eliminated. Every rotation produces a documented audit trail (AI risk assessment, decision rationale, old/new thumbprints, HTTPS verification) that supports change management and encryption controls across common compliance frameworks.
+### Business value
 
-**Technical value:** Event-driven detection means action begins the moment a certificate is flagged. The rotation itself is fully automated, and AI adds a layer of review on top, evaluating service dependencies, change windows, and active incidents to ensure your applications stay up and the rotation is timed for the lowest possible risk.
+MTTR drops from hours of manual triage to under 2 minutes of automated response. Certificate-related outages from missed renewals are eliminated. Every rotation produces a documented audit trail (AI risk assessment, decision rationale, old/new thumbprints, HTTPS verification) that supports change management and encryption controls across common compliance frameworks.
+
+### Technical value
+
+Event-driven detection means action begins the moment a certificate is flagged. The rotation itself is fully automated, and AI adds a layer of review on top, evaluating service dependencies, change windows, and active incidents to ensure your applications stay up and the rotation is timed for the lowest possible risk.
+
+---
 
 - [Background](#background)
 - [Solution](#solution)
@@ -81,6 +87,10 @@ The challenge is in the decision: should we rotate now, schedule it for the main
 ### Certificate Monitoring
 
 Certificate monitoring that can send webhook alerts when certificates are approaching expiry (e.g., scheduled PowerShell scripts, SCOM, or a third-party monitoring tool). This is the event source that triggers the entire workflow. Configure alerts at multiple intervals (e.g., 90, 30, and 7 days before expiry) so the AI has time-to-expiry context when evaluating risk.
+
+> **Tip:** In this guide we simulate certificate expiry events with a `curl` request to the EDA event stream.
+>
+> In production, use a purpose-built observability platform with native certificate monitoring capabilities -- such as <a target="_blank" href="https://www.dynatrace.com/">Dynatrace</a> or <a target="_blank" href="https://www.ibm.com/products/instana">IBM Instana</a> -- to automatically detect expiring certificates and fire webhook alerts to EDA without custom scripts or scheduled tasks.
 
 ### Red Hat Ansible Automation Platform
 
@@ -156,7 +166,11 @@ The workflow starts when your existing certificate monitoring detects a certific
 
 EDA matches the event against a rulebook condition and triggers the "AI Certificate Risk Analysis" job template. This playbook runs on localhost, calls an AI inference endpoint with certificate details and service context (CMDB data, dependencies, compliance requirements, change history), and produces a PROCEED, SCHEDULE, or ESCALATE decision.
 
-For PROCEED, the playbook launches the "Rotate Windows Certificate" job template immediately via the controller API. For SCHEDULE, it creates a one-time schedule on the same job template for the next maintenance window, so the rotation is guaranteed to happen at the optimal time rather than left unresolved. For ESCALATE, it updates the ITSM ticket to high priority and stops. Escalation is the right path when the risk picture is too complex for automated action. (A wildcard cert affecting dozens of services, a compliance audit freeze, conflicting dependencies, or a host with a history of failed rotations.) If the AI service is unavailable, the playbook's rescue block automatically escalates for human review via a high-priority ITSM ticket, and the rotation job template remains available for the on-call team to launch manually.
+- **PROCEED** -- The playbook launches the "Rotate Windows Certificate" job template immediately via the controller API.
+- **SCHEDULE** -- The playbook creates a one-time schedule on the same job template for the next maintenance window, so the rotation is guaranteed to happen at the optimal time rather than left unresolved.
+- **ESCALATE** -- The playbook updates the ITSM ticket to high priority and stops. Escalation is the right path when the risk picture is too complex for automated action: a wildcard cert affecting dozens of services, a compliance audit freeze, conflicting dependencies, or a host with a history of failed rotations.
+
+If the AI service is unavailable, the playbook's rescue block automatically escalates for human review via a high-priority ITSM ticket, and the rotation job template remains available for the on-call team to launch manually.
 
 The rotation playbook connects to the Windows host via WinRM, finds a valid replacement certificate, rebinds IIS, removes the old cert, verifies HTTPS, and resolves the ITSM incident with the full rotation details.
 
