@@ -121,9 +121,9 @@ graph LR
 
 - **Source code:** [ansible/ansible-dev-tools](https://github.com/ansible/ansible-dev-tools) on GitHub
 - **Documentation (upstream):** [Ansible Development Tools](https://docs.ansible.com/projects/dev-tools/) official docs
-- **Documentation (downstream):** [Developing automation content (AAP 2.6)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/developing_automation_content/devtools-intro) on Red Hat docs
+- **Documentation (downstream):** [Ansible development tools (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/develop-assembly_devtools_intro) on Red Hat docs
 - **Community container image:** [community-ansible-dev-tools](https://github.com/ansible/community-ansible-dev-tools/pkgs/container/community-ansible-dev-tools) on GHCR
-- **Supported container image:** [ansible-dev-tools-rhel9](https://catalog.redhat.com/software/containers/ansible-automation-platform-26/ansible-dev-tools-rhel9/) on Red Hat Ecosystem Catalog (requires AAP or Ansible Developer subscription)
+- **Supported container image:** [ansible-dev-tools-rhel9](https://catalog.redhat.com/en/software/containers/ansible-automation-platform-27/ansible-dev-tools-rhel9/69fb1e26616f0fc2878516a6) on Red Hat Ecosystem Catalog (requires AAP or Ansible Developer subscription)
 - **VS Code extension:** [Ansible extension for VS Code](https://marketplace.visualstudio.com/items?itemName=redhat.ansible)
 - **Community:** [Ansible Forum (devtools)](https://forum.ansible.com/tags/devtools)
 
@@ -667,9 +667,10 @@ By standardizing on ADT, your organization eliminates environment drift as a sou
 
 **Downstream (Red Hat product documentation)**
 
-- [Ansible development tools overview (AAP 2.6)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/developing_automation_content/devtools-intro)
-- [Installing Ansible development tools (AAP 2.6)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/developing_automation_content/installing-devtools)
-- [Using Ansible development workspaces (AAP 2.6)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html-single/using_ansible_development_workspaces_for_automation_content_development/index)
+- [Ansible development tools overview (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/develop-assembly_devtools_intro)
+- [Installing Ansible development tools (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/extend-install_ansible_development_tools_with_the_ai_assistant)
+- [Using Ansible development workspaces (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/develop-assembly_workspaces_intro)
+- [MCP server integration (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/develop-con_mcp_server_integration)
 
 **Other**
 
