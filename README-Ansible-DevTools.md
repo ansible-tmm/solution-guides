@@ -28,21 +28,19 @@ The goal is to move every automation developer in your organization onto the sam
   - [Prerequisites](#prerequisites)
     - [Ansible Automation Platform](#ansible-automation-platform)
     - [System Requirements](#system-requirements)
+  - [Maturity Path](#maturity-path)
+    - [Detailed Comparison](#detailed-comparison)
   - [Installation Methods](#installation-methods)
     - [Method A: Dev Container (VS Code)](#method-a-dev-container-vs-code)
     - [Method B: RPM (Red Hat Subscription)](#method-b-rpm-red-hat-subscription)
     - [Method C: Python Package (pipx)](#method-c-python-package-pipx)
     - [Method D: Red Hat OpenShift Dev Spaces](#method-d-red-hat-openshift-dev-spaces)
+    - [Verify Your Installation](#verify-your-installation)
+    - [Troubleshooting](#troubleshooting)
   - [AI-Assisted Ansible Development](#ai-assisted-ansible-development)
     - [Ansible Devtools MCP Server](#ansible-devtools-mcp-server)
     - [Connecting to Ansible Automation Platform](#connecting-to-ansible-automation-platform)
     - [End-to-End Development Workflow](#end-to-end-development-workflow)
-  - [Validation](#validation)
-    - [Verify the Installation](#verify-the-installation)
-    - [Quick Smoke Test](#quick-smoke-test)
-    - [Troubleshooting](#troubleshooting)
-  - [Maturity Path](#maturity-path)
-    - [Detailed Comparison](#detailed-comparison)
   - [Related Guides](#related-guides)
   - [Sources](#sources)
 
@@ -117,6 +115,34 @@ graph LR
 | **Container runtime** | Optional (for molecule, builder) | Optional (for molecule, builder) | Docker or Podman | Managed by OpenShift |
 | **Disk space** | ~500 MB | ~500 MB | ~2 GB (image) | Managed by cluster |
 | **Subscription** | None | AAP or Ansible Developer (supported) | None (community) or AAP/Ansible Developer (supported) | OpenShift (supported) |
+
+---
+
+## Maturity Path
+
+| Maturity | Method | Onboarding | What You Do | Consistency | Who manages it |
+|----------|--------|-----------|-------------|-------------|---------------|
+| **Crawl** | pipx/pip | ~30 min | Individual developers install ADT on their own workstations. Each developer manages their own Python version and tool upgrades. Teams coordinate versions manually via chat or documentation. | Low: each developer manages their own environment, drift is inevitable | Developer |
+| **Walk** | RPM | ~15 min | IT includes ADT in the standard RHEL laptop provisioning via Satellite. All developers on RHEL get the same RPM version. Add `ansible-lint` and `molecule` to CI pipelines for a second layer of consistency. | Medium: same tool versions across RHEL systems, but no guarantee of IDE config, linting profiles, or Python library alignment | IT / Platform team |
+| **Run** | Dev Container | ~10 min | Add a `.devcontainer/` directory to every Ansible project repo. Developers open the repo in VS Code and get the full environment automatically. The platform team manages a base container image; teams can extend it for project-specific needs. | High: same OS, same Python, same tools, same VS Code extensions, same linting config | Team lead / repo owner |
+| **Fly** | Dev Spaces | ~2 min | Deploy Dev Spaces on OpenShift for the entire organization. Developers open a browser, click create, and start coding. The platform team manages workspace images, resource limits, and access centrally. | Highest: zero local dependencies, zero configuration, fully governed | Platform team / IT |
+
+> **Tip:** Dev containers and Dev Spaces are the target.
+>
+> The pipx/pip and RPM methods are stepping stones. They get individual developers productive quickly, but they don't solve the consistency problem at scale. Invest in a base container image early. Once that image exists, both dev containers and Dev Spaces use it, and every developer gets an identical environment from day one.
+
+### Detailed Comparison
+
+| Dimension | pipx/pip | RPM | Dev Container | Dev Spaces |
+|-----------|--------|-----|---------------|------------|
+| **Local install required** | Python 3.10+ | RHEL + subscription | VS Code + container runtime | Browser only |
+| **Image management needed** | No | No | Yes (initial investment) | Yes (initial investment) |
+| **Nested containers** | N/A (use host runtime) | N/A (use host runtime) | Yes (with capabilities) | Yes (OCP user namespaces) |
+| **Offline / air-gapped** | PyPI mirror | Satellite | Registry mirror | Internal registry |
+| **Vendor support** | Community | Red Hat (supported) | Community or Red Hat (supported) | Red Hat (supported) |
+| **Cost** | Free | AAP or Ansible Developer subscription (supported) | Free (community) or AAP/Ansible Developer subscription (supported) | OpenShift subscription (supported) |
+
+By standardizing on ADT, your organization eliminates environment drift as a source of CI failures, reduces developer onboarding from weeks to minutes, and ensures that every automation artifact is created, tested, and deployed with the same governed toolchain. The investment shifts from individual troubleshooting to platform management -- a one-time image setup that scales across every team and project without requiring action from individual developers.
 
 ---
 
@@ -258,27 +284,6 @@ Click **Create & Open**. The workspace provisions automatically with all ADT too
 adt --version
 ```
 
-**Example devfile.yaml:**
-
-```yaml
-schemaVersion: 2.2.2
-metadata:
-  name: ansible-dev-tools-workspace
-components:
-  - name: tooling-container
-    container:
-      image: ghcr.io/ansible/community-ansible-dev-tools:latest
-      memoryRequest: 2Gi
-      memoryLimit: 4Gi
-      cpuRequest: 500m
-      cpuLimit: 1000m
-      env:
-        - name: SHELL
-          value: /bin/bash
-        - name: ADT_CONTAINER_ENGINE
-          value: podman
-```
-
 > **Why Dev Spaces?**
 >
 > Unlike local dev containers, Dev Spaces runs entirely in the cloud. Developers only need a browser. The platform administrator controls the image, resource limits, and access -- ensuring every developer gets an identical, governed environment. This also enables features like rootless nested containers via OpenShift user namespaces, which are difficult to configure on local workstations.
@@ -293,6 +298,30 @@ components:
 | **Multi-user** | Each developer gets an isolated workspace on shared infrastructure |
 | **Preloaded extensions** | Ansible VS Code extension with lint, navigator, and creator integration |
 | **Git integration** | OAuth2 for GitHub/GitLab, SSH key forwarding |
+
+### Verify Your Installation
+
+Regardless of the method, verify ADT is working:
+
+```bash
+adt --version
+ansible-creator init collection testns.testcol --init-path /tmp/testcol
+cd /tmp/testcol && ansible-lint
+```
+
+Expected: `adt --version` lists all tool versions, and `ansible-lint` reports `Passed with production profile: 0 failure(s), 0 warning(s) on 5 files.`
+
+### Troubleshooting
+
+| Symptom | Likely Cause | Fix |
+|---------|-------------|-----|
+| `command not found: adt` | Not installed or not in PATH | Check installation method and re-run |
+| `pip install` fails with "externally managed" | PEP 668 on modern macOS/Linux | Use `pipx install` instead |
+| `dnf install` says package not found | AAP repo not enabled | Run `subscription-manager repos --list \| grep ansible` |
+| Dev container fails to start | Container runtime not running | Start Docker Desktop or Podman Desktop, then retry |
+| Molecule tests fail with "permission denied" | Missing container capabilities | Add `--cap-add=SYS_ADMIN --cap-add=SYS_RESOURCE --device /dev/fuse` flags |
+| Dev Spaces workspace stuck starting | Resource limits exceeded or image pull failure | Check OpenShift events with `oc get events -n <workspace-ns>` |
+| `ansible-lint` shows different results across team | Different ADT versions | Use container-based methods for consistency |
 
 ---
 
@@ -428,90 +457,6 @@ graph LR
 This workflow is particularly valuable for teams onboarding new automation developers. A developer who is still learning Ansible conventions can ask the AI assistant to scaffold a role, explain why the linter flagged a particular rule, fix it, and then run the corrected playbook against a real environment -- building understanding of both the toolchain and the platform in context rather than in isolation.
 
 > **Example:** A developer asks the AI assistant to create a role that configures NTP on RHEL hosts. The assistant scaffolds the role with `ansible-creator`, lints it, queries the AAP development instance to confirm the RHEL inventory group exists and has the expected hosts, launches a test job, and discovers that the `chrony` package is already installed but the configuration file differs. The assistant updates the template, re-runs the job, and confirms idempotency -- all within the same conversation, without the developer opening the AAP UI once.
-
----
-
-## Validation
-
-### Verify the Installation
-
-Regardless of the installation method, run:
-
-```bash
-adt --version
-```
-
-**Expected output** (versions may vary):
-
-```
-ansible-builder                 3.1.1
-ansible-core                    2.20.5
-ansible-creator                 26.4.3
-ansible-dev-environment         26.4.0
-ansible-dev-tools               26.4.6
-ansible-lint                    26.4.0
-ansible-navigator               26.4.0
-ansible-sign                    0.1.5
-molecule                        26.4.0
-pytest-ansible                  26.4.0
-tox-ansible                     26.3.0
-```
-
-### Quick Smoke Test
-
-Scaffold a collection and run lint to confirm the full toolchain works:
-
-```bash
-ansible-creator init collection testns.testcol --init-path /tmp/testcol
-cd /tmp/testcol
-ansible-lint
-```
-
-**Expected output:**
-
-```
-Passed with production profile: 0 failure(s), 0 warning(s) on 5 files.
-```
-
-### Troubleshooting
-
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| `command not found: adt` | Virtual environment not activated | Run `source ~/ansible-dev-venv/bin/activate` |
-| `uv add` or `pip install` fails with dependency conflicts | System Python has conflicting packages or is externally managed (PEP 668) | Use `uv venv` to create a clean virtual environment. On macOS 14+, `uv` handles PEP 668 automatically |
-| `dnf install` says package not found | AAP repo not enabled or subscription not attached | Run `subscription-manager repos --list \| grep ansible` to verify repo availability |
-| Dev container fails to start | Container runtime not running | Start Docker Desktop or Podman Desktop, then retry |
-| Molecule tests fail with "permission denied" | Missing container capabilities for nested Podman | Add `--cap-add=SYS_ADMIN --cap-add=SYS_RESOURCE --device /dev/fuse` flags |
-| Dev Spaces workspace stuck starting | Resource limits exceeded or image pull failure | Check OpenShift events with `oc get events -n <workspace-ns>` |
-| `ansible-lint` shows different results across team | Different ADT versions installed | Pin the version (`uv add ansible-dev-tools==26.4.6`) or use container-based methods |
-
----
-
-## Maturity Path
-
-| Maturity | Method | Onboarding | What You Do | Consistency | Who manages it |
-|----------|--------|-----------|-------------|-------------|---------------|
-| **Crawl** | uv/pip | ~30 min | Individual developers install ADT on their own workstations. Each developer manages their own Python version, venv, and tool upgrades. Teams coordinate versions manually via chat or documentation. | Low: each developer manages their own environment, drift is inevitable | Developer |
-| **Walk** | RPM | ~15 min | IT includes ADT in the standard RHEL laptop provisioning via Satellite. All developers on RHEL get the same RPM version. Add `ansible-lint` and `molecule` to CI pipelines for a second layer of consistency. | Medium: same tool versions across RHEL systems, but no guarantee of IDE config, linting profiles, or Python library alignment | IT / Platform team |
-| **Run** | Dev Container | ~10 min | Add a `.devcontainer/` directory to every Ansible project repo. Developers open the repo in VS Code and get the full environment automatically. The platform team manages a base container image; teams can extend it for project-specific needs. | High: same OS, same Python, same tools, same VS Code extensions, same linting config | Team lead / repo owner |
-| **Fly** | Dev Spaces | ~2 min | Deploy Dev Spaces on OpenShift for the entire organization. Developers open a browser, click create, and start coding. The platform team manages workspace images, resource limits, and access centrally. | Highest: zero local dependencies, zero configuration, fully governed | Platform team / IT |
-
-> **Tip:** Dev containers and Dev Spaces are the target.
->
-> The uv/pip and RPM methods are stepping stones. They get individual developers productive quickly, but they don't solve the consistency problem at scale. Invest in a base container image early. Once that image exists, both dev containers and Dev Spaces use it, and every developer gets an identical environment from day one.
-
-### Detailed Comparison
-
-| Dimension | uv/pip | RPM | Dev Container | Dev Spaces |
-|-----------|--------|-----|---------------|------------|
-| **Local install required** | Python 3.10+ | RHEL + subscription | VS Code + container runtime | Browser only |
-| **Image management needed** | No | No | Yes (initial investment) | Yes (initial investment) |
-| **Nested containers** | N/A (use host runtime) | N/A (use host runtime) | Yes (with capabilities) | Yes (OCP user namespaces) |
-| **Offline / air-gapped** | PyPI mirror | Satellite | Registry mirror | Internal registry |
-| **Vendor support** | Community | Red Hat (supported) | Community or Red Hat (supported) | Red Hat (supported) |
-| **Cost** | Free | AAP or Ansible Developer subscription (supported) | Free (community) or AAP/Ansible Developer subscription (supported) | OpenShift subscription (supported) |
-
-By standardizing on ADT, your organization eliminates environment drift as a source of CI failures, reduces developer onboarding from weeks to minutes, and ensures that every automation artifact is created, tested, and deployed with the same governed toolchain. The investment shifts from individual troubleshooting to platform management -- a one-time image setup that scales across every team and project without requiring action from individual developers.
 
 ---
 
