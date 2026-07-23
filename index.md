@@ -262,6 +262,28 @@ patternfly: true
         </div>
       </a>
 
+      <a href="{{ '/README-Ansible-DevTools' | relative_url }}" class="card-link" data-partners="foundational,published">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-green">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">AI-Assisted Ansible Developer Experience</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Standardize your automation developer experience across the organization using Ansible Development Tools, from individual uv/pip installs to enterprise-governed Dev Spaces with 2-minute onboarding.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
+          </div>
+        </div>
+      </a>
+
     </div>
 
     <div class="cards-wip-section">
@@ -355,27 +377,6 @@ patternfly: true
           </div>
         </a>
 
-        <a href="{{ '/README-Ansible-DevTools' | relative_url }}" class="card-link" data-partners="foundational,wip">
-          <div class="pf-v6-c-card">
-            <div class="pf-v6-c-card__header">
-              <span class="pf-v6-c-label pf-m-orange">
-                <span class="pf-v6-c-label__content">
-                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
-                  Work in Progress
-                </span>
-              </span>
-            </div>
-            <div class="pf-v6-c-card__title">
-              <h3 class="pf-v6-c-card__title-text">AI-Assisted Ansible Developer Experience</h3>
-            </div>
-            <div class="pf-v6-c-card__body">
-              Standardize your automation developer experience across the organization using Ansible Development Tools, from individual uv/pip installs to enterprise-governed Dev Spaces with 2-minute onboarding.
-            </div>
-            <div class="pf-v6-c-card__footer">
-              <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
-            </div>
-          </div>
-        </a>
 
         <a href="{{ '/README-NetBox-EDA-Config-Solution-Guide' | relative_url }}" class="card-link" data-partners="netbox,aiops,wip">
           <div class="pf-v6-c-card">
