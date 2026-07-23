@@ -13,14 +13,7 @@ graph LR
     C -->|centralize| D["Dev Spaces<br/><b>Governed</b><br/>~2 min"]
 ```
 
-| Method | Onboarding | Consistency | Who manages it |
-|--------|-----------|-------------|---------------|
-| **uv/pip** | ~30 min, but developers must manually coordinate versions with their team and troubleshoot conflicts on their own | Low: each developer manages their own environment, drift is inevitable | Developer |
-| **RPM** | ~15 min if Satellite is available, but requires IT to include it in laptop provisioning workflows | Medium: same package version across RHEL systems, but no IDE or linting config | IT / Platform team |
-| **Dev Container** | ~10 min (first image pull), then instant for subsequent projects. Requires permissions to run containers on the workstation. Available as community (free) or supported (AAP subscription) image | High: same image, same tools, same config. Adding `.devcontainer/` to a repo is all it takes | Team lead / repo owner |
-| **Dev Spaces** | ~2 min. Open a browser, click create, start coding | Highest: centrally managed, browser-only, zero local dependencies | Platform team / IT |
-
-The goal is to move every automation developer in your organization onto the same toolchain, with the same versions, the same linting rules, and the same testing frameworks. Dev containers and Dev Spaces are the recommended enterprise options: they require an initial investment in image management to account for different project scenarios, but once that setup is done, the environment is completely transparent to developers.
+The goal is to move every automation developer in your organization onto the same toolchain, with the same versions, the same linting rules, and the same testing frameworks. Dev containers and Dev Spaces are the recommended enterprise options: they require an initial investment in image management to account for different project scenarios, but once that setup is done, the environment is completely transparent to developers. See the [Maturity Path](#maturity-path) for a detailed comparison of each method.
 
 > **Example:** A network automation team of 12 engineers across three offices adopts Dev Spaces. A new engineer joins on Monday, opens a browser, navigates to the Dev Spaces URL, and clicks "Create Workspace" on the team's Git repository. Two minutes later they have a full VS Code environment with ansible-lint, molecule, ansible-navigator, and the team's linting profile, identical to every other engineer on the team. No local installs, no "which Python version do I need," no VPN issues with package mirrors.
 
@@ -32,16 +25,14 @@ The goal is to move every automation developer in your organization onto the sam
   - [Solution](#solution)
     - [What's in the Bundle](#whats-in-the-bundle)
     - [Who Benefits](#who-benefits)
-    - [Recommended Resources](#recommended-resources)
   - [Prerequisites](#prerequisites)
     - [Ansible Automation Platform](#ansible-automation-platform)
     - [System Requirements](#system-requirements)
   - [Installation Methods](#installation-methods)
-    - [Method A: Python Package (uv)](#method-a-python-package-uv)
+    - [Method A: Dev Container (VS Code)](#method-a-dev-container-vs-code)
     - [Method B: RPM (Red Hat Subscription)](#method-b-rpm-red-hat-subscription)
-    - [Method C: Dev Container (VS Code)](#method-c-dev-container-vs-code)
+    - [Method C: Python Package (uv)](#method-c-python-package-uv)
     - [Method D: Red Hat OpenShift Dev Spaces](#method-d-red-hat-openshift-dev-spaces)
-  - [Comparison](#comparison)
   - [AI-Assisted Ansible Development](#ai-assisted-ansible-development)
     - [Ansible Devtools MCP Server](#ansible-devtools-mcp-server)
     - [Connecting to Ansible Automation Platform](#connecting-to-ansible-automation-platform)
@@ -51,6 +42,7 @@ The goal is to move every automation developer in your organization onto the sam
     - [Quick Smoke Test](#quick-smoke-test)
     - [Troubleshooting](#troubleshooting)
   - [Maturity Path](#maturity-path)
+    - [Detailed Comparison](#detailed-comparison)
   - [Related Guides](#related-guides)
   - [Sources](#sources)
 
@@ -98,34 +90,12 @@ graph LR
 
 ### Who Benefits
 
-**Business Value Drivers:**
-
-- **Faster onboarding** -- new automation developers go from zero to productive in minutes instead of weeks, directly reducing time-to-value for automation initiatives.
-- **Reduced support burden** -- eliminating "works on my machine" failures frees senior engineers from troubleshooting environment issues and lets them focus on building automation.
-- **Lower risk of inconsistent deployments** -- when every developer uses the same toolchain, the gap between what passes locally and what runs in production shrinks to zero.
-
-**Technical Value Drivers:**
-
-- **Deterministic environments** -- containerized workspaces guarantee identical OS, Python, tool versions, linting rules, and VS Code extensions across every developer.
-- **Governed toolchain updates** -- platform teams control image versions centrally, rolling out upgrades and security patches without requiring action from individual developers.
-- **Integrated content lifecycle** -- Create, Test, and Deploy tools are pre-integrated and version-locked, eliminating dependency conflicts and broken tool interactions.
-
 | Persona | Challenge | What They Gain |
 |---------|-----------|----------------|
 | **Automation Developer** | Spending days or weeks assembling tools, resolving conflicts, and matching versions with the rest of the team instead of writing automation | A single install (or a container they never have to configure) that provides all tools in known-good, compatible versions |
 | **Platform Engineer / SRE** | Inconsistent environments across developers causing "works on my machine" failures that waste CI cycles and delay releases | Containerized workspaces that guarantee identical toolchains for every developer, eliminating environment as a variable |
 | **Automation Architect** | Enforcing development standards and testing practices across multiple teams when each team manages tools differently | Standardized tooling embedded in the project repo (`.devcontainer/`) or the platform (Dev Spaces), so standards are inherited, not documented |
 | **Engineering Manager** | New developers take 1 to 3 months to become productive, with most of that time spent on environment setup and troubleshooting | Onboarding drops to minutes with dev containers or Dev Spaces. New hires open a browser or VS Code and start contributing on day one |
-
-### Recommended Resources
-
-- **Source code:** [ansible/ansible-dev-tools](https://github.com/ansible/ansible-dev-tools) on GitHub
-- **Documentation (upstream):** [Ansible Development Tools](https://docs.ansible.com/projects/dev-tools/) official docs
-- **Documentation (downstream):** [Ansible development tools (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/develop-assembly_devtools_intro) on Red Hat docs
-- **Community container image:** [community-ansible-dev-tools](https://github.com/ansible/community-ansible-dev-tools/pkgs/container/community-ansible-dev-tools) on GHCR
-- **Supported container image:** [ansible-dev-tools-rhel9](https://catalog.redhat.com/en/software/containers/ansible-automation-platform-27/ansible-dev-tools-rhel9/69fb1e26616f0fc2878516a6) on Red Hat Ecosystem Catalog (requires AAP or Ansible Developer subscription)
-- **VS Code extension:** [Ansible extension for VS Code](https://marketplace.visualstudio.com/items?itemName=redhat.ansible)
-- **Community:** [Ansible Forum (devtools)](https://forum.ansible.com/tags/devtools)
 
 ---
 
@@ -134,9 +104,9 @@ graph LR
 ### Ansible Automation Platform
 
 - **uv/pip methods:** No AAP subscription required -- these use the upstream community packages.
-- **Dev container method:** Available in two variants -- a free upstream community image (no subscription required) and a supported downstream image from `registry.redhat.io` (requires an AAP or Ansible Developer subscription).
-- **RPM method:** Requires an AAP or Ansible Developer subscription and RHEL 9 registered with Red Hat Subscription Manager.
-- **Dev Spaces method:** Requires an OpenShift cluster with Red Hat OpenShift Dev Spaces operator installed.
+- **Dev container method:** Available in two variants -- a free upstream community image (no subscription required) and a supported downstream image from `registry.redhat.io` (requires an AAP or Ansible Developer subscription, supported).
+- **RPM method:** Requires an AAP or Ansible Developer subscription (supported) and RHEL 9 registered with Red Hat Subscription Manager.
+- **Dev Spaces method:** Requires an OpenShift subscription (supported) with the Dev Spaces operator installed.
 
 ### System Requirements
 
@@ -146,15 +116,122 @@ graph LR
 | **OS** | Linux, macOS, WSL | RHEL 9 | Any (VS Code + container runtime) | Browser only |
 | **Container runtime** | Optional (for molecule, builder) | Optional (for molecule, builder) | Docker or Podman | Managed by OpenShift |
 | **Disk space** | ~500 MB | ~500 MB | ~2 GB (image) | Managed by cluster |
-| **Subscription** | None | Red Hat AAP or Ansible Developer | None (community) or AAP/Ansible Developer (supported) | OpenShift + Dev Spaces |
+| **Subscription** | None | AAP or Ansible Developer (supported) | None (community) or AAP/Ansible Developer (supported) | OpenShift (supported) |
 
 ---
 
 ## Installation Methods
 
-### Method A: Python Package (uv)
+### Method A: Dev Container (VS Code)
 
-**Operational Impact:** None -- local workstation only
+**Best for:** Teams wanting a consistent, reproducible development environment without managing Python installations. Works on any OS that runs VS Code and a container runtime.
+
+Pre-built container images with all ADT tools, the Ansible VS Code extension, and nested Podman support are available in two variants:
+
+- **Upstream (community):** `ghcr.io/ansible/community-ansible-dev-tools:latest`
+- **Downstream (Red Hat supported):** `registry.redhat.io/ansible-automation-platform-26/ansible-dev-tools-rhel9` (requires [Red Hat registry authentication](https://access.redhat.com/RegistryAuthentication))
+
+**Step 1:** Install prerequisites:
+
+- [VS Code](https://code.visualstudio.com/)
+- [Ansible extension for VS Code](https://marketplace.visualstudio.com/items?itemName=redhat.ansible) (`redhat.ansible`)
+- [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) (`ms-vscode-remote.remote-containers`)
+- A container runtime: [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman Desktop](https://podman-desktop.io/)
+
+**Step 2:** Add a devcontainer to your project using one of these methods:
+
+**Option A: CLI.** Run `ansible-creator` to scaffold devcontainer files into an existing project:
+
+```bash
+ansible-creator add resource devcontainer /path/to/your/project
+```
+
+This generates a `.devcontainer/` directory with both Docker and Podman configurations.
+
+**Option B: VS Code UI.** Open the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and run **Ansible: Add devcontainer configuration**. The Ansible extension generates the same `.devcontainer/` directory.
+
+> **Tip:** Using the supported downstream image.
+>
+> To use the Red Hat supported image instead of the community one, replace the `image` value in your `devcontainer.json` with `registry.redhat.io/ansible-automation-platform-26/ansible-dev-tools-rhel9:latest`. You must authenticate to `registry.redhat.io` first -- run `podman login registry.redhat.io` (or `docker login`) with your Red Hat account credentials. See [Red Hat Registry Authentication](https://access.redhat.com/RegistryAuthentication) for details.
+
+**Step 3:** Open your project in VS Code, and when prompted, click **Reopen in Container** (or run the command `Dev Containers: Reopen in Container` from the command palette).
+
+**Step 4:** Open a terminal in VS Code and verify:
+
+```bash
+adt --version
+```
+
+> **Tip:** Nested Podman is supported.
+>
+> The container image supports nested Podman, so you can run `molecule test` and `ansible-builder build` inside the dev container without additional configuration.
+
+**Running the container image directly (without VS Code):**
+
+```bash
+podman run -it --rm \
+  --cap-add=SYS_ADMIN \
+  --cap-add=SYS_RESOURCE \
+  --device "/dev/fuse" \
+  --hostname=ansible-dev-container \
+  --name=ansible-dev-container \
+  --security-opt "apparmor=unconfined" \
+  --security-opt "label=disable" \
+  --security-opt "seccomp=unconfined" \
+  --user=root \
+  --userns=host \
+  -v $PWD:/workdir \
+  ghcr.io/ansible/community-ansible-dev-tools:latest
+```
+
+---
+
+### Method B: RPM (Red Hat Subscription)
+
+**Best for:** Enterprise environments running RHEL with Red Hat subscriptions, air-gapped networks with Satellite.
+
+**Step 1:** Register your system and enable a repository that includes ADT. Two subscription options are available:
+
+```bash
+# Option 1: Ansible Automation Platform subscription (AAP 2.6, RHEL 9)
+sudo subscription-manager repos \
+  --enable ansible-automation-platform-2.6-for-rhel-9-x86_64-rpms
+
+# Option 2: Ansible Developer subscription (Developer 1.3, RHEL 9)
+sudo subscription-manager repos \
+  --enable ansible-developer-1.3-for-rhel-9-x86_64-rpms
+```
+
+> **Tip:** Choose the right subscription for your use case.
+>
+> The **Ansible Developer** subscription provides the development tools without bundling the full AAP platform -- this is often more appropriate for developer workstations. The **AAP** subscription includes the dev tools alongside the full platform components.
+
+**Step 2:** Install ADT:
+
+```bash
+sudo dnf install ansible-dev-tools
+```
+
+**Step 3:** Verify the installation:
+
+```bash
+adt --version
+```
+
+> **Why RPM over uv/pip?**
+>
+> The RPM packages are built and tested by Red Hat, receive security errata through the standard RHEL advisory process, and are supported under a Red Hat subscription. This is the recommended method for enterprises that need vendor-backed support and predictable update cycles.
+
+**Available repositories:**
+
+Both subscriptions provide repos for RHEL 9 across four architectures: `x86_64`, `aarch64`, `ppc64le`, and `s390x`. Replace the architecture in the repo name to match your system:
+
+- **Ansible Automation Platform:** `ansible-automation-platform-{version}-for-rhel-9-{arch}-rpms` (versions: 2.6, 2.5)
+- **Ansible Developer:** `ansible-developer-{version}-for-rhel-9-{arch}-rpms` (versions: 1.3, 1.2)
+
+---
+
+### Method C: Python Package (uv)
 
 **Best for:** Individual developers, quick setup on Linux/macOS/WSL, CI pipelines.
 
@@ -200,150 +277,7 @@ uv add ansible-dev-tools==26.4.6
 
 ---
 
-### Method B: RPM (Red Hat Subscription)
-
-**Operational Impact:** None -- local workstation only
-
-**Best for:** Enterprise environments running RHEL with Red Hat subscriptions, air-gapped networks with Satellite.
-
-**Step 1:** Register your system and enable a repository that includes ADT. Two subscription options are available:
-
-```bash
-# Option 1: Ansible Automation Platform subscription (AAP 2.6, RHEL 9)
-sudo subscription-manager repos \
-  --enable ansible-automation-platform-2.6-for-rhel-9-x86_64-rpms
-
-# Option 2: Ansible Developer subscription (Developer 1.3, RHEL 9)
-sudo subscription-manager repos \
-  --enable ansible-developer-1.3-for-rhel-9-x86_64-rpms
-```
-
-> **Tip:** Choose the right subscription for your use case.
->
-> The **Ansible Developer** subscription provides the development tools without bundling the full AAP platform -- this is often more appropriate for developer workstations. The **AAP** subscription includes the dev tools alongside the full platform components.
-
-**Step 2:** Install ADT:
-
-```bash
-sudo dnf install ansible-dev-tools
-```
-
-**Step 3:** Verify the installation:
-
-```bash
-adt --version
-```
-
-> **Why RPM over uv/pip?**
->
-> The RPM packages are built and tested by Red Hat, receive security errata through the standard RHEL advisory process, and are supported under a Red Hat subscription. This is the recommended method for enterprises that need vendor-backed support and predictable update cycles.
-
-**Available repositories:**
-
-Both subscriptions provide repos for RHEL 9 across four architectures: `x86_64`, `aarch64`, `ppc64le`, and `s390x`. Replace the architecture in the repo name to match your system:
-
-- **Ansible Automation Platform:** `ansible-automation-platform-{version}-for-rhel-9-{arch}-rpms` (versions: 2.6, 2.5)
-- **Ansible Developer:** `ansible-developer-{version}-for-rhel-9-{arch}-rpms` (versions: 1.3, 1.2)
-
----
-
-### Method C: Dev Container (VS Code)
-
-**Operational Impact:** None -- local workstation only
-
-**Best for:** Teams wanting a consistent, reproducible development environment without managing Python installations. Works on any OS that runs VS Code and a container runtime.
-
-Pre-built container images with all ADT tools, the Ansible VS Code extension, and nested Podman support are available in two variants:
-
-- **Upstream (community):** `ghcr.io/ansible/community-ansible-dev-tools:latest`
-- **Downstream (Red Hat supported):** `registry.redhat.io/ansible-automation-platform-26/ansible-dev-tools-rhel9` (requires [Red Hat registry authentication](https://access.redhat.com/RegistryAuthentication))
-
-**Step 1:** Install prerequisites:
-
-- [VS Code](https://code.visualstudio.com/)
-- [Ansible extension for VS Code](https://marketplace.visualstudio.com/items?itemName=redhat.ansible) (`redhat.ansible`)
-- [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) (`ms-vscode-remote.remote-containers`)
-- A container runtime: [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman Desktop](https://podman-desktop.io/)
-
-**Step 2:** Add a devcontainer to your project using one of these methods:
-
-**Option A: CLI.** Run `ansible-creator` to scaffold devcontainer files into an existing project:
-
-```bash
-ansible-creator add resource devcontainer /path/to/your/project
-```
-
-This generates a `.devcontainer/` directory with both Docker and Podman configurations.
-
-**Option B: VS Code UI.** Open the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and run **Ansible: Add devcontainer configuration**. The Ansible extension generates the same `.devcontainer/` directory.
-
-**Option C: Manual.** Create `.devcontainer/devcontainer.json` in your project. This example matches the output of `ansible-creator` for a Podman-based setup:
-
-```json
-{
-  "name": "ansible-dev-container-podman",
-  "image": "ghcr.io/ansible/community-ansible-dev-tools:latest",
-  "containerUser": "root",
-  "runArgs": [
-    "--cap-add=SYS_ADMIN",
-    "--cap-add=SYS_RESOURCE",
-    "--device", "/dev/fuse",
-    "--security-opt", "seccomp=unconfined",
-    "--security-opt", "label=disable",
-    "--security-opt", "apparmor=unconfined",
-    "--userns=host",
-    "--hostname=ansible-dev-container"
-  ],
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "redhat.ansible",
-        "redhat.vscode-redhat-account"
-      ]
-    }
-  }
-}
-```
-
-> **Tip:** Using the supported downstream image.
->
-> To use the Red Hat supported image instead of the community one, replace the `image` value in your `devcontainer.json` with `registry.redhat.io/ansible-automation-platform-26/ansible-dev-tools-rhel9:latest`. You must authenticate to `registry.redhat.io` first -- run `podman login registry.redhat.io` (or `docker login`) with your Red Hat account credentials. See [Red Hat Registry Authentication](https://access.redhat.com/RegistryAuthentication) for details.
-
-**Step 3:** Open your project in VS Code, and when prompted, click **Reopen in Container** (or run the command `Dev Containers: Reopen in Container` from the command palette).
-
-**Step 4:** Open a terminal in VS Code and verify:
-
-```bash
-adt --version
-```
-
-> **Tip:** Nested Podman is supported.
->
-> The container image supports nested Podman, so you can run `molecule test` and `ansible-builder build` inside the dev container without additional configuration.
-
-**Running the container image directly (without VS Code):**
-
-```bash
-podman run -it --rm \
-  --cap-add=SYS_ADMIN \
-  --cap-add=SYS_RESOURCE \
-  --device "/dev/fuse" \
-  --hostname=ansible-dev-container \
-  --name=ansible-dev-container \
-  --security-opt "apparmor=unconfined" \
-  --security-opt "label=disable" \
-  --security-opt "seccomp=unconfined" \
-  --user=root \
-  --userns=host \
-  -v $PWD:/workdir \
-  ghcr.io/ansible/community-ansible-dev-tools:latest
-```
-
----
-
 ### Method D: Red Hat OpenShift Dev Spaces
-
-**Operational Impact:** Medium -- requires an OpenShift cluster with Dev Spaces operator
 
 **Best for:** Enterprise teams wanting centralized, browser-based development environments with zero local setup. Ideal for onboarding, workshops, and environments where developers cannot install software on their workstations.
 
@@ -406,26 +340,6 @@ components:
 | **Multi-user** | Each developer gets an isolated workspace on shared infrastructure |
 | **Preloaded extensions** | Ansible VS Code extension with lint, navigator, and creator integration |
 | **Git integration** | OAuth2 for GitHub/GitLab, SSH key forwarding |
-
----
-
-## Comparison
-
-| Dimension | uv/pip | RPM | Dev Container | Dev Spaces |
-|-----------|--------|-----|---------------|------------|
-| **New developer onboarding** | ~30 min (manual coordination) | ~15 min (if Satellite provisioned) | ~10 min (first image pull) | ~2 min (browser, click, code) |
-| **Team consistency** | Low (each dev manages their own) | Medium (same RPM, no IDE config) | High (same image, tools, config) | Highest (centrally managed) |
-| **Local install required** | Python 3.10+ | RHEL + subscription | VS Code + container runtime | Browser only |
-| **Who manages it** | Developer | IT / Platform team | Team lead / repo owner | Platform team / IT |
-| **Image management needed** | No | No | Yes (initial investment) | Yes (initial investment) |
-| **Nested containers** | N/A (use host runtime) | N/A (use host runtime) | Yes (with capabilities) | Yes (OCP user namespaces) |
-| **Offline / air-gapped** | PyPI mirror | Satellite | Registry mirror | Internal registry |
-| **Vendor support** | Community | Red Hat (AAP sub) | Community or Red Hat (AAP sub) | Red Hat (OCP + Dev Spaces) |
-| **Cost** | Free | AAP subscription | Free (community) or AAP subscription (supported) | OCP + Dev Spaces subscription |
-
-> **Start here:** Think about your team, not just yourself.
->
-> For individual exploration, start with **uv/pip**. For RHEL shops that need supported packages and managed updates, add **RPM** via Satellite. For team-wide consistency with minimal effort, adopt **dev containers** in your project repos. For enterprise governance with zero local dependencies, deploy **Dev Spaces**. The container-based methods are the long-term target.
 
 ---
 
@@ -622,16 +536,27 @@ Passed with production profile: 0 failure(s), 0 warning(s) on 5 files.
 
 ## Maturity Path
 
-| Maturity | Method | What You Do | Environment Consistency |
-|----------|--------|-------------|------------------------|
-| **Crawl** | uv/pip | Individual developers install ADT on their own workstations. Each developer manages their own Python version, venv, and tool upgrades. Teams coordinate versions manually via chat or documentation. | Low. Works for individual contributors and early exploration, but drift across the team is inevitable. |
-| **Walk** | RPM | IT includes ADT in the standard RHEL laptop provisioning via Satellite. All developers on RHEL get the same RPM version. Add `ansible-lint` and `molecule` to CI pipelines for a second layer of consistency. | Medium. Same tool versions across RHEL systems, but no guarantee of IDE config, linting profiles, or Python library alignment. |
-| **Run** | Dev Container | Add a `.devcontainer/` directory to every Ansible project repo. Developers open the repo in VS Code and get the full environment automatically. The platform team manages a base container image; teams can extend it for project-specific needs. | High. Same OS, same Python, same tools, same VS Code extensions, same linting config. Requires container runtime permissions on the workstation. |
-| **Fly** | Dev Spaces | Deploy Dev Spaces on OpenShift for the entire organization. Developers open a browser, click create, and start coding. The platform team manages workspace images, resource limits, and access centrally. | Highest. Zero local dependencies, zero configuration, fully governed. Developers only need a browser and credentials. |
+| Maturity | Method | Onboarding | What You Do | Consistency | Who manages it |
+|----------|--------|-----------|-------------|-------------|---------------|
+| **Crawl** | uv/pip | ~30 min | Individual developers install ADT on their own workstations. Each developer manages their own Python version, venv, and tool upgrades. Teams coordinate versions manually via chat or documentation. | Low: each developer manages their own environment, drift is inevitable | Developer |
+| **Walk** | RPM | ~15 min | IT includes ADT in the standard RHEL laptop provisioning via Satellite. All developers on RHEL get the same RPM version. Add `ansible-lint` and `molecule` to CI pipelines for a second layer of consistency. | Medium: same tool versions across RHEL systems, but no guarantee of IDE config, linting profiles, or Python library alignment | IT / Platform team |
+| **Run** | Dev Container | ~10 min | Add a `.devcontainer/` directory to every Ansible project repo. Developers open the repo in VS Code and get the full environment automatically. The platform team manages a base container image; teams can extend it for project-specific needs. | High: same OS, same Python, same tools, same VS Code extensions, same linting config | Team lead / repo owner |
+| **Fly** | Dev Spaces | ~2 min | Deploy Dev Spaces on OpenShift for the entire organization. Developers open a browser, click create, and start coding. The platform team manages workspace images, resource limits, and access centrally. | Highest: zero local dependencies, zero configuration, fully governed | Platform team / IT |
 
 > **Tip:** Dev containers and Dev Spaces are the target.
 >
 > The uv/pip and RPM methods are stepping stones. They get individual developers productive quickly, but they don't solve the consistency problem at scale. Invest in a base container image early. Once that image exists, both dev containers and Dev Spaces use it, and every developer gets an identical environment from day one.
+
+### Detailed Comparison
+
+| Dimension | uv/pip | RPM | Dev Container | Dev Spaces |
+|-----------|--------|-----|---------------|------------|
+| **Local install required** | Python 3.10+ | RHEL + subscription | VS Code + container runtime | Browser only |
+| **Image management needed** | No | No | Yes (initial investment) | Yes (initial investment) |
+| **Nested containers** | N/A (use host runtime) | N/A (use host runtime) | Yes (with capabilities) | Yes (OCP user namespaces) |
+| **Offline / air-gapped** | PyPI mirror | Satellite | Registry mirror | Internal registry |
+| **Vendor support** | Community | Red Hat (supported) | Community or Red Hat (supported) | Red Hat (supported) |
+| **Cost** | Free | AAP or Ansible Developer subscription (supported) | Free (community) or AAP/Ansible Developer subscription (supported) | OpenShift subscription (supported) |
 
 By standardizing on ADT, your organization eliminates environment drift as a source of CI failures, reduces developer onboarding from weeks to minutes, and ensures that every automation artifact is created, tested, and deployed with the same governed toolchain. The investment shifts from individual troubleshooting to platform management -- a one-time image setup that scales across every team and project without requiring action from individual developers.
 
@@ -639,19 +564,10 @@ By standardizing on ADT, your organization eliminates environment drift as a sou
 
 ## Related Guides
 
-**Solution guides in this collection:**
-
 - **Database automation:** The [EDB Postgres automation guide](README-EDB.md) demonstrates a multi-role deployment that benefits from consistent dev environments -- teams working on complex database automation can use ADT dev containers to ensure every contributor has the same linting rules and molecule test setup.
 - **ITSM integration:** The [ServiceNow ITSM guide](README-ServiceNow-ITSM.md) and [RHEL patching guide](README-Patching-RHEL.md) show production automation workflows where environment consistency directly reduces "works on my machine" failures in CI/CD pipelines.
 - **AI-assisted operations:** The [Intelligent Assistant with RHAIIS guide](README-Intelligent-Assistant-RHAIIS.md) extends the AI-assisted development theme -- once your dev environment includes the Ansible MCP server, the same AI assistant that helps you write automation can also interact with your AAP instance.
 - **Network automation:** The [NetBox + AAP guide](README-NetBox-AAP-Solution-Guide.md) and [NetBox + EDA guide](README-NetBox-EDA-Config-Solution-Guide.md) are examples of multi-tool integrations where standardized dev environments prevent version conflicts across collections.
-
-**External documentation:**
-
-- **Execution Environments:** See the [Ansible Builder documentation](https://docs.ansible.com/projects/dev-tools/container/) for building custom EEs on top of the ADT container image.
-- **Content Testing:** See [Molecule documentation](https://ansible.readthedocs.io/projects/molecule/) for comprehensive testing strategies with ADT.
-- **Content Signing:** See [ansible-sign documentation](https://docs.ansible.com/projects/sign/) for signing and verifying Ansible content in CI/CD.
-- **Dev Spaces Administration:** See the [Red Hat OpenShift Dev Spaces docs](https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/) for cluster setup and operator configuration.
 
 ---
 
@@ -662,8 +578,13 @@ By standardizing on ADT, your organization eliminates environment drift as a sou
 - [Ansible Development Tools documentation](https://docs.ansible.com/projects/dev-tools/)
 - [ansible-dev-tools on GitHub](https://github.com/ansible/ansible-dev-tools)
 - [community-ansible-dev-tools container](https://docs.ansible.com/projects/dev-tools/container/)
+- [community-ansible-dev-tools on GHCR](https://github.com/ansible/community-ansible-dev-tools/pkgs/container/community-ansible-dev-tools)
 - [OpenShift Dev Spaces with ADT](https://docs.ansible.com/projects/dev-tools/devspaces/)
 - [ansible-dev-tools on PyPI](https://pypi.org/project/ansible-dev-tools/)
+- [Ansible extension for VS Code](https://marketplace.visualstudio.com/items?itemName=redhat.ansible)
+- [Ansible Forum (devtools)](https://forum.ansible.com/tags/devtools)
+- [Molecule documentation](https://ansible.readthedocs.io/projects/molecule/)
+- [ansible-sign documentation](https://docs.ansible.com/projects/sign/)
 
 **Downstream (Red Hat product documentation)**
 
@@ -671,6 +592,8 @@ By standardizing on ADT, your organization eliminates environment drift as a sou
 - [Installing Ansible development tools (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/extend-install_ansible_development_tools_with_the_ai_assistant)
 - [Using Ansible development workspaces (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/develop-assembly_workspaces_intro)
 - [MCP server integration (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/develop-con_mcp_server_integration)
+- [ansible-dev-tools-rhel9 container](https://catalog.redhat.com/en/software/containers/ansible-automation-platform-27/ansible-dev-tools-rhel9/69fb1e26616f0fc2878516a6)
+- [Red Hat OpenShift Dev Spaces documentation](https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/)
 
 **Other**
 
