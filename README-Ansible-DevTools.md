@@ -447,7 +447,7 @@ graph TD
     AAP --> PLATFORM["<b>AAP Instance</b><br/>Launch jobs · Query inventory<br/>Platform health · Credentials"]
 ```
 
-> **Tip:** Both MCP servers are currently available as a technology preview.
+> **Tip:** The Ansible Devtools MCP Server is currently available as a technology preview. The AAP MCP Server is generally available.
 
 ### Ansible Devtools MCP Server
 
