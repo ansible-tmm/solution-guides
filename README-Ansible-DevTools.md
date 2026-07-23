@@ -59,8 +59,6 @@ graph LR
 >
 > A developer asks the AI assistant to create a role that configures NTP on RHEL hosts. The assistant scaffolds the role with `ansible-creator`, lints it, queries the AAP development instance to confirm the RHEL inventory group exists and has the expected hosts, launches a test job, and discovers that the `chrony` package is already installed but the configuration file differs. The assistant updates the template, re-runs the job, and confirms idempotency -- all within the same conversation, without the developer opening the AAP UI once.
 
-See [Configuring MCP Servers](#configuring-mcp-servers) for setup instructions.
-
 ---
 
 - [AI-Assisted Ansible Developer Experience - Solution Guide](#ai-assisted-ansible-developer-experience---solution-guide)
