@@ -61,31 +61,6 @@ graph LR
 
 ---
 
-- [AI-Assisted Ansible Developer Experience - Solution Guide](#ai-assisted-ansible-developer-experience---solution-guide)
-  - [Overview](#overview)
-    - [AI-Assisted Ansible Development](#ai-assisted-ansible-development)
-  - [Background](#background)
-  - [Solution](#solution)
-    - [What's in the Bundle](#whats-in-the-bundle)
-    - [Who Benefits](#who-benefits)
-  - [Prerequisites](#prerequisites)
-    - [Ansible Automation Platform](#ansible-automation-platform)
-    - [System Requirements](#system-requirements)
-  - [Maturity Path](#maturity-path)
-    - [Detailed Comparison](#detailed-comparison)
-  - [Installation Methods](#installation-methods)
-    - [Method A: Dev Container (VS Code)](#method-a-dev-container-vs-code)
-    - [Method B: RPM (Red Hat Subscription)](#method-b-rpm-red-hat-subscription)
-    - [Method C: Python Package (pipx)](#method-c-python-package-pipx)
-    - [Method D: Red Hat OpenShift Dev Spaces](#method-d-red-hat-openshift-dev-spaces)
-  - [Configuring MCP Servers](#configuring-mcp-servers)
-    - [Ansible Devtools MCP Server](#ansible-devtools-mcp-server)
-    - [Connecting to Ansible Automation Platform](#connecting-to-ansible-automation-platform)
-  - [Related Guides](#related-guides)
-  - [Sources](#sources)
-
----
-
 ## Background
 
 The Ansible content lifecycle -- **Create, Test, Deploy** -- requires a set of specialized tools at each stage. When each developer installs and maintains these tools individually, environment drift is inevitable: one developer runs ansible-lint 24.x while another has 25.x, molecule tests pass on Linux but fail on macOS because of a missing dependency, and the new hire spends their first week troubleshooting Python conflicts instead of writing automation.
