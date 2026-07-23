@@ -27,7 +27,7 @@ The Model Context Protocol (MCP) is an open standard that enables AI coding assi
 - **Ansible Automation Platform MCP Server** -- gives AI assistants access to your AAP instance (inventory, job templates, workflows) so they can query platform state and launch automation during development and testing.
 
 ```mermaid
-graph TD
+graph LR
     IDE["<b>VS Code / AI Assistant</b><br/>Claude Code, Copilot Chat, Cursor"]
     IDE -->|MCP| DT["<b>Devtools MCP Server</b><br/>Scaffold, lint, run, build EEs"]
     IDE -->|MCP| AAP["<b>AAP MCP Server</b><br/>Jobs, inventory, monitoring, RBAC"]
