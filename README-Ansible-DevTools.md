@@ -441,16 +441,10 @@ Together, these turn your AI assistant into an Ansible-aware pair programmer tha
 ```mermaid
 graph TD
     IDE["<b>VS Code / AI Assistant</b><br/>Claude Code, Copilot Chat, Cursor"]
-    IDE -->|MCP| DT["<b>Devtools MCP Server</b>"]
-    IDE -->|MCP| AAP["<b>AAP MCP Server</b>"]
-    DT --> S["ansible-creator<br/><i>Scaffold</i>"]
-    DT --> L["ansible-lint<br/><i>Validate</i>"]
-    DT --> N["ansible-navigator<br/><i>Run locally</i>"]
-    DT --> B["ansible-builder<br/><i>Build EEs</i>"]
-    AAP --> J["Job Management<br/><i>Launch & monitor</i>"]
-    AAP --> I["Inventory Management<br/><i>Query hosts</i>"]
-    AAP --> M["System Monitoring<br/><i>Platform health</i>"]
-    AAP --> R["Security & Compliance<br/><i>RBAC & credentials</i>"]
+    IDE -->|MCP| DT["<b>Devtools MCP Server</b><br/>Scaffold, lint, run, build EEs"]
+    IDE -->|MCP| AAP["<b>AAP MCP Server</b><br/>Jobs, inventory, monitoring, RBAC"]
+    DT --> LOCAL["<b>Local Development</b><br/>ansible-creator · ansible-lint<br/>ansible-navigator · ansible-builder"]
+    AAP --> PLATFORM["<b>AAP Instance</b><br/>Launch jobs · Query inventory<br/>Platform health · Credentials"]
 ```
 
 > **Tip:** Both MCP servers are currently available as a technology preview.
