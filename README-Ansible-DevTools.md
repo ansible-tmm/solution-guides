@@ -10,14 +10,14 @@ Onboarding a new automation developer takes anywhere from 1 to 3 months when don
 graph LR
     A["uv/pip<br/><b>Individual</b><br/>~30 min"] -->|standardize| B["RPM<br/><b>Managed</b><br/>~15 min"]
     B -->|containerize| C["Dev Container<br/><b>Standardized</b><br/>~10 min"]
-    C -->|centralize| D["Dev Spaces<br/><b>Governed</b><br/>~2 min"]
+    C -->|centralize| D["Dev Spaces<br/><b>Governed</b><br/>~5 min"]
 ```
 
 The goal is to move every automation developer in your organization onto the same toolchain, with the same versions, the same linting rules, and the same testing frameworks. Dev containers and Dev Spaces are the recommended enterprise options: they require an initial investment in image management to account for different project scenarios, but once that setup is done, the environment is completely transparent to developers. See the [Maturity Path](#maturity-path) for a detailed comparison of each method.
 
 > **Example:** Dev Spaces onboarding.
 >
-> A network automation team of 12 engineers across three offices adopts Dev Spaces. A new engineer joins on Monday, opens a browser, navigates to the Dev Spaces URL, and clicks "Create Workspace" on the team's Git repository. Two minutes later they have a full VS Code environment with ansible-lint, molecule, ansible-navigator, and the team's linting profile, identical to every other engineer on the team. No local installs, no "which Python version do I need," no VPN issues with package mirrors.
+> A network automation team of 12 engineers across three offices adopts Dev Spaces. A new engineer joins on Monday, opens a browser, navigates to the Dev Spaces URL, and clicks "Create Workspace" on the team's Git repository. Five minutes later they have a full VS Code environment with ansible-lint, molecule, ansible-navigator, and the team's linting profile, identical to every other engineer on the team. No local installs, no "which Python version do I need," no VPN issues with package mirrors.
 
 ### AI-Assisted Ansible Development
 
@@ -123,7 +123,7 @@ graph LR
 ### Ansible Automation Platform
 
 - **uv/pip methods:** No AAP subscription required -- these use the upstream community packages.
-- **Dev container method:** Available in two variants -- a free upstream community image (no subscription required) and a supported downstream image from `registry.redhat.io` (requires an AAP or Ansible Developer subscription, supported).
+- **Dev container method:** Available in two variants -- a free upstream community image (no subscription required) and a supported downstream image from `registry.redhat.io` (requires an AAP or Ansible Developer subscription).
 - **RPM method:** Requires an AAP or Ansible Developer subscription (supported) and RHEL 9 registered with Red Hat Subscription Manager.
 - **Dev Spaces method:** Requires an OpenShift subscription (supported) with the Dev Spaces operator installed.
 
@@ -146,7 +146,7 @@ graph LR
 | **Crawl** | pipx/pip | ~30 min | Individual developers install ADT on their own workstations. Each developer manages their own Python version and tool upgrades. Teams coordinate versions manually via chat or documentation. | Low: each developer manages their own environment, drift is inevitable | Developer |
 | **Walk** | RPM | ~15 min | IT includes ADT in the standard RHEL laptop provisioning via Satellite. All developers on RHEL get the same RPM version. Add `ansible-lint` and `molecule` to CI pipelines for a second layer of consistency. | Medium: same tool versions across RHEL systems, but no guarantee of IDE config, linting profiles, or Python library alignment | IT / Platform team |
 | **Run** | Dev Container | ~10 min | Add a `.devcontainer/` directory to every Ansible project repo. Developers open the repo in VS Code and get the full environment automatically. The platform team manages a base container image; teams can extend it for project-specific needs. | High: same OS, same Python, same tools, same VS Code extensions, same linting config | Team lead / repo owner |
-| **Fly** | Dev Spaces | ~2 min | Deploy Dev Spaces on OpenShift for the entire organization. Developers open a browser, click create, and start coding. The platform team manages workspace images, resource limits, and access centrally. | Highest: zero local dependencies, zero configuration, fully governed | Platform team / IT |
+| **Fly** | Dev Spaces | ~5 min | Deploy Dev Spaces on OpenShift for the entire organization. Developers open a browser, click create, and start coding. The platform team manages workspace images, resource limits, and access centrally. | Highest: zero local dependencies, zero configuration, fully governed | Platform team / IT |
 
 > **Tip:** Dev containers and Dev Spaces are the target.
 >
