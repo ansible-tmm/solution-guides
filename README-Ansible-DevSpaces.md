@@ -59,7 +59,7 @@ This guide uses a tiered container image strategy to deliver governed developmen
 
 ### Demos and Self-Paced Labs
 
-- [Ansible Development Workspaces workshop](<!-- TODO: replace with final RHDP workshop URL -->) -- hands-on workshop covering Dev Spaces setup and the tiered image strategy
+- [Ansible Development Tools workshop](<!-- TODO: replace with final RHDP workshop URL -->) -- hands-on DevTools workshop running on Dev Spaces
 
 ### Ownership Model
 
