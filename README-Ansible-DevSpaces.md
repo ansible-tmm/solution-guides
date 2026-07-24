@@ -100,7 +100,7 @@ The walkthrough uses the Red Hat supported image. A community alternative is ava
 The tiered strategy uses OpenShift ImageStreams to track upstream image changes and BuildConfig triggers to cascade rebuilds automatically:
 
 ```mermaid
-graph TD
+graph LR
     U["<b>Upstream release</b><br/>New base image tag"] -->|scheduled import| IS0["<b>Tier 0 ImageStream</b><br/>ansible-devspaces-base"]
     IS0 -->|ImageChange trigger| BC1["<b>Tier 1 BuildConfig</b><br/>ansible-devspaces-org"]
     BC1 -->|pushes to| IS1["<b>Tier 1 ImageStream</b><br/>ansible-devspaces-org"]
@@ -339,16 +339,6 @@ ansible-devspaces-org-2        Docker            Complete   3 minutes ago
 devspaces-network-team-2       Docker            Running    Just now
 devspaces-network-team-2       Docker            Complete   5 minutes ago
 ```
-
-### Troubleshooting
-
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| Build fails with `dnf` errors | Network policy blocking egress to package repos | Check cluster egress rules and add exceptions for RHEL repos |
-| ImageStream not updating | `importPolicy.scheduled` not set to `true` | Update the ImageStream spec, or force an import with `oc import-image ansible-devspaces-base:latest` |
-| Tier 2 not rebuilding after Tier 1 update | ImageChange trigger missing or misconfigured | Verify the BuildConfig trigger references the correct ImageStreamTag and namespace |
-| Workspace starts but packages missing | Devfile pointing at wrong image or tag | Check the image URL in the devfile matches the team ImageStream in the correct namespace |
-| Build times out | Cluster resource constraints | Increase the BuildConfig resource limits or check node capacity |
 
 ---
 
