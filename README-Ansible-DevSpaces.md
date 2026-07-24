@@ -8,12 +8,12 @@ This guide demonstrates a **tiered image layering strategy** using standard Open
 
 ```mermaid
 graph LR
-    A["<b>Tier 0: Base</b><br/>Red Hat"] -->|layer| B["<b>Tier 1: Org</b><br/>Platform team"]
-    B -->|layer| C["<b>Tier 2: Team</b><br/>Team lead"]
-    C -.->|opt-in| D["<b>Tier 3: Personal</b><br/>Individual"]
+    A["<b>Tier 0</b><br/>Base image<br/><i>Red Hat</i>"] -->|layer| B["<b>Tier 1</b><br/>Org image<br/><i>Platform team</i>"]
+    B -->|layer| C["<b>Tier 2</b><br/>Team image<br/><i>Team lead</i>"]
+    C -.->|opt-in| D["<b>Tier 3</b><br/>Personal image<br/><i>Individual</i>"]
 ```
 
-**Operational Impact:** Low -- creates BuildConfigs and ImageStreams on the cluster. Reversible configuration changes. No production system mutation.
+**Operational Impact:** None -- creates BuildConfigs and ImageStreams on the cluster for development environments. No production system mutation.
 
 **Business Value Drivers:**
 
@@ -97,19 +97,7 @@ The walkthrough uses the Red Hat supported image. A community alternative is ava
 
 ## Image Rebuild Workflow
 
-The tiered strategy uses OpenShift ImageStreams to track upstream image changes and BuildConfig triggers to cascade rebuilds automatically:
-
-```mermaid
-graph LR
-    U["<b>Upstream release</b><br/>New base image tag"] -->|scheduled import| IS0["<b>Tier 0 ImageStream</b><br/>ansible-devspaces-base"]
-    IS0 -->|ImageChange trigger| BC1["<b>Tier 1 BuildConfig</b><br/>ansible-devspaces-org"]
-    BC1 -->|pushes to| IS1["<b>Tier 1 ImageStream</b><br/>ansible-devspaces-org"]
-    IS1 -->|ImageChange trigger| BC2["<b>Tier 2 BuildConfig</b><br/>devspaces-network-team"]
-    BC2 -->|pushes to| IS2["<b>Tier 2 ImageStream</b><br/>devspaces-network-team"]
-    IS2 -.->|opt-in| BC3["<b>Tier 3 BuildConfig</b><br/>devspaces-personal"]
-```
-
-When the upstream Ansible DevTools project publishes a new image version, the Tier 0 ImageStream detects the change through scheduled polling (`importPolicy.scheduled: true`). This triggers the Tier 1 BuildConfig, which layers org-wide packages and pushes the result to the Tier 1 ImageStream. The Tier 2 BuildConfig watches the Tier 1 ImageStream and rebuilds the team image automatically. If a developer has opted into a personal layer (Tier 3), that rebuilds as well. The entire cascade completes in minutes with zero manual intervention.
+The tiered strategy uses OpenShift ImageStreams to track upstream image changes and BuildConfig triggers to cascade rebuilds automatically. When the upstream Ansible DevTools project publishes a new image version, the Tier 0 ImageStream detects the change through scheduled polling (`importPolicy.scheduled: true`). This triggers the Tier 1 BuildConfig, which layers org-wide packages and pushes the result to the Tier 1 ImageStream. The Tier 2 BuildConfig watches the Tier 1 ImageStream and rebuilds the team image automatically. If a developer has opted into a personal layer (Tier 3), that rebuilds as well. The entire cascade completes in minutes with zero manual intervention.
 
 When a BuildConfig itself changes (for example, a team lead adds a new package to their Containerfile and pushes to Git), a `ConfigChange` trigger fires a rebuild of that tier and everything downstream.
 
@@ -132,7 +120,7 @@ The result: security patches from the upstream image propagate to every develope
 
 ### Step 1: Import the base image (Tier 0)
 
-**Operational Impact:** Low -- creates read-only tracking resources, no cluster mutation.
+**Operational Impact:** None
 
 Create an ImageStream that tracks the upstream Ansible DevTools image. The `importPolicy.scheduled: true` setting tells OpenShift to poll for new tags periodically and trigger downstream rebuilds when the image changes.
 
@@ -163,7 +151,7 @@ Apply with `oc apply -f imagestream-base.yaml`.
 
 ### Step 2: Build the org-wide image (Tier 1)
 
-**Operational Impact:** Low -- builds a new container image in the cluster. Does not affect running workspaces.
+**Operational Impact:** None
 
 Create a BuildConfig with an inline Containerfile that layers org-common packages on top of the base image. The `dockerStrategy.from` field connects the build to the Tier 0 ImageStream, overriding the `FROM` line at build time. Two triggers ensure automatic rebuilds: `ImageChange` fires when the base image updates, and `ConfigChange` fires when the BuildConfig itself is modified.
 
@@ -217,7 +205,7 @@ Apply both with `oc apply -f imagestream-org.yaml -f buildconfig-org.yaml`. The 
 
 ### Step 3: Create a team image layer (Tier 2)
 
-**Operational Impact:** Low -- builds a new container image. Does not affect running workspaces.
+**Operational Impact:** None
 
 Each team maintains a Containerfile in their workspace repository. A BuildConfig in the team's namespace layers team-specific packages on top of the org-wide image.
 
@@ -271,7 +259,7 @@ Replace `<infra-namespace>` with the namespace where the Tier 1 ImageStream live
 
 ### Step 4: Wire the devfile
 
-**Operational Impact:** None -- configuration change to a file in Git.
+**Operational Impact:** None
 
 Point the team's `devfile.yaml` at the team ImageStream in the OpenShift internal registry. This is the moment where image management meets developer experience: after this step, any developer who opens this repository in Dev Spaces gets the team image automatically. They don't need to know about BuildConfigs or ImageStreams.
 
@@ -295,7 +283,7 @@ Commit the devfile to the team workspace repository. Developers log into the Dev
 
 ### Step 5: Personal image layer (Tier 3, opt-in)
 
-**Operational Impact:** Low -- one additional BuildConfig per opted-in developer.
+**Operational Impact:** None
 
 When a developer needs a system package that no one else on the team requires, they can create a personal image layer. The developer forks the team workspace repo, modifies the Containerfile to layer on the team image, and updates the devfile to point at their personal ImageStream.
 
