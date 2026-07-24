@@ -55,9 +55,15 @@ graph LR
 4. **Run on AAP** -- the assistant launches the playbook as a job on a development AAP instance, using the correct job template, credentials, and survey variables.
 5. **Troubleshoot** -- if the job fails, the assistant inspects the job output through AAP MCP, correlates it with the playbook logic it can read locally through Devtools MCP, and proposes a fix. The cycle repeats from step 2 until the job succeeds.
 
-> **Example:** NTP role with AI-assisted workflow.
+> **Example:** NTP configuration with AI-assisted workflow.
 >
-> A developer asks the AI assistant to create a role that configures NTP on RHEL hosts. The assistant scaffolds the role with `ansible-creator`, lints it, queries the AAP development instance to confirm the RHEL inventory group exists and has the expected hosts, launches a test job, and discovers that the `chrony` package is already installed but the configuration file differs. The assistant updates the template, re-runs the job, and confirms idempotency -- all within the same conversation, without the developer opening the AAP UI once.
+> A developer asks the AI assistant to "configure NTP on my RHEL hosts." Before writing any code, the assistant searches Automation Hub and discovers `redhat.rhel_system_roles.timesync`, a certified, tested role that handles chrony, ntp, and linuxptp configuration. It asks: "There's a certified role for this. Want to use it, or build a custom one?"
+>
+> **Path 1: Use existing content.** The developer chooses the certified role. The assistant looks up the role's parameters, generates a playbook that sets `timesync_ntp_servers` with the organization's NTP pool, lints it, queries the AAP development instance to confirm the RHEL inventory group exists, launches a test job, and validates that chrony is running with the correct sources. The developer never had to read the role's documentation.
+>
+> **Path 2: Build from scratch.** The developer also needs clock drift reported to an internal monitoring system. The `timesync` role configures NTP perfectly, but it does not export metrics. The assistant scaffolds a custom role with `ansible-creator` that queries `chronyc tracking`, extracts drift values, and posts them to the monitoring API. It lints the new role, runs it against the dev AAP instance alongside the certified role, and confirms both work together. The certified role handles NTP configuration; the custom role handles observability.
+>
+> In both paths, the developer stays in one conversation. The AI assistant handles discovery, scaffolding, validation, and troubleshooting while the developer focuses on intent and decisions.
 
 ---
 
