@@ -340,15 +340,6 @@ devspaces-network-team-2       Docker            Running    Just now
 devspaces-network-team-2       Docker            Complete   5 minutes ago
 ```
 
-### Validation Checklist
-
-| Stage | What to Verify | Success Indicator |
-|-------|---------------|-------------------|
-| **Tier 0 ImageStream** | Upstream image imported | `oc get istag ansible-devspaces-base:latest` shows the expected digest |
-| **Tier 1 Build** | Org-wide image built successfully | Build status is `Complete`, `jq` and `pinentry-curses` are available in the image |
-| **Tier 2 Build** | Team image built automatically | Build status is `Complete`, team packages (`libssh-devel`, `python3-netaddr`) are available |
-| **Devfile** | Workspace launches with correct image | Open a Dev Space, run `adt --version` and verify team packages are installed |
-
 ### Troubleshooting
 
 | Symptom | Likely Cause | Fix |
