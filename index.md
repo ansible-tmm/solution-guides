@@ -276,7 +276,7 @@ patternfly: true
             <h3 class="pf-v6-c-card__title-text">AI-Assisted Ansible Developer Experience</h3>
           </div>
           <div class="pf-v6-c-card__body">
-            Standardize your automation developer experience across the organization using Ansible Development Tools, from individual uv/pip installs to enterprise-governed Dev Spaces with 2-minute onboarding.
+            Standardize your automation developer experience across the organization using Ansible Development Tools, from individual uv/pip installs to enterprise-governed Dev Spaces with 5-minute onboarding.
           </div>
           <div class="pf-v6-c-card__footer">
             <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
@@ -289,6 +289,28 @@ patternfly: true
     <div class="cards-wip-section">
       <h2>Work in Progress</h2>
       <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="wip-gallery">
+        <a href="{{ '/README-Ansible-DevSpaces' | relative_url }}" class="card-link" data-partners="foundational,wip">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__header">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
+              </span>
+            </div>
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">Ansible Development Workspaces</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              Tiered image layering strategy for Ansible Dev Spaces on OpenShift -- deliver governed, customizable development environments across multiple automation domains using standard BuildConfigs and ImageStreams.
+            </div>
+            <div class="pf-v6-c-card__footer">
+              <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
+            </div>
+          </div>
+        </a>
+
         <a href="{{ '/README-AAP-HA-DR-OpenShift' | relative_url }}" class="card-link" data-partners="infrastructure,wip">
           <div class="pf-v6-c-card">
             <div class="pf-v6-c-card__header">

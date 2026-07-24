@@ -3,6 +3,7 @@ theme: jekyll-theme-dinky
 exclude:
   - ".devcontainer"
   - ".vscode"
+  - "docs/superpowers"
   - "plans"
   - "accessredhat-index.md"
 kramdown:
