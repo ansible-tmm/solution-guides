@@ -117,6 +117,17 @@ The result: security patches from the upstream image propagate to every develope
 
 ---
 
+## Maturity Path
+
+| Maturity | What You Do |
+|----------|-------------|
+| **Crawl** | Use the base image as-is (Tier 0 only) -- no customization, works out of the box for general Ansible development |
+| **Walk** | Add a Tier 1 org-wide image with an inline BuildConfig for common packages. Validate the auto-rebuild from Tier 0. This is the minimum viable setup for most organizations |
+| **Run** | Add Tier 2 team images layered on the org-wide image. Each automation domain gets its own Containerfile and BuildConfig. Auto-rebuild cascade validated end-to-end |
+| **Fly** | For organizations with 5+ domain variants, adopt a CEKit (Container Environment Kit) factory model for Tier 1: generate Containerfiles from YAML definitions, build all variants in parallel via CI, and publish to a shared registry. Add lifecycle automation to clean up stale personal images |
+
+---
+
 ## Solution Walkthrough
 
 ### Step 1: Import the base image (Tier 0)
@@ -347,17 +358,6 @@ devspaces-network-team-2       Docker            Complete   5 minutes ago
 | Tier 2 not rebuilding after Tier 1 update | ImageChange trigger missing or misconfigured | Verify the BuildConfig trigger references the correct ImageStreamTag and namespace |
 | Workspace starts but packages missing | Devfile pointing at wrong image or tag | Check the image URL in the devfile matches the team ImageStream in the correct namespace |
 | Build times out | Cluster resource constraints | Increase the BuildConfig resource limits or check node capacity |
-
----
-
-## Maturity Path
-
-| Maturity | What You Do |
-|----------|-------------|
-| **Crawl** | Use the base image as-is (Tier 0 only) -- no customization, works out of the box for general Ansible development |
-| **Walk** | Add a Tier 1 org-wide image with an inline BuildConfig for common packages. Validate the auto-rebuild from Tier 0. This is the minimum viable setup for most organizations |
-| **Run** | Add Tier 2 team images layered on the org-wide image. Each automation domain gets its own Containerfile and BuildConfig. Auto-rebuild cascade validated end-to-end |
-| **Fly** | For organizations with 5+ domain variants, adopt a CEKit (Container Environment Kit) factory model for Tier 1: generate Containerfiles from YAML definitions, build all variants in parallel via CI, and publish to a shared registry. Add lifecycle automation to clean up stale personal images |
 
 ---
 
