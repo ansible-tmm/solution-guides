@@ -57,6 +57,10 @@ This guide uses a tiered container image strategy to deliver governed developmen
 | **Automation Architect** | Standardizing toolchains across teams while allowing domain-specific customization | Tiered image model where standards are inherited automatically, not documented and hoped-for |
 | **Team Lead** | Getting team-specific packages into workspaces without waiting on the platform team | Self-service Containerfile in the team repo, auto-built by a BuildConfig -- no platform team bottleneck |
 
+### Demos and Self-Paced Labs
+
+- [Ansible Development Workspaces workshop](<!-- TODO: replace with final RHDP workshop URL -->) -- hands-on workshop covering Dev Spaces setup and the tiered image strategy
+
 ### Ownership Model
 
 | Concern | Owner | Mechanism |
@@ -206,7 +210,7 @@ Apply both with `oc apply -f imagestream-org.yaml -f buildconfig-org.yaml`. The 
 
 Each team maintains a Containerfile in their workspace repository. A BuildConfig in the team's namespace layers team-specific packages on top of the org-wide image.
 
-**Team Containerfile** (in the team workspace repo root):
+**Team Containerfile** (in the team workspace repo root). The `FROM` line references the ImageStream name -- the BuildConfig's `dockerStrategy.from` field overrides it at build time to resolve through the ImageStream:
 
 ```dockerfile
 FROM ansible-devspaces-org:latest
@@ -320,9 +324,9 @@ Tier 1 build completes, then Tier 2 build starts automatically within minutes:
 ```
 NAME                           TYPE     FROM     STATUS     STARTED
 ansible-devspaces-org-2        Docker            Running    Just now
-ansible-devspaces-org-2        Docker            Complete   2 minutes ago
+ansible-devspaces-org-2        Docker            Complete   3 minutes ago
 devspaces-network-team-2       Docker            Running    Just now
-devspaces-network-team-2       Docker            Complete   2 minutes ago
+devspaces-network-team-2       Docker            Complete   5 minutes ago
 ```
 
 ### Validation Checklist
