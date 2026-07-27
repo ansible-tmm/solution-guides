@@ -31,7 +31,7 @@ This implementation guide shows how to deploy **AAP 2.7 (operator-based) on two 
   - [Deploy AAP](#4-deploy-aap)
   - [Failover Procedures](#6-failover-procedures)
 - [Validation](#validation)
-- [Validated Test Scenarios and Observed SLAs](#validated-test-scenarios-and-observed-slas)
+- [Verified Test Scenarios and Observed SLAs](#verified-test-scenarios-and-observed-slas)
 - [Day 2 Operations](#8-day-2-operations)
 - [Known Issues](#known-issues)
 - [Maturity Path](#maturity-path)
@@ -1539,7 +1539,7 @@ Example status check (shape varies by version):
 | Metrics service will not reconcile | External Postgres admin secret not passed through | Apply the Known Issues workaround for `postgres-admin-credentials` |
 | Replication not Streaming on Cluster B | NLB hostname, mTLS certs, or `streaming_replica` password mismatch | Verify `externalClusters` connectionParameters, shared CA, and replication TLS secrets |
 
-## Validated Test Scenarios and Observed SLAs
+## Verified Test Scenarios and Observed SLAs
 
 The following scenarios were executed against this architecture and **passed** for the outcomes described below. Times are **observed averages rounded to the nearest second** -- use them to set recovery expectations, not as contractual SLAs. Environment sizing, node `tolerationSeconds`, DNS/GSLB behavior, and workload mix will change results.
 
