@@ -466,6 +466,28 @@ patternfly: true
           </div>
         </a>
 
+        <a href="{{ '/README-AIOps-Ticket-Enrichment' | relative_url }}" class="card-link" data-partners="aiops,wip">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__header">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
+              </span>
+            </div>
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">Ticket Enrichment Automation: From EDA to AI-Driven Orchestration</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              A journey guide for operations teams: when EDA and AAP are enough, when to add LLM-based ticket enrichment, and when Automation Orchestrator's switch, approval, and AI agent nodes become the right tools.
+            </div>
+            <div class="pf-v6-c-card__footer">
+              <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Automation Journey Guide</span></span>
+            </div>
+          </div>
+        </a>
+
       </div>
     </div>
 
