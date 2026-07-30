@@ -83,15 +83,15 @@ Not every team needs all three. Stage 1 needs only EDA and AAP. Later stages add
 
 ### Ansible Automation Platform
 
-- AAP 2.5 or later
+- Ansible Automation Platform 2.5 or later
 - Event-Driven Ansible controller configured
 - Job templates for target remediation playbooks already tested
 
 ### Automation Orchestrator
 
-- AO 2.5 or later (required for Stages 2-4)
+- Automation Orchestrator (required for Stages 3-5)
 - AO connected to AAP as an execution target
-- MCP tools configured for any external system queries (ITSM, monitoring)
+- MCP tools configured for any external system queries (AAP, ITSM, monitoring)
 
 ### External Systems
 
