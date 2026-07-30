@@ -1,7 +1,7 @@
 {% raw %}
 # Ticket Enrichment Automation: From EDA to AI-Driven Orchestration - Automation Journey Guide <!-- omit in toc -->
 
-<img src="assets/images/servicenow-hero.png" alt="Ticket Enrichment Automation" style="max-width:400px">
+<img src="assets/images/aiops-circle.png" alt="Ticket Enrichment Automation" style="max-width:400px">
 
 <style>
   div#toc {
@@ -16,6 +16,10 @@ Ticket enrichment is where most operations teams leave time on the floor. The mo
 This guide walks through the ticket enrichment automation journey in six concrete scenarios: what a well-designed **AAP + EDA** setup handles on its own, the signals that tell you when you have outgrown it, and how **Automation Orchestrator (AO)** extends that design when your requirements demand it. Every scenario includes an explicit decision point so you can locate yourself on the journey and know what to build next.
 
 It is written for the engineer who builds and maintains these workflows, not a buyer overview. If you are deciding which node type to use and why, this is for you.
+
+> **Note:** ITSM platform
+>
+> Examples in this guide use ServiceNow and the `servicenow.itsm` collection. The patterns apply equally to any ITSM or ticketing platform — Jira Service Management, BMC Helix, Freshservice, or a custom webhook endpoint. Swap the ticket-creation and work-note steps for your platform's Ansible collection or API.
 
 - [Overview](#overview)
 - [Background](#background)
