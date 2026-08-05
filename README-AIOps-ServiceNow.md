@@ -88,6 +88,14 @@ What makes up the solution?
 >
 > Spanish insurance leader <a target="_blank" href="https://www.redhat.com/en/about/press-releases/mutua-madrilena-adopts-red-hat-ansible-automation-platform-manage-its-automation-and-observability-strategy">Mutua Madrileña</a> paired Dynatrace observability with Event-Driven Ansible to automate incident resolution across 60+ platforms -- cutting IT incidents by half while expanding self-healing to new departments. The LEAP + MCP pattern in this guide follows the same architecture: intelligent detection feeds governed, deterministic automation.
 
+### Demos
+
+- Interactive walkthrough: [Try the interactive Arcade demo](https://app.arcade.software/share/UAt0jBV2NHwrV3rgaTQr)
+
+- Demo video: [Watch the demo](https://youtu.be/x5QtEykcrsM)
+
+<iframe src="https://www.youtube.com/embed/x5QtEykcrsM" style="width: 100%; max-width: 400px; aspect-ratio: 16/9; display: block;" frameborder="0" allowfullscreen></iframe>
+
 <h2 id="workflow"></h2>
 
 ## Workflow
