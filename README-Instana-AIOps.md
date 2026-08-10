@@ -108,6 +108,10 @@ IBM owns both Instana and Red Hat, which means tighter integration than third-pa
 
 ### Demos and Labs
 
+- Demo video: [Watch the demo](https://youtu.be/sjouT0Nnphg)
+
+<iframe src="https://www.youtube.com/embed/sjouT0Nnphg" style="width: 100%; max-width: 400px; aspect-ratio: 16/9; display: block;" frameborder="0" allowfullscreen></iframe>
+
 - [Red Hat TV: From Observability to Action with Event-Driven Ansible and IBM Instana](https://tv.redhat.com/en/detail/6365958260112/from-observability-to-action-with-event-driven-ansible-and-ibm-instana)
 - [IBM Developer: Automation-Powered AIOps using Instana and Red Hat Ansible](https://developer.ibm.com/articles/automation-powered-aiops/)
 
