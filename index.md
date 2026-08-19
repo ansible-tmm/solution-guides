@@ -333,6 +333,28 @@ patternfly: true
           </div>
         </a>
 
+        <a href="{{ '/README-AAP-PostgreSQL-Autovacuum-Tuning' | relative_url }}" class="card-link" data-partners="infrastructure,wip">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__header">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
+              </span>
+            </div>
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">PostgreSQL Autovacuum Tuning for AAP</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              Three targeted autovacuum parameter changes — tested in order of impact — to keep large AAP tables continuously clean at enterprise scale.
+            </div>
+            <div class="pf-v6-c-card__footer">
+              <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Solution Guide</span></span>
+            </div>
+          </div>
+        </a>
+
         <a href="{{ '/README-SQS' | relative_url }}" class="card-link" data-partners="aws,aiops,wip">
           <div class="pf-v6-c-card">
             <div class="pf-v6-c-card__header">
