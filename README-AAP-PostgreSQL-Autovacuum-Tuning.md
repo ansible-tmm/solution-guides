@@ -115,7 +115,7 @@ require it.
 
 ## Rung 2: Increase Check Frequency
 
-![Rung 2: naptime=10s drives a 6× surge in vacuum cadence on high-churn tables](assets/images/AAP-PostgreSQL-Autovacuum-Tuning-Rung2.png)
+![Rung 2: naptime=10s on indexed table (HOT disabled) drives a 6× surge in vacuum rate](assets/images/AAP-PostgreSQL-Autovacuum-Tuning-Rung2.png)
 
 **Apply this if:** You have a table where a frequently-updated column is also indexed. If
 this is the case, HOT (Heap Only Tuple) optimization is disabled on that table. HOT allows
@@ -230,8 +230,8 @@ For example, `main_hostmetric` at peak: 47 pages × 21 = 987, rounded to 1,000.
 **Three possible outcomes — all informative:**
 
 | Outcome | Signal | Interpretation |
-|---|---|---|
-| **Positive** | Same fire rate; dead_pct reaches 0 | cost_limit was the bottleneck; keep the setting |
+|---------|---------------------------------------|-----------------|
+| **Positive** | Same fire rate; dead_pct → 0 | cost_limit was the bottleneck; keep the setting |
 | **Flat** | Fire rate and dead_pct unchanged | cost_limit is not the issue; look elsewhere |
 | **Warning** | CPU spike without improvement | cost_limit too aggressive for available I/O headroom; dial back |
 
@@ -309,8 +309,8 @@ reach 100% before the pass ends. If it does not, increase `cost_limit` and re-ch
 
 ## Related Guides
 
-- [AAP HA/DR on OpenShift with CloudNativePG](README-AAP-HA-DR-OpenShift.md) — the deployment topology this autovacuum tuning applies to
-- [High-Availability AAP with EDB PostgreSQL DR](README-EDB.md) — the EDB variant of the same HA/DR problem
+- [AAP HA/DR on OpenShift with CloudNativePG](https://ansible-tmm.github.io/solution-guides/README-AAP-HA-DR-OpenShift) — the deployment topology this autovacuum tuning applies to
+- [High-Availability AAP with EDB PostgreSQL DR](https://ansible-tmm.github.io/solution-guides/README-EDB) — the EDB variant of the same HA/DR problem
 
 ---
 
