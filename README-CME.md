@@ -1,18 +1,6 @@
 {% raw %}
 # Reducing Residual CVE Risk with Compensating Controls - Solution Guide <!-- omit in toc -->
 
-> **Knowledge Base Article**: [https://access.redhat.com/articles/XXXXXXX](https://access.redhat.com/articles/XXXXXXX)
->
-> While this Solution Guide can be found on the customer portal, this document is the source of truth.
-
-<style>
-  div#toc {
-    display: none;
-  }
-</style>
-
-<h2 id="overview"></h2>
-
 ## Overview
 
 When a critical CVE drops, the ticket says 9.8 and someone asks whether the fleet is exposed. Security maps the advisory to "whatever hardening we think we have." Engineers SSH into a handful of hosts and run `getenforce`, `sysctl`, and `update-crypto-policies --show`. The report, if there is one, is a pass/fail spreadsheet with no number attached to residual risk. CVSS environmental scoring was supposed to help. In practice almost nobody uses it, because it asks an analyst to guess.
@@ -510,5 +498,4 @@ This solution turns 118 CME defensive controls into compliance-as-code Ansible r
 - <a target="_blank" href="https://github.com/nmartins0611/cme">cme.controls collection -- GitHub</a>
 - <a target="_blank" href="https://d3fend.mitre.org/">MITRE D3FEND</a>
 - <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible">Red Hat Ansible Automation Platform</a>
-- <a target="_blank" href="https://access.redhat.com/security/cve/CVE-2024-38476">CVE-2024-38476 -- access.redhat.com</a>
 {% endraw %}
