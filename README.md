@@ -7,6 +7,9 @@ Solution guides for AI-driven automation with Ansible Automation Platform.
 
 | Solution Guide | Guide | Knowledge Base |
 |----------------|-------|----------------|
+| Defend, Contain, Comply -- Vulnerability Lifecycle Automation | [README-DCC.md](README-DCC.md) | |
+| Zero Trust Operations with Ansible Automation Platform | [README-ZTA.md](README-ZTA.md) | |
+| Reducing Residual CVE Risk with Compensating Controls | [README-CME.md](README-CME.md) | |
 | AIOps automation with Ansible | [README-AIOps.md](README-AIOps.md) | [access.redhat.com](https://access.redhat.com/articles/7119667) |
 | AIOps with Splunk and Event-Driven Ansible | [README-AIOps-Splunk-ITSI.md](README-AIOps-Splunk-ITSI.md) | |
 | AIOps with AWS SQS and Event-Driven Ansible | [README-SQS.md](README-SQS.md) | |

@@ -172,6 +172,73 @@ patternfly: true
         </div>
       </a>
 
+      <a href="{{ '/README-DCC' | relative_url }}" class="card-link" data-partners="foundational,splunk">
+        <div class="pf-v6-c-card card-foundational">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-green">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Defend, Contain, Comply</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Automated vulnerability lifecycle management -- from Splunk CVE detection through EDA-driven containment, OPA policy-gated patching, CIS-aligned hardening, and hardened container delivery.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
+            <img src="{{ '/assets/images/splunk-logo.png' | relative_url }}" alt="Splunk" class="card-partner-logo">
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ '/README-ZTA' | relative_url }}" class="card-link" data-partners="foundational">
+        <div class="pf-v6-c-card card-foundational">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-green">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Zero Trust Operations</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Ansible Automation Platform as the Policy Enforcement Point -- identity, short-lived credentials, OPA policy gating, SPIFFE workload identity, and EDA-driven incident response aligned with NIST SP 800-207.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ '/README-CME' | relative_url }}" class="card-link" data-partners="foundational">
+        <div class="pf-v6-c-card card-foundational">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-green">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Reducing Residual CVE Risk</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Query, verify, and remediate compensating controls from the CME taxonomy, then rewrite the CVSS vector from what is actually active -- residual risk as a measurement, not a guess.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
+          </div>
+        </div>
+      </a>
+
       <a href="{{ '/README-IA' | relative_url }}" class="card-link" data-partners="integration">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header">
