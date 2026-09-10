@@ -496,6 +496,7 @@ ls reports/cve_CVE-2024-38476_*_PRE.html reports/cve_CVE-2024-38476_*_POST.html
 
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e1.png" width="20" style="vertical-align:text-bottom;"> **[Defend, Contain, Comply](README-DCC.md)** -- SIEM detection, EDA containment, OPA-gated vendor patching, CIS hardening, and container delivery for the same CVE class
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e1.png" width="20" style="vertical-align:text-bottom;"> **[Zero Trust Operations with Ansible](README-ZTA.md)** -- AAP as PEP, OPA as PDP, short-lived credentials, and automated credential revocation
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e1.png" width="20" style="vertical-align:text-bottom;"> **[Post-Quantum Cryptography Readiness for RHEL](README-PQC.md)** -- cryptographic inventory and PQC remediation, including the same crypto-policy surface this guide scores as a compensating control
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f517.png" width="20" style="vertical-align:text-bottom;"> **[AIOps automation with Ansible](README-AIOps.md)** -- event-driven plus AI workflows when you want diagnosis and playbook generation in front of this pipeline
 
 <h2 id="summary"></h2>

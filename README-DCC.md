@@ -714,6 +714,7 @@ The compliance report at `/tmp/compliance-reports/` contains timestamped HTML wi
 - [AIOps with Splunk and Event-Driven Ansible](README-AIOps-Splunk-ITSI.md) -- deeper Splunk integration patterns including ITSI predictive analytics and ML-driven anomaly detection
 - [Zero Trust Operations with Ansible](README-ZTA.md) -- OPA policy-as-code, SPIFFE workload identity, and short-lived credentials for zero-trust automation
 - [Reducing Residual CVE Risk with Compensating Controls](README-CME.md) -- verify and score host mitigations (ASLR, SELinux, crypto policy) while the vendor patch is still in flight
+- [Post-Quantum Cryptography Readiness for RHEL](README-PQC.md) -- fleet cryptographic inventory, CycloneDX CBOM, and staged PQC remediation on the same RHEL hosts
 
 <h2 id="summary"></h2>
 
