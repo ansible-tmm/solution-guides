@@ -21,6 +21,7 @@ Solution guides for AI-driven automation with Ansible Automation Platform.
 | Ticket Enrichment Automation: From EDA to AI-Driven Orchestration (Automation Journey Guide) | [README-AIOps-Ticket-Enrichment.md](README-AIOps-Ticket-Enrichment.md) | |
 | Consuming OpenShift API Resources with EDA and Kafka | [README-OpenShift-EDA-Kafka.md](README-OpenShift-EDA-Kafka.md) | |
 | AAP HA/DR on OpenShift with CloudNativePG | [README-AAP-HA-DR-OpenShift.md](README-AAP-HA-DR-OpenShift.md) | |
+| Proactive vulnerability remediation with Satellite, Event-Driven Ansible, and Lightspeed On-Premises | [README-Satellite-CVE-Remediation.md](README-Satellite-CVE-Remediation.md) | |
 
 ## Contributing
 
