@@ -43,6 +43,9 @@ patternfly: true
         <input type="checkbox" value="instana"> IBM Instana
       </label>
       <label class="cards-sidebar__checkbox">
+        <input type="checkbox" value="logicmonitor"> LogicMonitor
+      </label>
+      <label class="cards-sidebar__checkbox">
         <input type="checkbox" value="redhat-ai"> Red Hat AI
       </label>
       <label class="cards-sidebar__checkbox">
@@ -498,6 +501,25 @@ patternfly: true
             </div>
             <div class="pf-v6-c-card__body">
               A journey guide for operations teams: when EDA and AAP are enough, when to add LLM-based ticket enrichment, and when Automation Orchestrator's switch, approval, and AI agent nodes become the right tools.
+            </div>
+          </div>
+        </a>
+
+        <a href="{{ '/README-AIOps-LogicMonitor' | relative_url }}" class="card-link" data-partners="logicmonitor,aiops,solution,wip">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__header">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
+              </span>
+            </div>
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">Closed-Loop Network Remediation with LogicMonitor and Edwin AI</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              A crawl-walk-run maturity model for closed-loop network remediation: LogicMonitor alerts trigger Event-Driven Ansible, progressing from a single BGP-reset job template, to Edwin AI-enriched branched workflows, to agentic remediation via the AAP MCP Server.
             </div>
           </div>
         </a>

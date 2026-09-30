@@ -1,5 +1,7 @@
 # LogicMonitor \+ Ansible Automation Platform: AIOps Solution Guide
 
+> **Work in Progress** -- this guide is actively being developed.
+
 **From Alert Noise to Governed Remediation**
 
 Organizations invest heavily in observability, yet most still rely on humans to translate monitoring insights into remediation actions. LogicMonitor and Edwin AI provide the intelligence to detect, analyze, and recommend. Ansible Automation Platform provides the trust layer to govern, execute, and report. Together, they deliver closed-loop AIOps that is safe enough for 3 AM and auditable enough for Monday morning.
