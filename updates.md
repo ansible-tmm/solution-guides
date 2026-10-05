@@ -9,7 +9,7 @@ permalink: /updates/
 </div>
 
 <!-- BEGIN:AUTO-UPDATES -->
-*Rolling window: 2026-09-01 to 2026-10-01. Regenerated weekly from git history.*
+*Rolling window: 2026-09-05 to 2026-10-05. Regenerated weekly from git history.*
 
 ### New guides
 
@@ -50,6 +50,7 @@ permalink: /updates/
 
 ### Site and tooling
 
+- Add weekly What's New page from git history
 - Clean up issue title: strip README- prefix, hyphens to spaces, better fallback
 - Use page filename instead of document.title for issue title
 - Pre-fill GitHub issue with current page URL
@@ -64,9 +65,8 @@ permalink: /updates/
 - Align NetBox cards with the new Solution/Implementation guide-type schema
 - Publish NetBox guides and rename for EDA consistency
 - Replace Event-Driven catalog track with Network automation category.
-- Fix how-work-starts image path on AIOps use cases hub.
 
-_…and 114 more site commits in this window._
+_…and 115 more site commits in this window._
 
 <!-- END:AUTO-UPDATES -->
 
