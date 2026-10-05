@@ -2,8 +2,17 @@
 
 <h1>PostgreSQL Autovacuum Tuning Guide for Ansible Automation Platform</h1>
 
-<span class="guide-type-badge guide-type-badge--implementation"><i class="fas fa-cogs" aria-hidden="true"></i> Implementation guide</span>
+<span class="guide-type-badge guide-type-badge--implementation"><i class="fas fa-cogs" aria-hidden="true"></i> Implementation Guide</span>
 
+</div>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--postgresql" role="img" aria-label="Ansible Automation Platform and PostgreSQL">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set card-partner-logo-set--postgresql">
+    <img src="assets/images/logos/postgresSQL.png" alt="PostgreSQL" class="card-partner-logo card-partner-logo--light">
+    <img src="assets/images/logos/postgresSQL_dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+  </span>
 </div>
 
 ## Overview
@@ -26,9 +35,9 @@ Every UPDATE and DELETE in PostgreSQL leaves behind a "dead tuple" - the old row
 
 ## Background
 
-This guide was developed and validated in summer 2026 on a Red Hat Scale Lab cluster running AAP 2.6 (Controller 4.7.15) on OpenShift 4.21.19 with a two-node CloudNativePG PostgreSQL 15.10 database. Representative of a large enterprise deployment, the environment included approximately 37,000 managed hosts, 40,000 job templates, and a sustained workload of more than 3,000 jobs per hour (72,000 per day). Database memory configuration matched a tuned production cluster with `shared_buffers=16 GB` and `effective_cache_size=48 GB.`
+This guide was developed and validated in summer 2026 on a Red Hat Scale Lab cluster running AAP 2.6 (Controller 4.7.15) on OpenShift 4.21.19 with a two-node CloudNativePG PostgreSQL 15.10 database. Sized to represent a large enterprise deployment, the environment included approximately 37,000 managed hosts, 40,000 job templates, and a sustained workload of more than 3,000 jobs per hour (~75,000 per day). Database memory configuration matched a tuned production cluster with `shared_buffers=16 GB` and `effective_cache_size=48 GB`.
 
-To simulate what a customer environment looks like without autovacuum tuning, the two highest-churn tables (`main_unifiedjob` and `main_job`) had autovacuum deliberately disabled for the four days before measurement began, driving `main_unifiedjob` to 39% dead tuples at the start of the baseline rung. Each of the three tuning rungs ran for approximately 10 hours with bloat state carried forward. Since there were no table resets between rungs, each set of parameters had to recover from real accumulated bloat rather than a freshly vacuumed starting point. Measurements were taken at T=0, 2, 5, 8, and 10 hrs within each rung.
+To simulate what a customer environment looks like without autovacuum tuning, the two highest-churn tables (`main_unifiedjob` and `main_job`) had autovacuum deliberately disabled for four days before measurement began, driving `main_unifiedjob` to 39% dead tuples at the start of the baseline rung. Each of the three tuning rungs ran for approximately 10 hours with bloat state carried forward. Since there were no table resets between rungs, each set of parameters had to recover from real accumulated bloat rather than a freshly vacuumed starting point. Measurements were taken at T=0, 2 hr, 5 hr, 8 hr, and 10 hr within each rung.
 
 ## Prerequisites
 - Superuser access to the AAP PostgreSQL instance
@@ -473,7 +482,7 @@ Quick reference for metrics, settings, and diagnostic views. Settings show the s
 <li><a href="#overview">Review the decision diagram in Overview</a></li>
 <li><a href="#tuning-path">Follow the tuning path</a> for rung order</li>
 <li><a href="#key-terms">Jump to Key Terms</a> for a parameter lookup</li>
-<li><a href="/">Back to Ansible Guides</a></li>
+<li><a href="/">Back to AAP Guides</a></li>
 </ul>
 
 </div>

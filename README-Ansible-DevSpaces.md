@@ -1,4 +1,19 @@
-# Ansible Development Workspaces - Solution Guide
+<div class="guide-header">
+
+<h1>Ansible Development Workspaces</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--cloud-native" role="img" aria-label="Ansible Automation Platform and Red Hat OpenShift Dev Spaces">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set">
+    <img src="assets/images/logos/cloud-native.png" alt="Red Hat OpenShift" class="card-partner-logo card-partner-logo--light">
+    <img src="assets/images/logos/cloud-native-dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+  </span>
+</div>
 
 ## Overview
 

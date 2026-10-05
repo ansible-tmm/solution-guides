@@ -1,5 +1,5 @@
 (function () {
-  var EXCLUDED_CLASSES = ['header-logo', 'footer-logo', 'card-partner-logo'];
+  var EXCLUDED_CLASSES = ['header-logo', 'footer-logo', 'card-partner-logo', 'guide-vendor-logo', 'guide-tool-logo', 'guide-hero-callout__icon', 'guide-hero-partner__partner', 'guide-aiops-circle', 'guide-how-work-starts', 'guide-closing-logo'];
   var overlay = null;
   var overlayImg = null;
   var closeBtn = null;
@@ -19,7 +19,7 @@
     if (/\.svg(\?|#|$)/i.test(src)) return false;
 
     var widthAttr = parseInt(img.getAttribute('width'), 10);
-    if (!isNaN(widthAttr) && widthAttr <= 48) return false;
+    if (!isNaN(widthAttr) && widthAttr <= 280) return false;
 
     return true;
   }

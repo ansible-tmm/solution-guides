@@ -1,12 +1,25 @@
+<div class="guide-header">
 
-# AI Infrastructure Automation with Ansible – Solution Guide
+<h1>AI Infrastructure Automation with Ansible</h1>
 
+<span class="guide-type-badge guide-type-badge--implementation"><i class="fas fa-cogs" aria-hidden="true"></i> Implementation Guide</span>
+
+</div>
 
 <style>
   div#toc {
     display: none;
   }
 </style>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--redhat-ai" role="img" aria-label="Ansible Automation Platform and Red Hat AI">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set card-partner-logo-set--redhat-ai">
+    <img src="assets/images/logos/redhat-ai-logo.png" alt="Red Hat AI" class="card-partner-logo card-partner-logo--light">
+    <img src="assets/images/logos/redhat-ai-logo-dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+  </span>
+</div>
 
 <h2 id="background"></h2>
 ## Background
@@ -32,7 +45,7 @@ This Ansible-based solution automates the key steps involved in setting up an AI
 - Serving an AI model: Deploys InstructLab, fetches a model, and launches an inference endpoint.
 - Validation: Verifies that the model server is accessible and working using test prompts.
 
-Together, these steps create a repeatable and auditable way to deploy AI infrastructure--from infrastructure provisioning to serving a model--using automation best practices. This automation can also be used to power the Ansible Lightspeed intelligent assistant by configuring Red Hat AI as a model provider and connecting Ansible Lightspeed to the hosted LLM.
+Together, these steps create a repeatable and auditable way to deploy AI infrastructure--from infrastructure provisioning to serving a model--using automation best practices. This automation can also back **Automation intelligent assistant** in AAP by configuring Red Hat AI as a model provider and pointing the chatbot at your hosted LLM endpoint.
 
 <h2 id="solution-overview"></h2>
 ## Solution Overview
@@ -261,16 +274,16 @@ You can also use the redhat.ai.completion module to send a prompt to the model d
 
 This method is useful when testing from within an automated workflow or integrating into a larger playbook.
 
-<h2 id="integration-with-ansible-lightspeed"></h2>
-## Integration with Ansible Lightspeed
+<h2 id="integration-with-automation-intelligent-assistant"></h2>
+## Integration with Automation intelligent assistant
 
-Once you have validated that the LLM is running and serving inference requests, this automated setup can act as the backend foundation for powering the Ansible Lightspeed Intelligent Assistant within Ansible Automation Platform (AAP).
+Once you have validated that the LLM is running and serving inference requests, this automated setup can act as the backend for **Automation intelligent assistant** within Ansible Automation Platform (AAP).
 
-This means you can use this deployment to support internal use cases where the Ansible Lightspeed intelligent assistant needs to leverage model hosted on your own infrastructure. This is particularly useful for air-gapped, privacy-sensitive, or regulated environments where using public models is not ideal.
+Use this deployment when **Automation intelligent assistant** must call a model on your own infrastructure -- air-gapped, privacy-sensitive, or regulated environments where public models are not ideal.
 
 After the model backend is ready:
-	•	Follow the [Ansible Lightspeed documentation](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/installing_on_openshift_container_platform/deploying-chatbot-operator) to configure and enable the Ansible Lightspeed intelligent assistant in AAP.
-	•	In the Lightspeed settings, supply your hosted LLM’s API endpoint and token as required.
+	•	Follow the [Automation intelligent assistant documentation](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/installing_on_openshift_container_platform/deploying-chatbot-operator) to configure and enable the in-product chatbot in AAP (legacy doc paths may still reference Ansible Lightspeed).
+	•	In the chatbot configuration secret, supply your hosted LLM API endpoint and token as required.
 
 This integration enables you to leverage generative AI for Ansible Automation Platform while retaining full control over your LLM infrastructure.
 
@@ -289,7 +302,7 @@ We recommend checking for updates to these collections regularly on [Automation 
 ## Sources
 
 - [Red Hat Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible)
-- [Red Hat Ansible Lightspeed](https://www.redhat.com/en/technologies/management/ansible/ansible-lightspeed)
+- [Red Hat Lightspeed for Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible/ansible-lightspeed)
 - [Red Hat Enterprise Linux AI](https://www.redhat.com/en/products/ai/enterprise-linux-ai)
 
 ---
@@ -304,4 +317,7 @@ We recommend checking for updates to these collections regularly on [Automation 
 
 ---
 
-<img width="400" src="https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/aap_logo.png">
+<span class="guide-closing-logo-set">
+<img class="guide-closing-logo guide-closing-logo--light" src="assets/images/logos/aap_logo.png" alt="Red Hat Ansible Automation Platform">
+<img class="guide-closing-logo guide-closing-logo--dark" src="assets/images/logos/redhat-ansible-logo.svg" alt="" aria-hidden="true">
+</span>

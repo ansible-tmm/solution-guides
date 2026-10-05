@@ -8,7 +8,6 @@ Browse all solution guides, filter by partner or type, and find contributing gui
 
 **Ansible Automation Platform Features**
 
-- [Automation Dashboard and Analytics - Solution Guide](https://access.redhat.com/articles/7136383)
 - [Get started with EDA (Ansible Rulebook) - Solution Guide](https://access.redhat.com/articles/7136720)
 
 **AI + Ansible Automation Platform**

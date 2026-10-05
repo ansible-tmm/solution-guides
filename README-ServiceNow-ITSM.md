@@ -1,6 +1,19 @@
-# ServiceNow ITSM Ticket Enrichment Automation - Solution Guide <!-- omit in toc -->
+<div class="guide-header">
 
-<img src="assets/images/servicenow-hero.png" alt="Ansible + ServiceNow" style="max-width:400px">
+<h1>ServiceNow ITSM Ticket Enrichment Automation</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--servicenow" role="img" aria-label="Ansible Automation Platform and ServiceNow">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set">
+    <img src="assets/images/logos/servicenow-logo.png" alt="ServiceNow" class="card-partner-logo card-partner-logo--light">
+    <img src="assets/images/logos/servicenow-logo-dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+  </span>
+</div>
 
 ## Overview
 
@@ -257,17 +270,17 @@ Create a job template using this playbook. Save it as "Enrich CVE ticket." Add a
 | <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3c3.png" width="20" style="vertical-align:text-bottom;"> **Walk** | Chain steps into AAP workflow templates; enrich tickets with CVE data from Red Hat Insights; add surveys for user input |
 | <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f680.png" width="20" style="vertical-align:text-bottom;"> **Run** | Integrate Event-Driven Ansible for automatic ticket creation on alerts; update CMDB; attach reports; connect monitoring/observability tools for closed-loop remediation |
 
+## Summary
+
+This guide demonstrates the lowest-risk entry point for ServiceNow + Ansible automation: reading ticket data, creating incidents, and enriching them with CVE advisory context from Red Hat Insights. Each step builds on the last, from simple data gathering to automated enrichment that reduces manual triage and improves ticket quality. Once comfortable with these patterns, teams can extend to CMDB updates, file attachments, Event-Driven Ansible integrations, and the governed LEAP + MCP execution pattern described in the companion guide.
+
+---
+
 ## Related Guides
 
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f517.png" width="20" style="vertical-align:text-bottom;"> **LEAP + MCP integration:** [Unlock AIOps with ServiceNow LEAP and Ansible MCP server](README-AIOps-ServiceNow.md)
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4cb.png" width="20" style="vertical-align:text-bottom;"> **AIOps reference architecture:** [AIOps automation with Ansible](README-AIOps.md)
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **Event-Driven Ansible:** <a target="_blank" href="https://www.redhat.com/en/interactive-labs/ansible#event-driven-ansible">Self-paced labs: Getting started with Event-Driven Ansible</a>
-
----
-
-## Summary
-
-This guide demonstrates the lowest-risk entry point for ServiceNow + Ansible automation: reading ticket data, creating incidents, and enriching them with CVE advisory context from Red Hat Insights. Each step builds on the last, from simple data gathering to automated enrichment that reduces manual triage and improves ticket quality. Once comfortable with these patterns, teams can extend to CMDB updates, file attachments, Event-Driven Ansible integrations, and the governed LEAP + MCP execution pattern described in the companion guide.
 
 ---
 
@@ -281,4 +294,7 @@ This guide demonstrates the lowest-risk entry point for ServiceNow + Ansible aut
 
 ---
 
-<img width="400" src="https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/aap_logo.png">
+<span class="guide-closing-logo-set">
+<img class="guide-closing-logo guide-closing-logo--light" src="assets/images/logos/aap_logo.png" alt="Red Hat Ansible Automation Platform">
+<img class="guide-closing-logo guide-closing-logo--dark" src="assets/images/logos/redhat-ansible-logo.svg" alt="" aria-hidden="true">
+</span>

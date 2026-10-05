@@ -1,5 +1,11 @@
 {% raw %}
-# Automated Incident Remediation with IBM Instana and Ansible Automation Platform - Solution Guide <!-- omit in toc -->
+<div class="guide-header">
+
+<h1>Automated Incident Remediation with IBM Instana and Ansible Automation Platform</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
 
 <style>
   div#toc {
@@ -7,7 +13,14 @@
   }
 </style>
 
-<img src="assets/images/instana-hero.png" alt="Ansible + Instana" style="max-width:400px">
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--instana" role="img" aria-label="Ansible Automation Platform and IBM Instana">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set">
+    <img src="assets/images/logos/instana-logo.png" alt="IBM Instana" class="card-partner-logo card-partner-logo--light">
+    <img src="assets/images/logos/instana-logo-dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+  </span>
+</div>
 
 ## Overview
 
@@ -811,14 +824,6 @@ app-server-01.example.com : ok=4    changed=1    unreachable=0    failed=0
 
 ---
 
-## Related Guides
-
-- [AIOps automation with Ansible](README-AIOps.md) -- the tool-agnostic AIOps pattern that this guide builds on
-- [AI Infrastructure automation with Ansible](README-IA.md) -- deploy the AI inference backend if using the optional LLM enrichment step
-- [Get started with EDA](https://access.redhat.com/articles/7136720) -- Event-Driven Ansible fundamentals for teams new to event-driven automation
-
----
-
 ## ROI Recap
 
 By connecting IBM Instana to Ansible Automation Platform, you have turned your existing automation library into a governed, event-driven remediation pipeline:
@@ -848,6 +853,14 @@ Start capturing these metrics before enabling automated remediation -- having a 
 > **Tip:** Define a small metric set before you scale automation.
 >
 > Identify 3-5 metrics most relevant to your environment and begin capturing baselines during the Crawl stage. Organizations that define success metrics before enabling automation can demonstrate measurable impact within the first quarter.
+
+---
+
+## Related Guides
+
+- [AIOps automation with Ansible](README-AIOps.md) -- the tool-agnostic AIOps pattern that this guide builds on
+- [AI Infrastructure automation with Ansible](README-IA.md) -- deploy the AI inference backend if using the optional LLM enrichment step
+- [Get started with EDA](https://access.redhat.com/articles/7136720) -- Event-Driven Ansible fundamentals for teams new to event-driven automation
 
 ---
 
@@ -902,5 +915,8 @@ Start capturing these metrics before enabling automated remediation -- having a 
 
 ---
 
-<img width="400" src="https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/aap_logo.png">
+<span class="guide-closing-logo-set">
+<img class="guide-closing-logo guide-closing-logo--light" src="assets/images/logos/aap_logo.png" alt="Red Hat Ansible Automation Platform">
+<img class="guide-closing-logo guide-closing-logo--dark" src="assets/images/logos/redhat-ansible-logo.svg" alt="" aria-hidden="true">
+</span>
 {% endraw %}

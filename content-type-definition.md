@@ -54,7 +54,7 @@ Tracking is currently via GitHub Pages analytics (page views, time on page), KB 
 
 ## Common Sections / Document Outline
 
-All solution guides follow a standardized framework defined in the [Best Practices for Writing Solution Guides](README-best-practices.md). The section names map 1:1 across every guide:
+All solution guides follow a standardized framework defined in the [Best Practices for Writing Solution Guides](README-best-practices.md). Implementation guides use a separate framework in [Best Practices for Writing Implementation Guides](README-best-practices-implementation.md). The [Best Practices hub](best-practices.md) explains when to use each. Solution guide section names map 1:1 across every guide:
 
 | Section | Purpose | Key Elements |
 |---------|---------|-------------|
@@ -102,7 +102,6 @@ All solution guides follow a standardized framework defined in the [Best Practic
 
 | Guide | KB Article |
 |-------|------------|
-| Automation Dashboard and Analytics | [7136383](https://access.redhat.com/articles/7136383) |
 | Get started with EDA (Ansible Rulebook) | [7136720](https://access.redhat.com/articles/7136720) |
 | ServiceNow ITSM Ticket Enrichment Automation | [7127603](https://access.redhat.com/articles/7127603) |
 | Network Fact Gathering & Reporting | [7123361](https://access.redhat.com/articles/7123361) |

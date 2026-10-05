@@ -48,10 +48,15 @@
       function renderMermaid() {
         document.querySelectorAll('pre > code.language-mermaid').forEach(function (codeEl) {
           var pre = codeEl.parentElement;
+          var wrapper = pre.closest('.code-block-wrapper');
           var div = document.createElement('div');
           div.className = 'mermaid';
           div.textContent = codeEl.textContent;
-          pre.parentNode.replaceChild(div, pre);
+          if (wrapper) {
+            wrapper.parentNode.replaceChild(div, wrapper);
+          } else {
+            pre.parentNode.replaceChild(div, pre);
+          }
         });
 
         document.querySelectorAll('.mermaid').forEach(function (el) {
@@ -105,6 +110,7 @@
       };
     </script>
     <script src="{{ '/assets/tablelink.js' | relative_url }}"></script>
+    <script src="{{ '/assets/md-links.js' | relative_url }}"></script>
     <script src="{{ '/assets/image-lightbox.js' | relative_url }}"></script>
     <script src="{{ '/assets/code-blocks.js' | relative_url }}"></script>
 
@@ -120,7 +126,7 @@
               title="Red Hat Ansible"
               alt="Red Hat Ansible"
             />
-            <span class="header-title">Ansible Guides</span>
+            <span class="header-title">AAP Guides</span>
           </a>
           <button class="header-hamburger" id="header-hamburger" aria-label="Toggle menu">
             <i class="fas fa-bars"></i>
@@ -129,13 +135,13 @@
             <a class="header-link" href="{{ '/' | relative_url }}">
               Home
             </a>
-            <a class="header-link" href="{{ '/README-AIOps' | relative_url }}">
-              AIOps
+            <a class="header-link" href="{{ '/guide-types/' | relative_url }}">
+              Guide types
             </a>
-            <a class="header-link" href="{{ '/README-best-practices' | relative_url }}">
+            <a class="header-link" href="{{ '/best-practices/' | relative_url }}">
               Best practices
             </a>
-            <a class="header-link" target="_new" href="https://github.com/ansible-tmm/solution-guides/issues/new">
+            <a class="header-link" target="_new" id="open-issue-link" href="https://github.com/ansible-tmm/solution-guides/issues/new">
               Open an issue
             </a>
             <button type="button" class="header-theme-toggle" id="theme-toggle" aria-label="Switch to dark mode" title="Switch to dark mode">
@@ -150,12 +156,15 @@
       </header>
 
       <section>
-        <div style="text-align: right; margin-bottom: 0.5rem;">
+        {% unless page.patternfly or page.inline_edit %}
+        <div class="edit-link-wrap">
           <a href="https://github.com/ansible-tmm/solution-guides/edit/main/{{ page.path }}"
              target="_blank" class="edit-link">
-            <i class="fas fa-pencil-alt"></i> Edit on GitHub
+            <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+            Edit on GitHub
           </a>
         </div>
+        {% endunless %}
         {{ content }}
       </section>
 
@@ -177,7 +186,9 @@
             <span class="footer-linkSpacer">|</span>
             <a href="https://www.redhat.com/en/about/all-policies-guidelines" class="footer-link">All policies and guidelines</a>
             <span class="footer-linkSpacer">|</span>
-            <a href="{{ '/opus-review' | relative_url }}" class="footer-link">Review</a>
+            <a href="{{ '/reviews/' | relative_url }}" class="footer-link">Reviews</a>
+            <span class="footer-linkSpacer">|</span>
+            <a href="{{ '/updates/' | relative_url }}" class="footer-link">What's New</a>
             <span class="footer-linkSpacer">|</span>
             <a href="https://github.com/ansible-tmm/solution-guides" target="_blank" class="footer-link" title="View source on GitHub">
               <i class="fab fa-github"></i> GitHub
@@ -283,7 +294,7 @@
         var backLink = document.createElement('a');
         backLink.href = '{{ "/" | relative_url }}';
         backLink.className = 'guide-sidebar__back';
-        backLink.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Ansible Guides';
+        backLink.innerHTML = '<i class="fas fa-arrow-left"></i> Back to AAP Guides';
         sidebar.appendChild(backLink);
 
         var nav = document.createElement('nav');
@@ -325,12 +336,12 @@
         wrapper.appendChild(sidebar);
         wrapper.appendChild(section);
 
-        var activeLink = null;
+        var navHeadings = headings;
         var sidebarLinks = ul.querySelectorAll('.guide-sidebar__link');
         function updateActive() {
           var scrollPos = window.scrollY + 100;
           var current = null;
-          headings.forEach(function(h) {
+          navHeadings.forEach(function(h) {
             if (h.offsetTop <= scrollPos) current = h.id;
           });
           if (overviewHeading && overviewHeading.id) {
@@ -446,6 +457,19 @@
 
           requestAnimationFrame(animate);
         }
+      })();
+    </script>
+    <script>
+      (function() {
+        var link = document.getElementById('open-issue-link');
+        if (!link) return;
+        var base = link.href.split('?')[0];
+        var pageURL = window.location.href;
+        var pageName = window.location.pathname.split('/').pop().replace('.html', '').replace(/^index$/, '') || 'Solution Guides Index';
+        pageName = pageName.replace(/^README-/, '').replace(/-/g, ' ');
+        var title = encodeURIComponent('Feedback: ' + pageName);
+        var body = encodeURIComponent('**Page:** ' + pageURL + '\n\n---\n\n');
+        link.href = base + '?title=' + title + '&body=' + body;
       })();
     </script>
   </body>

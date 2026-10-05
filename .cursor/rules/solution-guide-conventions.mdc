@@ -41,19 +41,51 @@ Internal cross-references between solution guides should use plain markdown link
 See [AIOps automation with Ansible](README-AIOps.md) for the full pipeline.
 ```
 
+Many guide bodies wrap content in `{% raw %}…{% endraw %}`, so **Liquid does not run** inside them. For HTML `href` attributes in those files (for example use-case strips), use a plain Pages path with `.html`, not `relative_url`:
+
+```html
+# Good -- works inside {% raw %} on GitHub Pages
+<a href="README-AIOps-Use-Case-01-Incident-Ticket-Enrichment.html">…</a>
+
+# Bad -- Liquid left as literal text inside {% raw %}
+<a href="{{ '/README-AIOps-Use-Case-01-Incident-Ticket-Enrichment' | relative_url }}">…</a>
+
+# Bad -- GitHub Pages serves raw markdown for .md URLs
+<a href="README-AIOps-Use-Case-01-Incident-Ticket-Enrichment.md">…</a>
+```
+
+Hub pages with YAML front matter and no `{% raw %}` wrapper (for example `aiops-use-cases.md`) may keep using `{{ '/path' | relative_url }}`.
+
 ## Solution Guide Structure
 
 All solution guides must follow the framework in `README-best-practices.md`. The framework section names map 1:1 to the section names in every guide:
 
-1. **Title** — `[Topic] - Solution Guide` format. Outcome-oriented, not product feature.
-2. **Overview** — Problem statement (2-4 sentences), hero image, table of contents.
+1. **Title** -- outcome-oriented topic in `<h1>` with a `guide-type-badge` pill (Solution Guide, Implementation Guide, or AIOps Use Case for the ticket enrichment appendix). Do not append the guide type to the `<h1>` text. Operational patterns (six use cases, Crawl/Walk/Run) belong in [README-AIOps.md](README-AIOps.md#common-aiops-use-cases), not separate catalog entries.
+2. **Overview** -- Problem statement (2-4 sentences), hero callout, table of contents.
+
+### Guide hero callout (below `guide-header`)
+
+- **Foundational AIOps** ([README-AIOps.md](README-AIOps.md)): `guide-hero-callout` with AAP icon and **Ansible unlocks AIOps** text (no partner logo).
+- **Partner Solution and Implementation guides**: `guide-hero-callout guide-hero-partner` with AAP icon, `+`, and partner wordmark at **36px** height, left-aligned in the same lavender box. Use light/dark logo pairs from `assets/images/logos/` when available. Add a modifier class (`guide-hero-partner--splunk`, `--netbox`, `--redhat-ai`, etc.) when the wordmark needs sizing tweaks (see `assets/css/style.scss`).
+- **AIOps Use Case** pattern pages: no partner hero unless a single vendor is the focus; link to the foundational guide instead.
+
+```html
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--splunk" role="img" aria-label="Ansible Automation Platform and Splunk">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set">
+    <img src="assets/images/logos/splunk-logo.png" alt="Splunk" class="card-partner-logo card-partner-logo--light">
+    <img src="assets/images/logos/splunk-logo-dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+  </span>
+</div>
+```
 3. **Background** — Domain context explaining what the topic is and why it matters.
 4. **Solution** — Components list, Who Benefits persona table, demos/videos.
 5. **Prerequisites** — AAP version, collections (with Automation Hub links), external systems.
 6. **[Topic] Workflow** — Architecture diagrams, narrative walkthrough.
 7. **Solution Walkthrough** — Step-by-step technical depth with featured code.
 8. **Validation** — Concrete test, expected output, troubleshooting table.
-9. **Maturity Path and Related Guides** — Crawl/Walk/Run, cross-links to other guides.
+9. **Maturity Path, Summary, and Related Guides** — Crawl/Walk/Run, then Summary (wraps up the guide), then Related Guides (call to action for what to read next). Summary always comes before Related Guides.
 
 Key non-negotiables:
 
@@ -63,6 +95,8 @@ Key non-negotiables:
 - **Validation section is mandatory**: Include a concrete test, verbatim expected output, and a troubleshooting table.
 - **Automation Hub links**: Every Ansible collection referenced must link to its Automation Hub page.
 - **KB article link (legacy only)**: If a corresponding article exists on access.redhat.com, include the link in a blockquote under the title. New guides do not require a KB article.
+- **Lightspeed naming**: Follow `.cursor/rules/red-hat-lightspeed-terminology.mdc` for Automation code assistant, Automation intelligent assistant, and Red Hat Lightspeed in new prose and catalog copy.
+- **Automation orchestrator naming**: Follow `.cursor/rules/red-hat-automation-orchestrator-terminology.mdc` (**Automation orchestrator**, not title case on the second word).
 
 ## Scoring and Reviewing Guides
 
@@ -79,6 +113,8 @@ When reviewing or grading solution guides, use the weighted rubric from `README-
 
 Score each category 1-5. Multiply by weight for a final score out of 10. Any category below 3 means revise before publishing.
 
+Apply category-aware adjustments for AIOps, Network automation, and AIOps Use Case pages (see "Scoring by Solution Category" in `README-best-practices.md`). Do not penalize Network automation guides for lacking AI components.
+
 When writing a review:
 1. List **Strengths** (what the guide does well).
 2. List **Weaknesses** (specific gaps, not vague complaints).
@@ -86,7 +122,9 @@ When writing a review:
 4. Provide an overall score and a one-line verdict.
 5. If reconciling with another reviewer, document the reasoning for any score changes.
 
-Reviews are stored in `opus-review.md` with a scorecard table at the top.
+Solution guide reviews are stored in `opus-review-solution.md`. Implementation guide reviews are in `opus-review-implementation.md`. The [Reviews hub](reviews.md) links to both.
+
+Implementation guides follow `README-best-practices-implementation.md` -- a separate framework and rubric from solution guides. The [Best Practices hub](best-practices.md) explains when to use each.
 
 ## Mermaid Diagrams
 
@@ -112,5 +150,9 @@ Use `graph LR` for workflows (left-to-right) and `graph TD` for architecture (to
 
 - Solution guides: `README-[topic].md` (e.g., `README-AIOps.md`, `README-IA.md`)
 - Main entry point: `README.md` (table of contents only)
-- Best practices: `README-best-practices.md`
-- Reviews: `opus-review.md`
+- Best practices hub: `best-practices.md`
+- Solution guide best practices: `README-best-practices.md`
+- Implementation guide best practices: `README-best-practices-implementation.md`
+- Reviews hub: `reviews.md`
+- Solution guide reviews: `opus-review-solution.md`
+- Implementation guide reviews: `opus-review-implementation.md`

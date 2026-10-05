@@ -1,5 +1,20 @@
 {% raw %}
-# Event-Driven WAN Circuit Failover with NetBox and Ansible Automation Platform - Solution Guide <!-- omit in toc -->
+<div class="guide-header">
+
+<h1>Event-Driven WAN Circuit Failover with NetBox and Ansible Automation Platform</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--netbox" role="img" aria-label="Ansible Automation Platform and NetBox">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set card-partner-logo-set--netbox">
+    <img src="assets/images/logos/logo_netboxlabs_dark_teal-scaled.png" alt="NetBox Labs" class="card-partner-logo card-partner-logo--light">
+    <img src="assets/images/logos/logo_netboxlabs_dark_teal-scaled-darkmode.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+  </span>
+</div>
 
 ## Overview
 
@@ -469,6 +484,18 @@ Open the GitHub Pages URL and confirm a new timestamped report appears in the in
 
 ---
 
+## Summary
+
+This guide demonstrated two use cases for automated WAN circuit failover:
+
+- **Use Case A** established the event-driven pipeline: a circuit status change in NetBox triggers EDA, which launches an AAP workflow that dynamically discovers backup circuits, reconfigures routers, updates the CMDB, and supports bidirectional failback with built-in loop prevention, all in under 30 seconds.
+
+- **Use Case B** added automated incident reporting: every failover produces a timestamped HTML report with topology diagrams, bandwidth impact analysis, backup selection rationale, and NetBox audit trail links, published automatically to GitHub Pages.
+
+The unifying pattern across both use cases is **NetBox as the single source of truth driving event-based automation**. By modeling circuits, sites, devices, and their interconnections in NetBox, the automation adapts dynamically to topology changes: no hardcoded mappings, no manual CMDB updates, no missed routers.
+
+---
+
 ## Related Guides
 
 - **[Event-Driven Network Source of Truth with NetBox and AAP](README-NetBox-SoT-EDA-Config.md):** Foundational guide covering NetBox dynamic inventory, config contexts, and event-driven NTP/banner/VLAN configuration. Start here if your team is new to NetBox + EDA integration.
@@ -480,18 +507,6 @@ Open the GitHub Pages URL and confirm a new timestamped report appears in the in
 - **[Event-Driven Ansible Documentation](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/using_event-driven_ansible/index):** Official Red Hat documentation for EDA controller configuration, rulebook syntax, and action plugins.
 
 - **[NetBox Webhooks and Event Rules](https://netboxlabs.com/docs/netbox/en/stable/integrations/webhooks/):** NetBox documentation for configuring webhooks and event rules that trigger external automation.
-
----
-
-## Summary
-
-This guide demonstrated two use cases for automated WAN circuit failover:
-
-- **Use Case A** established the event-driven pipeline: a circuit status change in NetBox triggers EDA, which launches an AAP workflow that dynamically discovers backup circuits, reconfigures routers, updates the CMDB, and supports bidirectional failback with built-in loop prevention, all in under 30 seconds.
-
-- **Use Case B** added automated incident reporting: every failover produces a timestamped HTML report with topology diagrams, bandwidth impact analysis, backup selection rationale, and NetBox audit trail links, published automatically to GitHub Pages.
-
-The unifying pattern across both use cases is **NetBox as the single source of truth driving event-based automation**. By modeling circuits, sites, devices, and their interconnections in NetBox, the automation adapts dynamically to topology changes: no hardcoded mappings, no manual CMDB updates, no missed routers.
 
 ---
 

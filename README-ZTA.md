@@ -1,11 +1,25 @@
 {% raw %}
-# Zero Trust Architecture with Ansible Automation Platform - Solution Guide <!-- omit in toc -->
+<div class="guide-header">
+
+<h1>Zero Trust Architecture with Ansible Automation Platform</h1>
+
+<span class="guide-type-badge guide-type-badge--implementation"><i class="fas fa-cogs" aria-hidden="true"></i> Implementation Guide</span>
+
+</div>
 
 <style>
   div#toc {
     display: none;
   }
 </style>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--zero-trust" role="img" aria-label="Ansible Automation Platform and Zero Trust Architecture">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set card-partner-logo-set--zero-trust">
+    <img src="assets/images/logos/zero-trust.png" alt="Zero Trust Architecture" class="card-partner-logo">
+  </span>
+</div>
 
 ## Overview
 
@@ -1209,6 +1223,28 @@ Success criteria:
 | **Configuration drift detection** | Weekly manual checks | Continuous, auto-remediated within 15 minutes | AAP job logs: drift detection frequency and remediation time |
 | **Mean time to recovery (MTTR)** | 4-8 hours (manual diagnosis and fix) | < 30 minutes (automated diagnosis via break-glass playbooks) | AAP job history: time from failure detection to service restoration |
 
+<h2 id="summary"></h2>
+
+## Summary
+
+This guide demonstrated five use cases for implementing Zero Trust Architecture with Ansible Automation Platform as the central orchestration layer:
+
+1. 🔍 **Infrastructure Integration** — Automated verification of identity, secrets, policy, and CMDB components
+2. 🔑 **Just-In-Time Credentials** — Dynamic database credentials with automatic expiration (5-minute TTL)
+3. 🛡️ **Platform-Level Policy Enforcement** — AAP Policy as Code blocks unauthorized launches with no bypass possible
+4. 🔐 **Workload Identity Verification** — SPIFFE/SPIRE cryptographically proves automation platform legitimacy
+5. 🔒 **Defense-in-Depth Access Control** — Four independent layers with tested break-glass recovery
+
+**Measured Business Impact:**
+
+- ✅ **80% reduction** in manual security operations through automation
+- ✅ **95% reduction** in credential compromise risk through short-lived credentials
+- ✅ **Continuous compliance** through unified audit trails across all components
+
+Organizations implementing this architecture eliminate standing credentials, enforce deny-by-default policies at multiple layers, and automate the coordination of identity, secrets, policy, and network controls -- transforming Zero Trust from a conceptual framework into an operational reality.
+
+---
+
 <h2 id="related-guides"></h2>
 
 ## Related Guides
@@ -1229,26 +1265,6 @@ Success criteria:
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4dc.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://spiffe.io/docs/latest/spire/using/">Kubernetes Multi-Cluster Security with SPIFFE</a> — Extend workload identity to containerized applications
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f511.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://developer.hashicorp.com/vault/docs/enterprise/namespaces">HashiCorp Vault Enterprise Namespaces</a> — Multi-tenant secrets management for large-scale deployments
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e1.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.openpolicyagent.org/docs/latest/policy-language/">Open Policy Agent — Advanced Rego Patterns</a> — Custom policy authoring and testing
-
-<h2 id="summary"></h2>
-
-## Summary
-
-This guide demonstrated five use cases for implementing Zero Trust Architecture with Ansible Automation Platform as the central orchestration layer:
-
-1. 🔍 **Infrastructure Integration** — Automated verification of identity, secrets, policy, and CMDB components
-2. 🔑 **Just-In-Time Credentials** — Dynamic database credentials with automatic expiration (5-minute TTL)
-3. 🛡️ **Platform-Level Policy Enforcement** — AAP Policy as Code blocks unauthorized launches with no bypass possible
-4. 🔐 **Workload Identity Verification** — SPIFFE/SPIRE cryptographically proves automation platform legitimacy
-5. 🔒 **Defense-in-Depth Access Control** — Four independent layers with tested break-glass recovery
-
-**Measured Business Impact:**
-
-- ✅ **80% reduction** in manual security operations through automation
-- ✅ **95% reduction** in credential compromise risk through short-lived credentials
-- ✅ **Continuous compliance** through unified audit trails across all components
-
-Organizations implementing this architecture eliminate standing credentials, enforce deny-by-default policies at multiple layers, and automate the coordination of identity, secrets, policy, and network controls -- transforming Zero Trust from a conceptual framework into an operational reality.
 
 ---
 
@@ -1276,5 +1292,8 @@ Organizations implementing this architecture eliminate standing credentials, enf
 
 ---
 
-<img width="400" src="https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/aap_logo.png">
+<span class="guide-closing-logo-set">
+<img class="guide-closing-logo guide-closing-logo--light" src="assets/images/logos/aap_logo.png" alt="Red Hat Ansible Automation Platform">
+<img class="guide-closing-logo guide-closing-logo--dark" src="assets/images/logos/redhat-ansible-logo.svg" alt="" aria-hidden="true">
+</span>
 {% endraw %}

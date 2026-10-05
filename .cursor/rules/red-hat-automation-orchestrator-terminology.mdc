@@ -1,0 +1,39 @@
+---
+description: Red Hat Automation orchestrator product naming in guides and catalog copy.
+alwaysApply: true
+---
+
+# Automation orchestrator terminology
+
+Red Hat styles the product name with only **Automation** capitalized. The second word is **orchestrator** (lowercase), not title case.
+
+## Use in new prose
+
+| Wrong | Correct |
+|-------|---------|
+| Automation Orchestrator | **Automation orchestrator** |
+| automation orchestrator | **Automation orchestrator** |
+| Ansible Automation Orchestrator (unless quoting docs literally) | **Automation orchestrator** |
+
+**Abbreviation:** After first use, **Automation orchestrator (AO)** is fine; then **AO** alone in the same section.
+
+**Headings:** Use sentence-style headings, for example `### Automation orchestrator` or `## Decision framework: when to add Automation orchestrator`, not `### Automation Orchestrator`.
+
+Apply the same pattern in tables, callouts, catalog cards, hub copy, and maturity chips.
+
+## When title case is OK
+
+Keep **Orchestrator** capitalized only when matching an **external** artifact readers will see unchanged:
+
+- Official document titles or KB headings (literal quotes)
+- UI labels or screenshots that show title case
+- Third-party quotes
+
+Do not propagate title case into paraphrased guide prose.
+
+## Related rules
+
+- [red-hat-lightspeed-terminology.mdc](red-hat-lightspeed-terminology.mdc) -- **Automation code assistant**, **Automation intelligent assistant**, Red Hat Lightspeed
+- [editing-conventions.mdc](editing-conventions.mdc) -- no em dashes; use StrReplace for edits
+
+When editing AIOps or use-case guides, fix **Automation Orchestrator** to **Automation orchestrator** in prose you touch unless quoting an external title literally.

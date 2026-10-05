@@ -1,9 +1,22 @@
 {% raw %}
-# RHEL Patching with Red Hat Lightspeed and Ansible MCP Server - Solution Guide <!-- omit in toc -->
+<div class="guide-header">
+
+<h1>RHEL Patching with Red Hat Lightspeed and Ansible MCP Server</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
 
 > **Work in Progress** -- this guide is actively being developed.
 
-![patching-hero](assets/images/aiops.png)
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--redhat-ai" role="img" aria-label="Ansible Automation Platform and Red Hat Lightspeed">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set card-partner-logo-set--redhat-ai">
+    <img src="assets/images/logos/redhat-ai-logo.png" alt="Red Hat Lightspeed" class="card-partner-logo card-partner-logo--light">
+    <img src="assets/images/logos/redhat-ai-logo-dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+  </span>
+</div>
 
 ## Overview
 
@@ -25,7 +38,7 @@ The Model Context Protocol (MCP) changes how operators interact with these syste
 
 This solution connects two MCP servers to an AI assistant (such as an IDE with MCP support) to create an end-to-end patching workflow:
 
-- **<a target="_blank" href="https://console.redhat.com">Red Hat Lightspeed</a>** for vulnerability identification, advisory lookup, host inventory, and remediation playbook generation
+- **<a target="_blank" href="https://console.redhat.com">Red Hat Lightspeed</a>** for vulnerability identification, advisory lookup, host inventory, and **Red Hat-curated remediation playbooks** (Remediations service)
 - **<a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible">Ansible Automation Platform (AAP)</a>** for governed playbook execution across RHEL VMs on OpenShift Virtualization
 - **Red Hat Lightspeed MCP server** to expose Lightspeed Vulnerability, Inventory, and Remediations APIs to the AI assistant
 - **AAP MCP server** to expose job templates, inventories, and execution capabilities to the AI assistant
@@ -60,7 +73,7 @@ This solution connects two MCP servers to an AI assistant (such as an IDE with M
 
 | System | Required | Purpose |
 |--------|----------|---------|
-| Red Hat Lightspeed (console.redhat.com) | Yes | Vulnerability data, host inventory, remediation playbook generation |
+| Red Hat Lightspeed (console.redhat.com) | Yes | Vulnerability data, host inventory, Red Hat-curated remediation playbooks |
 | OpenShift Virtualization | Yes | Platform running the RHEL VMs to be patched |
 | MCP-compatible AI client | Yes | IDE or tool with MCP support (e.g., Cursor, VS Code with MCP extension) |
 
@@ -150,7 +163,7 @@ For CVE-2024-6174, this returns that `cloud-init` must be updated to version `24
 
 **Operational Impact:** None
 
-The assistant queries the AAP MCP server to find an existing job template for security patching, or uses the Lightspeed Remediations API to generate one.
+The assistant queries the AAP MCP server to find an existing job template for security patching, or uses the Lightspeed **Remediations** API to retrieve a Red Hat-curated playbook.
 
 ```yaml
 # AAP MCP tool call (conceptual)
@@ -158,7 +171,7 @@ The assistant queries the AAP MCP server to find an existing job template for se
   parameters:
     search: "security patch"
 
-# Or generate a remediation playbook via Lightspeed
+# Or retrieve a Red Hat-curated remediation playbook via Lightspeed Remediations
 - tool: remediations_create_playbook
   parameters:
     cve_ids: ["CVE-2024-6174"]

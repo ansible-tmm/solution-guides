@@ -1,11 +1,26 @@
 {% raw %}
-# Event-Driven Remediation with Azure Service Bus and Ansible - Solution Guide <!-- omit in toc -->
+<div class="guide-header">
+
+<h1>Event-Driven Remediation with Azure Service Bus and Ansible</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
 
 <style>
   div#toc {
     display: none;
   }
 </style>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--azure" role="img" aria-label="Ansible Automation Platform and Microsoft Azure">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set">
+    <img src="assets/images/logos/azure-logo.png" alt="Microsoft Azure" class="card-partner-logo card-partner-logo--light">
+    <img src="assets/images/logos/azure-logo-darkmode.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+  </span>
+</div>
 
 ## Overview
 
@@ -15,7 +30,7 @@ This guide demonstrates how to connect **Azure Service Bus Queues** directly to 
 
 > **This guide builds on the AIOps reference architecture.**
 >
-> For the full end-to-end AIOps pipeline -- including AI inference, Lightspeed playbook generation, and the Crawl/Walk/Run maturity model -- see [AIOps automation with Ansible](README-AIOps.md). This guide focuses specifically on using **Azure Service Bus** as the event transport layer.
+> Production **Walk** remediation uses **AAP MCP** to search approved job templates and workflows, then AI **selects** from that library before a governed run. See [curated automation remediation](README-AIOps.md#4-curated-automation-remediation-walk). This guide wires **Azure Service Bus** into EDA and walks the **workshop Run** pipeline (enrichment plus **Automation code assistant** codegen) where labs need it; swap stage 3 for MCP selection when you deploy for real.
 
 <h2 id="background"></h2>
 
@@ -41,7 +56,7 @@ What makes up the solution?
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **Event-Driven Ansible (EDA)** to subscribe to Service Bus queues and trigger automation <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9e0.png" width="20" style="vertical-align:text-bottom;"> **Red Hat AI** for AI-driven root cause analysis of the event context <a target="_blank" href="https://www.redhat.com/en/products/ai">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f501.png" width="20" style="vertical-align:text-bottom;"> **Ansible Automation Platform (AAP)** workflows for orchestrating enrichment and remediation <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible">[Link]</a>
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2728.png" width="20" style="vertical-align:text-bottom;"> **Ansible Lightspeed** to generate remediation playbooks from AI-enriched context <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/ansible-lightspeed">[Link]</a>
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2728.png" width="20" style="vertical-align:text-bottom;"> **Automation code assistant** to generate remediation playbooks from AI-enriched context (workshop Run only) <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/ansible-lightspeed">[Link]</a>
 
 > **EDA is part of Ansible Automation Platform.**
 >
@@ -80,7 +95,7 @@ What makes up the solution?
 | Azure Service Bus namespace | Yes | With at least one queue or topic/subscription configured |
 | Azure subscription | Yes | With permissions to create Service Bus resources and configure Shared Access Policies |
 | AI inference endpoint | Yes | Red Hat AI (RHEL AI + InstructLab) or any OpenAI-compatible API |
-| Ansible Lightspeed | Recommended | For dynamic playbook generation at the **Run** maturity level |
+| Automation code assistant | Recommended (workshop Run) | LLM playbook generation at incident time -- not Red Hat Lightspeed curated remediations |
 | Git repository | Yes | GitHub, GitLab, or Gitea for storing generated playbooks |
 | Chat or ITSM tool | Recommended | Slack, Mattermost, or ServiceNow for human-in-the-loop notifications |
 
@@ -88,12 +103,12 @@ What makes up the solution?
 
 ## Azure Service Bus to Ansible Workflow
 
-The workflow has four stages, matching the [AIOps reference architecture](README-AIOps.md):
+The workflow has four stages aligned with the [workshop Run pipeline](README-AIOps.md#workshop-run-pipeline) in the foundational AIOps guide (Azure Service Bus replaces Kafka as the transport layer):
 
 1. **Azure Event → Service Bus → EDA** -- Azure Monitor, Defender for Cloud, or a custom application publishes an event to a Service Bus queue. EDA subscribes to the queue and consumes the message.
 2. **Enrichment Workflow** -- AAP gathers additional context from the affected Azure resource or on-prem host, sends the enriched data to Red Hat AI for root cause analysis, and notifies the operations team.
-3. **Remediation Workflow** -- Ansible Lightspeed generates a remediation playbook from the AI analysis, commits it to Git, and creates a Job Template.
-4. **Execute Remediation** -- The generated playbook runs against the affected infrastructure (Azure VMs, on-prem hosts, or network devices), resolving the issue.
+3. **Remediation Workflow (workshop Run demo)** -- **Automation code assistant** generates a remediation playbook from the AI analysis, commits it to Git, and creates a Job Template. At **Walk**, use [AAP MCP to select an existing template](README-AIOps.md#4-curated-automation-remediation-walk) instead.
+4. **Execute Remediation** -- The approved or generated playbook runs against the affected infrastructure (Azure VMs, on-prem hosts, or network devices), resolving the issue.
 
 ### Operational Impact per Stage
 
@@ -309,7 +324,7 @@ The enrichment workflow posts the AI analysis to your team's communication chann
       when: snow_instance is defined
 ```
 
-From here, the remediation follows the same pattern as the [AIOps Remediation Workflow](README-AIOps.md#3-remediation-workflow) -- Lightspeed generates a playbook, it gets committed to Git, and a Job Template is created for execution.
+From here, the remediation follows the same pattern as the [UC06 workshop remediation workflow](README-AIOps-Use-Case-06-Self-Healing-Infrastructure.md#3-remediation-workflow) -- **Automation code assistant** generates a playbook, it gets committed to Git, and a Job Template is created for execution.
 
 <h2 id="validation"></h2>
 
@@ -360,23 +375,11 @@ az servicebus queue send \
 |----------|----------|-------------|---------|
 | <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6b6.png" width="20" style="vertical-align:text-bottom;"> **Crawl** | Alert Enrichment | Azure alert → Service Bus → EDA → AI diagnoses → enriched context posted to Slack/ITSM → **human investigates and remediates** | Read-only: AI interprets, humans act |
 | <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3c3.png" width="20" style="vertical-align:text-bottom;"> **Walk** | Curated Remediation | Azure alert → Service Bus → EDA → AI diagnoses → AI **selects a pre-approved playbook** → human approves → playbook executes | AI selects from existing automation |
-| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f680.png" width="20" style="vertical-align:text-bottom;"> **Run** | Auto-Remediation | Azure alert → Service Bus → EDA → AI diagnoses → Lightspeed **generates a remediation playbook** → policy engine validates → playbook executes | AI generates new automation within policy boundaries |
+| <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f680.png" width="20" style="vertical-align:text-bottom;"> **Run** | Auto-Remediation | Azure alert → Service Bus → EDA → AI diagnoses → **Automation code assistant generates a remediation playbook** → policy engine validates → playbook executes | AI generates new automation within policy boundaries |
 
 > **Start with Crawl.**
 >
 > Route Azure Monitor alerts to Service Bus and deploy the EDA rulebook and enrichment workflow first. Let your team see AI-enriched Azure alerts in Slack for a few weeks before adding automated remediation. This builds confidence in the pipeline and catches edge cases early.
-
-<h2 id="related-guides"></h2>
-
-## Related Guides
-
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4cb.png" width="20" style="vertical-align:text-bottom;"> **AIOps reference architecture:** See [AIOps automation with Ansible](README-AIOps.md) for the full end-to-end pipeline, including Lightspeed playbook generation, policy enforcement, and the broader AIOps maturity journey.
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f50d.png" width="20" style="vertical-align:text-bottom;"> **Using Splunk as the trigger?** See [Triggering Automated Remediation from Splunk Alerts](README-AIOps-Splunk.md) for connecting Splunk alerts to the same AIOps pipeline.
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:text-bottom;"> **Looking for ServiceNow integration?** See [Unlock AIOps with ServiceNow LEAP and Ansible MCP server](README-AIOps-ServiceNow.md) for LEAP/MCP-driven remediation and related ITSM patterns (see also [KB 7127603](https://access.redhat.com/articles/7127603)).
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9e0.png" width="20" style="vertical-align:text-bottom;"> **Need to deploy the AI backend?** See [AI Infrastructure automation with Ansible](README-IA.md) for automating Red Hat AI provisioning with the `infra.ai` and `redhat.ai` collections.
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **New to Event-Driven Ansible?** See [Get started with EDA (Ansible Rulebook)](https://access.redhat.com/articles/7136720) for the fundamentals of rulebooks, event sources, and actions.
-
----
 
 ## Summary
 
@@ -384,5 +387,20 @@ With Azure Service Bus connected to Event-Driven Ansible, your Azure monitoring 
 
 ---
 
-<img width="400" src="https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/aap_logo.png">
+<h2 id="related-guides"></h2>
+
+## Related Guides
+
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4cb.png" width="20" style="vertical-align:text-bottom;"> **AIOps reference architecture:** [AIOps automation with Ansible](README-AIOps.md) -- curated MCP selection at Walk, workshop codegen at Run, and the Crawl/Walk/Run maturity model.
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f50d.png" width="20" style="vertical-align:text-bottom;"> **Using Splunk as the trigger?** See [Triggering Automated Remediation from Splunk Alerts](README-AIOps-Splunk.md) for connecting Splunk alerts to the same AIOps pipeline.
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:text-bottom;"> **Looking for ServiceNow integration?** See [Unlock AIOps with ServiceNow LEAP and Ansible MCP server](README-AIOps-ServiceNow.md) for LEAP/MCP-driven remediation and related ITSM patterns (see also [KB 7127603](https://access.redhat.com/articles/7127603)).
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9e0.png" width="20" style="vertical-align:text-bottom;"> **Need to deploy the AI backend?** See [AI Infrastructure automation with Ansible](README-IA.md) for automating Red Hat AI provisioning with the `infra.ai` and `redhat.ai` collections.
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **New to Event-Driven Ansible?** See [Get started with EDA (Ansible Rulebook)](https://access.redhat.com/articles/7136720) for the fundamentals of rulebooks, event sources, and actions.
+
+---
+
+<span class="guide-closing-logo-set">
+<img class="guide-closing-logo guide-closing-logo--light" src="assets/images/logos/aap_logo.png" alt="Red Hat Ansible Automation Platform">
+<img class="guide-closing-logo guide-closing-logo--dark" src="assets/images/logos/redhat-ansible-logo.svg" alt="" aria-hidden="true">
+</span>
 {% endraw %}

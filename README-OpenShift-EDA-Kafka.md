@@ -1,7 +1,20 @@
 {% raw %}
-# Using Event-Driven Ansible to Consume OpenShift API Resources With Kafka - Solution Guide <!-- omit in toc -->
+<div class="guide-header">
 
-<img src="assets/images/logos/kafka_logo.webp" alt="OpenShift API events with Kafka and EDA" style="max-width:400px">
+<h1>Using Event-Driven Ansible to Consume OpenShift API Resources With Kafka</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--cloud-native" role="img" aria-label="Ansible Automation Platform and Red Hat OpenShift">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set">
+    <img src="assets/images/logos/cloud-native.png" alt="Red Hat OpenShift" class="card-partner-logo card-partner-logo--light">
+    <img src="assets/images/logos/cloud-native-dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+  </span>
+</div>
 
 <style>
   div#toc {
@@ -1018,19 +1031,19 @@ localhost                  : ok=1    changed=0    unreachable=0    failed=0    s
 >
 > The **Run** stage integrates this event pipeline with the AIOps reference architecture. The Kafka topic from this guide becomes the event source for the AIOps Enrichment Workflow. See [AIOps automation with Ansible](README-AIOps.md) for the full self-healing pipeline.
 
+## Summary
+
+This guide illustrated establishing a complete event pipeline from the OpenShift API to Event-Driven Ansible using Knative Eventing and Apache Kafka. Namespace lifecycle events -- creates, updates, and deletes -- are captured by an APIServerSource, published to a Kafka topic through a KafkaSink for durability and decoupling, and consumed by an EDA rulebook that triggers Automation Controller job templates on namespace creation and deletion. The pipeline logs every namespace event automatically, providing the foundation for adding governance actions, compliance validation, or integration with the AIOps self-healing architecture.
+
+---
+
 <h2 id="related-guides"></h2>
 
 ## Related Guides
 
-- **Full AIOps reference architecture:** See [AIOps automation with Ansible](README-AIOps.md) for the complete self-healing pipeline with AI inference, Lightspeed playbook generation, and Kafka event consumption.
+- **Full AIOps reference architecture:** See [AIOps automation with Ansible](README-AIOps.md) for curated remediation at Walk and [Self-healing infrastructure (use case 6)](README-AIOps-Use-Case-06-Self-Healing-Infrastructure.md#optional-appendix-workshop-multi-llm-pipeline-policy-governed-only) for optional **Automation code assistant** workshop Run depth with Kafka event consumption.
 - **Alternative event transport:** See [AIOps with AWS SQS and Event-Driven Ansible](README-SQS.md) for using AWS SQS instead of Kafka as the message queue.
 - **Another EDA pattern:** See [Event-Driven Network Source of Truth with NetBox and Ansible Automation Platform](README-NetBox-SoT-EDA-Config.md) for using EDA with webhooks instead of Kafka.
 - **New to Event-Driven Ansible?** See <a target="_blank" href="https://access.redhat.com/articles/7136720">Get started with EDA (Ansible Rulebook)</a> for the fundamentals.
-
----
-
-## Summary
-
-This guide illustrated establishing a complete event pipeline from the OpenShift API to Event-Driven Ansible using Knative Eventing and Apache Kafka. Namespace lifecycle events -- creates, updates, and deletes -- are captured by an APIServerSource, published to a Kafka topic through a KafkaSink for durability and decoupling, and consumed by an EDA rulebook that triggers Automation Controller job templates on namespace creation and deletion. The pipeline logs every namespace event automatically, providing the foundation for adding governance actions, compliance validation, or integration with the AIOps self-healing architecture.
 
 {% endraw %}

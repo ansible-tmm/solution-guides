@@ -3,6 +3,8 @@
 
 A framework for creating enterprise-grade solution guides for Ansible Automation Platform.
 
+> **Two guide types:** This document is for **Solution Guides** only. Implementation Guides use a separate framework and rubric on the [Best Practices hub](best-practices.md).
+
 > **Quick start:** Jump to the [Starter Template](#appendix-starter-template).
 >
 > Copy the ready-made skeleton, fill in the placeholders, and score your draft against the [Quality Scoring Rubric](#reference) before publishing.
@@ -56,7 +58,7 @@ These sections map 1:1 to the section names in every solution guide. When review
 | 6 | [Workflow and Architecture](#6-workflow-and-architecture) | Diagrams, narrative walkthrough, visual patterns |
 | 7 | [Solution Walkthrough](#7-solution-walkthrough) | Featured code, AAP integration, step-by-step technical depth |
 | 8 | [Validation](#8-validation) | Concrete tests, expected output, troubleshooting |
-| 9 | [Maturity Path and Related Guides](#9-maturity-path-and-related-guides) | Crawl/Walk/Run, cross-linking, ROI recap |
+| 9 | [Maturity Path, Summary, and Related Guides](#9-maturity-path-summary-and-related-guides) | Crawl/Walk/Run, summary, cross-linking |
 
 | Section | What It Covers |
 |---------|---------------|
@@ -69,26 +71,26 @@ These sections map 1:1 to the section names in every solution guide. When review
 
 **Rule:** Titles must describe an operational outcome, not a product feature.
 
-Solution guides follow the convention `[Topic] - Solution Guide`. Within that convention, the topic portion should still be outcome-oriented whenever possible.
+Solution guide pages use an outcome-oriented **topic** in the `<h1>`, with a **Solution Guide** pill badge beside it (see the starter template). The topic portion should still be outcome-oriented whenever possible.
 
 **Bad:**
 
 - "Using the ServiceNow Collection"
 - "Ansible EDA Overview"
 
-**Good (standard format):**
+**Good (topic in `<h1>`, type in pill badge):**
 
-- "ServiceNow ITSM Ticket Enrichment Automation - Solution Guide"
-- "AIOps automation with Ansible - Solution Guide"
+- "ServiceNow ITSM Ticket Enrichment Automation"
+- "AIOps automation with Ansible"
 
-**Better (outcome-oriented):**
+**Better (outcome-oriented topics):**
 
-- "Unlock AIOps with ServiceNow LEAP and Ansible MCP server - Solution Guide"
-- "Triggering Automated Remediation from Splunk Alerts with Event-Driven Ansible - Solution Guide"
+- "Unlock AIOps with ServiceNow LEAP and Ansible MCP server"
+- "Triggering Automated Remediation from Splunk Alerts with Event-Driven Ansible"
 
-> **Tip:** When in doubt, use the standard format.
+> **Tip:** When in doubt, keep the topic clear and outcome-oriented.
 >
-> Use `[Topic] - Solution Guide` for the title, but lead the guide itself with an outcome-oriented subtitle or problem statement in the Overview section.
+> Put the guide type in the `guide-type-badge` pill, not in the `<h1>`. Lead the guide with a problem statement in the Overview section.
 
 **Solution vs. Tutorial:** A solution guide must solve an operational problem, not teach how to use a tool. If your guide could be titled "Getting started with X" or "How to use Y," it is a tutorial, not a solution. Reframe it around the outcome: what real-world problem does this automation solve?
 
@@ -151,7 +153,7 @@ List the tools and technologies used in this solution. Link to product pages.
 **Example:**
 
 - **Red Hat AI** for understanding service issues
-- **Ansible Lightspeed** to generate remediation playbooks
+- **Automation code assistant** to generate remediation playbooks (workshop Run -- not Red Hat Lightspeed curated content)
 - **Ansible Automation Platform (AAP)** workflows for orchestration
 - **Event-Driven Ansible (EDA)** to listen to real-time service events
 
@@ -452,9 +454,9 @@ Include at least 2-3 common failure scenarios and how to diagnose them:
 
 ---
 
-## 9. Maturity Path and Related Guides
+## 9. Maturity Path, Summary, and Related Guides
 
-Close the loop so the guide is more than just a lab exercise. Show the reader where they are on the adoption journey and where to go next.
+Close the loop so the guide is more than just a lab exercise. The closing sections follow a deliberate order: **Maturity Path** (where am I on the journey?) → **Summary** (what did I just read?) → **Related Guides** (where do I go next?).
 
 ### 9.1 Crawl, Walk, Run
 
@@ -468,9 +470,13 @@ Every guide should map to a maturity progression. This helps organizations adopt
 
 The progression should be specific to the guide's use case. The key question at each stage is: **how much autonomy does automation have?**
 
-### 9.2 Related Guides
+### 9.2 Summary
 
-Every guide exists within a broader ecosystem. Authors must identify and link to related guides so readers understand the full journey.
+Wrap up what the reader just learned. Summarize the key outcomes and the measurable value the guide delivers. This comes **before** Related Guides because it closes the current guide's narrative -- Related Guides is the call to action for what to read next.
+
+### 9.3 Related Guides
+
+Every guide exists within a broader ecosystem. Authors must identify and link to related guides so readers understand the full journey. This is the last content section before the closing logo -- it serves as the call to action.
 
 - Link to the **next logical guide** (e.g., Network Fact Gathering links to Network Backup and Configuration)
 - Link to **prerequisite guides** (e.g., AIOps guide references the AI Infrastructure guide for deploying the AI backend)
@@ -482,14 +488,6 @@ Every guide exists within a broader ecosystem. Authors must identify and link to
 > **Related guides:**
 > - Need to deploy the AI infrastructure first? See [AI Infrastructure automation with Ansible](README-IA.md)
 > - Ready to add event-driven triggers? See [Get started with EDA](https://access.redhat.com/articles/7136720)
-
-### 9.3 ROI Recap
-
-Summarize the measurable outcome the reader has achieved.
-
-> **Completed:** The solution guide is done.
->
-> You now have automated X, reducing manual effort and improving consistency.
 
 ---
 
@@ -510,6 +508,20 @@ Grade guides against this rubric before publishing:
 | Business Framing | 10% |
 
 Score each 1-5. Anything below 3 in any category -- revise before publish.
+
+### Scoring by Solution Category
+
+Apply the base rubric above, then adjust expectations by category. Do not penalize a guide for capabilities outside its category.
+
+| Category | Rubric adjustments |
+|----------|-------------------|
+| **AIOps** | Full rubric. Technical Executability should include AI enrichment, inference endpoints, MCP/Lightspeed integration, or governed playbook selection where the guide claims an AI outcome. |
+| **Network automation** | Do not penalize absence of AI. Weight inventory/source-of-truth integration (for example NetBox), device configuration or failover workflows, and closed-loop automation where EDA is used. Business Framing should cite change velocity, outage reduction, or config consistency. |
+| **AIOps Use Case** | Lighter on YAML depth and single-partner executability. Weight decision paths, adoption narrative, explicit signals for when to add the next capability, and cross-links to reference architectures. Validation may be scenario-based rather than a single runnable pipeline. Six patterns live in [README-AIOps.md](README-AIOps.md#common-aiops-use-cases); the ticket enrichment appendix is the primary extended adoption page. |
+
+**N/A rules:**
+- Network automation guides: skip AI-specific executability checks unless the guide adds an optional AI enrichment section.
+- AIOps Use Case pages: Architecture Clarity may emphasize decision flow over deployment topology; Production Readiness Info may be advisory rather than a full runbook.
 
 </details>
 
@@ -563,7 +575,13 @@ A truly excellent solution guide:
 Copy this skeleton when creating a new solution guide. Replace all placeholder text.
 
 ````markdown
-# [Topic] - Solution Guide
+<div class="guide-header">
+
+<h1>[Topic]</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
 
 ## Overview
 
@@ -678,13 +696,14 @@ target_host : ok=X    changed=X    unreachable=0    failed=0    skipped=0
 | **Walk** | [Intermediate -- curated automation, human approval] |
 | **Run** | [Fully automated -- AI-driven, policy-governed] |
 
+## Summary
+
+<!-- Wrap up what the reader learned. Summarize key outcomes and measurable value. -->
+
 ## Related Guides
+
+<!-- Call to action -- where to go next. Last content section before the closing logo. -->
 
 - [Related guide 1](link)
 - [Related guide 2](link)
-
-## Sources
-
-- [Red Hat Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible)
-- [Additional source](link)
 ````

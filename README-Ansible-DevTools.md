@@ -1,4 +1,18 @@
-# AI-Assisted Ansible Developer Experience - Solution Guide
+<div class="guide-header">
+
+<h1>AI-Assisted Ansible Developer Experience</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--redhat" role="img" aria-label="Ansible Automation Platform and Red Hat">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set">
+    <img src="assets/images/logos/redhat-logo.svg" alt="Red Hat" class="card-partner-logo">
+  </span>
+</div>
 
 ## Overview
 
@@ -375,37 +389,45 @@ When using the Ansible VS Code extension, the MCP server can be started automati
 
 When developing against a development or staging AAP instance, the <a href="https://www.redhat.com/en/blog/it-automation-agentic-ai-introducing-mcp-server-red-hat-ansible-automation-platform" target="_blank">AAP MCP server</a> allows your AI assistant to query inventories, inspect job templates, launch jobs, and monitor results -- all without leaving your editor. This is particularly useful for iterating on automation content: write a playbook, push it to your dev AAP instance, run it, and troubleshoot failures in a single workflow.
 
-The AAP gateway (starting with AAP 2.6.4) exposes MCP endpoints for six service areas:
+The AAP gateway (starting with AAP 2.6.4) exposes MCP on port **8448**. In **AAP 2.7**, URLs use the `/mcp/<toolset>` pattern (older guides used `/<toolset>/mcp`). See [Deploying the Ansible MCP server](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/extend-assembly_deploying_ansible_mcp_server#proc-connect-ai-agent-ansible-mcp-server).
 
-| Service | Endpoint | What It Provides |
-|---------|----------|------------------|
-| **Job Management** | `/job_management/mcp` | Launch, monitor, and inspect job runs |
-| **Inventory Management** | `/inventory_management/mcp` | Query hosts, groups, and inventory sources |
-| **System Monitoring** | `/system_monitoring/mcp` | Check platform health and capacity |
-| **User Management** | `/user_management/mcp` | Inspect users, teams, and organizations |
-| **Security & Compliance** | `/security_compliance/mcp` | Review RBAC policies and credentials |
-| **Platform Configuration** | `/platform_configuration/mcp` | Inspect settings and configuration |
+| Service | Endpoint (2.7) | What It Provides |
+|---------|------------------|------------------|
+| **Discover (recommended)** | `/mcp/discover` | Lightweight toolset summary; loads only the toolset you need per session |
+| **All tools** | `/mcp` | Full catalog on every connection (higher token use) |
+| **Job Management** | `/mcp/job_management` | Launch, monitor, and inspect job runs |
+| **Inventory Management** | `/mcp/inventory_management` | Query hosts, groups, and inventory sources |
+| **System Monitoring** | `/mcp/system_monitoring` | Check platform health and capacity |
+| **User Management** | `/mcp/user_management` | Inspect users, teams, and organizations |
+| **Security & Compliance** | `/mcp/security_compliance` | Review RBAC policies and credentials |
+| **Platform Configuration** | `/mcp/platform_configuration` | Inspect settings and configuration |
+| **Content Discovery** | `/mcp/content_discovery` | Search collections, EEs, and intelligent assistant knowledge |
 
 **Adding AAP MCP to Claude Code** (using a `.mcp.json` file in your project root):
 
 ```json
 {
   "mcpServers": {
+    "aap-mcp-discover": {
+      "type": "http",
+      "url": "https://aap-gateway.example.com:8448/mcp/discover",
+      "headersHelper": "echo '{\"Authorization\": \"Bearer '\"$MCP_AAP_TOKEN\"'\"}'"
+    },
     "aap-mcp-job-management": {
       "type": "http",
-      "url": "https://aap-gateway.example.com:8448/job_management/mcp",
+      "url": "https://aap-gateway.example.com:8448/mcp/job_management",
       "headersHelper": "echo '{\"Authorization\": \"Bearer '\"$MCP_AAP_TOKEN\"'\"}'"
     },
     "aap-mcp-inventory-management": {
       "type": "http",
-      "url": "https://aap-gateway.example.com:8448/inventory_management/mcp",
+      "url": "https://aap-gateway.example.com:8448/mcp/inventory_management",
       "headersHelper": "echo '{\"Authorization\": \"Bearer '\"$MCP_AAP_TOKEN\"'\"}'"
     }
   }
 }
 ```
 
-> **Tip:** Start with just the services you need.
+> **Tip:** Prefer a single **`/mcp/discover`** entry unless you need to restrict which toolsets the agent can load.
 >
 > You don't have to configure all six AAP MCP services at once. For content development, `job_management` and `inventory_management` are typically the most useful -- they let your AI assistant launch test runs and inspect target hosts.
 

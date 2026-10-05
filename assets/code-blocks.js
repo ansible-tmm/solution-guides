@@ -45,6 +45,8 @@
     var text = code ? code.textContent : pre.textContent;
     var lang = code ? getLanguage(code) : '';
 
+    if (lang === 'mermaid') return;
+
     var wrapper = pre.parentElement;
     if (!wrapper.classList.contains('code-block-wrapper')) {
       wrapper = document.createElement('div');

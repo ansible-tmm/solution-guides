@@ -1,10 +1,25 @@
-# High Availability and Disaster Recovery for AAP 2.7 on OpenShift - Implementation Guide <!-- omit in toc -->
+<div class="guide-header">
+
+<h1>High Availability and Disaster Recovery for AAP 2.7 on OpenShift</h1>
+
+<span class="guide-type-badge guide-type-badge--implementation"><i class="fas fa-cogs" aria-hidden="true"></i> Implementation Guide</span>
+
+</div>
 
 <style>
   div#toc {
     display: none;
   }
 </style>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--cloud-native" role="img" aria-label="Ansible Automation Platform and Red Hat OpenShift">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set">
+    <img src="assets/images/logos/cloud-native.png" alt="Red Hat OpenShift" class="card-partner-logo card-partner-logo--light">
+    <img src="assets/images/logos/cloud-native-dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+  </span>
+</div>
 
 <a target="_blank" href="assets/images/aap-hadr-full-architecture.png">
   <img src="assets/images/aap-hadr-full-architecture.png" alt="AAP HA/DR on OpenShift architecture" style="max-width:100%">

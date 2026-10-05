@@ -1,0 +1,40 @@
+name: Weekly updates
+
+on:
+  schedule:
+    # Mondays 14:00 UTC
+    - cron: '0 14 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-updates
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate What's New
+        run: |
+          chmod +x scripts/generate-updates.sh
+          ./scripts/generate-updates.sh
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- updates.md; then
+            echo "No changes to updates.md"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add updates.md
+          git commit -m "chore: refresh What's New (last 30 days)"
+          git push
