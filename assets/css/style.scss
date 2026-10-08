@@ -500,6 +500,14 @@ table.guide-table-event-sources {
   max-width: 120px;
 }
 
+// Wide Satellite wordmark (2000x788); same source assets as the catalog
+// card footer (.card-partner-logo-set--satellite), scaled for the hero.
+.guide-hero-partner--satellite .guide-hero-partner__partner.card-partner-logo-set .card-partner-logo {
+  height: auto;
+  max-height: 32px;
+  max-width: 90px;
+}
+
 .guide-hero-callout__icon {
   flex-shrink: 0;
   width: 36px;
