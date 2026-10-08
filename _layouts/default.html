@@ -5,6 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 {% seo %}
+    {%- comment -%} Explicit social preview overrides (Slack / OG). New filename busts caches. {%- endcomment -%}
+    <meta property="og:title" content="AAP Guides">
+    <meta property="og:description" content="{{ site.description | default: 'Browse Ansible Automation Platform solution and implementation guides for AIOps, network automation, and more.' | xml_escape }}">
+    <meta property="og:image" content="{{ '/assets/social/og-image-v1.jpg' | absolute_url }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AAP Guides">
+    <meta name="twitter:description" content="{{ site.description | default: 'Browse Ansible Automation Platform solution and implementation guides for AIOps, network automation, and more.' | xml_escape }}">
+    <meta name="twitter:image" content="{{ '/assets/social/og-image-v1.jpg' | absolute_url }}">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RHMT749KVY"></script>
     <script>
