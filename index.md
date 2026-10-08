@@ -392,6 +392,12 @@ patternfly: true
           <div class="pf-v6-c-card__body">
             A crawl-walk-run maturity model for closed-loop network remediation: LogicMonitor alerts trigger Event-Driven Ansible, progressing from a single BGP-reset job template, to Edwin AI-enriched branched workflows, to agentic remediation via the AAP MCP Server.
           </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="card-partner-logo-set card-partner-logo-set--logicmonitor">
+              <img src="{{ '/assets/images/logos/logic-monitor-light-mode.png' | relative_url }}" alt="LogicMonitor" class="card-partner-logo card-partner-logo--light">
+              <img src="{{ '/assets/images/logos/logic-monitor-dark-mode.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+            </span>
+          </div>
         </div>
       </a>
 
