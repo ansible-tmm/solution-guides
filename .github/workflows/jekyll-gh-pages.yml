@@ -15,11 +15,12 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# One Pages deploy at a time. Cancel older in-flight deploys when a newer
+# push lands -- otherwise rapid commits race and fail with HTTP 400
+# "in progress deployment; cancel X first or wait".
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   # Build job
