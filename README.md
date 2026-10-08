@@ -20,6 +20,7 @@ Solution guides for AI-driven automation with Ansible Automation Platform.
 | Intelligent Network Automation with Gluware and Ansible | [README-Gluware-Network-Automation.md](README-Gluware-Network-Automation.md) | |
 | Consuming OpenShift API Resources with EDA and Kafka | [README-OpenShift-EDA-Kafka.md](README-OpenShift-EDA-Kafka.md) | |
 | AAP HA/DR on OpenShift with CloudNativePG | [README-AAP-HA-DR-OpenShift.md](README-AAP-HA-DR-OpenShift.md) | |
+| Proactive vulnerability remediation with Satellite, Event-Driven Ansible, and Lightspeed On-Premises | [README-Satellite-CVE-Remediation.md](README-Satellite-CVE-Remediation.md) | |
 
 ## Contributing
 
