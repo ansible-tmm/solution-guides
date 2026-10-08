@@ -3170,6 +3170,14 @@ details.legacy-guides > *:not(summary):not(.legacy-guides__body) {
   width: auto;
 }
 
+// Wide Satellite wordmark (2000x788); shrink to match other card footers
+.card-partner-logo-set--satellite .card-partner-logo {
+  height: auto;
+  max-height: 28px;
+  max-width: 132px;
+  width: auto;
+}
+
 // Wide PostgreSQL wordmark (5200x800 canvas)
 .card-partner-logo-set--postgresql .card-partner-logo {
   height: auto;

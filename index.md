@@ -420,6 +420,12 @@ patternfly: true
           <div class="pf-v6-c-card__body">
             Closed-loop CVE detection and remediation: a Satellite webhook triggers Event-Driven Ansible, which launches an AAP job to scan on-premises Lightspeed Vulnerability data and install Critical/Important fixes across the fleet -- fully air-gap capable.
           </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="card-partner-logo-set card-partner-logo-set--satellite">
+              <img src="{{ '/assets/images/logos/satellite-logo.png' | relative_url }}" alt="Red Hat Satellite" class="card-partner-logo card-partner-logo--light">
+              <img src="{{ '/assets/images/logos/satellite-logo-dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+            </span>
+          </div>
         </div>
       </a>
 
