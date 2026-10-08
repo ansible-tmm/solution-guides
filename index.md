@@ -373,7 +373,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-AIOps-LogicMonitor' | relative_url }}" class="card-link" data-tags="logicmonitor,aiops,solution,wip">
+      <a href="{{ '/README-AIOps-LogicMonitor' | relative_url }}" class="card-link" data-tags="logicmonitor,aiops,network,solution,wip">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header card-header--labels">
             <span class="pf-v6-c-label pf-m-orange">
@@ -384,6 +384,9 @@ patternfly: true
             </span>
             <span class="pf-v6-c-label card-label-track card-label-track--aiops">
               <span class="pf-v6-c-label__content">AIOps</span>
+            </span>
+            <span class="pf-v6-c-label card-label-track card-label-track--network">
+              <span class="pf-v6-c-label__content">Network</span>
             </span>
           </div>
           <div class="pf-v6-c-card__title">
@@ -521,6 +524,37 @@ patternfly: true
             <span class="card-partner-logo-set">
               <img src="{{ '/assets/images/logos/glueware-light.png' | relative_url }}" alt="Gluware" class="card-partner-logo card-partner-logo--light">
               <img src="{{ '/assets/images/logos/glueware-dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ '/README-AIOps-LogicMonitor' | relative_url }}" class="card-link" data-tags="logicmonitor,aiops,network,solution,wip">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header card-header--labels">
+            <span class="pf-v6-c-label pf-m-orange">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                Work in Progress
+              </span>
+            </span>
+            <span class="pf-v6-c-label card-label-track card-label-track--aiops">
+              <span class="pf-v6-c-label__content">AIOps</span>
+            </span>
+            <span class="pf-v6-c-label card-label-track card-label-track--network">
+              <span class="pf-v6-c-label__content">Network</span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Closed-Loop Network Remediation with LogicMonitor and Edwin AI</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            A crawl-walk-run maturity model for closed-loop network remediation: LogicMonitor alerts trigger Event-Driven Ansible, progressing from a single BGP-reset job template, to Edwin AI-enriched branched workflows, to agentic remediation via the AAP MCP Server.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="card-partner-logo-set card-partner-logo-set--logicmonitor">
+              <img src="{{ '/assets/images/logos/logic-monitor-light-mode.png' | relative_url }}" alt="LogicMonitor" class="card-partner-logo card-partner-logo--light">
+              <img src="{{ '/assets/images/logos/logic-monitor-dark-mode.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
             </span>
           </div>
         </div>
@@ -944,9 +978,29 @@ patternfly: true
       }
     });
 
+    // Cross-listed guides appear in multiple galleries unfiltered. When any
+    // search/partner/track filter is on, keep one card per href so counts stay sane.
+    var filtersActive = !!(query || activePartners.length || activeTracks.length);
+    if (filtersActive) {
+      var seenHrefs = {};
+      visible = 0;
+      legacyHasMatch = false;
+      allCards.forEach(function (card) {
+        if (card.style.display === 'none') return;
+        var href = card.getAttribute('href') || '';
+        if (seenHrefs[href]) {
+          card.style.display = 'none';
+          return;
+        }
+        seenHrefs[href] = true;
+        visible++;
+        if (legacyDetails && legacyDetails.contains(card)) legacyHasMatch = true;
+      });
+    }
+
     updateSectionVisibility({
       onlyPublishedDefault: isDefaultStatusFilter(),
-      hasOtherFilters: !!(query || activePartners.length || activeTracks.length)
+      hasOtherFilters: filtersActive
     });
 
     if (legacyDetails) {
