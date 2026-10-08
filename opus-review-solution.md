@@ -6,7 +6,7 @@ permalink: /opus-review-solution/
 
 # Review: Published Solution Guides
 
-*Reviewed: September 25, 2026*
+*Reviewed: October 8, 2026* (Satellite WIP added; published ranking unchanged from September 25, 2026)
 
 ## Scorecard
 
@@ -17,6 +17,12 @@ permalink: /opus-review-solution/
 | 3 | [Automated Incident Remediation with IBM Instana](#3-automated-incident-remediation-with-ibm-instana) | 8.9/10 | Dual-path architecture (EDA vs native); per-use-case operational impact and unusually complete validation |
 | 4 | [Unlock AIOps with ServiceNow LEAP and Ansible MCP server](#4-unlock-aiops-with-servicenow-leap-and-ansible-mcp-server) | 8.7/10 | Strong LEAP/MCP governance story with MTTR focus, customer evidence, multi-agent visibility |
 | 5 | [AIOps automation with Ansible](#5-aiops-automation-with-ansible) | 8.6/10 | Strongest foundational reference architecture; curated-path framing, MCP workflow clarity, structured validation, and comprehensive event/tool catalog |
+
+### WIP / Incoming (not ranked against published)
+
+| Guide | Score | Status | Verdict |
+|-------|-------|--------|---------|
+| [Proactive Vulnerability Remediation with Satellite](#wip-satellite-cve-remediation) | 9.0/10 | WIP | Publish-quality walkthrough and validation; needs catalog polish, Summary order, and maturity/approval framing before leaving WIP |
 
 ---
 
@@ -223,6 +229,44 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 
 ---
 
+### WIP. Proactive Vulnerability Remediation with Satellite <a id="wip-satellite-cve-remediation"></a>
+
+**File:** [README-Satellite-CVE-Remediation.md](README-Satellite-CVE-Remediation.md)
+**Score: 9.0 / 10** (WIP -- not ranked against published guides)
+**Author:** [myee111](https://github.com/myee111) via [PR #63](https://github.com/ansible-tmm/solution-guides/pull/63)
+
+| Category | Score |
+|----------|-------|
+| Outcome Clarity (20%) | 4.5 |
+| Architecture Clarity (20%) | 4.5 |
+| Technical Executability (25%) | 4.5 |
+| Validation/Testability (15%) | 5 |
+| Production Readiness (10%) | 4 |
+| Business Framing (10%) | 4 |
+
+**Stats:** ~625 lines | 8 walkthrough steps | ~9 YAML blocks | 2 Mermaid diagrams | 3 Satellite UI screenshots | Companion public repo [`rhel-labs/satellite-vulnerability-remediation`](https://github.com/rhel-labs/satellite-vulnerability-remediation)
+
+**Strengths:**
+- Real closed-loop pattern: Satellite webhook → EDA → AAP Job Template → fleet-wide CVE scan/install, including air-gap / on-prem Lightspeed Vulnerability distinction
+- Validation is near the top of the bar: concrete `hammer` trigger, before/after `rpm -q`, severity policy shown in results, `PLAY RECAP`, dashboard before/after screenshots, strong troubleshooting table
+- Production instincts: credential injectors + `!unsafe`, Machine credential callout, severity filter, RBAC note, custom EE/`uv` requirement called out honestly
+- Author iteration is visible across the PR (lab hostnames removed, EE and Project gaps closed, public companion repo linked)
+
+**Weaknesses / improvements before publish:**
+- Catalog and chrome were incomplete on first merge (fixed as WIP: badge, hero, catalog card, Satellite filter) -- still needs a Satellite partner wordmark when available
+- Closing section still uses combined Maturity Path and Related Guides with ROI Recap after Related Guides; needs Summary before Related Guides per current rubric
+- Auto-remediate Critical/Important with no approval gate is framed as Walk; for field use that reads closer to aggressive Run -- sharpen Walk vs Run and add change-window / approval guidance
+- Related Guides could also point at Patching-RHEL / Lightspeed CVE patterns where relevant
+
+**Suggestions (publish checklist):**
+1. Split **Summary** before **Related Guides**; rename section 9 to match the rubric
+2. Clarify maturity: Walk = severity-scoped with human approval or pilot org; Run = policy-driven auto-install
+3. Add a Satellite partner logo pair and `guide-hero-partner` callout when assets are ready
+4. Optional: short Lightspeed terminology callout (Satellite on-prem Vulnerability vs console.redhat.com)
+5. Keep companion repo link prominent -- it already solves the common "source repo" gap other guides have
+
+---
+
 ## Cross-Cutting Observations
 
 **What changed since the July 2026 review:**
@@ -231,6 +275,7 @@ Score each category 1-5. Multiply by weight. Final score out of 10. Any category
 - **Windows Cert Rotation** remains the standard for AIOps validation (three decision paths, three test scenarios with syntax-highlighted output)
 - **MCP coverage is growing** -- the ServiceNow guide documents MCP server integration alongside governed template-as-code; the foundational AIOps guide now has a dedicated MCP search phase with a read-path table
 - **Closed-loop incident narratives** are now the baseline -- Splunk and Instana both demonstrate detect-through-remediate completeness with per-stage validation
+- **Satellite CVE Remediation** (WIP, 9.0) lands as a high-quality air-gapped closed-loop contribution with elite validation; parked as WIP for chrome/maturity polish before published ranking
 
 **Patterns that work well across solution guides:**
 - Per-stage operational impact tables (Windows, Instana)

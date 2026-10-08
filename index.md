@@ -69,6 +69,9 @@ patternfly: true
         <input type="checkbox" value="redhat-ai"> Red Hat AI
       </label>
       <label class="cards-sidebar__checkbox cards-sidebar__checkbox--partner">
+        <input type="checkbox" value="satellite"> Red Hat Satellite
+      </label>
+      <label class="cards-sidebar__checkbox cards-sidebar__checkbox--partner">
         <input type="checkbox" value="servicenow"> ServiceNow
       </label>
       <label class="cards-sidebar__checkbox cards-sidebar__checkbox--partner">
@@ -388,6 +391,28 @@ patternfly: true
           </div>
           <div class="pf-v6-c-card__body">
             A crawl-walk-run maturity model for closed-loop network remediation: LogicMonitor alerts trigger Event-Driven Ansible, progressing from a single BGP-reset job template, to Edwin AI-enriched branched workflows, to agentic remediation via the AAP MCP Server.
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ '/README-Satellite-CVE-Remediation' | relative_url }}" class="card-link" data-tags="satellite,aiops,solution,wip">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header card-header--labels">
+            <span class="pf-v6-c-label pf-m-orange">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                Work in Progress
+              </span>
+            </span>
+            <span class="pf-v6-c-label card-label-track card-label-track--aiops">
+              <span class="pf-v6-c-label__content">AIOps</span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Proactive Vulnerability Remediation with Satellite and Event-Driven Ansible</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Closed-loop CVE detection and remediation: a Satellite webhook triggers Event-Driven Ansible, which launches an AAP job to scan on-premises Lightspeed Vulnerability data and install Critical/Important fixes across the fleet -- fully air-gap capable.
           </div>
         </div>
       </a>
