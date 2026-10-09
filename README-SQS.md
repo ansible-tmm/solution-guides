@@ -17,8 +17,8 @@
   <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
   <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
   <span class="guide-hero-partner__partner card-partner-logo-set">
-    <img src="assets/images/logos/aws-logo.png" alt="Amazon Web Services" class="card-partner-logo card-partner-logo--light">
-    <img src="assets/images/logos/aws-logo-dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+    <img src="assets/images/logos/aws-logo.png" alt="Amazon Web Services" class="card-partner-logo card-partner-logo--light" width="53" height="32">
+    <img src="assets/images/logos/aws-logo-dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true" width="53" height="32">
   </span>
 </div>
 
