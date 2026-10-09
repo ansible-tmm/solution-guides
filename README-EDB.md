@@ -197,7 +197,7 @@ EDB is a trusted PostgreSQL partner with deep integration into Red Hat's ecosyst
 │  │  eda2-dc1                │  │   │  │  eda2-dc2                │   │
 │  │    + Redis colocated     │  │   │  │    + Redis (stopped)     │   │
 │  └──────────┬───────────────┘  │   │  └──────────┬───────────────┘   │
-│             │                  │   │             │                   │         
+│             │                  │   │             │                   │
 │  ┌──────────▼─────────────────┐│   │  ┌──────────▼─────────────────┐ │
 │  │ PostgreSQL Cluster (3)     ││   │  │ PostgreSQL Cluster (3)     │ │
 │  │ (EDB Postgres Advanced 16) ││   │  │ (EDB Postgres Advanced 16) │ │
@@ -792,19 +792,19 @@ eda2-dc2.example.com eda_pg_host='10.2.2.100' eda_pg_port='5432'
 ```bash
 cd /opt/ansible-automation-platform-containerized-setup-2.6-1
 
-# Run installer
-./setup.sh
+# Run install playbook
+ansible-playbook -i inventory ansible.containerized_installer.install
 
 # Verify installation
 podman ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 
 # Enable systemd services
-systemctl enable --now automation-controller-web
-systemctl enable --now automation-controller-task
-systemctl enable --now automation-gateway
-systemctl enable --now automation-hub
-systemctl enable --now eda-activation-worker
-systemctl enable --now redis
+systemctl enable --user --now automation-controller-web
+systemctl enable --user --now automation-controller-task
+systemctl enable --user --now automation-gateway
+systemctl enable --user --now automation-hub
+systemctl enable --user --now eda-activation-worker
+systemctl enable --user --now redis
 ```
 
 #### Step 11: Install AAP on DC2 (standby) and stop services
@@ -813,12 +813,12 @@ systemctl enable --now redis
 # On DC2 nodes
 
 # IMMEDIATELY STOP all AAP containers (standby mode)
-systemctl stop automation-controller-web automation-controller-task
-systemctl stop automation-gateway automation-hub eda-activation-worker redis
+systemctl stop --user automation-controller-web automation-controller-task
+systemctl stop --user automation-gateway automation-hub eda-activation-worker redis
 
 # Disable auto-start
-systemctl disable automation-controller-web automation-controller-task
-systemctl disable automation-gateway automation-hub eda-activation-worker redis
+systemctl disable --user automation-controller-web automation-controller-task
+systemctl disable --user automation-gateway automation-hub eda-activation-worker redis
 ```
 
 #### Step 12: Verify AAP database connectivity to PostgreSQL VIP
@@ -881,22 +881,22 @@ fi
 # Start AAP containers by component type
 echo "Starting Platform Gateway nodes in $DATACENTER..."
 for node in "${GATEWAY_NODES[@]}"; do
-    ssh "$node" "systemctl start automation-gateway redis"
+    ssh "$node" "systemctl start --user automation-gateway redis"
 done
 
 echo "Starting Automation Controller nodes in $DATACENTER..."
 for node in "${CONTROLLER_NODES[@]}"; do
-    ssh "$node" "systemctl start automation-controller-web automation-controller-task"
+    ssh "$node" "systemctl start --user automation-controller-web automation-controller-task"
 done
 
 echo "Starting Automation Hub nodes in $DATACENTER..."
 for node in "${HUB_NODES[@]}"; do
-    ssh "$node" "systemctl start automation-hub redis"
+    ssh "$node" "systemctl start --user automation-hub redis"
 done
 
 echo "Starting Event-Driven Ansible nodes in $DATACENTER..."
 for node in "${EDA_NODES[@]}"; do
-    ssh "$node" "systemctl start eda-activation-worker redis"
+    ssh "$node" "systemctl start --user eda-activation-worker redis"
 done
 
 # Wait for AAP API
@@ -1064,16 +1064,16 @@ psql -h 10.1.2.100 -U postgres -c "SELECT pg_is_in_recovery();"
 ```bash
 # Stop AAP in DC1
 for node in gateway1-dc1 gateway2-dc1; do
-    ssh "$node" "systemctl stop automation-gateway redis"
+    ssh "$node" "systemctl stop --user automation-gateway redis"
 done
 for node in controller1-dc1 controller2-dc1; do
-    ssh "$node" "systemctl stop automation-controller-web automation-controller-task"
+    ssh "$node" "systemctl stop --user automation-controller-web automation-controller-task"
 done
 for node in hub1-dc1 hub2-dc1; do
-    ssh "$node" "systemctl stop automation-hub redis"
+    ssh "$node" "systemctl stop --user automation-hub redis"
 done
 for node in eda1-dc1 eda2-dc1; do
-    ssh "$node" "systemctl stop eda-activation-worker redis"
+    ssh "$node" "systemctl stop --user eda-activation-worker redis"
 done
 
 # Promote DC2 database to primary
@@ -1234,16 +1234,16 @@ ssh pg-dc2-1 "psql -U postgres -c \"SELECT * FROM pg_stat_replication;\""
 
 # 5. Stop AAP in DC2
 for node in gateway1-dc2 gateway2-dc2; do
-    ssh "$node" "systemctl stop automation-gateway redis"
+    ssh "$node" "systemctl stop --user automation-gateway redis"
 done
 for node in controller1-dc2 controller2-dc2; do
-    ssh "$node" "systemctl stop automation-controller-web automation-controller-task"
+    ssh "$node" "systemctl stop --user automation-controller-web automation-controller-task"
 done
 for node in hub1-dc2 hub2-dc2; do
-    ssh "$node" "systemctl stop automation-hub redis"
+    ssh "$node" "systemctl stop --user automation-hub redis"
 done
 for node in eda1-dc2 eda2-dc2; do
-    ssh "$node" "systemctl stop eda-activation-worker redis"
+    ssh "$node" "systemctl stop --user eda-activation-worker redis"
 done
 
 # 6. Promote DC1 back to primary
@@ -1258,16 +1258,16 @@ ssh pg-dc2-1 "sudo systemctl start edb-as-16"
 
 # 8. Start AAP in DC1
 for node in gateway1-dc1 gateway2-dc1; do
-    ssh "$node" "systemctl start automation-gateway redis"
+    ssh "$node" "systemctl start --user automation-gateway redis"
 done
 for node in controller1-dc1 controller2-dc1; do
-    ssh "$node" "systemctl start automation-controller-web automation-controller-task"
+    ssh "$node" "systemctl start --user automation-controller-web automation-controller-task"
 done
 for node in hub1-dc1 hub2-dc1; do
-    ssh "$node" "systemctl start automation-hub redis"
+    ssh "$node" "systemctl start --user automation-hub redis"
 done
 for node in eda1-dc1 eda2-dc1; do
-    ssh "$node" "systemctl start eda-activation-worker redis"
+    ssh "$node" "systemctl start --user eda-activation-worker redis"
 done
 
 # 9. Update Global Load Balancer back to DC1
@@ -1318,7 +1318,7 @@ echo "Checking EFM cluster status..."
 
 # Stop AAP in DC1
 for node in gateway1-dc1 gateway2-dc1 controller1-dc1 controller2-dc1 hub1-dc1 hub2-dc1 eda1-dc1 eda2-dc1; do
-    ssh "$node" "systemctl stop automation-*"
+    ssh "$node" "systemctl stop --user automation-*"
 done
 
 # Promote DC2 database
@@ -1326,7 +1326,7 @@ ssh pg-dc2-1 "sudo -u enterprisedb /usr/edb/as16/bin/pg_ctl promote -D /var/lib/
 
 # Start AAP in DC2
 for node in gateway1-dc2 gateway2-dc2 controller1-dc2 controller2-dc2 hub1-dc2 hub2-dc2 eda1-dc2 eda2-dc2; do
-    ssh "$node" "systemctl start automation-*"
+    ssh "$node" "systemctl start --user automation-*"
 done
 
 # Update Global Load Balancer
@@ -1372,13 +1372,13 @@ curl -k -X POST -H "Authorization: Bearer ${AAP_TOKEN}" \
 # (Manual via AAP UI or API)
 
 # 2. Stop services
-ssh controller1-dc1 "systemctl stop automation-controller-web automation-controller-task"
+ssh controller1-dc1 "systemctl stop --user automation-controller-web automation-controller-task"
 
 # 3. Perform maintenance
 ssh controller1-dc1 "dnf update -y && reboot"
 
 # 4. Start services
-ssh controller1-dc1 "systemctl start automation-controller-web automation-controller-task"
+ssh controller1-dc1 "systemctl start --user automation-controller-web automation-controller-task"
 
 # 5. Verify health
 curl -k https://controller1-dc1/api/v2/ping/
@@ -1438,8 +1438,8 @@ This architecture ensures automation availability for workflows that cannot tole
 
 ---
 
-**Document Version:** 1.0  
-**Last Review:** 2026-04-20  
+**Document Version:** 1.1
+**Last Review:** 2026-10-09
 **Based On:** AAP Containerized Multi-Datacenter DR Architecture v2.0 (2026-03-31)
 
 {% endraw %}
