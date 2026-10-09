@@ -1438,8 +1438,8 @@ This architecture ensures automation availability for workflows that cannot tole
 
 ---
 
-**Document Version:** 1.0
-**Last Review:** 2026-04-20
+**Document Version:** 1.1
+**Last Review:** 2026-10-09
 **Based On:** AAP Containerized Multi-Datacenter DR Architecture v2.0 (2026-03-31)
 
 {% endraw %}
