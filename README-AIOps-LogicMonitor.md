@@ -22,10 +22,10 @@ This guide follows a crawl-walk-run maturity progression for BGP network remedia
 * [Solution](#solution)  
 * [Prerequisites](#prerequisites)  
 * [Integration Architecture](#integration-architecture)  
-* Stage 1 \-- Crawl: Envision Playbook Mapping and Manual Execution  
-* [Stage 2 \-- Walk: Event-Driven Network Remediation](#stage-1----crawl-event-driven-network-remediation)  
-* [Stage 3 \-- Run: AI-Driven Chat and Agentic Operations](#stage-2----walk-ai-enriched-remediation)  
-* [Run Extension \-- Optional Agentic Automation Patterns](#stage-3----run-agentic-aiops-with-mcp)  
+* [Stage 1 \-- Crawl: Envision Playbook Mapping and Manual Execution](#stage-1----crawl-envision-playbook-mapping-and-manual-execution)  
+* [Stage 2 \-- Walk: Event-Driven Network Remediation](#stage-2----walk-event-driven-network-remediation)  
+* [Stage 3 \-- Run: AI-Driven Chat and Agentic Operations](#stage-3----run-ai-driven-chat-and-agentic-operations)  
+* [Operational Considerations](#operational-considerations)  
 * [Validation and Troubleshooting](#validation-and-troubleshooting)  
 * [Maturity Path Summary](#maturity-path-summary)  
 * [ROI Recap](#roi-recap)  
@@ -82,7 +82,7 @@ LogicMonitor and Edwin AI provide the intelligence. AAP provides the trust layer
 | **Edwin AI** | Analysis and recommendation | Alert correlation, root cause analysis, remediation recommendations |
 | **AAP Automation Controller** | Governed execution | Job templates, workflow templates, RBAC, audit logging |
 | **AAP EDA Controller** | Event-driven automation | Rulebook activations, event stream processing, webhook ingestion |
-| **MCP integration** | Agentic AI interface | Connects Edwin AI to AAP APIs for approved automation discovery and execution within configured authorization and approval boundaries. |
+| **MCP (Model Context Protocol) integration** | Agentic AI interface | Connects Edwin AI to AAP APIs for approved automation discovery and execution within configured authorization and approval boundaries. |
 | **Network infrastructure** | Target infrastructure | Network devices monitored by LogicMonitor (examples in this guide use Arista EOS) |
 
 ### Personas
@@ -183,8 +183,8 @@ Four integration surfaces are used across the three maturity stages:
 
 | Surface | Component | Stage | Role |
 | :---- | :---- | :---- | :---- |
-| **EDA Event Stream** | AAP Event Streams (AAP 2.5+) | All | Configured endpoint that receives events and routes them to rulebook activations. |
-| **EDA webhook source** | `ansible.eda.webhook` source plugin | All | EDA rulebook activation that evaluates events received through the configured Event Stream. |
+| **EDA Event Stream** | AAP Event Streams (AAP 2.5+) | Walk, Run | Configured endpoint that receives events and routes them to rulebook activations. |
+| **EDA webhook source** | `ansible.eda.webhook` source plugin | Walk, Run | EDA rulebook activation that evaluates events received through the configured Event Stream. |
 | **LM device management** | `logicmonitor.integration` collection | All | Manages LM devices, collectors, alert rules, device groups |
 | **Edwin AI query** | `logicmonitor.edwin_ai.query_api` module | Run | Queries Edwin AI for correlated alerts, events, insights |
 | **MCP integration** | `MCP connection to AAP APIs` | Run | Connects Edwin AI to AAP APIs for approved automation discovery and execution. |
@@ -214,8 +214,6 @@ The crawl-walk-run progression starts with Envision mapping and operator-led exe
 
 Crawl establishes the shared operational vocabulary before automation is delegated to events or agents. LogicMonitor Envision statically maps monitored conditions and recommended actions to approved AAP job templates. Operators use that mapping to review the alert context, select the appropriate playbook, and execute it manually through LogicMonitor Envision with AAP RBAC, approvals, and auditability.
 
-## 
-
 ### Flow
 
 LogicMonitor detects a condition and surfaces its context in Envision  
@@ -224,8 +222,6 @@ LogicMonitor detects a condition and surfaces its context in Envision
       \-\> Operator manually execute the AAP job from the LogicMonitor Envision UI  
         \-\> AAP enforces access controls and any required approval  
           \-\> Results are recorded and used to identify candidates for Walk-stage triggers
-
-## 
 
 ### Setup
 
@@ -261,14 +257,10 @@ LogicMonitor detects a BGP alert on a network device
 2. **Confirm the LogicMonitor signal path.** Ensure the relevant alerts, device metrics, logs, and topology context are available to Edwin AI so it can correlate the event and identify the likely root cause.  
      
 3. **Configure Edwin Rules and Actions.** For direct execution, map a condition to an approved AAP job or workflow template ID. For EDA, use Post Ansible EDA Event with the configured Event Stream URL. Map the affected resource and incident context into valid JSON extra variables expected by the target template.
+   ![][image2]
 
-> ![][image2]
-
-4. **Define safe execution boundaries.** Use approved AAP templates, appropriate credentials and permissions, and approval gates for write-based remediation where policy requires. Rule-based actions run only within the configured integration credential or service-account and AAP RBAC boundaries. Capture the execution ID, check status after launch, and review output in Edwin; synchronize to ITSM only when configured.  
-   
-
-> ![][image3]  
-> 
+4. **Define safe execution boundaries.** Use approved AAP templates, appropriate credentials and permissions, and approval gates for write-based remediation where policy requires. Rule-based actions run only within the configured integration credential or service-account and AAP RBAC boundaries. Capture the execution ID, check status after launch, and review output in Edwin; synchronize to ITSM only when configured.
+   ![][image3]
 
 5. **Create the job template.** Using the AAP bootstrap playbook at `lab-automation/aap_bootstrap_lm_aiops.yml`, or manually, create the "Reset BGP Session" job template:  
  
@@ -306,7 +298,9 @@ Edwin uses Post Ansible EDA Event to send the mapped payload to the configured E
           alert_id: "{{ event.payload.id }}"
 ```
 
-The "Reset BGP Session" job template (`playbooks/reset_bgp_session.yml`) targets the affected device, clears all BGP sessions, waits for peers to re-establish, and validates the recovery. On success, it reports the remediation result back to LogicMonitor via `playbooks/report_to_logicmonitor.yml`, which acknowledges and annotates the alert:
+The "Reset BGP Session" job template (`playbooks/reset_bgp_session.yml`) targets the affected device, resets the affected BGP peer session, waits for it to re-establish, and validates the recovery.
+
+> **Note:** In production, scope the reset to the specific affected peer session rather than clearing all BGP sessions on the device. Clearing all sessions disrupts working peers and can cause broader network impact. On success, it reports the remediation result back to LogicMonitor via `playbooks/report_to_logicmonitor.yml`, which acknowledges and annotates the alert:
 
 ```
 # Note: The logicmonitor.integration collection does not yet include an alert
@@ -325,6 +319,7 @@ The "Reset BGP Session" job template (`playbooks/reset_bgp_session.yml`) targets
         Automated remediation by AAP: {{ remediation_result }}
         on host {{ remediation_host }}.
     status_code: [200, 202]
+  no_log: true
 ```
 
 ### Validation
@@ -346,7 +341,7 @@ PLAY RECAP *********************************************************************
 affected-device            : ok=6    changed=0    unreachable=0    failed=0
 ```
 
-For hands-on testing with a lab environment, see the [Demo Guide](http://README-AIOps-LogicMonitor-Demo.md).
+For hands-on testing with a lab environment, see the [Demo Guide](README-AIOps-LogicMonitor-Demo.md).
 
 ### Components
 
@@ -522,7 +517,7 @@ Execution status and output return to the Edwin AI chat
 Edwin AI chat summarizes the result and recommends next steps
 ```
 
-For hands-on testing with a lab environment, see the [Demo Guide](http://README-AIOps-LogicMonitor-Demo.md).
+For hands-on testing with a lab environment, see the [Demo Guide](README-AIOps-LogicMonitor-Demo.md).
 
 ### Components
 
@@ -539,29 +534,35 @@ For hands-on testing with a lab environment, see the [Demo Guide](http://README-
 
 ---
 
-### Validation
+## Operational Considerations
 
-From an Edwin AI Insight, open chat and verify that the agent can use MCP to retrieve eligible templates, recommend an action, and return execution results to the conversation.
+The following best practices apply across all maturity stages and should be addressed before deploying to production.
 
-**Expected result in Edwin AI chat:**
+### Credential Management
 
-From an Edwin AI Insight, the agent uses MCP to discover eligible templates, recommends an appropriate diagnostic or remediation action, and returns results to chat.
+Multiple credential types are in play across the integration: LogicMonitor API tokens, Edwin AI `access_id` and `access_key`, AAP OAuth tokens, network device credentials, and MCP authentication. Store all secrets using AAP credential types or an external vault (such as HashiCorp Vault or CyberArk). Define a rotation policy for each credential type. Apply least-privilege scoping to ensure service accounts and integration credentials have only the permissions required for their specific function.
 
-For hands-on testing with a lab environment, see the [Demo Guide](http://README-AIOps-LogicMonitor-Demo.md).
+### Event Stream Security
 
-### Components
+When Edwin posts payloads to an EDA Event Stream URL, protect the endpoint:
 
-| Component | Details |
-| :---- | :---- |
-| Event Stream | Optional EDA handoff for a pattern promoted to Walk |
-| EDA source | `Optional EDA rulebook activation for the promoted Walk pattern` |
-| Rulebook | Not required for the core Run chat flow |
-| Job Template | No automatic escalation template required |
-| Optional implementation pattern | `Use only if an organization chooses to build a separate integration handoff; it is not required for Run.` |
-| MCP integration | `MCP connection to AAP APIs` |
-| MCP capabilities | `Approved job and workflow template discovery, execution, and status checks` |
-| Optional | Optional: use approved LogicMonitor integrations for additional exploration where available |
-| Collections | `logicmonitor.integration`, `logicmonitor.edwin_ai` |
+* **Authentication:** Require token-based authentication or mTLS on the Event Stream endpoint.
+* **Payload validation:** Validate the payload schema in the EDA rulebook before processing. Reject unexpected or malformed events.
+* **Network segmentation:** Restrict network access to the Event Stream URL to known sources (Edwin AI, internal monitoring infrastructure).
+
+### Defining "Read-Only" Automation
+
+The Run stage describes "autonomous read-only diagnostics." In practice, "read-only" is an operational contract, not a platform-level toggle. Enforce it through:
+
+* **Template design:** Ensure diagnostic playbooks only run gather-facts, show commands, or other non-mutating operations.
+* **Credential scoping:** Use read-only credentials for diagnostic service accounts on target devices.
+* **RBAC boundaries:** Limit the integration service account to diagnostic job templates only.
+
+### Idempotency and Rate Limiting
+
+* Ensure all remediation playbooks are idempotent so that repeated execution does not cause unintended side effects.
+* Protect against alert storms: implement rate limiting or deduplication logic in EDA rulebook conditions to prevent dozens of simultaneous remediations from a burst of correlated alerts.
+* Respect change windows: consider whether EDA rules should check for active maintenance windows before triggering remediation.
 
 ---
 
@@ -571,6 +572,9 @@ For hands-on testing with a lab environment, see the [Demo Guide](http://README-
 
 | Stage | Validation step | Expected result |
 | :---- | :---- | :---- |
+| **Crawl** | Configure Ansible Actions integration in LogicMonitor | AAP endpoint connects and retrieves job template metadata |
+| **Crawl** | Map an approved playbook to a monitored resource in Envision | Mapped action appears in the resource Actions tab |
+| **Crawl** | Operator launches mapped playbook from Envision | AAP job executes with RBAC enforcement; output and run history visible in LogicMonitor |
 | **Walk** | BGP peer down alert fires in LogicMonitor | Edwin Post Ansible EDA Event reaches the configured Event Stream URL |
 | **Walk** | EDA rulebook evaluates alert | "Reset BGP Session" job launches targeting correct host |
 | **Walk** | Check LM alert after remediation | Alert acknowledged with AAP annotation |
@@ -660,7 +664,7 @@ Track these metrics to quantify the value of each stage:
 | :---- | :---- | :---- |
 | MTTR by stage | Time from mapped recommendation to execution (Crawl), event to execution (Walk), and investigation to approved action (Run) | Set a baseline for Crawl; target a measurable reduction for Walk; track diagnostic and approval time for Run |
 | Remediation success rate | Percentage of automated remediations that resolve the issue | Track operator-validated Crawl outcomes and success rate for Walk rules |
-| On-call escalation reduction | Change in pages to on-call engineers | 30-50% reduction after Walk, 50-70% after Run |
+| On-call escalation reduction | Change in pages to on-call engineers | Illustrative targets: 30-50% reduction after Walk, 50-70% after Run (establish baselines to validate) |
 | Alert noise reduction | Volume of alerts reaching human operators | Measurable decrease as Walk rules expand without sacrificing approval controls |
 | Pattern promotion rate | Number of Run patterns promoted to Walk rules or documented as Crawl mappings per quarter | Indicates system maturity growth |
 
@@ -684,7 +688,7 @@ The architecture remains the same: LogicMonitor detects, Edwin AI analyzes, and 
 
 | Resource | Status | Description |
 | :---- | :---- | :---- |
-| [Demo Guide](http://README-AIOps-LogicMonitor-Demo.md) | Available | Step-by-step lab setup with ContainerLab, Arista cEOS, incident simulation playbooks, and validation scripts |
+| [Demo Guide](README-AIOps-LogicMonitor-Demo.md) | Available | Step-by-step lab setup with ContainerLab, Arista cEOS, incident simulation playbooks, and validation scripts |
 | Video walkthrough | Planned | Recorded demo showing the crawl-walk-run progression end-to-end |
 | Live demo environment | Planned | Pre-configured environment with LogicMonitor, AAP 2.6, and all three stages ready to run |
 
