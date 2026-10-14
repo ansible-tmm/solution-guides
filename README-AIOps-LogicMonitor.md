@@ -300,7 +300,11 @@ Edwin uses Post Ansible EDA Event to send the mapped payload to the configured E
 
 The "Reset BGP Session" job template (`playbooks/reset_bgp_session.yml`) targets the affected device, resets the affected BGP peer session, waits for it to re-establish, and validates the recovery.
 
-> **Note:** In production, scope the reset to the specific affected peer session rather than clearing all BGP sessions on the device. Clearing all sessions disrupts working peers and can cause broader network impact. On success, it reports the remediation result back to LogicMonitor via `playbooks/report_to_logicmonitor.yml`, which acknowledges and annotates the alert:
+> **Note:** Scope BGP reset carefully.
+>
+> In production, scope the reset to the specific affected peer session rather than clearing all BGP sessions on the device. Clearing all sessions disrupts working peers and can cause broader network impact.
+
+On success, it reports the remediation result back to LogicMonitor via `playbooks/report_to_logicmonitor.yml`, which acknowledges and annotates the alert:
 
 ```
 # Note: The logicmonitor.integration collection does not yet include an alert
@@ -688,7 +692,7 @@ The architecture remains the same: LogicMonitor detects, Edwin AI analyzes, and 
 
 | Resource | Status | Description |
 | :---- | :---- | :---- |
-| [Demo Guide](README-AIOps-LogicMonitor-Demo.md) | Available | Step-by-step lab setup with ContainerLab, Arista cEOS, incident simulation playbooks, and validation scripts |
+| [Demo Guide](README-AIOps-LogicMonitor-Demo.md) | Planned | Step-by-step lab setup with ContainerLab, Arista cEOS, incident simulation playbooks, and validation scripts |
 | Video walkthrough | Planned | Recorded demo showing the crawl-walk-run progression end-to-end |
 | Live demo environment | Planned | Pre-configured environment with LogicMonitor, AAP 2.6, and all three stages ready to run |
 
