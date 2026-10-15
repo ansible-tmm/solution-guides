@@ -1571,6 +1571,7 @@ The following scenarios were executed against this architecture and **passed** f
 
 - [High-Availability AAP with EDB PostgreSQL DR](README-EDB.md) -- VM-based Active-Passive DR with EDB Postgres Advanced Server and EFM
 - [Consuming OpenShift API Resources with EDA and Kafka](README-OpenShift-EDA-Kafka.md) -- OpenShift event capture patterns complementary to platform HA
+- [`aap-ha-dr-gitops`](https://gitlab.cee.redhat.com/ansible/aap-ha-dr-gitops/-/tree/devel) (**internal Red Hat GitLab**) -- example GitOps deployment on ROSA using CNPG for the database, ODF for S3-compatible storage, and ESO for AWS Secrets Manager secrets
 
 ## Appendix A: ODF RGW Multisite Storage
 
