@@ -315,7 +315,7 @@ Published since the July 2026 review. Not yet scored against the [Implementation
 
 ### 9. Vulnerability management with Lightwell
 
-**File:** [Implementation_Guide.md](/home/nmartins/Development/Repos/lightwell-patch-to-production/Implementation_Guide.md)
+**File:** [README-Lightwell-Vulnerability-Management.md](README-Lightwell-Vulnerability-Management.md)
 **Score:** 9.4 / 10
 
 | Category | Score |
