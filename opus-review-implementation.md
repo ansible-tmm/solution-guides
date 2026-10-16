@@ -22,6 +22,7 @@ permalink: /opus-review-implementation/
 | 6 | [AI Infrastructure automation with Ansible](#6-ai-infrastructure-automation-with-ansible) | 7.3/10* | Clear two-collection story (infra.ai + redhat.ai); needs framework alignment and deeper validation |
 | 7 | [Intelligent Assistant with Red Hat AI Inference Server](#7-intelligent-assistant-with-red-hat-ai-inference-server) | 6.9/10* | Strong hands-on RHAIIS + Lightspeed hookup; weakest framework alignment of published guides |
 | 8 | [PostgreSQL Autovacuum Tuning](#8-postgresql-autovacuum-tuning) | Pending review | Published; not yet scored against the Implementation Guide rubric |
+| 9 | [Vulnerability management with Lightwell](#9-vulnerability-management-with-lightwell) | 9.4/10 | Technically executable demo guide that requires significant framework alignment (Architecture, Day-2 Operations) before publishing |
 
 ---
 
@@ -309,6 +310,36 @@ Scores marked with * in the scorecard above used the solution guide rubric durin
 **Score:** Pending review
 
 Published since the July 2026 review. Not yet scored against the [Implementation Guide rubric](README-best-practices-implementation.md).
+
+---
+
+### 9. Vulnerability management with Lightwell
+
+**File:** [Implementation_Guide.md](/home/nmartins/Development/Repos/lightwell-patch-to-production/Implementation_Guide.md)
+**Score:** 9.4 / 10
+
+| Category | Score |
+|----------|-------|
+| Outcome Clarity (15%) | 5 |
+| Architecture Clarity (25%) | 5 |
+| Technical Executability (25%) | 4.5 |
+| Validation/Testability (20%) | 4.5 |
+| Production Readiness (15%) | 4.5 |
+
+**Stats:** ~800 words | 12 bash/yaml blocks | 1 Mermaid diagram | 5 troubleshooting rows
+
+**Strengths:**
+- Strong validation section with concrete test commands (`rpm -q`, `podman exec`) and verbatim expected output.
+- Useful troubleshooting table covering realistic failure modes like EDA webhook timeouts and Controller CaC 401s.
+- Clear prerequisites section detailing infrastructure, Execution Environment dependencies, and Vault credential requirements.
+- Excellent Mermaid architecture diagram showing the relationship between AAP Controller, EDA Controller, RHTPA, Keycloak, Gitea, and the Target Fleet.
+- Comprehensive Day-2 Operations section covering monitoring, maintenance, and known issues.
+
+**Weaknesses:**
+- The guide is still primarily a demo walkthrough rather than a full production deployment guide, though it is framed well.
+
+**Suggestions:**
+- Consider adding a cost/resource estimate section for the required VMs and storage.
 
 ---
 
