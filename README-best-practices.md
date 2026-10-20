@@ -5,7 +5,7 @@ A framework for creating enterprise-grade solution guides for Ansible Automation
 
 > **Two guide types:** This document is for **Solution Guides** only. Implementation Guides use a separate framework and rubric on the [Best Practices hub](best-practices.md).
 
-> **Quick start:** Jump to the [Starter Template](#appendix-starter-template).
+> **Quick start:** Jump to the [Starter Template](#appendix-starter-template) for a single-outcome guide, or the [Multi-use-case starter](#appendix-multi-use-case-starter) when one partner topic has Use Case A/B/….
 >
 > Copy the ready-made skeleton, fill in the placeholders, and score your draft against the [Quality Scoring Rubric](#reference) before publishing.
 
@@ -62,8 +62,9 @@ These sections map 1:1 to the section names in every solution guide. When review
 
 | Section | What It Covers |
 |---------|---------------|
-| [Reference](#reference) | Scoring rubric, failure modes, elite guide criteria |
-| [Appendix: Starter Template](#appendix-starter-template) | Copy-paste skeleton for new guides |
+| [Reference](#reference) | Scoring rubric, failure modes, elite guide criteria (includes multi-use-case row) |
+| [Appendix: Starter Template](#appendix-starter-template) | Copy-paste skeleton for single-outcome guides |
+| [Appendix: Multi-use-case starter](#appendix-multi-use-case-starter) | Skeleton when one partner topic has Use Case A/B/… |
 
 ---
 
@@ -120,6 +121,46 @@ Define the operational pain in 2-4 sentences max. Quantify if possible (time, co
 ### 2.2 Table of Contents
 
 Include a linked table of contents after the problem statement so readers can jump to any section.
+
+For **multi-use-case** guides, the ToC (and the auto-generated sidebar) must make each use case obvious: list **Use Case A**, **Use Case B**, and so on as top-level `##` headings with stable IDs, not buried as `###` under a single walkthrough.
+
+### 2.3 Multi-use-case Solution Guides
+
+Some partner topics solve more than one operational problem (for example Splunk ITSI + RHEL remediation, or ServiceNow ticket enrichment + LEAP/MCP). Prefer **one Solution Guide with multiple use cases** over duplicate catalog cards.
+
+This is the **canonical structure** (mirrored by ServiceNow and Splunk guides in this repo):
+
+```text
+Title (broader partner / outcome topic) + Solution Guide badge + partner hero
+├── Overview          problem statement + Use Case A/B/C jump links + comparison table
+├── Table of Contents shared sections + bold links to each use case
+├── Background        shared domain context (map bullets to use cases where helpful)
+├── Solution          shared components + Who Benefits (demos/labs live under each use case)
+├── Prerequisites     once at the top; tag UC-specific rows (version, Store apps, MCP) -- do not repeat inside use cases
+├── Use Case A        h2 with stable id -- Overview, Workflow, Walkthrough, Validation, Summary
+├── Use Case B        same nested shape
+└── Next Steps        CTA once at the end of the guide (not per use case)
+```
+
+| Pattern | Do this | Avoid |
+|---------|---------|-------|
+| **Catalog title** | Broader outcome topic (for example "ServiceNow ITSM automation with Ansible") | Naming the card after only one use case when the guide covers more |
+| **Catalog body** | Outcome language that sells the use cases ("Enrich incidents… then close the loop with LEAP…") | Meta layout copy ("two use cases under one Solution Guide", "combined guide", "merged content") |
+| **Overview** | Numbered Use Case A/B/C list with jump links **and** a comparison table (outcome, impact, maturity) | Treating use cases as an afterthought or burying them outside Overview |
+| **ToC / sidebar** | In-page ToC plus top-level use-case headings so "On this page" lists each use case | Hiding `div#toc` and nesting use cases as `###` so they vanish from navigation |
+| **Use-case headings** | Stable HTML anchors: `<h2 id="use-case-a-…">Use Case A: …</h2>` (sidebar script keys off `h2[id]`) | Empty placeholder `<h2 id="…"></h2>` above a markdown `##` (breaks jump links) |
+| **Shared sections** | One Background / Solution / Prerequisites for the partner topic | Prerequisites (or Who Benefits) both above the use cases **and** again inside each use case |
+| **Demos and labs** | Put Arcade, videos, and labs under the use case they demonstrate | A shared "Demos and labs" dump that mixes LEAP and ITSM (or other) assets above the use cases |
+| **Per use case** | Each use case owns Workflow, Walkthrough, Validation (and its own short Summary); nest inner sections as `###` / `####` | One giant walkthrough with unlabeled "also see" digressions |
+| **Legacy URLs** | Thin redirect (`meta refresh` + markdown link) to the combined guide `#use-case-…` anchor | A second full copy that drifts from the combined guide |
+
+**Depth:** Apply the [minimum depth standard](#what-makes-a-guide-elite) **per use case** for walkthrough steps and YAML (each use case should stand on its own). Shared Overview/Background/Solution count once.
+
+**Scoring:** Use the **Multi-use-case Solution Guide** row under [Scoring by Solution Category](#scoring-by-solution-category).
+
+**Copy-paste skeleton:** [Appendix: Multi-use-case starter](#appendix-multi-use-case-starter).
+
+**Examples in this repo:** [AIOps with Splunk and Event-Driven Ansible](README-AIOps-Splunk-ITSI.md), [ServiceNow ITSM automation with Ansible](README-AIOps-ServiceNow.md).
 
 ---
 
@@ -517,6 +558,7 @@ Apply the base rubric above, then adjust expectations by category. Do not penali
 |----------|-------------------|
 | **AIOps** | Full rubric. Technical Executability should include AI enrichment, inference endpoints, MCP/Lightspeed integration, or governed playbook selection where the guide claims an AI outcome. |
 | **Network automation** | Do not penalize absence of AI. Weight inventory/source-of-truth integration (for example NetBox), device configuration or failover workflows, and closed-loop automation where EDA is used. Business Framing should cite change velocity, outage reduction, or config consistency. |
+| **Multi-use-case Solution Guide** | Same base weights. Cap **Outcome Clarity** at 3 unless Overview + ToC name each use case and distinguish outcomes. Cap **Architecture Clarity** at 3 unless there is a shared architecture *and* a per-use-case flow (diagram or narrative). Cap **Validation/Testability** at 3 unless **each** use case has a concrete test (or an explicit, justified N/A). Do **not** penalize a single catalog entry for covering multiple use cases when the card body lists them. Score Technical Executability across use cases: thin use cases drag the score even if one use case is elite. |
 | **AIOps Use Case** | Lighter on YAML depth and single-partner executability. Weight decision paths, adoption narrative, explicit signals for when to add the next capability, and cross-links to reference architectures. Validation may be scenario-based rather than a single runnable pipeline. Six patterns live in [README-AIOps.md](README-AIOps.md#common-aiops-use-cases); the ticket enrichment appendix is the primary extended adoption page. |
 
 **N/A rules:**
@@ -706,4 +748,109 @@ target_host : ok=X    changed=X    unreachable=0    failed=0    skipped=0
 
 - [Related guide 1](link)
 - [Related guide 2](link)
+````
+
+---
+
+## Appendix: Multi-use-case starter
+
+Use this when one partner topic has two or more distinct operational outcomes. For a single-outcome guide, use the [Starter Template](#appendix-starter-template) instead. Full rules: [§2.3 Multi-use-case Solution Guides](#23-multi-use-case-solution-guides).
+
+````markdown
+<div class="guide-header">
+
+<h1>[Partner / outcome topic]</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
+
+<!-- Partner hero callout (guide-hero-partner) -->
+
+## Overview
+
+<!-- 2-4 sentence problem statement spanning the partner topic. -->
+
+This guide includes [N] use cases:
+
+- **[Use Case A: …](#use-case-a-…)** -- [outcome in one sentence]
+- **[Use Case B: …](#use-case-b-…)** -- [outcome in one sentence]
+
+| Use case | Primary outcome | Operational impact | Maturity fit |
+|----------|-----------------|-------------------|--------------|
+| **A. …** | … | None / Low / Medium / High | Crawl / Walk / Run |
+| **B. …** | … | … | … |
+
+## Table of Contents
+
+- [Background](#background)
+- [Solution](#solution)
+- [Prerequisites](#prerequisites)
+- **[Use Case A: …](#use-case-a-…)**
+- **[Use Case B: …](#use-case-b-…)**
+
+## Background
+
+<!-- Shared domain context. Optional bullets mapping concepts to Use Case A/B. -->
+
+## Solution
+
+<!-- Shared components; tag "(Use Case A)" / "(Use Case B)" / "(both)" on each bullet. -->
+
+### Who Benefits
+
+| Persona | Challenge | What They Gain |
+|---------|-----------|---------------|
+| … | … | … (Use Case A); … (Use Case B) |
+
+<!-- No shared Demos section -- put Arcade/videos/labs under the use case they demonstrate. -->
+
+## Prerequisites
+
+<!-- Once for the whole guide. Mark UC-specific lines (Use Case A / B). Do not repeat under each use case. -->
+
+---
+
+<h2 id="use-case-a-…">Use Case A: …</h2>
+
+### Overview
+### Demos and labs
+### Workflow
+### Solution Walkthrough
+### Validation
+### Summary
+
+---
+
+<h2 id="use-case-b-…">Use Case B: …</h2>
+
+### Overview
+### Demos and labs
+### Workflow
+### Solution Walkthrough
+### Validation
+### Summary
+
+---
+
+## Next Steps
+
+<!-- CTA only -- trial, consulting, training, or equivalent. Do not add Related Guides. -->
+````
+
+**Catalog card (home page):** broader title; body sells outcomes only -- never "two use cases under one guide" or other authoring meta.
+
+**Legacy redirect (when merging an old URL):**
+
+````markdown
+---
+layout: default
+title: Moved -- [Old title]
+---
+
+<meta http-equiv="refresh" content="0; url=README-[combined].html#use-case-a-…">
+
+# This content moved
+
+**[New guide -- Use Case A](README-[combined].md#use-case-a-…)**
 ````
