@@ -1372,13 +1372,13 @@ curl -k -X POST -H "Authorization: Bearer ${AAP_TOKEN}" \
 # (Manual via AAP UI or API)
 
 # 2. Stop services
-ssh controller1-dc1 "systemctl stop --user automation-controller-web automation-controller-task"
+ssh controller1-dc1 "export XDG_RUNTIME_DIR=/run/user/$(id -u);  systemctl stop --user automation-controller-web automation-controller-task"
 
 # 3. Perform maintenance
 ssh controller1-dc1 "dnf update -y && reboot"
 
 # 4. Start services
-ssh controller1-dc1 "systemctl start --user automation-controller-web automation-controller-task"
+ssh controller1-dc1 "export XDG_RUNTIME_DIR=/run/user/$(id -u);  systemctl start --user automation-controller-web automation-controller-task"
 
 # 5. Verify health
 curl -k https://controller1-dc1/api/v2/ping/
