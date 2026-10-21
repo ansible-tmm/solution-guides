@@ -441,15 +441,6 @@ Authentication uses an AAP personal access token passed via `MCP_AAP_TOKEN`. The
 
 ---
 
-## Related Guides
-
-- **Database automation:** The [EDB Postgres automation guide](README-EDB.md) demonstrates a multi-role deployment that benefits from consistent dev environments -- teams working on complex database automation can use ADT dev containers to ensure every contributor has the same linting rules and molecule test setup.
-- **ITSM integration:** The [ServiceNow ITSM guide](README-ServiceNow-ITSM.md) and [RHEL patching guide](README-Patching-RHEL.md) show production automation workflows where environment consistency directly reduces "works on my machine" failures in CI/CD pipelines.
-- **AI-assisted operations:** The [Intelligent Assistant with RHAIIS guide](README-Intelligent-Assistant-RHAIIS.md) extends the AI-assisted development theme -- once your dev environment includes the Ansible MCP server, the same AI assistant that helps you write automation can also interact with your AAP instance.
-- **Network automation:** The [NetBox + AAP guide](README-NetBox-WAN-EDA-Failover.md) and [NetBox + EDA guide](README-NetBox-SoT-EDA-Config.md) are examples of multi-tool integrations where standardized dev environments prevent version conflicts across collections.
-
----
-
 ## Sources
 
 **Red Hat product documentation**

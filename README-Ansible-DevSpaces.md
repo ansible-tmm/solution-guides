@@ -346,14 +346,6 @@ devspaces-network-team-2       Docker            Complete   5 minutes ago
 
 ---
 
-## Related Guides
-
-- [AI-Assisted Ansible Developer Experience](README-Ansible-DevTools.md) -- Ansible Development Tools overview, all installation methods (including Dev Spaces getting started), and MCP server configuration
-- [Ansible development workspaces blog](<!-- TODO: replace with final blog 1 URL -->) -- narrative companion covering the business case for governed development environments
-- [AI-assisted Ansible development with MCP blog](<!-- TODO: replace with final blog 2 URL -->) -- AI-assisted development with the MCP server in governed workspaces
-
----
-
 ## Sources
 
 - <a href="https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/" target="_blank">Red Hat OpenShift Dev Spaces documentation</a>

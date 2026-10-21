@@ -42,7 +42,7 @@ Implementation guides answer **how** to configure AAP for production. They compl
 | 6 | [Implementation Walkthrough](#6-implementation-walkthrough) | Step-by-step technical depth with featured code |
 | 7 | [Validation](#7-validation) | Concrete tests, verbatim expected output, troubleshooting |
 | 8 | [Day-2 Operations](#8-day-2-operations) | Monitoring, maintenance, failover, known issues |
-| 9 | [Related Guides](#9-related-guides) | Cross-links to complementary platform and solution guides |
+| 9 | [Next Steps](#9-next-steps) | Optional CTA after Day-2 (trial, consulting, training, or back to catalog) |
 
 ---
 
@@ -118,11 +118,9 @@ Mandatory for every implementation guide:
 
 ---
 
-## 9. Related Guides
+## 9. Next Steps
 
-Cross-link to:
-- Complementary implementation guides (for example, HA/DR before autovacuum tuning)
-- Solution guides that run on the platform this guide configures
+Optional closing CTA after Day-2 Operations (trial, consulting, training, Sources, or a link back to the catalog). Do **not** add a Related Guides section -- readers discover complementary guides from the home page catalog.
 
 ---
 
@@ -215,7 +213,7 @@ Reject guides that exhibit any of these patterns:
 
 <!-- Monitoring, maintenance, known issues -->
 
-## Related Guides
+## Next Steps
 
-- [Complementary guide](README-example.md)
+<!-- Optional CTA only -- trial, consulting, training, or back to catalog. Do not add Related Guides. -->
 ````

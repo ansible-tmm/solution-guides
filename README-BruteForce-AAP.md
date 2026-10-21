@@ -37,7 +37,6 @@ Security operations centers (SOCs) spend countless hours manually chasing alerts
 * [Validation](#validation)
 * [Maturity Path](#maturity-path)
 * [Summary](#summary)
-* [Related Guides](#related-guides)
 
 ## Background
 
@@ -275,9 +274,3 @@ ok: [app.example.com] => {
 ## Summary
 
 Automating incident response with Event-Driven Ansible transforms security from a reactive monitoring task into a proactive defense mechanism. By integrating SIEM detections (Splunk) with HashiCorp Vault and AAP, organizations can enforce Zero Trust principles at machine speed -- automatically severing database access during a brute-force attack and significantly reducing the risk of a data breach.
-
-## Related Guides
-
-- Need to set up the Splunk alerting integration first? See [AIOps with Splunk and Event-Driven Ansible](README-AIOps-Splunk-ITSI.md)
-- Learn more about dynamic credentials: [Integrating HashiCorp Vault with Ansible](https://github.com/ansible/workshops)
-- Understand the broader architecture: [Zero Trust Architecture Overview](README-ZTA.md)

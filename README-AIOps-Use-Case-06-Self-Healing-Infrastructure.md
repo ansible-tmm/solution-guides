@@ -545,12 +545,4 @@ Validate **per workshop stage** before enabling policy-governed auto-run.
 | Code assistant returns a playbook but it does not fix the issue | Remediation to Execute | Prompt was too vague or AI diagnosis was incorrect | Review the Remediation Workflow survey; refine the AI-generated prompt before codegen |
 | Job Template was created but playbook is missing | Remediation to Git/Project Sync | Git commit failed or project sync did not run | Check Gitea/GitHub for the commit; verify the Project Sync node succeeded in the Workflow Visualizer |
 
-## Related Guides
-
-- [Common AIOps Use Cases](aiops-use-cases.md)
-- [AIOps automation with Ansible](README-AIOps.md)
-- [Curated Automation Remediation](README-AIOps-Use-Case-04-Curated-Automation-Remediation.md)
-- [Automated incident remediation with IBM Instana](README-Instana-AIOps.md)
-- [AIOps with Splunk and Event-Driven Ansible](README-AIOps-Splunk-ITSI.md)
-- [Hands-On AIOps Workshop](https://rhpds.github.io/ai-driven-automation-showroom/modules/index.html)
 {% endraw %}

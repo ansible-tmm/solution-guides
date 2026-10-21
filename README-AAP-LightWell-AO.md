@@ -35,7 +35,6 @@ Security operations teams face a persistent gap: vulnerability scanners surface 
 - [Validation](#validation)
 - [Maturity Path](#maturity-path)
 - [Summary](#summary)
-- [Related Guides](#related-guides)
 
 ## Background
 
@@ -379,10 +378,4 @@ In the AAP Controller UI navigate to **Jobs**. Confirm successful executions for
 
 This solution closes the manual gap between CVE disclosure and remediation by connecting Lightwell's security intelligence feed to Red Hat Trusted Profile Analyzer's SBOM inventory through an event-driven pipeline built on Ansible. When a CVE is announced, EDA routes the event to the appropriate AAP workflow -- whether that is correlating the CVE against SBOMs to identify blast radius, patching OS packages via `dnf`, or triggering a container image rebuild through Gitea CI/CD. Each pipeline stage is governed by AAP, providing RBAC, audit trails, and approval gates. The maturity path moves from SBOM visibility with manual patching through approval-gated automation to fully policy-driven remediation, giving security and platform teams a clear path to reducing mean-time-to-remediation without sacrificing governance.
 
-## Related Guides
-
-- [Automated CVE Response and Compliance Verification with CME](README-CME.md) -- complement the Lightwell pipeline with CVSS attenuation scoring and 118 compliance-as-code controls
-- [Automated Brute-Force Remediation with Event-Driven Ansible](README-BruteForce-AAP.md) -- EDA-driven credential revocation for active attacks
-- [Zero Trust Architecture with Ansible Automation Platform](README-ZTA.md) -- the broader security architecture this pipeline fits within
-- [High Availability and Disaster Recovery for AAP on OpenShift](README-AAP-HA-DR-OpenShift.md) -- harden the AAP platform running this pipeline
 {% endraw %}

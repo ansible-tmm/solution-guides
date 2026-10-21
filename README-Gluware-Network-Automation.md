@@ -531,15 +531,6 @@ The three use cases in this guide represent the highest-value, highest-frequency
 
 Together, these workflows reduce manual toil, improve compliance posture, shrink change windows, and give network and operations teams a consistent, auditable, and scalable automation pipeline.
 
-## Related Guides
-
-- [AIOps automation with Ansible](README-AIOps.html) -- foundational AIOps reference architecture
-- [AIOps with Splunk and Event-Driven Ansible](README-AIOps-Splunk-ITSI.html) -- Splunk integration with EDA, including network OSPF scenario
-- <a target="_blank" href="https://access.redhat.com/articles/7123366">Network Backup and Configuration</a> -- KB article for network config management
-- <a target="_blank" href="https://access.redhat.com/articles/7123361">Network Fact Gathering and Reporting</a> -- KB article for network inventory and reporting
-- <a target="_blank" href="https://gluware.com/ansible">Gluware Ansible Certified Collection</a> -- Gluware partner page
-- <a target="_blank" href="https://gluware.com/platforms">Gluware Supported Platforms</a> -- vendor and OS coverage
-
 <span class="guide-closing-logo-set">
 <img class="guide-closing-logo guide-closing-logo--light" src="assets/images/logos/aap_logo.png" alt="Red Hat Ansible Automation Platform">
 <img class="guide-closing-logo guide-closing-logo--dark" src="assets/images/logos/redhat-ansible-logo.svg" alt="" aria-hidden="true">

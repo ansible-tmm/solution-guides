@@ -58,7 +58,7 @@ These sections map 1:1 to the section names in every solution guide. When review
 | 6 | [Workflow and Architecture](#6-workflow-and-architecture) | Diagrams, narrative walkthrough, visual patterns |
 | 7 | [Solution Walkthrough](#7-solution-walkthrough) | Featured code, AAP integration, step-by-step technical depth |
 | 8 | [Validation](#8-validation) | Concrete tests, expected output, troubleshooting |
-| 9 | [Maturity Path, Summary, and Related Guides](#9-maturity-path-summary-and-related-guides) | Crawl/Walk/Run, summary, cross-linking |
+| 9 | [Maturity Path and Summary](#9-maturity-path-and-summary) | Crawl/Walk/Run, summary; CTA is Next Steps only |
 
 | Section | What It Covers |
 |---------|---------------|
@@ -454,9 +454,9 @@ Include at least 2-3 common failure scenarios and how to diagnose them:
 
 ---
 
-## 9. Maturity Path, Summary, and Related Guides
+## 9. Maturity Path and Summary
 
-Close the loop so the guide is more than just a lab exercise. The closing sections follow a deliberate order: **Maturity Path** (where am I on the journey?) → **Summary** (what did I just read?) → **Related Guides** (where do I go next?).
+Close the loop so the guide is more than just a lab exercise. The closing content sections follow a deliberate order: **Maturity Path** (where am I on the journey?) → **Summary** (what did I just read?). The call to action after Summary is **Next Steps** only (trial, consulting, training, or equivalent) -- do not add a Related Guides section on Solution or Implementation Guides.
 
 ### 9.1 Crawl, Walk, Run
 
@@ -472,22 +472,7 @@ The progression should be specific to the guide's use case. The key question at 
 
 ### 9.2 Summary
 
-Wrap up what the reader just learned. Summarize the key outcomes and the measurable value the guide delivers. This comes **before** Related Guides because it closes the current guide's narrative -- Related Guides is the call to action for what to read next.
-
-### 9.3 Related Guides
-
-Every guide exists within a broader ecosystem. Authors must identify and link to related guides so readers understand the full journey. This is the last content section before the closing logo -- it serves as the call to action.
-
-- Link to the **next logical guide** (e.g., Network Fact Gathering links to Network Backup and Configuration)
-- Link to **prerequisite guides** (e.g., AIOps guide references the AI Infrastructure guide for deploying the AI backend)
-- Link to **ISV or partner integrations** where applicable
-- Link to **advanced architecture expansions** for readers ready to go deeper
-
-**Example cross-links:**
-
-> **Related guides:**
-> - Need to deploy the AI infrastructure first? See [AI Infrastructure automation with Ansible](README-IA.md)
-> - Ready to add event-driven triggers? See [Get started with EDA](https://access.redhat.com/articles/7136720)
+Wrap up what the reader just learned. Summarize the key outcomes and the measurable value the guide delivers. After Summary, close with **Next Steps** as the only CTA before the closing logo.
 
 ---
 
@@ -700,10 +685,7 @@ target_host : ok=X    changed=X    unreachable=0    failed=0    skipped=0
 
 <!-- Wrap up what the reader learned. Summarize key outcomes and measurable value. -->
 
-## Related Guides
+## Next Steps
 
-<!-- Call to action -- where to go next. Last content section before the closing logo. -->
-
-- [Related guide 1](link)
-- [Related guide 2](link)
+<!-- CTA only -- trial, consulting, training, or equivalent. Do not add Related Guides. -->
 ````

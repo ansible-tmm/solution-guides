@@ -606,18 +606,6 @@ With AWS SQS as the event transport, your AIOps pipeline gains the durability an
 
 ---
 
-<h2 id="related-guides"></h2>
-
-## Related Guides
-
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9e0.png" width="20" style="vertical-align:text-bottom;"> **Full AIOps reference architecture:** [AIOps automation with Ansible](README-AIOps.md) -- curated MCP selection at Walk, workshop codegen at Run, and SQS as one event transport option.
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9e0.png" width="20" style="vertical-align:text-bottom;"> **Need to deploy the AI backend?** See [AI Infrastructure automation with Ansible](README-IA.md) for automating Red Hat AI provisioning with the `infra.ai` and `redhat.ai` collections.
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3a5.png" width="20" style="vertical-align:text-bottom;"> **Want to try this hands-on?** The <a target="_blank" href="https://rhpds.github.io/ai-driven-automation-showroom/modules/index.html">Hands-On AIOps Workshop</a> walks through the full self-healing pipeline with a live lab.
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **New to Event-Driven Ansible?** See <a target="_blank" href="https://access.redhat.com/articles/7136720">Get started with EDA (Ansible Rulebook)</a> for the fundamentals.
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4cb.png" width="20" style="vertical-align:text-bottom;"> **Looking for ticket enrichment?** See <a target="_blank" href="https://access.redhat.com/articles/7127603">ServiceNow ITSM Ticket Enrichment Automation</a> -- a great starting point for the **Crawl** stage of AIOps.
-
----
-
 <span class="guide-closing-logo-set">
 <img class="guide-closing-logo guide-closing-logo--light" src="assets/images/logos/aap_logo.png" alt="Red Hat Ansible Automation Platform">
 <img class="guide-closing-logo guide-closing-logo--dark" src="assets/images/logos/redhat-ansible-logo.svg" alt="" aria-hidden="true">

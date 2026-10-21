@@ -33,7 +33,6 @@ Organizations spend hundreds of hours manually verifying compliance, managing ac
 - [Validation](#validation)
 - [Maturity Path](#maturity-path)
 - [Summary](#summary)
-- [Related Guides](#related-guides)
 
 ## Background
 
@@ -371,8 +370,4 @@ The `set_stats` audit record is visible at `GET /api/v2/jobs/<job_id>/` under th
 
 This guide demonstrated a layered Policy as Code governance pipeline built on AAP, EDA, OPA, and SPIFFE/SPIRE. RBAC and IdM integration provide the coarse authorization gate. OPA evaluates fine-grained context -- blast radius, change windows, ITSM tickets -- before any change reaches a device. SPIRE adds cryptographic proof of workload identity for sensitive paths. Every decision is logged via `set_stats` and queryable from the Controller API, giving auditors a verifiable trail without a separate logging sink.
 
-## Related Guides
-
-- [NetBox as a Source of Truth for Network Configuration](README-NetBox-SoT-EDA-Config.md)
-- [Automated Vulnerability Remediation with Satellite](README-Satellite-CVE-Remediation.md)
 {% endraw %}

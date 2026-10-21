@@ -1571,12 +1571,6 @@ The following scenarios were executed against this architecture and **passed** f
 | **Walk** | Two-cluster active-passive with CNPG streaming replication, shared secrets, idle standby AAP, and annual controlled switchover drills |
 | **Run** | Automated health-based GSLB cutover, monitored replication lag SLOs, GitOps-coordinated failover, and routine emergency-failover rehearsals |
 
-## Related Guides
-
-- [High-Availability AAP with EDB PostgreSQL DR](README-EDB.md) -- VM-based Active-Passive DR with EDB Postgres Advanced Server and EFM
-- [Consuming OpenShift API Resources with EDA and Kafka](README-OpenShift-EDA-Kafka.md) -- OpenShift event capture patterns complementary to platform HA
-- [`aap-ha-dr-gitops`](https://gitlab.cee.redhat.com/ansible/aap-ha-dr-gitops/-/tree/devel) (**internal Red Hat GitLab**) -- example GitOps deployment on ROSA using CNPG for the database, ODF for S3-compatible storage, and ESO for AWS Secrets Manager secrets
-
 ## Appendix A: ODF RGW Multisite Storage
 
 This section describes the S3 storage implementation we used: OpenShift Data Foundation (ODF) with Ceph RGW (RADOS Gateway) multisite replication. Any S3-compatible storage with cross-site replication can substitute for this.

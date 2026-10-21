@@ -1415,15 +1415,6 @@ By implementing this multi-datacenter Active-Passive DR architecture, you have d
 
 ---
 
-## Related Guides
-
-- [Red Hat Ansible Automation Platform Documentation](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/)
-- [AAP 2.6 Containerized Installation Guide](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/containerized_installation)
-- [AAP 2.6 Container Enterprise Topology](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/tested_deployment_models/container-topologies#cont-b-env-a)
-- [EDB Postgres Advanced Server Documentation](https://www.enterprisedb.com/docs/epas/latest/)
-- [EDB Failover Manager Documentation](https://www.enterprisedb.com/docs/efm/latest/)
-- [Barman Documentation](https://www.enterprisedb.com/docs/supported-open-source/barman/)
-
 This architecture ensures automation availability for workflows that cannot tolerate downtime -- network orchestration, security compliance enforcement, multi-cloud deployments, and automated incident response.
 
 ---

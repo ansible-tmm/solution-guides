@@ -999,16 +999,6 @@ This guide demonstrates three ways to connect Splunk to Event-Driven Ansible for
 
 The same pipeline applies across all three: Splunk detects, EDA triggers, AI enriches, and Ansible remediates -- reducing MTTR from hours of manual investigation to minutes of automated resolution. Whether the alert is a predicted network throughput anomaly, a failed httpd service, or an OSPF adjacency down, the pattern is the same. Only the detection logic, diagnostics collection, and remediation tasks change.
 
-<h2 id="related-guides"></h2>
-
-## Related Guides
-
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4cb.png" width="20" style="vertical-align:text-bottom;"> **AIOps reference architecture:** [AIOps automation with Ansible](README-AIOps.md) -- curated MCP selection at Walk, workshop codegen at Run, and partner event sources.
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9e0.png" width="20" style="vertical-align:text-bottom;"> **Need to deploy the AI backend?** See [AI Infrastructure automation with Ansible](README-IA.md) for automating Red Hat AI provisioning with the `infra.ai` and `redhat.ai` collections.
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **New to Event-Driven Ansible?** See [Get started with EDA (Ansible Rulebook)](https://access.redhat.com/articles/7136720) for the fundamentals of rulebooks, event sources, and actions.
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png" width="20" style="vertical-align:text-bottom;"> **Looking for ServiceNow integration?** See [Unlock AIOps with ServiceNow LEAP and Ansible MCP server](README-AIOps-ServiceNow.md) for LEAP/MCP-driven remediation and related ITSM patterns (see also [KB 7127603](https://access.redhat.com/articles/7127603)).
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3a5.png" width="20" style="vertical-align:text-bottom;"> **Want to try this hands-on?** The [Hands-On AIOps Workshop -- Part 2](https://rhpds.github.io/ai-driven-automation-showroom/modules/index.html) walks through Splunk integration with Cisco router remediation in a live lab.
-
 ## Next Steps
 
 | | |

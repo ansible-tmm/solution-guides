@@ -496,20 +496,6 @@ The unifying pattern across both use cases is **NetBox as the single source of t
 
 ---
 
-## Related Guides
-
-- **[Event-Driven Network Source of Truth with NetBox and AAP](README-NetBox-SoT-EDA-Config.md):** Foundational guide covering NetBox dynamic inventory, config contexts, and event-driven NTP/banner/VLAN configuration. Start here if your team is new to NetBox + EDA integration.
-
-- **[EDA + NetBox Workshop](https://github.com/rhpds/zt-ans-bu-eda-netbox):** 7-module hands-on workshop covering AAP dynamic inventory, EDA rulebooks, NetBox webhooks, and workflow automation. Ideal for teams new to Event-Driven Ansible.
-
-- **[NetBox as a Dynamic Inventory Source](https://docs.ansible.com/ansible/latest/collections/netbox/netbox/nb_inventory_inventory.html):** Documentation for the `netbox.netbox.nb_inventory` plugin used to dynamically pull device and site data from NetBox into Ansible inventories.
-
-- **[Event-Driven Ansible Documentation](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/using_event-driven_ansible/index):** Official Red Hat documentation for EDA controller configuration, rulebook syntax, and action plugins.
-
-- **[NetBox Webhooks and Event Rules](https://netboxlabs.com/docs/netbox/en/stable/integrations/webhooks/):** NetBox documentation for configuring webhooks and event rules that trigger external automation.
-
----
-
 ## Next Steps
 
 - **[Try Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible/trial):** Start a free trial of AAP including Event-Driven Ansible

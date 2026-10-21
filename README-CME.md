@@ -46,7 +46,6 @@ This guide demonstrates how to automate the **full vulnerability response lifecy
 - [Validation](#validation)
   - [Troubleshooting](#troubleshooting)
 - [Maturity Path](#maturity-path)
-- [Related Guides](#related-guides)
 - [Summary](#summary)
 
 <h2 id="background"></h2>
@@ -438,8 +437,6 @@ rhel-vm    : ok=48   changed=5    unreachable=0    failed=0    skipped=3
 | <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3c3.png" width="20" style="vertical-align:text-bottom;"> **Walk** | Deploy the full compliance cycle workflow on Automation Controller with the approval gate. Use the `rhel9_baseline` profile (55 controls) across fleet inventory. Enable CVSS attenuation scoring via MCP. Security team reviews and approves remediation before execution. |
 | <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f680.png" width="20" style="vertical-align:text-bottom;"> **Run** | Connect EDA Controller to scanner webhooks for automatic CVE response. `cve_response.yml` runs the full 5-phase pipeline autonomously with policy-based approval (severity threshold gates replace human gates). AI agent triages CVEs, selects profiles, and escalates only novel threats. Posture reports feed SIEM dashboards for continuous compliance monitoring. |
 
-<h2 id="related-guides"></h2>
-
 ## Day-2 Operations
 
 ### Monitoring
@@ -462,12 +459,6 @@ rhel-vm    : ok=48   changed=5    unreachable=0    failed=0    skipped=3
 | **`cme_score` returns no attenuation on first run** | `cme_post_passed` is empty because no controls passed PRE verify | Run a second `verify.yml` pass after the initial baseline deployment to populate the passed-controls list before scoring. |
 | **Workflow approval node times out** | No user with `Approve` role processes the approval within the timeout (default 3600s) | Assign the `Approve` role to a team with on-call coverage, or increase the timeout for low-urgency workflows via the AAP Controller API. |
 | **Backslash in control description causes YAML parse error** | `include_role` task fails with `yaml.scanner.ScannerError` | Regenerate the affected role with `python scripts/generate_collection.py` -- the fixed `_escape_yaml` function strips problematic characters. |
-
-## Related Guides
-
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f517.png" width="20" style="vertical-align:text-bottom;"> **<a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible">Event-Driven Ansible</a>** -- connect scanner webhooks to the CVE response workflow via EDA rulebooks
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d8.png" width="20" style="vertical-align:text-bottom;"> **<a target="_blank" href="https://www.redhat.com/en/topics/automation/what-is-ansible">Ansible Automation Platform</a>** -- platform overview for orchestration, governance, and RBAC
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e1.png" width="20" style="vertical-align:text-bottom;"> **<a target="_blank" href="https://github.com/nmartins0611/cme">CME Project</a>** -- full taxonomy documentation, MCP server API reference, and D3FEND alignment
 
 <h2 id="summary"></h2>
 
