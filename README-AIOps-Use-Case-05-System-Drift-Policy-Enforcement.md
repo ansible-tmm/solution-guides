@@ -75,9 +75,4 @@ Open ticket, generate report, or run automated remediation branches with approva
 |---------|--------|
 | End-to-end scenario tests | Content in progress |
 
-## Related Guides
-
-- [Common AIOps Use Cases](aiops-use-cases.md)
-- [AIOps automation with Ansible](README-AIOps.md)
-- [Zero Trust Architecture with Ansible Automation Platform](README-ZTA.md)
 {% endraw %}

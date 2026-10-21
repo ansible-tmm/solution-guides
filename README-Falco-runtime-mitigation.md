@@ -238,7 +238,3 @@ Finally, check the HTML dashboard at `<a target="_blank" href="http://YOUR-REPOR
 ## Summary
 
 This guide demonstrated how to integrate Falco, Falcosidekick, and Event-Driven Ansible to create a closed-loop enforcement architecture for Linux OT hosts. By mapping MITRE ATT&CK ICS techniques to specific Ansible mitigation playbooks, organizations can reduce their response time to runtime threats from hours to seconds, minimizing the risk of system compromise.
-
-## Related Guides
-
-- [AIOps automation with Ansible](README-AIOps.md)

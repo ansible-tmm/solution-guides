@@ -29,7 +29,7 @@ Visitors are IT practitioners (SREs, network engineers, automation architects) a
 | access.redhat.com KB search | "AIOps solution guide", "EDA rulebook", "network backup ansible" |
 | Internal Red Hat (field/SA) | "ansible aiops demo for customer", "splunk EDA reference architecture" |
 | GitHub Pages site | Direct navigation from https://ansible-tmm.github.io/solution-guides/ with search and partner/type filtering |
-| Cross-links from other guides | Each guide links to related guides, creating a discovery path (e.g., AIOps -> Splunk -> ServiceNow) |
+| Catalog and hub navigation | Readers discover partner guides from the homepage catalog and AIOps use-case hub (e.g., AIOps -> Splunk -> ServiceNow) |
 | Hands-on workshops | Workshop participants are directed to the guides for deeper reference after completing labs |
 
 ---
@@ -43,10 +43,10 @@ Each solution guide contains 2-4 CTAs depending on the topic and partner integra
 | **Try the hands-on lab** | "Recommended Demos and Self-Paced Labs" section, linking to Instruqt labs or workshop showrooms | Instruqt lab starts, workshop registrations |
 | **Clone the source code** | GitHub repository links in the Solution section (e.g., `ansible-tmm/aiops-splunk-eda`) | GitHub clone/fork counts |
 | **Read the KB article** | Blockquote link at the top of every guide pointing to its access.redhat.com article | KB article page views |
-| **Explore related guides** | "Related Guides" section at the bottom with cross-links to the next logical guide | GitHub Pages navigation, page views |
+| **Next Steps CTA** | Trial, consulting, and training links after Summary | GitHub Pages navigation, trial and services clicks |
 | **Install the Ansible collection** | Collection links throughout Prerequisites pointing to Automation Hub | Automation Hub collection installs |
 
-The primary CTA is **try the hands-on lab or clone the source repo** -- moving the visitor from reading to doing. The secondary CTA is **explore the next guide in the journey** (e.g., after reading the foundational AIOps guide, try the Splunk, ServiceNow, or Azure integration guide).
+The primary CTA is **try the hands-on lab or clone the source repo** -- moving the visitor from reading to doing. The secondary CTA is **Next Steps** (trial, consulting, training). Complementary guides live in the catalog and AIOps use-case hub, not a Related Guides section on Solution or Implementation Guides.
 
 Tracking is currently via GitHub Pages analytics (page views, time on page), KB article views on access.redhat.com, and downstream metrics from linked workshops/labs. There is no click-tracking on individual CTAs at this time.
 
@@ -67,7 +67,8 @@ All solution guides follow a standardized framework defined in the [Best Practic
 | **Solution Walkthrough** | Step-by-step technical depth with featured YAML code | Numbered steps; featured code blocks (not full repo dumps); per-step operational impact |
 | **Validation** | Concrete test, expected output, troubleshooting table | Executable test command (curl, ansible-playbook, or UI action); verbatim expected output; symptom/cause/fix troubleshooting table |
 | **Maturity Path** | Crawl/Walk/Run progression specific to the use case | Table mapping maturity levels to specific automation capabilities |
-| **Related Guides** | Cross-links to prerequisite, companion, and next-step guides | Annotated links explaining why each related guide is relevant |
+| **Summary** | Wrap-up of outcomes and measurable value | Closes the guide narrative before Next Steps |
+| **Next Steps** | Call to action after Summary | Trial, consulting, training, or equivalent -- not a Related Guides list |
 
 **Unique presentation aspects:**
 

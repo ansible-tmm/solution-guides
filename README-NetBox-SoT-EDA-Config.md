@@ -669,18 +669,6 @@ The unifying pattern is **NetBox as the single source of both inventory and desi
 
 ---
 
-## Related Guides
-
-- **[Event-Driven WAN Circuit Failover with NetBox and AAP](README-NetBox-WAN-EDA-Failover.md):** Advanced use case covering event-driven circuit failover with dynamic backup discovery, router reconfiguration, and automated incident reporting. Builds on the EDA + NetBox foundation established in this guide.
-
-- **[NetBox Dynamic Inventory Plugin Documentation](https://docs.ansible.com/ansible/latest/collections/netbox/netbox/nb_inventory_inventory.html):** Full reference for the `netbox.netbox.nb_inventory` plugin including all configuration options, query filters, and compose directives.
-
-- **[Event-Driven Ansible Documentation](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/using_event-driven_ansible/index):** Official Red Hat documentation for EDA controller configuration, rulebook syntax, and action plugins.
-
-- **[NetBox Config Contexts](https://netboxlabs.com/docs/netbox/en/stable/models/extras/configcontext/):** NetBox documentation for creating and managing config contexts with hierarchical assignment.
-
----
-
 ## Next Steps
 
 - **[Try Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible/trial):** Start a free trial of AAP including Event-Driven Ansible

@@ -36,7 +36,6 @@ Modern infrastructure automation creates a paradox: the tools that make operatio
 - [Validation](#validation)
 - [Maturity Path](#maturity-path)
 - [Summary](#summary)
-- [Related Guides](#related-guides)
 
 <h2 id="background"></h2>
 
@@ -438,14 +437,5 @@ curl -sk -X POST "${CONTROLLER}/api/v2/job_templates/Apply%20Security%20Patch/la
 ## Summary
 
 This solution guide shows how to configure Ansible Automation Platform 2.6 as the central Policy Enforcement Point in a NIST SP 800-207-aligned Zero Trust Architecture. By integrating IdM for user identity, OPA for policy decisions, Vault for short-lived secrets, SPIFFE/SPIRE for workload identity, and Arista for network micro-segmentation, every infrastructure change passes through independent, auditable trust gates before a single task executes. The result is a measurable reduction in blast radius: stolen credentials expire within minutes, unauthorized users are blocked before secrets are issued, and rogue workloads are rejected even when they carry valid user tokens. The maturity path from audit-only LDAP integration to fully automated incident response is incremental -- each stage delivers real security value while building toward complete ZTA coverage.
-
-<h2 id="related-guides"></h2>
-
-## Related Guides
-
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d8.png" width="20" style="vertical-align:text-bottom;"> **[Automated CVE response with policy-gated patching and compliance evidence](README-CVE-defend-contain-comply.md)** -- operational ZTA pattern using OPA gates in a Splunk-triggered CVE response pipeline
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d8.png" width="20" style="vertical-align:text-bottom;"> **[Automated Brute-Force Remediation with Event-Driven Ansible](README-BruteForce-AAP.md)** -- EDA-driven credential revocation as the automated incident response layer of this ZTA stack
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d8.png" width="20" style="vertical-align:text-bottom;"> **[Event-Driven Network Source of Truth with NetBox and AAP](README-NetBox-SoT-EDA-Config.md)** -- extends SPIFFE-verified VLAN management to network source-of-truth driven configuration
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d8.png" width="20" style="vertical-align:text-bottom;"> **[AIOps automation with Ansible](README-AIOps.md)** -- extend ZTA into AI-driven anomaly detection and intelligent remediation decisions
 
 {% endraw %}

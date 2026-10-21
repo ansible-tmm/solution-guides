@@ -47,7 +47,6 @@ This guide deploys three self-contained Ansible collections that scan RHEL 9 hos
 - [Day-2 Operations](#day-2-operations)
 - [Maturity Path](#maturity-path)
 - [Summary](#summary)
-- [Related Guides](#related-guides)
 
 ## Background
 
@@ -247,13 +246,4 @@ Monitor the [DISA STIG document library](https://public.cyber.mil/stigs/) for RH
 
 This implementation guide deploys agentless RHEL 9 compliance scanning across three frameworks -- DISA STIG V2R8, CIS Level 1 Server, and CIS Level 2 Server -- using OpenSCAP as the certified scanning engine, purpose-built Execution Environments for ephemeral scanner delivery, and the `normalize_xccdf` module for per-host findings normalization. The separation between assessment (read-only, never modifies hosts) and remediation (explicit, tag-scoped, user-initiated) means compliance scans can run continuously without change-management risk, while remediation remains a deliberate, auditable action. The NDJSON streaming design handles the scale reality of 4000+ findings per host without hitting Controller event limits.
 
-## Related Guides
-
-- [Automated CVE response with policy-gated patching and compliance evidence](README-CVE-defend-contain-comply.md) -- combines OpenSCAP-style compliance enforcement with OPA policy gates and a Splunk-triggered EDA pipeline
-- [Automated CVE response and compliance verification with CME](README-CME.md) -- 118 compliance-as-code controls with CVSS attenuation scoring, complementing the STIG/CIS scan results
-- [Zero Trust Architecture infrastructure with Ansible Automation Platform](README-ZTA-with-AAP.md) -- the broader security posture this compliance baseline feeds into
-- <a target="_blank" href="https://www.open-scap.org/tools/openscap-base/">OpenSCAP scanner documentation</a>
-- <a target="_blank" href="https://www.cisecurity.org/cis-benchmarks">CIS Benchmarks</a>
-- <a target="_blank" href="https://public.cyber.mil/stigs/">DISA STIGs</a>
-- <a target="_blank" href="https://github.com/ComplianceAsCode/content">ComplianceAsCode (scap-security-guide) content</a>
 {% endraw %}

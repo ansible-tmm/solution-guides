@@ -1035,15 +1035,4 @@ localhost                  : ok=1    changed=0    unreachable=0    failed=0    s
 
 This guide illustrated establishing a complete event pipeline from the OpenShift API to Event-Driven Ansible using Knative Eventing and Apache Kafka. Namespace lifecycle events -- creates, updates, and deletes -- are captured by an APIServerSource, published to a Kafka topic through a KafkaSink for durability and decoupling, and consumed by an EDA rulebook that triggers Automation Controller job templates on namespace creation and deletion. The pipeline logs every namespace event automatically, providing the foundation for adding governance actions, compliance validation, or integration with the AIOps self-healing architecture.
 
----
-
-<h2 id="related-guides"></h2>
-
-## Related Guides
-
-- **Full AIOps reference architecture:** See [AIOps automation with Ansible](README-AIOps.md) for curated remediation at Walk and [Self-healing infrastructure (use case 6)](README-AIOps-Use-Case-06-Self-Healing-Infrastructure.md#optional-appendix-workshop-multi-llm-pipeline-policy-governed-only) for optional **Automation code assistant** workshop Run depth with Kafka event consumption.
-- **Alternative event transport:** See [AIOps with AWS SQS and Event-Driven Ansible](README-SQS.md) for using AWS SQS instead of Kafka as the message queue.
-- **Another EDA pattern:** See [Event-Driven Network Source of Truth with NetBox and Ansible Automation Platform](README-NetBox-SoT-EDA-Config.md) for using EDA with webhooks instead of Kafka.
-- **New to Event-Driven Ansible?** See <a target="_blank" href="https://access.redhat.com/articles/7136720">Get started with EDA (Ansible Rulebook)</a> for the fundamentals.
-
 {% endraw %}

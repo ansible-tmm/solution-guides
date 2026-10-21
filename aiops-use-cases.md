@@ -21,7 +21,7 @@ inline_edit: true
 
 > **What these pages are for.**
 >
-> AIOps Use Cases explain **when** Event-Driven Ansible, AI enrichment, and Automation orchestrator earn their place for a given operational pattern. They are **not** partner Solution Guides. Partner technologies may appear as examples; start with the [foundational AIOps Solution Guide](README-AIOps.md) for the reference architecture, then open partner integrations from each use case's Related Guides section.
+> AIOps Use Cases explain **when** Event-Driven Ansible, AI enrichment, and Automation orchestrator earn their place for a given operational pattern. They are **not** partner Solution Guides. Partner technologies may appear as examples; start with the [foundational AIOps Solution Guide](README-AIOps.md) for the reference architecture, then open partner integrations from the [Solution Guides catalog]({{ '/' | relative_url }}#aiops-solutions).
 
 ## Crawl, Walk, Run
 
@@ -100,7 +100,7 @@ Workflows can begin from a human request, an observability event, an ITSM ticket
 
 1. Read [AIOps automation with Ansible](README-AIOps.md) for the end-to-end reference architecture (EDA, inference, MCP, governed execution).
 2. Pick the **use case** that matches the customer's operational question (table above).
-3. Follow **Related Guides** on that use case page for partner-specific depth (Splunk, ServiceNow, Azure, AWS, Instana, and others).
+3. Open the matching **partner Solution Guide** from the [catalog]({{ '/' | relative_url }}#aiops-solutions) for partner-specific depth (Splunk, ServiceNow, Azure, AWS, Instana, and others).
 
 Solution Guides answer "how does AAP plus a partner solve X?" Use cases answer "which pattern are we selling, and when does each platform layer matter?"
 

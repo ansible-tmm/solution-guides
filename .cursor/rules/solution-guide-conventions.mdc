@@ -85,7 +85,7 @@ All solution guides must follow the framework in `README-best-practices.md`. The
 6. **[Topic] Workflow** — Architecture diagrams, narrative walkthrough.
 7. **Solution Walkthrough** — Step-by-step technical depth with featured code.
 8. **Validation** — Concrete test, expected output, troubleshooting table.
-9. **Maturity Path, Summary, and Related Guides** — Crawl/Walk/Run, then Summary (wraps up the guide), then Related Guides (call to action for what to read next). Summary always comes before Related Guides.
+9. **Maturity Path and Summary** (Solution Guides) / **Day-2 Operations** then optional **Next Steps** (Implementation Guides). Call to action is **Next Steps** only (trial, consulting, training, or equivalent). Do not add a Related Guides section on Solution or Implementation Guides.
 
 Key non-negotiables:
 
