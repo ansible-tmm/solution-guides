@@ -550,7 +550,7 @@ Multiple credential types are in play across the integration: LogicMonitor API t
 
 When Edwin posts payloads to an EDA Event Stream URL, protect the endpoint:
 
-* **Authentication:** Require token-based authentication or mTLS on the Event Stream endpoint.
+* **Authentication:** Require token-based authentication or mTLS on the Event Stream endpoint. Edwin's "Post Ansible EDA Event" action is a distinct integration point from LogicMonitor's Custom HTTP Delivery; use Token authentication (or mTLS) for this action rather than an HMAC signature.
 * **Payload validation:** Validate the payload schema in the EDA rulebook before processing. Reject unexpected or malformed events.
 * **Network segmentation:** Restrict network access to the Event Stream URL to known sources (Edwin AI, internal monitoring infrastructure).
 
