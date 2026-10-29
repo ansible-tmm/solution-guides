@@ -723,7 +723,7 @@ The architecture remains the same: LogicMonitor detects, Edwin AI analyzes, and 
 | :---- | :---- |
 | `logicmonitor.integration` collection | [Automation Hub](https://console.redhat.com/ansible/automation-hub/collections/published/logicmonitor/integration) |
 | `logicmonitor.edwin_ai` collection | [Automation Hub](https://console.redhat.com/ansible/automation-hub/collections/published/logicmonitor/edwin_ai) |
-| MCP integration | [Configured through Edwin AI](https://github.com/ansible/aap-mcp-server) |
+| MCP integration | [Deploying the Ansible MCP Server (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/extend-assembly_deploying_ansible_mcp_server) |
 | Optional LogicMonitor API integration | Available separately |
 | Solution Guides | [ansible-tmm.github.io/solution-guides](https://ansible-tmm.github.io/solution-guides/) |
 
