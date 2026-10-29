@@ -30,7 +30,6 @@ This guide follows a crawl-walk-run maturity progression for BGP network remedia
 * [Maturity Path Summary](#maturity-path-summary)  
 * [ROI Recap](#roi-recap)  
 * [Extending to Hybrid IT](#extending-to-hybrid-it)  
-* [Demos and Labs](#demos-and-labs)  
 * [Sources and Next Steps](#sources-and-next-steps)
 
 ---
@@ -113,7 +112,6 @@ LogicMonitor and Edwin AI provide the intelligence. AAP provides the trust layer
 | `logicmonitor.edwin_ai` | Edwin AI query API for alert correlation and insights |
 | `arista.eos` | Network device automation (substitute your platform's collection as needed) |
 | `ansible.eda` | Event-Driven Ansible webhook source plugin, Event Stream management |
-| `ansible.controller` | AAP Controller object management (bootstrap automation) |
 
 ---
 
@@ -264,7 +262,7 @@ LogicMonitor detects a BGP alert on a network device
 4. **Define safe execution boundaries.** Use approved AAP templates, appropriate credentials and permissions, and approval gates for write-based remediation where policy requires. Rule-based actions run only within the configured integration credential or service-account and AAP RBAC boundaries. Capture the execution ID, check status after launch, and review output in Edwin; synchronize to ITSM only when configured.
    ![][image3]
 
-5. **Create the job template.** Using the AAP bootstrap playbook at `lab-automation/aap_bootstrap_lm_aiops.yml`, or manually, create the "Reset BGP Session" job template:  
+5. **Create the job template.** Create the "Reset BGP Session" job template:  
  
 
 
@@ -346,8 +344,6 @@ ok: [affected-device] => {
 PLAY RECAP *********************************************************************
 affected-device            : ok=6    changed=0    unreachable=0    failed=0
 ```
-
-For hands-on testing with a lab environment, see the [Demo Guide](README-AIOps-LogicMonitor-Demo.md).
 
 ### Components
 
@@ -522,8 +518,6 @@ Execution status and output return to the Edwin AI chat
 
 Edwin AI chat summarizes the result and recommends next steps
 ```
-
-For hands-on testing with a lab environment, see the [Demo Guide](README-AIOps-LogicMonitor-Demo.md).
 
 ### Components
 
@@ -702,16 +696,6 @@ This guide uses BGP network remediation as the reference scenario because networ
 | **Storage** | Array health alert -> Envision-mapped diagnostic playbook, manually reviewed and launched | I/O latency + firmware event correlation -> EDA rule triggers an approved workflow | Cascading storage alerts -> Edwin AI chat and agents triage across arrays |
 
 The architecture remains the same: LogicMonitor detects, Edwin AI analyzes, and AAP governs execution. Only the content collections and remediation playbooks change per domain. Teams that start with network can expand to additional domains by adding new rulebook rules, job templates, and the appropriate content collections.
-
----
-
-## Demos and Labs
-
-| Resource | Status | Description |
-| :---- | :---- | :---- |
-| [Demo Guide](README-AIOps-LogicMonitor-Demo.md) | Planned | Step-by-step lab setup with ContainerLab, Arista cEOS, incident simulation playbooks, and validation scripts |
-| Video walkthrough | Planned | Recorded demo showing the crawl-walk-run progression end-to-end |
-| Live demo environment | Planned | Pre-configured environment with LogicMonitor, AAP 2.7, and all three stages ready to run |
 
 ---
 
