@@ -1,4 +1,4 @@
-# LogicMonitor \+ Ansible Automation Platform: AIOps Solution Guide
+# LogicMonitor + Ansible Automation Platform: AIOps Solution Guide
 
 > **Work in Progress** -- this guide is actively being developed.
 
@@ -6,7 +6,7 @@
 
 Organizations invest heavily in observability, yet most still rely on humans to translate monitoring insights into remediation actions. LogicMonitor and Edwin AI provide the intelligence to detect, analyze, and recommend. Ansible Automation Platform provides the trust layer to govern, execute, and report. Together, they deliver closed-loop AIOps that is safe enough for 3 AM and auditable enough for Monday morning.
 
-This guide follows a crawl-walk-run maturity progression for BGP network remediation. Crawl uses LogicMonitor Envision to map approved playbooks for operator-led execution; Walk uses Event-Driven Ansible (EDA) and rule-based triggers; Run uses Edwin AI chat and autonomous agents. The same pattern applies to any infrastructure domain that LogicMonitor monitors \-- servers, storage, cloud, and hybrid IT environments.
+This guide follows a crawl-walk-run maturity progression for BGP network remediation. Crawl uses LogicMonitor Envision to map approved playbooks for operator-led execution; Walk uses Event-Driven Ansible (EDA) and rule-based triggers; Run uses Edwin AI chat and autonomous agents. The same pattern applies to any infrastructure domain that LogicMonitor monitors -- servers, storage, cloud, and hybrid IT environments.
 
 |  |  |
 | :---- | :---- |
@@ -22,9 +22,9 @@ This guide follows a crawl-walk-run maturity progression for BGP network remedia
 * [Solution](#solution)  
 * [Prerequisites](#prerequisites)  
 * [Integration Architecture](#integration-architecture)  
-* [Stage 1 \-- Crawl: Envision Playbook Mapping and Manual Execution](#stage-1----crawl-envision-playbook-mapping-and-manual-execution)  
-* [Stage 2 \-- Walk: Event-Driven Network Remediation](#stage-2----walk-event-driven-network-remediation)  
-* [Stage 3 \-- Run: AI-Driven Chat and Agentic Operations](#stage-3----run-ai-driven-chat-and-agentic-operations)  
+* [Stage 1 -- Crawl: Envision Playbook Mapping and Manual Execution](#stage-1----crawl-envision-playbook-mapping-and-manual-execution)  
+* [Stage 2 -- Walk: Event-Driven Network Remediation](#stage-2----walk-event-driven-network-remediation)  
+* [Stage 3 -- Run: AI-Driven Chat and Agentic Operations](#stage-3----run-ai-driven-chat-and-agentic-operations)  
 * [Operational Considerations](#operational-considerations)  
 * [Validation and Troubleshooting](#validation-and-troubleshooting)  
 * [Maturity Path Summary](#maturity-path-summary)  
@@ -53,20 +53,20 @@ LogicMonitor is a hosted full-stack infrastructure monitoring platform with part
 
 Edwin AI is LogicMonitor's AI-powered ITOps layer. It goes beyond simple threshold-based alerting to proactively detect, diagnose, and recommend remediation actions through:
 
-* **Alert correlation** \-- grouping related alerts to reduce noise and reveal root causes  
-* **Event analysis** \-- connecting configuration changes, deployments, and infrastructure events to alert patterns  
-* **Intelligent recommendations** \-- suggesting specific remediation actions based on historical patterns and current context
+* **Alert correlation** -- grouping related alerts to reduce noise and reveal root causes  
+* **Event analysis** -- connecting configuration changes, deployments, and infrastructure events to alert patterns  
+* **Intelligent recommendations** -- suggesting specific remediation actions based on historical patterns and current context
 
 ### Ansible Automation Platform: The Trust Layer
 
 Red Hat Ansible Automation Platform provides the governance framework that makes AI-recommended automation safe for production:
 
-* **RBAC** \-- controlling who can create, modify, and execute automation  
-* **Policy as Code** \-- defining what automation is allowed to do and under what conditions  
-* **Approval workflows** \-- requiring human sign-off for high-risk actions  
-* **Audit trails** \-- recording every action, every parameter, and every outcome  
-* **Deterministic execution** \-- ensuring the same automation produces the same result every time  
-* **Event-Driven Ansible** \-- reacting to external events in real time with governed rule evaluation
+* **RBAC** -- controlling who can create, modify, and execute automation  
+* **Policy as Code** -- defining what automation is allowed to do and under what conditions  
+* **Approval workflows** -- requiring human sign-off for high-risk actions  
+* **Audit trails** -- recording every action, every parameter, and every outcome  
+* **Deterministic execution** -- ensuring the same automation produces the same result every time  
+* **Event-Driven Ansible** -- reacting to external events in real time with governed rule evaluation
 
 LogicMonitor and Edwin AI provide the intelligence. AAP provides the trust layer. Neither platform can deliver closed-loop AIOps alone.
 
@@ -99,7 +99,7 @@ LogicMonitor and Edwin AI provide the intelligence. AAP provides the trust layer
 
 | Requirement | Version / Details |
 | :---- | :---- |
-| Ansible Automation Platform | 2.6 (Automation Controller \+ EDA Controller) |
+| Ansible Automation Platform | 2.6 (Automation Controller + EDA Controller) |
 | LogicMonitor | Active account with API access and webhook configuration |
 | Edwin AI | Portal with API credentials (`access_id`, `access_key`) |
 | MCP integration | Connects Edwin AI to AAP APIs through MCP; configure the AAP connection and authorization controls. |
@@ -193,7 +193,7 @@ Four integration surfaces are used across the three maturity stages:
 
 Each maturity stage uses a different integration pattern with AAP. The patterns differ in how they are triggered, how tightly they couple the partner platform to AAP, and how governance is enforced:
 
-|  | Envision (Crawl) | EDA (Walk) | Edwin AI Chat \+ MCP (Run) |
+|  | Envision (Crawl) | EDA (Walk) | Edwin AI Chat + MCP (Run) |
 | :---- | :---- | :---- | :---- |
 | **Trigger** | Operator-selected mapped playbooks | Edwin events and EDA rules | Natural-language chat and agent tools |
 | **Coupling** | Guided (operator-led, mapped) | Rule-based (event-driven) | Agentic (chat and tool-mediated) |
@@ -205,10 +205,10 @@ The crawl-walk-run progression starts with Envision mapping and operator-led exe
 
 ---
 
-## Stage 1 \-- Crawl: Envision Playbook Mapping and Manual Execution
+## Stage 1 -- Crawl: Envision Playbook Mapping and Manual Execution
 
 * Integration surface: LogicMonitor Envision and AAP job templates  
-* Operational impact: Foundational \-- mapped playbooks, operator-led execution, and governed learning  
+* Operational impact: Foundational -- mapped playbooks, operator-led execution, and governed learning  
 * Story: A known operational condition is mapped to an approved playbook; the operator reviews context and starts the run manually.
 
 
@@ -217,22 +217,22 @@ Crawl establishes the shared operational vocabulary before automation is delegat
 ### Flow
 
 LogicMonitor detects a condition and surfaces its context in Envision  
-  \-\> LogicMonitor presents the mapped, approved AAP job template  
-    \-\> Operator reviews the diagnostic context and available actions  
-      \-\> Operator manually execute the AAP job from the LogicMonitor Envision UI  
-        \-\> AAP enforces access controls and any required approval  
-          \-\> Results are recorded and used to identify candidates for Walk-stage triggers
+  -> LogicMonitor presents the mapped, approved AAP job template  
+    -> Operator reviews the diagnostic context and available actions  
+      -> Operator manually execute the AAP job from the LogicMonitor Envision UI  
+        -> AAP enforces access controls and any required approval  
+          -> Results are recorded and used to identify candidates for Walk-stage triggers
 
 ### Setup
 
-* Configure Ansible Actions in LogicMonitor: in Settings \> Integrations, add an Ansible Actions integration, provide the AAP HTTPS endpoint and a write-scoped AAP personal access token.  
+* Configure Ansible Actions in LogicMonitor: in Settings > Integrations, add an Ansible Actions integration, provide the AAP HTTPS endpoint and a write-scoped AAP personal access token.  
 * Validate playbook discovery and resource mapping: LogicMonitor retrieves AAP job-template metadata only. Confirm the AAP host name matches the LogicMonitor resource hostname, IP address, or display name before making the action available to the appropriate resources.  
 * Run and review from the resource: authorized operators use the resource Actions tab to launch a mapped playbook, monitor execution status, and review output and run history. 
 
-## Stage 2 \-- Walk: Event-Driven Network Remediation
+## Stage 2 -- Walk: Event-Driven Network Remediation
 
 * Integration surface: LogicMonitor alerts, Edwin AI Rules and Actions, Event-Driven Ansible, and Ansible Automation Platform  
-* Operational impact: Medium \-- root-cause-informed routing of repeatable alerts to approved automation  
+* Operational impact: Medium -- root-cause-informed routing of repeatable alerts to approved automation  
 * Story: LogicMonitor detects an alert; Edwin AI identifies its likely root cause and uses configured Rules and Actions to select the correct AAP job template or workflow for execution.
 
 The Walk stage combines LogicMonitor detection with Edwin AI correlation and rule-based action mapping. Edwin identifies the likely root cause, then configured Rules and Actions select an approved AAP job template and send the relevant payload to Event-Driven Ansible for governed AAP execution. This creates a repeatable, root-cause-informed path from alert to action.
@@ -278,7 +278,7 @@ LogicMonitor detects a BGP alert on a network device
 | Ask Variables on Launch | Yes |
 | Extra Variables | `{"affected_host":"<host>","alert_id":"<alert_id>"} (valid JSON supplied by the Edwin action payload)` |
 
-### Use Case: BGP Peer Down \-- Reset Session
+### Use Case: BGP Peer Down -- Reset Session
 
 A BGP neighbor relationship drops to IDLE state on one router, causing a network segment to become unreachable. LogicMonitor detects the state change, fires a critical alert, and sends the alert context to Edwin AI for correlation and action selection.
 
@@ -363,10 +363,10 @@ For hands-on testing with a lab environment, see the [Demo Guide](README-AIOps-L
 
 ---
 
-## Stage 3 \-- Run: AI-Driven Chat and Agentic Operations
+## Stage 3 -- Run: AI-Driven Chat and Agentic Operations
 
 - Integration surface: Edwin AI Insights and chat, MCP integration, approved AAP job and workflow templates, and AAP authorization controls  
-- Operational impact: High \-- faster contextual diagnosis and guided, governed automation execution from the operator's chat workflow  
+- Operational impact: High -- faster contextual diagnosis and guided, governed automation execution from the operator's chat workflow  
 - Story: Edwin AI correlates related alerts into an Insight, identifies the likely root cause, and recommends approved AAP job or workflow templates. An operator uses chat to investigate, start an eligible job or workflow template, and receive the execution result.
 
 The Run stage is a conversational, AI-assisted operations experience. Edwin AI correlates alerts into an Insight, identifies the likely root cause, and recommends existing approved AAP job or workflow templates for diagnostics or remediation. Operators interact with Edwin AI chat to review the rationale, ask follow-up questions, and initiate eligible execution. Edwin communicates with AAP through MCP and returns execution status and results to the conversation. Configured AAP authorization and approval controls govern which templates and actions are permitted. Read-only diagnostics may be autonomous where policy permits; write-based remediation remains human-approved.
@@ -445,15 +445,15 @@ LogicMonitor alerts contribute to an Edwin AI Insight
 
 This optional workflow illustrates how AAP can package a multi-step remediation. In the Run stage, Edwin performs correlation and recommendation in chat; an operator selects or approves an eligible AAP job or workflow template, and results return to that conversation.
 
-### Use Case: BGP Flapping \-- Conversational Investigation and Recommendations
+### Use Case: BGP Flapping -- Conversational Investigation and Recommendations
 
 BGP sessions are flapping on a router. Edwin correlates the BGP alert with related operational signals, identifies the likely cause, and presents relevant approved AAP job or workflow templates in chat. The operator can ask follow-up questions, run a read-only diagnostic, or approve a write-based remediation. The examples below illustrate how Edwin can connect findings to recommended automation:
 
 | Edwin AI Insight finds | Root cause | Recommended AAP job or workflow template |
 | :---- | :---- | :---- |
-| BGP flapping \+ interface error counters spiking | Bad link or cable | Bounce the interface (`playbooks/bounce_interface.yml`) |
-| BGP flapping \+ CPU at 98% on the device | Resource exhaustion | Restart routing process (`playbooks/restart_routing.yml`) |
-| BGP flapping \+ config change event 5 minutes ago | Config drift | Roll back to last known good config (`playbooks/rollback_config.yml`) |
+| BGP flapping + interface error counters spiking | Bad link or cable | Bounce the interface (`playbooks/bounce_interface.yml`) |
+| BGP flapping + CPU at 98% on the device | Resource exhaustion | Restart routing process (`playbooks/restart_routing.yml`) |
+| BGP flapping + config change event 5 minutes ago | Config drift | Roll back to last known good config (`playbooks/rollback_config.yml`) |
 | Only BGP flapping, no correlated alerts | Unknown / transient | Recommend a read-only BGP and interface diagnostic before any remediation |
 
 For the chat-driven Run flow, Edwin uses its correlated Insight directly to recommend relevant AAP job or workflow templates. The enrichment playbook below is an optional asset for organizations that also maintain reusable AAP workflows; it is not required for chat-based correlation or recommendation.
@@ -631,7 +631,7 @@ From Walk to Run: Advance when an alert needs contextual investigation, conversa
 
 ### The Promotion Pattern
 
-The crawl-walk-run framework is not just an adoption path \-- it is an ongoing operational pattern. As the Run stage handles novel alerts and the team observes which patterns recur:
+The crawl-walk-run framework is not just an adoption path -- it is an ongoing operational pattern. As the Run stage handles novel alerts and the team observes which patterns recur:
 
 1. A recurring Run pattern that yields a repeatable, approved action can be promoted to a Walk rule with explicit event conditions and guardrails.  
 2. A recurring Walk procedure can be retained as a Crawl mapping for operator-led execution when manual oversight remains the preferred operating model.  
@@ -653,7 +653,7 @@ Edwin AI's alert correlation reduces the volume of events that reach the on-call
 
 ### Governance and Audit Readiness
 
-Every remediation action \-- whether manually launched from a Crawl mapping, triggered by a Walk rule, or initiated from Run-stage chat through MCP \-- flows through AAP's governance framework. This means:
+Every remediation action -- whether manually launched from a Crawl mapping, triggered by a Walk rule, or initiated from Run-stage chat through MCP -- flows through AAP's governance framework. This means:
 
 - Complete audit trails for every action taken  
 - RBAC enforcement on all automation, including AI-initiated actions  
@@ -680,9 +680,9 @@ This guide uses BGP network remediation as the reference scenario because networ
 
 | Domain | Crawl example | Walk example | Run example |
 | :---- | :---- | :---- | :---- |
-| **Server / OS** | Disk usage alert \-\> Envision-mapped playbook, manually reviewed and launched | High memory alert \-\> EDA rule triggers an approved diagnostic or remediation workflow | Unknown performance degradation \-\> Edwin AI chat and agents investigate; MCP provides governed access to approved automation |
-| **Cloud** | Cloud budget threshold \-\> Envision-mapped rightsizing playbook, manually reviewed and launched | Latency spike \+ deployment event \-\> EDA rules trigger an approved workflow | Novel cloud service alert \-\> Edwin AI chat and agentic investigation |
-| **Storage** | Array health alert \-\> Envision-mapped diagnostic playbook, manually reviewed and launched | I/O latency \+ firmware event correlation \-\> EDA rule triggers an approved workflow | Cascading storage alerts \-\> Edwin AI chat and agents triage across arrays |
+| **Server / OS** | Disk usage alert -> Envision-mapped playbook, manually reviewed and launched | High memory alert -> EDA rule triggers an approved diagnostic or remediation workflow | Unknown performance degradation -> Edwin AI chat and agents investigate; MCP provides governed access to approved automation |
+| **Cloud** | Cloud budget threshold -> Envision-mapped rightsizing playbook, manually reviewed and launched | Latency spike + deployment event -> EDA rules trigger an approved workflow | Novel cloud service alert -> Edwin AI chat and agentic investigation |
+| **Storage** | Array health alert -> Envision-mapped diagnostic playbook, manually reviewed and launched | I/O latency + firmware event correlation -> EDA rule triggers an approved workflow | Cascading storage alerts -> Edwin AI chat and agents triage across arrays |
 
 The architecture remains the same: LogicMonitor detects, Edwin AI analyzes, and AAP governs execution. Only the content collections and remediation playbooks change per domain. Teams that start with network can expand to additional domains by adding new rulebook rules, job templates, and the appropriate content collections.
 
@@ -712,9 +712,9 @@ The architecture remains the same: LogicMonitor detects, Edwin AI analyzes, and 
 
 ### Related Solution Guides
 
-- [**Instana \+ AAP**](https://ansible-tmm.github.io/solution-guides/Instana-AIOps/) \-- Observability-driven automation with IBM Instana  
-- [**Splunk \+ AAP**](https://ansible-tmm.github.io/solution-guides/AIOps-Splunk-ITSI/) \-- SIEM-driven event response and remediation  
-- [**ServiceNow \+ AAP**](https://ansible-tmm.github.io/solution-guides/AIOps-ServiceNow/) \-- ITSM-integrated change management and incident response
+- [**Instana + AAP**](https://ansible-tmm.github.io/solution-guides/Instana-AIOps/) -- Observability-driven automation with IBM Instana  
+- [**Splunk + AAP**](https://ansible-tmm.github.io/solution-guides/AIOps-Splunk-ITSI/) -- SIEM-driven event response and remediation  
+- [**ServiceNow + AAP**](https://ansible-tmm.github.io/solution-guides/AIOps-ServiceNow/) -- ITSM-integrated change management and incident response
 
 ### Next Steps
 
