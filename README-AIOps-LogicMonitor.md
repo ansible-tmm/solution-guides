@@ -179,7 +179,7 @@ The integration maps cleanly across the AIOps value chain, with LogicMonitor and
 
 ### Integration Surfaces
 
-Four integration surfaces are used across the three maturity stages:
+Five integration surfaces are used across the three maturity stages:
 
 | Surface | Component | Stage | Role |
 | :---- | :---- | :---- | :---- |
@@ -221,7 +221,7 @@ Crawl establishes the shared operational vocabulary before automation is delegat
 LogicMonitor detects a condition and surfaces its context in Envision  
   -> LogicMonitor presents the mapped, approved AAP job template  
     -> Operator reviews the diagnostic context and available actions  
-      -> Operator manually execute the AAP job from the LogicMonitor Envision UI  
+      -> Operator manually executes the AAP job from the LogicMonitor Envision UI  
         -> AAP enforces access controls and any required approval  
           -> Results are recorded and used to identify candidates for Walk-stage triggers
 
