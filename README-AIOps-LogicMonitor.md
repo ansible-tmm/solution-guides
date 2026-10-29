@@ -99,7 +99,7 @@ LogicMonitor and Edwin AI provide the intelligence. AAP provides the trust layer
 
 | Requirement | Version / Details |
 | :---- | :---- |
-| Ansible Automation Platform | 2.6 (Automation Controller + EDA Controller) |
+| Ansible Automation Platform | 2.7 (Automation Controller + EDA Controller) |
 | LogicMonitor | Active account with API access and webhook configuration |
 | Edwin AI | Portal with API credentials (`access_id`, `access_key`) |
 | MCP integration | Connects Edwin AI to AAP APIs through MCP; configure the AAP connection and authorization controls. |
@@ -711,7 +711,7 @@ The architecture remains the same: LogicMonitor detects, Edwin AI analyzes, and 
 | :---- | :---- | :---- |
 | [Demo Guide](README-AIOps-LogicMonitor-Demo.md) | Planned | Step-by-step lab setup with ContainerLab, Arista cEOS, incident simulation playbooks, and validation scripts |
 | Video walkthrough | Planned | Recorded demo showing the crawl-walk-run progression end-to-end |
-| Live demo environment | Planned | Pre-configured environment with LogicMonitor, AAP 2.6, and all three stages ready to run |
+| Live demo environment | Planned | Pre-configured environment with LogicMonitor, AAP 2.7, and all three stages ready to run |
 
 ---
 
