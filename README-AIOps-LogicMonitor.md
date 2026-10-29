@@ -203,6 +203,8 @@ Each maturity stage uses a different integration pattern with AAP. The patterns 
 
 The crawl-walk-run progression starts with Envision mapping and operator-led execution, adds EDA rule-based triggering for repeatable patterns, and then adds Edwin AI chat and agentic diagnostics. AAP governance applies at every stage.
 
+> **Roadmap note:** Today, Edwin AI reaches AAP through a custom LogicMonitor MCP service. Native integration with the Ansible AAP MCP Server -- including its OAuth-based authorization -- is in development. Throughout this guide, "MCP" refers to that custom LogicMonitor MCP; once AAP MCP Server support ships, the specifics of this integration surface will change.
+
 ---
 
 ## Stage 1 -- Crawl: Envision Playbook Mapping and Manual Execution
