@@ -562,6 +562,21 @@ The Run stage describes "autonomous read-only diagnostics." In practice, "read-o
 * **Credential scoping:** Use read-only credentials for diagnostic service accounts on target devices.
 * **RBAC boundaries:** Limit the integration service account to diagnostic job templates only.
 
+### Write-Approval Gates
+
+Every write-based job or workflow template reachable from Walk or Run should sit behind an explicit approval step, not just RBAC. In AAP, add an **Approval** node before the remediation node(s) in the workflow template:
+
+```
+Edwin / EDA trigger
+  -> Workflow Template: "Bounce Interface (Approved)"
+       Node 1: Approval -- "Approve interface bounce on {{ affected_host }}"
+         (timeout, approved-by audit trail, denial path)
+       Node 2 (on approval): Job Template -- "Bounce Interface"
+       Node 2 (on denial/timeout): Job Template -- "Notify on-call" (no device change)
+```
+
+For the Crawl and Walk stages, pair this with a read-only diagnostic template (`check_mode: true` or a dry-run playbook) that Edwin or the operator can run first to preview the change before approving the write-capable template. This keeps the "read-only by default, human-approved for writes" posture consistent across all three stages, not just Run.
+
 ### Idempotency and Rate Limiting
 
 * Ensure all remediation playbooks are idempotent so that repeated execution does not cause unintended side effects.
