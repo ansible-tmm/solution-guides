@@ -24,4 +24,5 @@ Full rule: [.cursor/rules/red-hat-lightspeed-terminology.mdc](.cursor/rules/red-
 
 - **Automation code assistant** and **Automation intelligent assistant** (only **Automation** capitalized): see [.cursor/rules/red-hat-lightspeed-terminology.mdc](.cursor/rules/red-hat-lightspeed-terminology.mdc)
 - Solution guide structure, blockquotes, links: [.cursor/rules/solution-guide-conventions.mdc](.cursor/rules/solution-guide-conventions.mdc)
+- Multi-use-case Solution Guides (one partner, Use Case A/B/…): [README-best-practices.md §2.3](README-best-practices.md#23-multi-use-case-solution-guides); skills at [.cursor/skills/multi-use-case-solution-guide/SKILL.md](.cursor/skills/multi-use-case-solution-guide/SKILL.md) and [.agents/skills/multi-use-case-solution-guide/SKILL.md](.agents/skills/multi-use-case-solution-guide/SKILL.md)
 - No em dashes (`—`); use `--`. Use the StrReplace tool for edits, not batch scripts: [.cursor/rules/editing-conventions.mdc](.cursor/rules/editing-conventions.mdc)

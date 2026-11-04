@@ -31,7 +31,7 @@ inline_edit: true
     </div>
     <div class="guide-type-fact">
       <dt>What they cover</dt>
-      <dd>Partner-focused reference architectures that show how Ansible Automation Platform solves a measurable operational challenge -- often alongside Splunk, ServiceNow, IBM Instana, Azure, or other technologies your organization already runs.</dd>
+      <dd>Partner-focused reference architectures that show how Ansible Automation Platform solves a measurable operational challenge -- often alongside Splunk, ServiceNow, IBM Instana, Azure, or other technologies your organization already runs. When one partner has several outcomes, authors use <strong>one Solution Guide with multiple use cases</strong> (shared intro, Use Case A/B in the ToC) rather than duplicate catalog cards.</dd>
     </div>
     <div class="guide-type-fact">
       <dt>What you get</dt>
@@ -39,7 +39,7 @@ inline_edit: true
     </div>
     <div class="guide-type-fact">
       <dt>Examples</dt>
-      <dd><a href="{{ '/README-AIOps' | relative_url }}">AIOps automation with Ansible</a>, <a href="{{ '/README-Instana-AIOps' | relative_url }}">automated incident remediation with IBM Instana</a>, <a href="{{ '/README-AIOps-Splunk-ITSI' | relative_url }}">AIOps with Splunk and Event-Driven Ansible</a>.</dd>
+      <dd><a href="{{ '/README-AIOps' | relative_url }}">AIOps automation with Ansible</a>, <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}">ServiceNow ITSM automation with Ansible</a> (multi-use-case), <a href="{{ '/README-AIOps-Splunk-ITSI' | relative_url }}">AIOps with Splunk and Event-Driven Ansible</a> (multi-use-case), <a href="{{ '/README-Instana-AIOps' | relative_url }}">automated incident remediation with IBM Instana</a>.</dd>
     </div>
   </dl>
 

@@ -31,11 +31,11 @@ inline_edit: true
     </div>
     <div class="guide-type-fact">
       <dt>What it covers</dt>
-      <dd>Nine-section framework: outcome-oriented title, business framing, workflow diagrams, solution walkthrough, validation, and Crawl/Walk/Run maturity path.</dd>
+      <dd>Nine-section framework: outcome-oriented title, business framing, workflow diagrams, solution walkthrough, validation, and Crawl/Walk/Run maturity path. Multi-use-case guides (one partner, Use Case A/B/…) use a shared Overview plus per-use-case walkthroughs -- see the multi-use-case appendix in the framework.</dd>
     </div>
     <div class="guide-type-fact">
       <dt>Scoring</dt>
-      <dd>Weighted rubric with category-aware adjustments for AIOps and Network automation Solution Guides. AIOps Use Cases use a lighter rubric row in the same document.</dd>
+      <dd>Weighted rubric with category-aware adjustments for AIOps, Network automation, multi-use-case Solution Guides, and a lighter row for AIOps Use Case pages.</dd>
     </div>
   </dl>
 
