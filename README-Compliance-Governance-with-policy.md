@@ -3,7 +3,7 @@
 
 <h1>Enforcing Compliance and Network Governance</h1>
 
-<span class="guide-type-badge guide-type-badge--implementation"><i class="fas fa-check-circle" aria-hidden="true"></i> Implementation Guide</span>
+<span class="guide-type-badge guide-type-badge--implementation"><i class="fas fa-cogs" aria-hidden="true"></i> Implementation Guide</span>
 
 </div>
 

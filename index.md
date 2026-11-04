@@ -578,34 +578,6 @@ patternfly: true
         </a>
         <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="security-gallery">
 
-      <a href="{{ '/README-Falco-runtime-mitigation' | relative_url }}" class="card-link" data-tags="security,solution,published">
-        <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header card-header--labels">
-            <span class="pf-v6-c-label pf-m-green">
-              <span class="pf-v6-c-label__content">
-                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
-                Solution Guide
-              </span>
-            </span>
-            <span class="pf-v6-c-label card-label-track card-label-track--security">
-              <span class="pf-v6-c-label__content">Security</span>
-            </span>
-          </div>
-          <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">Automated runtime mitigation for Linux OT hosts</h3>
-          </div>
-          <div class="pf-v6-c-card__body">
-            Closed-loop automated enforcement architecture using Falco for runtime syscall monitoring and Event-Driven Ansible to dynamically apply MITRE ATT&CK mitigation policies.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set card-partner-logo-set--falco">
-              <img src="{{ '/assets/images/logos/falco-horizontal-color.svg' | relative_url }}" alt="Falco" class="card-partner-logo card-partner-logo--light">
-              <img src="{{ '/assets/images/logos/falco-horizontal-color-dark.svg' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-            </span>
-          </div>
-        </div>
-      </a>
-
       <a href="{{ '/README-Satellite-CVE-Remediation' | relative_url }}" class="card-link" data-tags="redhat,security,solution,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header card-header--labels">
@@ -690,63 +662,6 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-Compliance-Governance-with-policy' | relative_url }}" class="card-link" data-tags="security,solution,published">
-        <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header card-header--labels">
-            <span class="pf-v6-c-label pf-m-green">
-              <span class="pf-v6-c-label__content">
-                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
-                Solution Guide
-              </span>
-            </span>
-            <span class="pf-v6-c-label card-label-track card-label-track--security">
-              <span class="pf-v6-c-label__content">Security</span>
-            </span>
-          </div>
-          <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">Enforcing Compliance and Network Governance</h3>
-          </div>
-          <div class="pf-v6-c-card__body">
-            Continuous compliance monitoring with EDA drift remediation, OPA contextual change-control gates (blast radius, change windows, ITSM tickets), and SPIFFE/SPIRE workload identity, with a full audit trail in AAP Controller.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set card-partner-logo-set--opa">
-              <img src="{{ '/assets/images/logos/opa.png' | relative_url }}" alt="Open Policy Agent" class="card-partner-logo card-partner-logo--light">
-              <img src="{{ '/assets/images/logos/opa-dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <a href="{{ '/README-ZTA-with-AAP' | relative_url }}" class="card-link" data-tags="security,solution,published">
-        <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header card-header--labels">
-            <span class="pf-v6-c-label pf-m-green">
-              <span class="pf-v6-c-label__content">
-                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
-                Solution Guide
-              </span>
-            </span>
-            <span class="pf-v6-c-label card-label-track card-label-track--security">
-              <span class="pf-v6-c-label__content">Security</span>
-            </span>
-          </div>
-          <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">Zero Trust Architecture Infrastructure with Ansible Automation Platform</h3>
-          </div>
-          <div class="pf-v6-c-card__body">
-            AAP 2.6 as the NIST SP 800-207 Policy Enforcement Point. Identity (IdM), policy (OPA), secrets (Vault), workload identity (SPIFFE/SPIRE), and network enforcement (Arista) wire into one auditable automation fabric.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set card-partner-logo-set--zero-trust">
-              <img src="{{ '/assets/images/logos/zero-trust.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--light" aria-hidden="true">
-              <img src="{{ '/assets/images/logos/zero-trust.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-              <span class="card-partner-logo-label">Zero Trust</span>
-            </span>
-          </div>
-        </div>
-      </a>
-
       <a href="{{ '/README-AAP-LightWell-AO' | relative_url }}" class="card-link" data-tags="security,solution,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header card-header--labels">
@@ -770,34 +685,6 @@ patternfly: true
             <span class="card-partner-logo-set card-partner-logo-set--lightwell">
               <img src="{{ '/assets/images/logos/lightwell-logo.png' | relative_url }}" alt="IBM Lightwell" class="card-partner-logo card-partner-logo--light">
               <img src="{{ '/assets/images/logos/lightwell-logo-dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <a href="{{ '/README-CME' | relative_url }}" class="card-link" data-tags="redhat,security,solution,published">
-        <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header card-header--labels">
-            <span class="pf-v6-c-label pf-m-green">
-              <span class="pf-v6-c-label__content">
-                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
-                Solution Guide
-              </span>
-            </span>
-            <span class="pf-v6-c-label card-label-track card-label-track--security">
-              <span class="pf-v6-c-label__content">Security</span>
-            </span>
-          </div>
-          <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">Automated CVE Response and Compliance Verification with CME</h3>
-          </div>
-          <div class="pf-v6-c-card__body">
-            Automate the full CVE response lifecycle with 118 compliance-as-code controls. CME maps CVEs to defensive controls, verifies fleet posture, remediates automatically, and calculates CVSS score attenuation.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set card-partner-logo-set--rhel">
-              <img src="{{ '/assets/images/logos/rhel-logo.png' | relative_url }}" alt="Red Hat Enterprise Linux" class="card-partner-logo card-partner-logo--light">
-              <img src="{{ '/assets/images/logos/rhel-logo-dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
             </span>
           </div>
         </div>
@@ -951,12 +838,6 @@ patternfly: true
           <div class="pf-v6-c-card__body">
             Multi-datacenter Active-Passive disaster recovery for Ansible Automation Platform using EDB Postgres Advanced Server and EDB Failover Manager with sub-5-minute RTO.
           </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set">
-              <img src="{{ '/assets/images/logos/edb.png' | relative_url }}" alt="EDB" class="card-partner-logo card-partner-logo--light">
-              <img src="{{ '/assets/images/logos/edb-dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-            </span>
-          </div>
         </div>
       </a>
 
@@ -975,12 +856,6 @@ patternfly: true
           </div>
           <div class="pf-v6-c-card__body">
             Provision and configure Red Hat AI infrastructure, from GPU instances to serving models, using the infra.ai and redhat.ai collections.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set card-partner-logo-set--redhat-ai">
-              <img src="{{ '/assets/images/logos/redhat-ai-logo.png' | relative_url }}" alt="Red Hat AI" class="card-partner-logo card-partner-logo--light">
-              <img src="{{ '/assets/images/logos/redhat-ai-logo-dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-            </span>
           </div>
         </div>
       </a>
@@ -1001,12 +876,6 @@ patternfly: true
           <div class="pf-v6-c-card__body">
             Deploy and configure a self-hosted LLM using Red Hat AI Inference Server on RHEL with GPU acceleration to power the Automation intelligent assistant in AAP.
           </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set card-partner-logo-set--redhat-ai">
-              <img src="{{ '/assets/images/logos/redhat-ai-logo.png' | relative_url }}" alt="Red Hat AI" class="card-partner-logo card-partner-logo--light">
-              <img src="{{ '/assets/images/logos/redhat-ai-logo-dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-            </span>
-          </div>
         </div>
       </a>
 
@@ -1025,13 +894,6 @@ patternfly: true
           </div>
           <div class="pf-v6-c-card__body">
             Standardize your automation developer experience across the organization using Ansible Development Tools, from individual uv/pip installs to enterprise-governed Dev Spaces with 5-minute onboarding.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set card-partner-logo-set--devtools">
-              <img src="{{ '/assets/images/logos/ansible-devtools-logo.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--light" aria-hidden="true">
-              <img src="{{ '/assets/images/logos/ansible-devtools-logo.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-              <span class="card-partner-logo-label">Ansible Content Tools</span>
-            </span>
           </div>
         </div>
       </a>
@@ -1058,13 +920,6 @@ patternfly: true
           <div class="pf-v6-c-card__body">
             Tiered image layering strategy for Ansible Dev Spaces on OpenShift. Deliver governed, customizable development environments across multiple automation domains using standard BuildConfigs and ImageStreams.
           </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set card-partner-logo-set--devspaces">
-              <img src="{{ '/assets/images/logos/openshift-devspaces-logo.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--light" aria-hidden="true">
-              <img src="{{ '/assets/images/logos/openshift-devspaces-logo-dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-              <span class="card-partner-logo-label">OpenShift Dev Spaces</span>
-            </span>
-          </div>
         </div>
       </a>
 
@@ -1083,12 +938,6 @@ patternfly: true
           </div>
           <div class="pf-v6-c-card__body">
             Two-site active-passive disaster recovery for Ansible Automation Platform 2.7 on OpenShift using CloudNativePG cross-cluster replication, shared secrets, and controlled switchover procedures.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set card-partner-logo-set--cloudnativepg">
-              <img src="{{ '/assets/images/logos/cloud-native.png' | relative_url }}" alt="CloudNativePG" class="card-partner-logo card-partner-logo--light">
-              <img src="{{ '/assets/images/logos/cloud-native-dark.svg' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-            </span>
           </div>
         </div>
       </a>
@@ -1109,11 +958,81 @@ patternfly: true
           <div class="pf-v6-c-card__body">
             Three targeted autovacuum parameter changes, tested in order of impact, keep large AAP tables continuously clean at enterprise scale.
           </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set card-partner-logo-set--postgresql">
-              <img src="{{ '/assets/images/logos/postgresSQL.png' | relative_url }}" alt="PostgreSQL" class="card-partner-logo card-partner-logo--light">
-              <img src="{{ '/assets/images/logos/postgresSQL_dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+        </div>
+      </a>
+
+      <a href="{{ '/README-Falco-runtime-mitigation' | relative_url }}" class="card-link" data-tags="security,implementation,published">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-blue">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-cogs pf-v6-c-label__icon"></i>
+                Implementation Guide
+              </span>
             </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Automated runtime mitigation for Linux OT hosts</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Closed-loop automated enforcement architecture using Falco for runtime syscall monitoring and Event-Driven Ansible to dynamically apply MITRE ATT&CK mitigation policies.
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ '/README-Compliance-Governance-with-policy' | relative_url }}" class="card-link" data-tags="security,implementation,published">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-blue">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-cogs pf-v6-c-label__icon"></i>
+                Implementation Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Enforcing Compliance and Network Governance</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Continuous compliance monitoring with EDA drift remediation, OPA contextual change-control gates (blast radius, change windows, ITSM tickets), and SPIFFE/SPIRE workload identity, with a full audit trail in AAP Controller.
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ '/README-ZTA-with-AAP' | relative_url }}" class="card-link" data-tags="security,implementation,published">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-blue">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-cogs pf-v6-c-label__icon"></i>
+                Implementation Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Zero Trust Architecture Infrastructure with Ansible Automation Platform</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            AAP 2.6 as the NIST SP 800-207 Policy Enforcement Point. Identity (IdM), policy (OPA), secrets (Vault), workload identity (SPIFFE/SPIRE), and network enforcement (Arista) wire into one auditable automation fabric.
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ '/README-CME' | relative_url }}" class="card-link" data-tags="redhat,security,implementation,published">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header">
+            <span class="pf-v6-c-label pf-m-blue">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-cogs pf-v6-c-label__icon"></i>
+                Implementation Guide
+              </span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Automated CVE Response and Compliance Verification with CME</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Automate the full CVE response lifecycle with 118 compliance-as-code controls. CME maps CVEs to defensive controls, verifies fleet posture, remediates automatically, and calculates CVSS score attenuation.
           </div>
         </div>
       </a>

@@ -1,7 +1,7 @@
 {% raw %}
 <div class="guide-header">
 <h1>Zero Trust Architecture infrastructure with Ansible Automation Platform</h1>
-<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+<span class="guide-type-badge guide-type-badge--implementation"><i class="fas fa-cogs" aria-hidden="true"></i> Implementation Guide</span>
 </div>
 
 <style>
