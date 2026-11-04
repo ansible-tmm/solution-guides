@@ -11,6 +11,7 @@ exclude:
   - "docs/superpowers"
   - "plans"
   - "accessredhat-index.md"
+  - "LEGACY-KB-RETIREMENT.md"
   - "link-check-report.md"
   - ".venv-og"
 kramdown:

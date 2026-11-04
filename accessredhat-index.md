@@ -6,10 +6,6 @@ Browse all solution guides, filter by partner or type, and find contributing gui
 
 ---
 
-**Ansible Automation Platform Features**
-
-- [Get started with EDA (Ansible Rulebook) - Solution Guide](https://access.redhat.com/articles/7136720)
-
 **AI + Ansible Automation Platform**
 
 - [AI Infrastructure automation with Ansible - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-IA)
@@ -25,11 +21,6 @@ Browse all solution guides, filter by partner or type, and find contributing gui
 **Infrastructure Automation**
 
 - [High-Availability AAP with EDB PostgreSQL Active-Passive DR - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-EDB)
-
-**Network Automation with Ansible Automation Platform**
-
-- [Network Fact Gathering & Reporting - Solution Guide](https://access.redhat.com/articles/7123361)
-- [Network Back Up and Configuration - Solution Guide](https://access.redhat.com/articles/7123366)
 
 **ServiceNow ITSM Automation with Ansible Automation Platform**
 

@@ -103,10 +103,9 @@ All solution guides follow a standardized framework defined in the [Best Practic
 
 | Guide | KB Article |
 |-------|------------|
-| Get started with EDA (Ansible Rulebook) | [7136720](https://access.redhat.com/articles/7136720) |
 | ServiceNow ITSM Ticket Enrichment Automation | [7127603](https://access.redhat.com/articles/7127603) |
-| Network Fact Gathering & Reporting | [7123361](https://access.redhat.com/articles/7123361) |
-| Network Back Up and Configuration | [7123366](https://access.redhat.com/articles/7123366) |
+
+Retired KB-only cards (EDA getting started, network fact gathering, network backup) are tracked in [LEGACY-KB-RETIREMENT.md](LEGACY-KB-RETIREMENT.md) with Jira destinations.
 
 ---
 
