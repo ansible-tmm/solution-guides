@@ -98,11 +98,13 @@ LogicMonitor and Edwin AI provide the intelligence. AAP provides the trust layer
 
 | Requirement | Version / Details |
 | :---- | :---- |
-| Ansible Automation Platform | 2.7 (Automation Controller + EDA Controller) |
+| Ansible Automation Platform | 2.6 or later |
 | LogicMonitor | Active account with API access and webhook configuration |
 | Edwin AI | Portal with API credentials (`access_id`, `access_key`) |
 | MCP integration | Connects Edwin AI to AAP APIs through MCP; configure the AAP connection and authorization controls. |
 | Network devices | Devices monitored by LogicMonitor with BGP peering (examples use Arista EOS) |
+
+> **Note:** AAP 2.6 is the minimum supported version for this guide. Validation against AAP 2.7 is in progress; this section will be updated once that testing is complete.
 
 ### Collections
 
@@ -181,7 +183,7 @@ Five integration surfaces are used across the three maturity stages:
 
 | Surface | Component | Stage | Role |
 | :---- | :---- | :---- | :---- |
-| **EDA Event Stream** | AAP Event Streams (AAP 2.5+) | Walk, Run | Configured endpoint that receives events and routes them to rulebook activations. |
+| **EDA Event Stream** | AAP Event Streams (AAP 2.6+) | Walk, Run | Configured endpoint that receives events and routes them to rulebook activations. |
 | **EDA webhook source** | `ansible.eda.webhook` source plugin | Walk, Run | EDA rulebook activation that evaluates events received through the configured Event Stream. |
 | **LM device management** | `logicmonitor.integration` collection | All | Manages LM devices, collectors, alert rules, device groups |
 | **Edwin AI query** | `logicmonitor.edwin_ai.query_api` module | Run | Queries Edwin AI for correlated alerts, events, insights |
