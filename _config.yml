@@ -11,6 +11,7 @@ exclude:
   - "docs/superpowers"
   - "plans"
   - "accessredhat-index.md"
+  - "link-check-report.md"
   - ".venv-og"
 kramdown:
   syntax_highlighter_opts:

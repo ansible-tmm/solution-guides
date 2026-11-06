@@ -1,0 +1,38 @@
+# Lychee config for Solution Guides / hub markdown link checks.
+# Used by .github/workflows/weekly-link-check.yml
+
+verbose = "warning"
+no_progress = true
+cache = false
+max_concurrency = 8
+timeout = 30
+max_retries = 2
+retry_wait_time = 2
+
+# Prefer GET -- some sites reject or mishandle HEAD.
+method = "get"
+
+scheme = ["https", "http"]
+include_mail = false
+
+# 429 rate limits and common bot/WAF blocks (403) should not fail the run.
+# Real dead links usually return 404.
+accept = ["200..=299", "403", "429"]
+
+exclude = [
+  # Decorative emoji assets embedded in guide HTML
+  '^https://cdn\.jsdelivr\.net/gh/twitter/twemoji',
+  # Local / lab placeholders
+  '^https?://localhost',
+  '^https?://127\.0\.0\.1',
+  '^https?://0\.0\.0\.0',
+  # Flaky vendor front doors that often break HTTP/2 checkers
+  '^https://www\.servicenow\.com/',
+]
+
+exclude_path = [
+  '^\.github/',
+  '^plans/',
+  '^docs/',
+  'link-check-report\.md$',
+]
