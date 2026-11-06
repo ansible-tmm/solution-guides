@@ -715,9 +715,9 @@ The architecture remains the same: LogicMonitor detects, Edwin AI analyzes, and 
 
 ### Related Solution Guides
 
-- [**Instana + AAP**](https://ansible-tmm.github.io/solution-guides/Instana-AIOps/) -- Observability-driven automation with IBM Instana  
-- [**Splunk + AAP**](https://ansible-tmm.github.io/solution-guides/AIOps-Splunk-ITSI/) -- SIEM-driven event response and remediation  
-- [**ServiceNow + AAP**](https://ansible-tmm.github.io/solution-guides/AIOps-ServiceNow/) -- ITSM-integrated change management and incident response
+- [**Instana + AAP**](README-Instana-AIOps.md) -- Observability-driven automation with IBM Instana  
+- [**Splunk + AAP**](README-AIOps-Splunk-ITSI.md) -- SIEM-driven event response and remediation  
+- [**ServiceNow + AAP**](README-AIOps-ServiceNow.md) -- ITSM-integrated change management and incident response
 
 ### Next Steps
 
