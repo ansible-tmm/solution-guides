@@ -9,7 +9,7 @@ permalink: /updates/
 </div>
 
 <!-- BEGIN:AUTO-UPDATES -->
-*Rolling window: 2026-10-03 to 2026-11-02. Regenerated weekly from git history.*
+*Rolling window: 2026-10-10 to 2026-11-09. Regenerated weekly from git history.*
 
 ### New guides
 
@@ -30,7 +30,7 @@ permalink: /updates/
 - [High Availability and Disaster Recovery for AAP 2.7 on OpenShift]({{ "/README-AAP-HA-DR-OpenShift" | relative_url }}): docs: link public AAP HA DR example
 - [PostgreSQL Autovacuum Tuning Guide for Ansible Automation Platform]({{ "/README-AAP-PostgreSQL-Autovacuum-Tuning" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
 - [Event-Driven Remediation with Azure Service Bus and Ansible]({{ "/README-AIOps-Azure-Service-Bus" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
-- [LogicMonitor + Ansible Automation Platform: AIOps Solution Guide]({{ "/README-AIOps-LogicMonitor" | relative_url }}): fix: address structural, navigation, and best-practice gaps in LogicMonitor AIOps guide
+- [LogicMonitor + Ansible Automation Platform: AIOps Solution Guide]({{ "/README-AIOps-LogicMonitor" | relative_url }}): Fix SG outbound 404s and add weekly lychee link check
 - [Unlock AIOps with ServiceNow LEAP and Ansible MCP server]({{ "/README-AIOps-ServiceNow" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
 - [AIOps with Splunk and Event-Driven Ansible]({{ "/README-AIOps-Splunk-ITSI" | relative_url }}): Remove redundant section dividers on guide pages
 - [Windows Certificate Rotation with AI Risk Analysis]({{ "/README-AIOps-Windows-Cert-Rotation" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
@@ -43,7 +43,7 @@ permalink: /updates/
 - [Configuring Ansible Lightspeed intelligent assistant with Red Hat AI Inference Server on RHEL]({{ "/README-Intelligent-Assistant-RHAIIS" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
 - [Event-Driven Network Source of Truth with NetBox and Ansible Automation Platform]({{ "/README-NetBox-SoT-EDA-Config" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
 - [Event-Driven WAN Circuit Failover with NetBox and Ansible Automation Platform]({{ "/README-NetBox-WAN-EDA-Failover" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
-- [Using Event-Driven Ansible to Consume OpenShift API Resources With Kafka]({{ "/README-OpenShift-EDA-Kafka" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
+- [Using Event-Driven Ansible to Consume OpenShift API Resources With Kafka]({{ "/README-OpenShift-EDA-Kafka" | relative_url }}): Fix SG outbound 404s and add weekly lychee link check
 - [RHEL Patching with Red Hat Lightspeed and Ansible MCP Server]({{ "/README-Patching-RHEL" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
 - [AIOps with AWS SQS and Event-Driven Ansible]({{ "/README-SQS" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
 - [Proactive Vulnerability Remediation with Satellite, Event-Driven Ansible, and Lightspeed On-Premises]({{ "/README-Satellite-CVE-Remediation" | relative_url }}): removed wip tag
@@ -52,6 +52,8 @@ permalink: /updates/
 
 ### Site and tooling
 
+- Fix SG outbound 404s and add weekly lychee link check
+- Codify multi-use-case Solution Guide pattern (#89)
 - Trim NetBox and Gluware from partner filters
 - Trim CloudNativePG, EDB, and Kafka from partner filters
 - Remove orphan catalog cards for deleted Neuromancer and ZTA guides
@@ -65,10 +67,8 @@ permalink: /updates/
 - Label Automation orchestrator icon mark
 - Label Dev Spaces and Content Tools icon marks
 - Label Zero Trust emblem with readable text
-- Rewrite catalog blurbs without prose double dashes
-- Size OPA light logo as a wordmark, not an icon
 
-_…and 33 more site commits in this window._
+_…and 27 more site commits in this window._
 
 <!-- END:AUTO-UPDATES -->
 
