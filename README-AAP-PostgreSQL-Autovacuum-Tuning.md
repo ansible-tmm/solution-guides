@@ -467,13 +467,6 @@ Quick reference for metrics, settings, and diagnostic views. Settings show the s
 
 ---
 
-## Related Guides
-
-- [AAP HA/DR on OpenShift with CloudNativePG](https://ansible-tmm.github.io/solution-guides/README-AAP-HA-DR-OpenShift) — the deployment topology this autovacuum tuning applies to
-- [High-Availability AAP with EDB PostgreSQL DR](https://ansible-tmm.github.io/solution-guides/README-EDB) — the EDB variant of the same HA/DR problem
-
----
-
 ## Next Steps
 
 <div class="key-terms-closing">

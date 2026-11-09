@@ -688,14 +688,6 @@ Start capturing these metrics before enabling automated rotation so you have a b
 
 ---
 
-## Related Guides
-
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9e0.png" width="20" style="vertical-align:text-bottom;"> **AIOps reference architecture:** [AIOps automation with Ansible](README-AIOps.md) covers the foundational patterns for AI-driven automation that this guide builds on
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f517.png" width="20" style="vertical-align:text-bottom;"> **ServiceNow integration:** [ServiceNow ITSM Ticket Enrichment](README-ServiceNow-ITSM.md) for deeper ITSM automation patterns, including AI-enriched ticket updates
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4cb.png" width="20" style="vertical-align:text-bottom;"> **AI infrastructure:** [AI Infrastructure automation with Ansible](README-IA.md) for deploying your own AI inference endpoint instead of using a cloud API
-
----
-
 ## Sources
 
 ### Red Hat Ansible Automation Platform

@@ -76,10 +76,4 @@ Switch and approval nodes for environment-specific routing, dependency checks, a
 |---------|--------|
 | End-to-end scenario tests | Content in progress |
 
-## Related Guides
-
-- [Common AIOps Use Cases](aiops-use-cases.md)
-- [AIOps automation with Ansible](README-AIOps.md)
-- [AIOps with AWS SQS and Event-Driven Ansible](README-SQS.md)
-- [Event-Driven Remediation with Azure Service Bus](README-AIOps-Azure-Service-Bus.md)
 {% endraw %}

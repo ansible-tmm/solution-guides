@@ -295,12 +295,6 @@ target_host : ok=3    changed=1    unreachable=0    failed=0    skipped=0
 | **Walk** | Connect AAP MCP so the assistant can launch approved job templates; human reviews and approves each execution |
 | **Run** | Fully automated pipeline: compliance scan triggers Lightspeed lookup, AAP patches affected systems within policy-defined maintenance windows, results feed back to Lightspeed for verification |
 
-## Related Guides
-
-- [AIOps automation with Ansible](README-AIOps.md) -- the foundational AIOps reference architecture this guide extends
-- [AI Infrastructure automation with Ansible](README-IA.md) -- deploy the AI backend used by Lightspeed
-- [Unlock AIOps with ServiceNow LEAP and Ansible MCP server](README-AIOps-ServiceNow.md) -- MCP-driven remediation with ServiceNow ITSM integration
-
 ## Sources
 
 - <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible">Red Hat Ansible Automation Platform</a>

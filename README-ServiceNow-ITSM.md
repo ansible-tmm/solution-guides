@@ -276,14 +276,6 @@ This guide demonstrates the lowest-risk entry point for ServiceNow + Ansible aut
 
 ---
 
-## Related Guides
-
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f517.png" width="20" style="vertical-align:text-bottom;"> **LEAP + MCP integration:** [Unlock AIOps with ServiceNow LEAP and Ansible MCP server](README-AIOps-ServiceNow.md)
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4cb.png" width="20" style="vertical-align:text-bottom;"> **AIOps reference architecture:** [AIOps automation with Ansible](README-AIOps.md)
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **Event-Driven Ansible:** <a target="_blank" href="https://www.redhat.com/en/interactive-labs/ansible#event-driven-ansible">Self-paced labs: Getting started with Event-Driven Ansible</a>
-
----
-
 ## Next Steps
 
 | | |
