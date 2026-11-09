@@ -787,6 +787,10 @@ eda2-dc2.example.com eda_pg_host='10.2.2.100' eda_pg_port='5432'
 >
 > All admin passwords and database credentials must match between DC1 and DC2 for seamless failover.
 
+> **Tip:** Containerized AAP uses user systemd.
+>
+> Enable lingering for the install user on every AAP node so services survive logout: `loginctl enable-linger <install_user>`. Remote failover scripts in this guide export `XDG_RUNTIME_DIR` with a remote `id -u` before `systemctl --user`; without linger (or that env var) non-interactive SSH often fails with `Failed to connect to bus`.
+
 #### Step 10: Install AAP on DC1 (active)
 
 ```bash
@@ -881,22 +885,22 @@ fi
 # Start AAP containers by component type
 echo "Starting Platform Gateway nodes in $DATACENTER..."
 for node in "${GATEWAY_NODES[@]}"; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl start --user automation-gateway redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-gateway redis"
 done
 
 echo "Starting Automation Controller nodes in $DATACENTER..."
 for node in "${CONTROLLER_NODES[@]}"; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl start --user automation-controller-web automation-controller-task"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-controller-web automation-controller-task"
 done
 
 echo "Starting Automation Hub nodes in $DATACENTER..."
 for node in "${HUB_NODES[@]}"; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl start --user automation-hub redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-hub redis"
 done
 
 echo "Starting Event-Driven Ansible nodes in $DATACENTER..."
 for node in "${EDA_NODES[@]}"; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl start --user eda-activation-worker redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user eda-activation-worker redis"
 done
 
 # Wait for AAP API
@@ -1064,16 +1068,16 @@ psql -h 10.1.2.100 -U postgres -c "SELECT pg_is_in_recovery();"
 ```bash
 # Stop AAP in DC1
 for node in gateway1-dc1 gateway2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl stop --user automation-gateway redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-gateway redis"
 done
 for node in controller1-dc1 controller2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl stop --user automation-controller-web automation-controller-task"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-controller-web automation-controller-task"
 done
 for node in hub1-dc1 hub2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl stop --user automation-hub redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-hub redis"
 done
 for node in eda1-dc1 eda2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl stop --user eda-activation-worker redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user eda-activation-worker redis"
 done
 
 # Promote DC2 database to primary
@@ -1234,16 +1238,16 @@ ssh pg-dc2-1 "psql -U postgres -c \"SELECT * FROM pg_stat_replication;\""
 
 # 5. Stop AAP in DC2
 for node in gateway1-dc2 gateway2-dc2; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl stop --user automation-gateway redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-gateway redis"
 done
 for node in controller1-dc2 controller2-dc2; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl stop --user automation-controller-web automation-controller-task"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-controller-web automation-controller-task"
 done
 for node in hub1-dc2 hub2-dc2; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl stop --user automation-hub redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-hub redis"
 done
 for node in eda1-dc2 eda2-dc2; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl stop --user eda-activation-worker redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user eda-activation-worker redis"
 done
 
 # 6. Promote DC1 back to primary
@@ -1258,16 +1262,16 @@ ssh pg-dc2-1 "sudo systemctl start edb-as-16"
 
 # 8. Start AAP in DC1
 for node in gateway1-dc1 gateway2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl start --user automation-gateway redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-gateway redis"
 done
 for node in controller1-dc1 controller2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl start --user automation-controller-web automation-controller-task"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-controller-web automation-controller-task"
 done
 for node in hub1-dc1 hub2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl start --user automation-hub redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-hub redis"
 done
 for node in eda1-dc1 eda2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl start --user eda-activation-worker redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user eda-activation-worker redis"
 done
 
 # 9. Update Global Load Balancer back to DC1
@@ -1318,7 +1322,7 @@ echo "Checking EFM cluster status..."
 
 # Stop AAP in DC1
 for node in gateway1-dc1 gateway2-dc1 controller1-dc1 controller2-dc1 hub1-dc1 hub2-dc1 eda1-dc1 eda2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl stop --user automation-*"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-*"
 done
 
 # Promote DC2 database
@@ -1326,7 +1330,7 @@ ssh pg-dc2-1 "sudo -u enterprisedb /usr/edb/as16/bin/pg_ctl promote -D /var/lib/
 
 # Start AAP in DC2
 for node in gateway1-dc2 gateway2-dc2 controller1-dc2 controller2-dc2 hub1-dc2 hub2-dc2 eda1-dc2 eda2-dc2; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl start --user automation-*"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-*"
 done
 
 # Update Global Load Balancer
@@ -1372,13 +1376,13 @@ curl -k -X POST -H "Authorization: Bearer ${AAP_TOKEN}" \
 # (Manual via AAP UI or API)
 
 # 2. Stop services
-ssh controller1-dc1 "export XDG_RUNTIME_DIR=/run/user/$(id -u);  systemctl stop --user automation-controller-web automation-controller-task"
+ssh controller1-dc1 "export XDG_RUNTIME_DIR=/run/user/\$(id -u);  systemctl stop --user automation-controller-web automation-controller-task"
 
 # 3. Perform maintenance
 ssh controller1-dc1 "dnf update -y && reboot"
 
 # 4. Start services
-ssh controller1-dc1 "export XDG_RUNTIME_DIR=/run/user/$(id -u);  systemctl start --user automation-controller-web automation-controller-task"
+ssh controller1-dc1 "export XDG_RUNTIME_DIR=/run/user/\$(id -u);  systemctl start --user automation-controller-web automation-controller-task"
 
 # 5. Verify health
 curl -k https://controller1-dc1/api/v2/ping/
@@ -1415,15 +1419,6 @@ By implementing this multi-datacenter Active-Passive DR architecture, you have d
 
 ---
 
-## Related Guides
-
-- [Red Hat Ansible Automation Platform Documentation](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/)
-- [AAP 2.6 Containerized Installation Guide](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/containerized_installation)
-- [AAP 2.6 Container Enterprise Topology](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/tested_deployment_models/container-topologies#cont-b-env-a)
-- [EDB Postgres Advanced Server Documentation](https://www.enterprisedb.com/docs/epas/latest/)
-- [EDB Failover Manager Documentation](https://www.enterprisedb.com/docs/efm/latest/)
-- [Barman Documentation](https://www.enterprisedb.com/docs/supported-open-source/barman/)
-
 This architecture ensures automation availability for workflows that cannot tolerate downtime -- network orchestration, security compliance enforcement, multi-cloud deployments, and automated incident response.
 
 ---
@@ -1438,8 +1433,8 @@ This architecture ensures automation availability for workflows that cannot tole
 
 ---
 
-**Document Version:** 1.1
-**Last Review:** 2026-10-09
+**Document Version:** 1.2
+**Last Review:** 2026-11-09
 **Based On:** AAP Containerized Multi-Datacenter DR Architecture v2.0 (2026-03-31)
 
 {% endraw %}
