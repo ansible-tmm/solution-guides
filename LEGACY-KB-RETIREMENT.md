@@ -14,11 +14,11 @@ GitHub tracking only (not published on the AAP Guides microsite). Use this file 
 
 Anyone with Jira access can open the tickets above to see migration status. The KB articles may remain on access.redhat.com until docs land; they are no longer promoted from the AAP Guides catalog.
 
-## Still under Legacy (not retired)
+## Migrated into a multi-use-case guide
 
-| Catalog card | Notes |
-|--------------|--------|
-| ServiceNow ITSM Ticket Enrichment | Remains in Legacy until its migration path is complete (`README-ServiceNow-ITSM.md`) |
+| Former Legacy catalog card | Destination |
+|----------------------------|-------------|
+| ServiceNow ITSM Ticket Enrichment | [ServiceNow ITSM automation with Ansible](README-AIOps-ServiceNow.md#use-case-a-servicenow-itsm-ticket-enrichment) (Use Case A). Legacy path [`README-ServiceNow-ITSM.md`](README-ServiceNow-ITSM.md) redirects. The Legacy gallery on the home page is empty and removed. |
 
 ## Why we removed them
 

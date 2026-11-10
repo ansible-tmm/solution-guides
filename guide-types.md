@@ -92,7 +92,7 @@ inline_edit: true
         <div class="guide-type-track__pills">
           <a href="{{ '/README-AIOps' | relative_url }}" class="guide-type-example-pill">AIOps automation with Ansible</a>
           <a href="{{ '/README-AIOps-Splunk-ITSI' | relative_url }}" class="guide-type-example-pill">AIOps with Splunk and Event-Driven Ansible</a>
-          <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}" class="guide-type-example-pill">Unlock AIOps with ServiceNow LEAP and Ansible MCP server</a>
+          <a href="{{ '/README-AIOps-ServiceNow' | relative_url }}" class="guide-type-example-pill">ServiceNow ITSM automation with Ansible</a>
         </div>
       </div>
     </article>

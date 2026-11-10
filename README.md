@@ -12,7 +12,7 @@ Solution guides for AI-driven automation with Ansible Automation Platform.
 | AIOps with AWS SQS and Event-Driven Ansible | [README-SQS.md](README-SQS.md) | |
 | AI Infrastructure automation with Ansible | [README-IA.md](README-IA.md) | [access.redhat.com](https://access.redhat.com/articles/7118390) |
 | Configuring Ansible Lightspeed intelligent assistant with Red Hat AI Inference Server on RHEL | | [access.redhat.com](https://access.redhat.com/articles/7130595) |
-| Unlock AIOps with ServiceNow LEAP and Ansible MCP server | [README-AIOps-ServiceNow.md](README-AIOps-ServiceNow.md) | [access.redhat.com](https://access.redhat.com/articles/7127603) |
+| ServiceNow ITSM automation with Ansible | [README-AIOps-ServiceNow.md](README-AIOps-ServiceNow.md) (ticket enrichment and LEAP + MCP AIOps) | [access.redhat.com](https://access.redhat.com/articles/7127603) |
 | Intelligent Network Automation with Gluware and Ansible | [README-Gluware-Network-Automation.md](README-Gluware-Network-Automation.md) | |
 | Consuming OpenShift API Resources with EDA and Kafka | [README-OpenShift-EDA-Kafka.md](README-OpenShift-EDA-Kafka.md) | |
 | AAP HA/DR on OpenShift with CloudNativePG | [README-AAP-HA-DR-OpenShift.md](README-AAP-HA-DR-OpenShift.md) | |

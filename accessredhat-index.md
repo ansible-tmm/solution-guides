@@ -16,12 +16,8 @@ Browse all solution guides, filter by partner or type, and find contributing gui
 - [AIOps automation with Ansible - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-AIOps) (Foundational)
 - [AIOps with Splunk and Event-Driven Ansible - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-AIOps-Splunk-ITSI)
 - [Automated Incident Remediation with IBM Instana - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-Instana-AIOps)
-- [Unlock AIOps with ServiceNow LEAP and Ansible MCP server - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-AIOps-ServiceNow)
+- [ServiceNow ITSM automation with Ansible - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-AIOps-ServiceNow) (ticket enrichment and LEAP + MCP)
 
 **Infrastructure Automation**
 
 - [High-Availability AAP with EDB PostgreSQL Active-Passive DR - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-EDB)
-
-**ServiceNow ITSM Automation with Ansible Automation Platform**
-
-- [ServiceNow ITSM Ticket Enrichment Automation - Solution Guide](https://ansible-tmm.github.io/solution-guides/README-ServiceNow-ITSM)

@@ -178,10 +178,10 @@ patternfly: true
             </span>
           </div>
           <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">Unlock AIOps with ServiceNow LEAP and Ansible MCP server</h3>
+            <h3 class="pf-v6-c-card__title-text">ServiceNow ITSM automation with Ansible</h3>
           </div>
           <div class="pf-v6-c-card__body">
-            Cut incident MTTR from hours to minutes: LEAP identifies remediation opportunities, the Ansible MCP server surfaces approved playbooks, and governed execution closes incidents with full audit trail.
+            Enrich ServiceNow incidents with Red Hat Lightspeed CVE context, then unlock governed AIOps: LEAP maps opportunities, the Ansible MCP server surfaces approved playbooks, and AAP remediates with full audit trail.
           </div>
           <div class="pf-v6-c-card__footer">
             <span class="card-partner-logo-set">
@@ -990,30 +990,6 @@ patternfly: true
       <p>Writing a new guide? Start with the <a href="{{ '/best-practices/' | relative_url }}">Best Practices hub</a>. Choose the Solution Guide or Implementation Guide framework, scoring rubric, and starter template for your content type.</p>
     </div>
 
-    <details class="legacy-guides">
-      <summary>Legacy Solution Guides (Under Review)</summary>
-      <div class="legacy-guides__body">
-      <p class="legacy-guides__intro">These solution guides were published on access.redhat.com before this repository existed. They are being reviewed and will be migrated to the new format as full markdown guides. Retired KB-only cards (EDA getting started, network fact gathering, network backup) are tracked in the repo file <code>LEGACY-KB-RETIREMENT.md</code> (GitHub only, not on this site).</p>
-      <div class="pf-v6-l-gallery cards-gallery legacy-guides__gallery">
-        <a href="{{ '/README-ServiceNow-ITSM' | relative_url }}" class="card-link" data-tags="servicenow,aiops,solution,published">
-          <div class="pf-v6-c-card">
-            <div class="pf-v6-c-card__title">
-              <h3 class="pf-v6-c-card__title-text">ServiceNow ITSM Ticket Enrichment</h3>
-            </div>
-            <div class="pf-v6-c-card__body">
-              Automate ServiceNow ticket creation and enrich incidents with CVE data from Red Hat Insights.
-            </div>
-            <div class="pf-v6-c-card__footer">
-              <span class="card-partner-logo-set">
-                <img src="{{ '/assets/images/logos/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo card-partner-logo--light">
-                <img src="{{ '/assets/images/logos/servicenow-logo-dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-              </span>
-            </div>
-          </div>
-        </a>
-      </div>
-      </div>
-    </details>
   </div>
 </div>
 
