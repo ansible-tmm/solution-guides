@@ -421,7 +421,7 @@ patternfly: true
                 <h3 class="pf-v6-c-card__title-text">Network automation with Ansible</h3>
               </div>
               <div class="pf-v6-c-card__body">
-                Foundational reference for Crawl/Walk/Run network automation: source of truth as inventory, event-driven config, and approved job templates for remediation and failover. Start here before the guides below.
+                Foundational NetOps as Code reference: nine use cases from backup and facts through SoT, compliance, health checks, NOS upgrades, Event-Driven Ansible troubleshooting, and device lifecycle. Start here before the guides below.
               </div>
             </div>
           </div>
