@@ -13,10 +13,13 @@
   }
 </style>
 
-<div class="guide-hero-callout guide-hero-partner" role="img" aria-label="Ansible Automation Platform and OpenShift Virtualization">
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--openshift" role="img" aria-label="Ansible Automation Platform and Red Hat OpenShift">
   <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
   <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
-  <span class="guide-hero-partner__partner" style="font-size:1.1rem;font-weight:700;letter-spacing:0.01em;">OpenShift Virtualization</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set">
+    <img src="assets/images/logos/Logo-Red_Hat-OpenShift-A-Standard-RGB.Large_logo.jpeg" alt="Red Hat OpenShift" class="card-partner-logo card-partner-logo--light" width="106" height="36">
+    <img src="assets/images/logos/Logo-Red_Hat-OpenShift-A-Reverse-RGB.Large_logo.jpeg" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true" width="106" height="36">
+  </span>
 </div>
 
 ## Overview

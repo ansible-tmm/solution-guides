@@ -524,6 +524,13 @@ table.guide-table-event-sources {
   max-width: 120px;
 }
 
+// Wide OpenShift product logo (2000x678)
+.guide-hero-partner--openshift .guide-hero-partner__partner.card-partner-logo-set .card-partner-logo {
+  height: auto;
+  max-height: 36px;
+  max-width: 140px;
+}
+
 .guide-hero-partner--gluware .guide-hero-partner__partner.card-partner-logo-set .card-partner-logo {
   height: auto;
   max-height: 32px;
@@ -3321,6 +3328,14 @@ details.legacy-guides > *:not(summary):not(.legacy-guides__body) {
   height: auto;
   max-height: 22px;
   max-width: 108px;
+  width: auto;
+}
+
+// Wide OpenShift product logo (2000x678)
+.card-partner-logo-set--openshift .card-partner-logo {
+  height: auto;
+  max-height: 28px;
+  max-width: 120px;
   width: auto;
 }
 

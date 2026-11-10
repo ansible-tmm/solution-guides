@@ -745,8 +745,9 @@ patternfly: true
             Closed-loop VM recovery on OpenShift Virtualization: Event-Driven Ansible consumes health signals, Ansible Automation Platform runs governed remediations, and operators keep RBAC and approval gates.
           </div>
           <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set">
-              <img src="{{ '/assets/images/logos/aap-ansible-icon.png' | relative_url }}" alt="Ansible Automation Platform" class="card-partner-logo" width="36" height="36">
+            <span class="card-partner-logo-set card-partner-logo-set--openshift">
+              <img src="{{ '/assets/images/logos/Logo-Red_Hat-OpenShift-A-Standard-RGB.Large_logo.jpeg' | relative_url }}" alt="Red Hat OpenShift" class="card-partner-logo card-partner-logo--light">
+              <img src="{{ '/assets/images/logos/Logo-Red_Hat-OpenShift-A-Reverse-RGB.Large_logo.jpeg' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
             </span>
           </div>
         </div>
