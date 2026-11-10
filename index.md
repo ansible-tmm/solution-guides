@@ -30,16 +30,16 @@ patternfly: true
     <div class="cards-sidebar__section">
       <h4 class="cards-sidebar__title">Categories</h4>
       <label class="cards-sidebar__checkbox cards-sidebar__checkbox--track">
-        <input type="checkbox" value="aiops"> AIOps
+        <input type="radio" name="guide-category" value="aiops"> AIOps
       </label>
       <label class="cards-sidebar__checkbox cards-sidebar__checkbox--track">
-        <input type="checkbox" value="network"> Network automation
+        <input type="radio" name="guide-category" value="network"> Network automation
       </label>
       <label class="cards-sidebar__checkbox cards-sidebar__checkbox--track">
-        <input type="checkbox" value="security"> Security automation
+        <input type="radio" name="guide-category" value="security"> Security automation
       </label>
       <label class="cards-sidebar__checkbox cards-sidebar__checkbox--track">
-        <input type="checkbox" value="virtualization"> Virtualization
+        <input type="radio" name="guide-category" value="virtualization"> Virtualization
       </label>
     </div>
     <div class="cards-sidebar__section">
@@ -1255,16 +1255,9 @@ patternfly: true
     cb.addEventListener('change', filterCards);
   });
 
-  // Categories are exclusive (one at a time). Partners stay multi-select.
+  // Categories are radios (one at a time). Partners stay multi-select checkboxes.
   trackCheckboxes.forEach(function (cb) {
-    cb.addEventListener('change', function () {
-      if (cb.checked) {
-        trackCheckboxes.forEach(function (other) {
-          if (other !== cb) other.checked = false;
-        });
-      }
-      filterCards();
-    });
+    cb.addEventListener('change', filterCards);
   });
 
   partnerCheckboxes.forEach(function (cb) {
