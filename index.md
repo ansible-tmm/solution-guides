@@ -1036,8 +1036,39 @@ patternfly: true
     { section: document.getElementById('virtualization'), gallery: document.getElementById('virtualization-gallery'), hero: document.getElementById('virtualization-foundational-hero') },
     { section: document.getElementById('implementation-guides'), gallery: document.getElementById('implementation-gallery') }
   ];
+  var trackSectionIds = {
+    aiops: 'aiops-solutions',
+    network: 'network-automation',
+    security: 'security-automation',
+    virtualization: 'virtualization'
+  };
+  var solutionTrackOrder = ['aiops-solutions', 'network-automation', 'security-automation', 'virtualization']
+    .map(function (id) { return document.getElementById(id); })
+    .filter(Boolean);
 
   if (!headerInput) return;
+
+  function restoreTrackSectionOrder() {
+    if (!solutionGuidesSection || !solutionTrackOrder.length) return;
+    var heading = solutionGuidesSection.querySelector('.cards-guide-section__heading');
+    var anchor = heading || null;
+    solutionTrackOrder.forEach(function (el) {
+      if (anchor) {
+        solutionGuidesSection.insertBefore(el, anchor.nextSibling);
+        anchor = el;
+      } else {
+        solutionGuidesSection.appendChild(el);
+      }
+    });
+  }
+
+  function promoteHomeTrackSection(track) {
+    if (!solutionGuidesSection || !trackSectionIds[track]) return;
+    var home = document.getElementById(trackSectionIds[track]);
+    if (!home) return;
+    var heading = solutionGuidesSection.querySelector('.cards-guide-section__heading');
+    solutionGuidesSection.insertBefore(home, heading ? heading.nextSibling : solutionGuidesSection.firstChild);
+  }
 
   function getCardText(card) {
     var title = card.querySelector('.pf-v6-c-card__title-text');
@@ -1206,6 +1237,15 @@ patternfly: true
 
     if (cardsMain) {
       cardsMain.classList.toggle('cards-main--partner-filter', activePartners.length > 0);
+      cardsMain.classList.toggle('cards-main--category-filter', activeTracks.length > 0);
+    }
+
+    // Single category selected: put that category's foundational section first so
+    // cross-listed cards from earlier galleries (e.g. AIOps+Security) cannot sit above it.
+    if (activeTracks.length === 1) {
+      promoteHomeTrackSection(activeTracks[0]);
+    } else {
+      restoreTrackSectionOrder();
     }
   }
 
@@ -1215,8 +1255,16 @@ patternfly: true
     cb.addEventListener('change', filterCards);
   });
 
+  // Categories are exclusive (one at a time). Partners stay multi-select.
   trackCheckboxes.forEach(function (cb) {
-    cb.addEventListener('change', filterCards);
+    cb.addEventListener('change', function () {
+      if (cb.checked) {
+        trackCheckboxes.forEach(function (other) {
+          if (other !== cb) other.checked = false;
+        });
+      }
+      filterCards();
+    });
   });
 
   partnerCheckboxes.forEach(function (cb) {
@@ -1229,6 +1277,7 @@ patternfly: true
     if (publishedCheckbox) publishedCheckbox.checked = true;
     if (wipCheckbox) wipCheckbox.checked = true;
     headerInput.value = '';
+    restoreTrackSectionOrder();
     filterCards();
   });
 

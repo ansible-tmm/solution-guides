@@ -2392,10 +2392,14 @@ b {
   margin-top: 0;
 }
 
-// Partner filter: drop track chrome so Solution and Implementation card grids share the same column.
+// Partner or category filter: drop track chrome so card grids share the same column
+// and foundational / cross-listed cards can stack without AIOps/Network/Security titles.
 .cards-main--partner-filter .cards-track-section:not(.cards-track-section--flat) .cards-track-section__heading,
 .cards-main--partner-filter .cards-track-section:not(.cards-track-section--flat) .cards-track-section__intro,
-.cards-main--partner-filter .cards-track-section:not(.cards-track-section--flat) .cards-track-section__empty {
+.cards-main--partner-filter .cards-track-section:not(.cards-track-section--flat) .cards-track-section__empty,
+.cards-main--category-filter .cards-track-section:not(.cards-track-section--flat) .cards-track-section__heading,
+.cards-main--category-filter .cards-track-section:not(.cards-track-section--flat) .cards-track-section__intro,
+.cards-main--category-filter .cards-track-section:not(.cards-track-section--flat) .cards-track-section__empty {
   display: none;
 }
 
