@@ -20,13 +20,12 @@ Solution guides for AI-driven automation with Ansible Automation Platform.
 | Automated runtime mitigation for Linux OT hosts | [README-Falco-runtime-mitigation.md](README-Falco-runtime-mitigation.md) | |
 | PQC Discovery - Post-Quantum Cryptography readiness on RHEL | [README-PQC-Discovery.md](README-PQC-Discovery.md) | |
 | Automated CVE response and compliance verification with CME | [README-CME.md](README-CME.md) | |
-| Automated CVE response with policy-gated patching and compliance evidence | [README-CVE-defend-contain-comply.md](README-CVE-defend-contain-comply.md) | |
+| Security automation with Splunk and Event-Driven Ansible | [README-Splunk-Security-EDA.md](README-Splunk-Security-EDA.md) (brute-force remediation and CVE defend/contain/comply) | |
 | AI-driven CVE routing and remediation with Automation orchestrator | [README-AO-driven-CVE-routing.md](README-AO-driven-CVE-routing.md) | |
 | Zero Trust Architecture infrastructure with Ansible Automation Platform | [README-ZTA-with-AAP.md](README-ZTA-with-AAP.md) | |
 | Enforcing compliance and network governance with Policy as Code | [README-Compliance-Governance-with-policy.md](README-Compliance-Governance-with-policy.md) | |
 | RHEL 9 STIG and CIS compliance scanning with Ansible | [README-STIG-CIS-compliance.md](README-STIG-CIS-compliance.md) | |
 | Automated vulnerability remediation with Lightwell and Ansible | [README-AAP-LightWell-AO.md](README-AAP-LightWell-AO.md) | |
-| Automated brute-force remediation with Event-Driven Ansible | [README-BruteForce-AAP.md](README-BruteForce-AAP.md) | |
 
 ## Contributing
 

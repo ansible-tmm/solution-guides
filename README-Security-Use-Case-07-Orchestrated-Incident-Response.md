@@ -21,7 +21,7 @@ SIEM notification of attacks such as brute force triggers an orchestrated respon
 
 Start from the [Common security automation use cases hub](security-use-cases.md) or the foundational [Security automation with Ansible](README-Security-Automation.md) guide.
 
-**Related catalog depth:** [Automated Brute-Force Remediation](README-BruteForce-AAP.md), [CVE defend contain comply](README-CVE-defend-contain-comply.md)
+**Related catalog depth:** [Security automation with Splunk -- brute-force](README-Splunk-Security-EDA.md#use-case-a-automated-brute-force-remediation), [CVE response](README-Splunk-Security-EDA.md#use-case-b-automated-cve-response)
 
 ## Background
 

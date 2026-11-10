@@ -266,6 +266,6 @@ Security automation with Ansible is a journey from continuous assessment and tru
 ## Next Steps
 
 1. Browse the [Common security automation use cases hub](security-use-cases.md).
-2. For concrete depth, open [RHEL 9 STIG and CIS compliance](README-STIG-CIS-compliance.md), [Automated Brute-Force Remediation](README-BruteForce-AAP.md), [ZTA with AAP](README-ZTA-with-AAP.md), or [Lightwell](README-AAP-LightWell-AO.md).
+2. For concrete depth, open [RHEL 9 STIG and CIS compliance](README-STIG-CIS-compliance.md), [Security automation with Splunk and EDA](README-Splunk-Security-EDA.md), [ZTA with AAP](README-ZTA-with-AAP.md), or [Lightwell](README-AAP-LightWell-AO.md).
 3. Return to the catalog **Security automation** section for the full set of guides.
 {% endraw %}

@@ -21,7 +21,7 @@ Using advisory data (CVSS, CWE), AAP gathers compensating controls that match th
 
 Start from the [Common security automation use cases hub](security-use-cases.md) or the foundational [Security automation with Ansible](README-Security-Automation.md) guide.
 
-**Related catalog depth:** [CVE response with CME](README-CME.md), [CVE defend contain comply](README-CVE-defend-contain-comply.md)
+**Related catalog depth:** [CVE response with CME](README-CME.md), [Security automation with Splunk -- CVE response](README-Splunk-Security-EDA.md#use-case-b-automated-cve-response)
 
 ## Background
 

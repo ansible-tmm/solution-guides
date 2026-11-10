@@ -578,7 +578,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-BruteForce-AAP' | relative_url }}" class="card-link" data-tags="splunk,security,solution,published">
+      <a href="{{ '/README-Splunk-Security-EDA' | relative_url }}" class="card-link" data-tags="splunk,security,solution,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header card-header--labels">
             <span class="pf-v6-c-label pf-m-green">
@@ -592,38 +592,10 @@ patternfly: true
             </span>
           </div>
           <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">Automated Brute-Force Remediation with Event-Driven Ansible</h3>
+            <h3 class="pf-v6-c-card__title-text">Security automation with Splunk and Event-Driven Ansible</h3>
           </div>
           <div class="pf-v6-c-card__body">
-            Closed-loop brute-force containment: Splunk detects SSH authentication failures, EDA routes the alert to AAP, which revokes HashiCorp Vault database credentials and stops the compromised service in seconds.
-          </div>
-          <div class="pf-v6-c-card__footer">
-            <span class="card-partner-logo-set">
-              <img src="{{ '/assets/images/logos/splunk-logo.png' | relative_url }}" alt="Splunk" class="card-partner-logo card-partner-logo--light">
-              <img src="{{ '/assets/images/logos/splunk-logo-dark.png' | relative_url }}" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <a href="{{ '/README-CVE-defend-contain-comply' | relative_url }}" class="card-link" data-tags="splunk,security,solution,published">
-        <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header card-header--labels">
-            <span class="pf-v6-c-label pf-m-green">
-              <span class="pf-v6-c-label__content">
-                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
-                Solution Guide
-              </span>
-            </span>
-            <span class="pf-v6-c-label card-label-track card-label-track--security">
-              <span class="pf-v6-c-label__content">Security</span>
-            </span>
-          </div>
-          <div class="pf-v6-c-card__title">
-            <h3 class="pf-v6-c-card__title-text">Automated CVE Response with Policy-Gated Patching and Compliance Evidence</h3>
-          </div>
-          <div class="pf-v6-c-card__body">
-            Three-phase automated CVE response. EDA contains the threat in seconds from a Splunk alert, OPA gates the patch with policy checks and human approval, then a compliance pipeline generates before/after evidence and a scanned container image.
+            Closed-loop security from Splunk alerts: revoke Vault credentials and stop compromised services on brute-force detection, then contain CVEs, gate patches with OPA and approval, and produce compliance evidence with a scanned container image.
           </div>
           <div class="pf-v6-c-card__footer">
             <span class="card-partner-logo-set">

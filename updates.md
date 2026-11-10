@@ -27,6 +27,7 @@ permalink: /updates/
 
 ### Guide updates
 
+- [Security automation with Splunk and Event-Driven Ansible]({{ "/README-Splunk-Security-EDA" | relative_url }}): Merged Splunk Security brute-force and CVE defend/contain/comply into one multi-use-case Solution Guide. Legacy URLs redirect to the matching anchors. AIOps Splunk ITSI guide unchanged.
 - [Event-Driven Network Automation with NetBox and AAP]({{ "/README-NetBox-EDA" | relative_url }}): Merged NetBox SoT and WAN failover into one multi-use-case Solution Guide (Use Case A source of truth; Use Case B WAN failover). Legacy URLs redirect to the matching anchors.
 - [High Availability and Disaster Recovery for AAP 2.7 on OpenShift]({{ "/README-AAP-HA-DR-OpenShift" | relative_url }}): docs: link public AAP HA DR example
 - [PostgreSQL Autovacuum Tuning Guide for Ansible Automation Platform]({{ "/README-AAP-PostgreSQL-Autovacuum-Tuning" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
