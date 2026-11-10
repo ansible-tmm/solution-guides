@@ -38,6 +38,9 @@ patternfly: true
       <label class="cards-sidebar__checkbox cards-sidebar__checkbox--track">
         <input type="checkbox" value="security"> Security automation
       </label>
+      <label class="cards-sidebar__checkbox cards-sidebar__checkbox--track">
+        <input type="checkbox" value="virtualization"> Virtualization
+      </label>
     </div>
     <div class="cards-sidebar__section">
       <h4 class="cards-sidebar__title">Partners</h4>
@@ -399,7 +402,30 @@ patternfly: true
             <i class="fas fa-info-circle" aria-hidden="true"></i>
           </a>
         </div>
-        <p class="cards-track-section__intro">Network source of truth, configuration, and failover patterns. NetBox acts as inventory and intent, with Event-Driven Ansible where state changes should trigger governed execution.</p>
+        <p class="cards-track-section__intro">Network source of truth, configuration, and failover patterns. Start with the foundational guide below, then explore NetBox, Gluware, and related partner guides. Event-Driven Ansible applies where state changes should trigger governed execution.</p>
+        <a href="{{ '/README-Network-Automation' | relative_url }}" id="network-foundational-hero" class="card-link card-link--foundational-hero" data-tags="network,solution,foundational,published">
+          <div class="pf-v6-c-card card-foundational card-foundational--hero">
+            <div class="pf-v6-c-card__header card-header--labels">
+              <span class="pf-v6-c-label pf-m-green">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                  Solution Guide
+                </span>
+              </span>
+              <span class="pf-v6-c-label card-label-style card-label-style--foundational">
+                <span class="pf-v6-c-label__content">Foundational</span>
+              </span>
+            </div>
+            <div class="pf-v6-c-card__main card-foundational--hero__main">
+              <div class="pf-v6-c-card__title">
+                <h3 class="pf-v6-c-card__title-text">Network automation with Ansible</h3>
+              </div>
+              <div class="pf-v6-c-card__body">
+                Foundational reference for Crawl/Walk/Run network automation: source of truth as inventory, event-driven config, and approved job templates for remediation and failover. Start here before the guides below.
+              </div>
+            </div>
+          </div>
+        </a>
         <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="network-gallery">
 
       <a href="{{ '/README-NetBox-SoT-EDA-Config' | relative_url }}" class="card-link" data-tags="netbox,network,solution,published">
@@ -526,7 +552,30 @@ patternfly: true
             <i class="fas fa-info-circle" aria-hidden="true"></i>
           </a>
         </div>
-        <p class="cards-track-section__intro">Automated security response, compliance enforcement, and threat mitigation using Ansible Automation Platform.</p>
+        <p class="cards-track-section__intro">Automated security response, compliance enforcement, and threat mitigation using Ansible Automation Platform. Start with the foundational guide below, then explore SIEM, runtime, vulnerability, and compliance partner guides.</p>
+        <a href="{{ '/README-Security-Automation' | relative_url }}" id="security-foundational-hero" class="card-link card-link--foundational-hero" data-tags="security,solution,foundational,published">
+          <div class="pf-v6-c-card card-foundational card-foundational--hero">
+            <div class="pf-v6-c-card__header card-header--labels">
+              <span class="pf-v6-c-label pf-m-green">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                  Solution Guide
+                </span>
+              </span>
+              <span class="pf-v6-c-label card-label-style card-label-style--foundational">
+                <span class="pf-v6-c-label__content">Foundational</span>
+              </span>
+            </div>
+            <div class="pf-v6-c-card__main card-foundational--hero__main">
+              <div class="pf-v6-c-card__title">
+                <h3 class="pf-v6-c-card__title-text">Security automation with Ansible</h3>
+              </div>
+              <div class="pf-v6-c-card__body">
+                Foundational reference for Crawl/Walk/Run security automation: detect, decide, and remediate with EDA and governed AAP jobs. Start here before the guides below.
+              </div>
+            </div>
+          </div>
+        </a>
         <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="security-gallery">
 
       <a href="{{ '/README-Falco-runtime-mitigation' | relative_url }}" class="card-link" data-tags="security,solution,published">
@@ -810,6 +859,69 @@ patternfly: true
         </div>
       </a>
       </div>
+      </div>
+
+      <div id="virtualization" class="cards-track-section">
+        <div class="cards-track-section__heading">
+          <h3 class="cards-track-section__title">Virtualization</h3>
+          <a href="{{ '/guide-types' | relative_url }}#virtualization" class="guide-section__info" data-tooltip="VM lifecycle and self-healing patterns with Ansible Automation Platform and OpenShift Virtualization." aria-label="Learn about Virtualization">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
+          </a>
+        </div>
+        <p class="cards-track-section__intro">VM lifecycle and self-healing on OpenShift Virtualization and related platforms. Start with the foundational guide below, then explore event-driven remediation for unhealthy VMs.</p>
+        <a href="{{ '/README-Virtualization' | relative_url }}" id="virtualization-foundational-hero" class="card-link card-link--foundational-hero" data-tags="virtualization,solution,foundational,published">
+          <div class="pf-v6-c-card card-foundational card-foundational--hero">
+            <div class="pf-v6-c-card__header card-header--labels">
+              <span class="pf-v6-c-label pf-m-green">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                  Solution Guide
+                </span>
+              </span>
+              <span class="pf-v6-c-label card-label-style card-label-style--foundational">
+                <span class="pf-v6-c-label__content">Foundational</span>
+              </span>
+            </div>
+            <div class="pf-v6-c-card__main card-foundational--hero__main">
+              <div class="pf-v6-c-card__title">
+                <h3 class="pf-v6-c-card__title-text">Virtualization automation with Ansible</h3>
+              </div>
+              <div class="pf-v6-c-card__body">
+                Foundational reference for Crawl/Walk/Run virtualization automation: inventory and lifecycle jobs first, then event-driven healing of VMs on OpenShift Virtualization. Start here before the guides below.
+              </div>
+            </div>
+          </div>
+        </a>
+        <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="virtualization-gallery">
+
+      <a href="{{ '/README-Self-Healing-VMs-OpenShift' | relative_url }}" class="card-link" data-tags="redhat,virtualization,solution,wip">
+        <div class="pf-v6-c-card">
+          <div class="pf-v6-c-card__header card-header--labels">
+            <span class="pf-v6-c-label pf-m-orange">
+              <span class="pf-v6-c-label__content">
+                <i class="fas fa-wrench pf-v6-c-label__icon"></i>
+                Work in Progress
+              </span>
+            </span>
+            <span class="pf-v6-c-label card-label-track card-label-track--virtualization">
+              <span class="pf-v6-c-label__content">Virtualization</span>
+            </span>
+          </div>
+          <div class="pf-v6-c-card__title">
+            <h3 class="pf-v6-c-card__title-text">Self-healing VMs on OpenShift</h3>
+          </div>
+          <div class="pf-v6-c-card__body">
+            Closed-loop VM recovery on OpenShift Virtualization: Event-Driven Ansible consumes health signals, Ansible Automation Platform runs governed remediations, and operators keep RBAC and approval gates.
+          </div>
+          <div class="pf-v6-c-card__footer">
+            <span class="card-partner-logo-set">
+              <img src="{{ '/assets/images/logos/aap-ansible-icon.png' | relative_url }}" alt="Ansible Automation Platform" class="card-partner-logo" width="36" height="36">
+            </span>
+          </div>
+        </div>
+      </a>
+
+        </div>
       </div>
 
     </section>

@@ -78,7 +78,7 @@ inline_edit: true
 </div>
 <section class="guide-types-tracks">
   <h2 id="solution-guide-categories" class="guide-types-tracks__title">Solution Guide categories</h2>
-  <p class="guide-type-panel__tracks-intro">Solution Guides are grouped into <strong>categories</strong> by domain: AIOps, Network automation, and Security automation. All categories use the same guide framework, validation expectations, and maturity path structure. Within a category, one guide may carry a <strong>Foundational</strong> badge -- start there before partner integrations (today: <a href="{{ '/README-AIOps' | relative_url }}">AIOps automation with Ansible</a>, including <a href="{{ '/README-AIOps' | relative_url }}#common-aiops-use-cases">six operational use cases</a> and Crawl/Walk/Run).</p>
+  <p class="guide-type-panel__tracks-intro">Solution Guides are grouped into <strong>categories</strong> by domain: AIOps, Network automation, Security automation, and Virtualization. All categories use the same guide framework, validation expectations, and maturity path structure. Within a category, one guide may carry a <strong>Foundational</strong> badge -- start there before partner integrations (AIOps, Network, Security, and Virtualization each have a foundational entry; AIOps also includes <a href="{{ '/README-AIOps' | relative_url }}#common-aiops-use-cases">six operational use cases</a> and Crawl/Walk/Run).</p>
 
   <div class="guide-type-tracks">
     <article class="guide-type-track guide-type-track--aiops">
@@ -106,6 +106,7 @@ inline_edit: true
       <div class="guide-type-track__examples">
         <span class="guide-type-track__examples-label">Examples</span>
         <div class="guide-type-track__pills">
+          <a href="{{ '/README-Network-Automation' | relative_url }}" class="guide-type-example-pill">Network automation with Ansible</a>
           <a href="{{ '/README-NetBox-WAN-EDA-Failover' | relative_url }}" class="guide-type-example-pill">Event-driven WAN circuit failover with NetBox and AAP</a>
           <a href="{{ '/README-NetBox-SoT-EDA-Config' | relative_url }}" class="guide-type-example-pill">Event-driven network source of truth with NetBox and AAP</a>
         </div>
@@ -121,9 +122,25 @@ inline_edit: true
       <div class="guide-type-track__examples">
         <span class="guide-type-track__examples-label">Examples</span>
         <div class="guide-type-track__pills">
+          <a href="{{ '/README-Security-Automation' | relative_url }}" class="guide-type-example-pill">Security automation with Ansible</a>
           <a href="{{ '/README-Falco-runtime-mitigation' | relative_url }}" class="guide-type-example-pill">Automated runtime mitigation for Linux OT hosts</a>
           <a href="{{ '/README-CME' | relative_url }}" class="guide-type-example-pill">CVE response and compliance verification with CME</a>
           <a href="{{ '/README-STIG-CIS-compliance' | relative_url }}" class="guide-type-example-pill">RHEL 9 STIG and CIS compliance scanning</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="guide-type-track guide-type-track--virtualization">
+      <div class="guide-type-track__header">
+        <span class="guide-type-track__badge">Virtualization</span>
+        <h3 id="virtualization" class="guide-type-track__title"><a href="{{ '/' | relative_url }}#virtualization">Virtualization</a></h3>
+      </div>
+      <p class="guide-type-track__body">Guides for <strong>VM lifecycle and self-healing</strong> with Ansible Automation Platform and OpenShift Virtualization. Use these when platform or guest health should trigger governed remediations.</p>
+      <div class="guide-type-track__examples">
+        <span class="guide-type-track__examples-label">Examples</span>
+        <div class="guide-type-track__pills">
+          <a href="{{ '/README-Virtualization' | relative_url }}" class="guide-type-example-pill">Virtualization automation with Ansible</a>
+          <a href="{{ '/README-Self-Healing-VMs-OpenShift' | relative_url }}" class="guide-type-example-pill">Self-healing VMs on OpenShift</a>
         </div>
       </div>
     </article>

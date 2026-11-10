@@ -984,6 +984,11 @@ table.guide-table-event-sources {
   border-color: #f0c8c4;
 }
 
+.guide-type-track--virtualization {
+  background: linear-gradient(135deg, #eef5fc 0%, #f5f9fd 50%, #ffffff 100%);
+  border-color: #b8cfe8;
+}
+
 .guide-type-track--journey {
   background: linear-gradient(135deg, #faf3e8 0%, #fdf9f3 50%, #ffffff 100%);
   border-color: #e8d4a8;
@@ -1022,6 +1027,12 @@ table.guide-table-event-sources {
   color: #a30000;
   background: #faeae8;
   border: 1px solid #f0c8c4;
+}
+
+.guide-type-track--virtualization .guide-type-track__badge {
+  color: #002f5d;
+  background: #eef5fc;
+  border: 1px solid #b8cfe8;
 }
 
 .guide-type-track--journey .guide-type-track__badge {
@@ -1205,6 +1216,19 @@ table.guide-table-event-sources {
   }
 }
 
+.guide-type-track--virtualization .guide-type-example-pill {
+  color: #002f5d;
+  background: #eef5fc;
+  border: 1px solid #b8cfe8;
+
+  &:hover,
+  &:focus {
+    color: #001f3f;
+    background: #dceaf8;
+    border-color: #8fb4d9;
+  }
+}
+
 .guide-type-track--journey .guide-type-example-pill {
   color: #9a6700;
   background: #faf3e8;
@@ -1226,6 +1250,11 @@ table.guide-table-event-sources {
 .guide-type-track--security .guide-type-track__title a:hover,
 .guide-type-track--security .guide-type-track__title a:focus {
   color: #a30000;
+}
+
+.guide-type-track--virtualization .guide-type-track__title a:hover,
+.guide-type-track--virtualization .guide-type-track__title a:focus {
+  color: #002f5d;
 }
 
 .guide-type-track--journey .guide-type-track__title a:hover,
@@ -2991,6 +3020,12 @@ b {
   border: 1px solid #f0c8c4;
 }
 
+.card-label-track--virtualization {
+  --pf-v6-c-label--BackgroundColor: #eef5fc;
+  --pf-v6-c-label--Color: #002f5d;
+  border: 1px solid #b8cfe8;
+}
+
 .card-label-style--foundational {
   --pf-v6-c-label--BackgroundColor: #e7f1fa;
   --pf-v6-c-label--Color: #0066cc;
@@ -4044,6 +4079,11 @@ details.legacy-guides > *:not(summary):not(.legacy-guides__body) {
     border-color: #7a3030;
   }
 
+  .guide-type-track--virtualization {
+    background: linear-gradient(135deg, #1a2a40 0%, #24262b 100%);
+    border-color: #3d5a7a;
+  }
+
   .guide-type-track--journey {
     background: linear-gradient(135deg, #3d3018 0%, #2d3039 100%);
     border-color: #6a5528;
@@ -4069,6 +4109,12 @@ details.legacy-guides > *:not(summary):not(.legacy-guides__body) {
     color: #f5b5b0;
     background: #3d1a1a;
     border-color: #7a3030;
+  }
+
+  .guide-type-track--virtualization .guide-type-track__badge {
+    color: #9ec5fe;
+    background: #1a2a40;
+    border-color: #3d5a7a;
   }
 
   .guide-type-track--journey .guide-type-track__badge {
@@ -4216,6 +4262,12 @@ details.legacy-guides > *:not(summary):not(.legacy-guides__body) {
     --pf-v6-c-label--BackgroundColor: #3d1a1a;
     --pf-v6-c-label--Color: #f5b5b0;
     border-color: #7a3030;
+  }
+
+  .card-label-track--virtualization {
+    --pf-v6-c-label--BackgroundColor: #1a2a40;
+    --pf-v6-c-label--Color: #9ec5fe;
+    border-color: #3d5a7a;
   }
 
   .card-label-style--foundational {
