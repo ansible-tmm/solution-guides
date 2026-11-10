@@ -571,7 +571,7 @@ patternfly: true
                 <h3 class="pf-v6-c-card__title-text">Security automation with Ansible</h3>
               </div>
               <div class="pf-v6-c-card__body">
-                Foundational reference for Crawl/Walk/Run security automation: detect, decide, and remediate with EDA and governed AAP jobs. Start here before the guides below.
+                Foundational Security automation in the AI era reference: eight use cases from compliance and exposure reporting through mitigation, hardening, Zero Trust deploy, orchestrated incident response, and orchestrated patching. Start here before the guides below.
               </div>
             </div>
           </div>
