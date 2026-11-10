@@ -78,7 +78,7 @@ inline_edit: true
 </div>
 <section class="guide-types-tracks">
   <h2 id="solution-guide-categories" class="guide-types-tracks__title">Solution Guide categories</h2>
-  <p class="guide-type-panel__tracks-intro">Solution Guides are grouped into <strong>categories</strong> by domain: AIOps, Network automation, Security automation, and Virtualization. All categories use the same guide framework, validation expectations, and maturity path structure. Within a category, one guide may carry a <strong>Foundational</strong> badge -- start there before partner integrations (AIOps, Network, Security, and Virtualization each have a foundational entry; AIOps includes <a href="{{ '/README-AIOps' | relative_url }}#common-aiops-use-cases">six operational use cases</a>, Network includes <a href="{{ '/network-use-cases' | relative_url }}">nine NetOps use cases</a>, and Security includes <a href="{{ '/security-use-cases' | relative_url }}">eight Crawl/Walk/Run use cases</a>).</p>
+  <p class="guide-type-panel__tracks-intro">Solution Guides are grouped into <strong>categories</strong> by domain: AIOps, Network automation, Security automation, and Virtualization. All categories use the same guide framework, validation expectations, and maturity path structure. Within a category, one guide may carry a <strong>Foundational</strong> badge -- start there before partner integrations (AIOps, Network, Security, and Virtualization each have a foundational entry; AIOps includes <a href="{{ '/README-AIOps' | relative_url }}#common-aiops-use-cases">six operational use cases</a>, Network includes <a href="{{ '/network-use-cases' | relative_url }}">nine NetOps use cases</a>, Security includes <a href="{{ '/security-use-cases' | relative_url }}">eight Crawl/Walk/Run use cases</a>, and Virtualization includes <a href="{{ '/virtualization-use-cases' | relative_url }}">nine Migration-to-Day-2 use cases</a>).</p>
 
   <div class="guide-type-tracks">
     <article class="guide-type-track guide-type-track--aiops">
@@ -135,7 +135,7 @@ inline_edit: true
         <span class="guide-type-track__badge">Virtualization</span>
         <h3 id="virtualization" class="guide-type-track__title"><a href="{{ '/' | relative_url }}#virtualization">Virtualization</a></h3>
       </div>
-      <p class="guide-type-track__body">Guides for <strong>VM lifecycle and self-healing</strong> with Ansible Automation Platform and OpenShift Virtualization. Use these when platform or guest health should trigger governed remediations.</p>
+      <p class="guide-type-track__body">Guides for <strong>migration through day-2 VM operations</strong> with Ansible Automation Platform and OpenShift Virtualization. Start with the foundational Crawl/Walk/Run reference and <a href="{{ '/virtualization-use-cases' | relative_url }}">nine virtualization use cases</a>, then open deeper guides when MTV orchestration or platform/guest health should trigger governed remediations.</p>
       <div class="guide-type-track__examples">
         <span class="guide-type-track__examples-label">Examples</span>
         <div class="guide-type-track__pills">

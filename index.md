@@ -755,7 +755,7 @@ patternfly: true
             <i class="fas fa-info-circle" aria-hidden="true"></i>
           </a>
         </div>
-        <p class="cards-track-section__intro">VM lifecycle and self-healing on OpenShift Virtualization and related platforms. Start with the foundational guide below, then explore event-driven remediation for unhealthy VMs.</p>
+        <p class="cards-track-section__intro">Automate from migration to production on OpenShift Virtualization. Start with the foundational guide below, then explore event-driven remediation and related VM lifecycle guides.</p>
         <a href="{{ '/README-Virtualization' | relative_url }}" id="virtualization-foundational-hero" class="card-link card-link--foundational-hero" data-tags="virtualization,solution,foundational,published">
           <div class="pf-v6-c-card card-foundational card-foundational--hero">
             <div class="pf-v6-c-card__header card-header--labels">
@@ -774,7 +774,7 @@ patternfly: true
                 <h3 class="pf-v6-c-card__title-text">Virtualization automation with Ansible</h3>
               </div>
               <div class="pf-v6-c-card__body">
-                Foundational reference for Crawl/Walk/Run virtualization automation: inventory and lifecycle jobs first, then event-driven healing of VMs on OpenShift Virtualization. Start here before the guides below.
+                Foundational AAP for OpenShift Virtualization reference: nine use cases from VMware discovery and MTV orchestration through provisioning, snapshots, patching, lifecycle, and event-driven remediation. Start here before the guides below.
               </div>
             </div>
           </div>

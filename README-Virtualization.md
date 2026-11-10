@@ -24,15 +24,17 @@
 
 ## Overview
 
-Virtual machine estates still heal slowly: a guest goes unhealthy, an operator gets a ticket, and recovery is a console session or a one-off script. This foundational guide frames how **Ansible Automation Platform (AAP)**, **Event-Driven Ansible (EDA)**, and **OpenShift Virtualization** (and related platforms) turn VM and platform signals into governed remediation -- lifecycle, health, and self-healing -- before you open deeper Solution Guides in this category.
+Virtualization change is still too often two disconnected worlds: a UI-driven migration project, then a different set of tools for day-2 operations. Drift returns, recovery stays reactive, and the skills used to migrate do not transfer to production. This foundational guide frames **Ansible Automation Platform (AAP) for OpenShift Virtualization** -- automate from migration to production with one platform, one skillset, and auditable playbooks.
+
+The maturity language matches the AVA 301 lifecycle map: **Migration → Initial Deployment → Day-2 Operations**, mapped here to **Crawl / Walk / Run**.
 
 <div class="guide-outcome">
-<strong>Outcome:</strong> A Crawl/Walk/Run path for virtualization automation with AAP: inventory and lifecycle jobs first, then event-driven healing of VMs on OpenShift Virtualization and related platforms.
+<strong>Outcome:</strong> A shared Crawl/Walk/Run reference for virtualization automation with nine use cases -- from VMware discovery and MTV orchestration through provisioning and guest configuration to snapshots, patching, lifecycle, and event-driven remediation.
 </div>
 
 - [Background](#background)
 - [Solution](#solution)
-- [Common virtualization automation patterns](#common-virtualization-automation-patterns)
+- [Common virtualization automation use cases](#common-virtualization-automation-use-cases)
 - [Prerequisites](#prerequisites)
 - [Virtualization automation workflow](#virtualization-automation-workflow)
 - [Solution Walkthrough](#solution-walkthrough)
@@ -43,102 +45,195 @@ Virtual machine estates still heal slowly: a guest goes unhealthy, an operator g
 
 ## Background
 
-**Virtualization automation** applies the same AAP strengths used for servers and networks to **VM lifecycle and health**: create, configure, snapshot, migrate, restart, and remediate under RBAC. On **OpenShift Virtualization**, VMs are first-class Kubernetes resources -- so Kubernetes and OpenShift events become natural EDA inputs, while AAP remains the governed executor for guest and infrastructure change.
+**Virtualization automation** uses AAP to orchestrate the full VM journey onto and on **OpenShift Virtualization**. Migration Toolkit for Virtualization (MTV) moves the disks; AAP makes migrations repeatable across clusters -- pre-flight checks, plan creation, wave ordering, post-migration validation, and ITSM approvals. The same Ansible skills then provision VMs, configure guests, and run day-2 operations: snapshots, patches, resource changes, and Event-Driven Ansible remediations.
 
-Foundational ideas:
+Shared themes from the AVA 301 narrative:
 
-- **Platform signals** -- OpenShift / KubeVirt / hypervisor health and guest metrics
-- **Inventory** -- AAP knows which VMs and namespaces matter
-- **Approved jobs** -- restart, resize, reconfigure, patch inside the guest
-- **EDA** -- react when a VM or node leaves the healthy state
+- **Automation-first** -- do not migrate first and automate later; automate once, benefit always
+- **Two collection journeys** -- `infra.openshift_virtualization_migration` for MTV at scale; `redhat.openshift_virtualization` / ops content for production VM lifecycle
+- **Unified value** -- AAP supplies workflow orchestration, RBAC, and audit; OpenShift Virtualization supplies kubevirt runtime, storage, and network abstraction
+- **Day-2 from day one** -- self-service provisioning, patching windows, dynamic inventory, and event-driven auto-remediation
+
+Partner and deeper Solution Guides specialize (for example self-healing VMs). Start here for the shared journey and the nine use cases.
 
 ## Solution
 
 What makes up the foundational pattern?
 
-- **Ansible Automation Platform** for orchestration and audit
-- **Event-Driven Ansible** for OpenShift and monitoring triggers
-- **OpenShift Virtualization** (or compatible virt platforms) as the VM plane
-- **Approved VM lifecycle and remediation job templates**
+- **Ansible Automation Platform** for orchestration, surveys, scheduling, RBAC, and audit
+- **Migration Toolkit for Virtualization (MTV)** for the data-plane move -- orchestrated by AAP
+- **OpenShift Virtualization** as the VM runtime (kubevirt)
+- **Event-Driven Ansible** for monitoring- and platform-triggered remediations
+- **ITSM / CMDB integrations** for change tickets and approvals when required
 
 ### Who Benefits
 
 | Persona | Challenge | What They Gain |
 |---------|-----------|----------------|
-| **Platform / Virt Admin** | Manual VM babysitting and inconsistent recovery | Event-driven remediations with AAP history |
-| **SRE** | Guest failures wait on tickets | Self-healing paths scoped to approved actions |
-| **IT Leader** | Virtualization ops do not scale with estate size | Crawl/Walk/Run adoption with measurable MTTR |
+| **Migration Team** | UI mistakes and one-off MTV plans across many clusters | Codified plans, pre-flight checks, and wave orchestration |
+| **Virt / Platform Ops** | Different tools for migrate vs operate | Same Ansible skills from cutover into day-2 |
+| **Leadership** | Migration risk and ops headcount scaling | Faster, safer migrations and lower MTTR without new tool sprawl |
 
-## Common virtualization automation patterns
+```mermaid
+graph LR
+  Crawl[Crawl: Migration] --> Walk[Walk: Initial Deployment]
+  Walk --> Run[Run: Day-2 Operations]
+```
 
-| Pattern | Maturity | What it solves |
-|---------|----------|----------------|
-| VM inventory and day-2 jobs | Crawl | Consistent lifecycle operations from AAP |
-| Guest config / patch via AAP | Crawl–Walk | OS and app changes inside VMs under governance |
-| Health-triggered restart / migrate | Walk | EDA reacts to unhealthy VM or node signals |
-| Self-healing VMs on OpenShift | Walk–Run | Closed loop: detect, decide, remediate, verify |
-| Capacity and placement automation | Run | Policy-driven resize, evacuate, or rebalance |
+<h2 id="common-virtualization-automation-use-cases">Common virtualization automation use cases</h2>
 
-See [Self-healing VMs on OpenShift](README-Self-Healing-VMs-OpenShift.md) for the first deep Solution Guide in this category.
+Nine patterns for customer conversations (from the Ansible OpenShift Virtualization Automation 301 use-case map). **One investment delivers value at every phase.** Each row maps to **Crawl**, **Walk**, or **Run**.
+
+### How work starts
+
+Virtualization automation can begin from a discovery job against VMware, an MTV plan workflow, a self-service survey in Automation controller, a schedule for patching or snapshots, or a platform/monitoring event into EDA. The use case describes the **pattern**; the entry point depends on the customer environment.
+
+Each pattern has its own **Virtualization Use Case** page (scaffold today; deepen over time). Pick a row below or open the [Common virtualization automation use cases hub](virtualization-use-cases.md).
+
+This foundational guide's [workflow](#virtualization-automation-workflow) is a **high-level Assess → Migrate → Deploy → Operate** loop. Open a strip item for the dedicated pattern page.
+
+<div class="cards-track-section cards-track-section--use-cases">
+<nav class="use-case-strip" aria-label="Virtualization automation use cases">
+<a class="use-case-strip__item" href="README-Virtualization-Use-Case-01-Discover-and-Analyze.html">
+  <span class="use-case-strip__num">1</span>
+  <span class="use-case-strip__body">
+    <span class="use-case-strip__title">Discover and analyze</span>
+    <span class="use-case-strip__question">How do we inventory VMware and hardware before migration waves?</span>
+  </span>
+  <span class="use-case-maturity-chip use-case-maturity-chip--crawl">Crawl</span>
+</a>
+<a class="use-case-strip__item" href="README-Virtualization-Use-Case-02-Pre-Migration-Validation.html">
+  <span class="use-case-strip__num">2</span>
+  <span class="use-case-strip__body">
+    <span class="use-case-strip__title">Pre-migration validation</span>
+    <span class="use-case-strip__question">How do we prove target readiness and MTV prerequisites before cutover?</span>
+  </span>
+  <span class="use-case-maturity-chip use-case-maturity-chip--crawl">Crawl</span>
+</a>
+<a class="use-case-strip__item" href="README-Virtualization-Use-Case-03-MTV-Migration-Orchestration.html">
+  <span class="use-case-strip__num">3</span>
+  <span class="use-case-strip__body">
+    <span class="use-case-strip__title">MTV migration orchestration</span>
+    <span class="use-case-strip__question">How do we run the same migration plan across clusters without UI mistakes?</span>
+  </span>
+  <span class="use-case-maturity-chip use-case-maturity-chip--crawl">Crawl</span>
+</a>
+<a class="use-case-strip__item" href="README-Virtualization-Use-Case-04-VM-Provisioning.html">
+  <span class="use-case-strip__num">4</span>
+  <span class="use-case-strip__body">
+    <span class="use-case-strip__title">VM provisioning workflows</span>
+    <span class="use-case-strip__question">How do we self-service create VMs on OpenShift Virtualization with approvals?</span>
+  </span>
+  <span class="use-case-maturity-chip use-case-maturity-chip--walk">Walk</span>
+</a>
+<a class="use-case-strip__item" href="README-Virtualization-Use-Case-05-Guest-OS-and-Apps.html">
+  <span class="use-case-strip__num">5</span>
+  <span class="use-case-strip__body">
+    <span class="use-case-strip__title">Guest OS and application configuration</span>
+    <span class="use-case-strip__question">How do we configure guests and deploy apps without day-1 drift?</span>
+  </span>
+  <span class="use-case-maturity-chip use-case-maturity-chip--walk">Walk</span>
+</a>
+<a class="use-case-strip__item" href="README-Virtualization-Use-Case-06-Snapshot-and-Backup.html">
+  <span class="use-case-strip__num">6</span>
+  <span class="use-case-strip__body">
+    <span class="use-case-strip__title">Snapshot and backup management</span>
+    <span class="use-case-strip__question">How do we create, manage, and restore VM snapshots consistently?</span>
+  </span>
+  <span class="use-case-maturity-chip use-case-maturity-chip--walk">Walk</span>
+</a>
+<a class="use-case-strip__item" href="README-Virtualization-Use-Case-07-Patch-and-Package-Management.html">
+  <span class="use-case-strip__num">7</span>
+  <span class="use-case-strip__body">
+    <span class="use-case-strip__title">Patch and package management</span>
+    <span class="use-case-strip__question">How do we patch guest VMs inside maintenance windows with audit proof?</span>
+  </span>
+  <span class="use-case-maturity-chip use-case-maturity-chip--run">Run</span>
+</a>
+<a class="use-case-strip__item" href="README-Virtualization-Use-Case-08-Lifecycle-Management.html">
+  <span class="use-case-strip__num">8</span>
+  <span class="use-case-strip__body">
+    <span class="use-case-strip__title">Lifecycle management</span>
+    <span class="use-case-strip__question">How do we power, scale, and reconfigure NICs and storage on running VMs?</span>
+  </span>
+  <span class="use-case-maturity-chip use-case-maturity-chip--run">Run</span>
+</a>
+<a class="use-case-strip__item" href="README-Virtualization-Use-Case-09-Event-Driven-Remediation.html">
+  <span class="use-case-strip__num">9</span>
+  <span class="use-case-strip__body">
+    <span class="use-case-strip__title">Event-driven remediation</span>
+    <span class="use-case-strip__question">How do platform and monitoring events drive governed VM auto-remediation?</span>
+  </span>
+  <span class="use-case-maturity-chip use-case-maturity-chip--run">Run</span>
+</a>
+</nav>
+</div>
 
 ## Prerequisites
 
+Requirements depend on which use case or partner guide you implement.
+
 ### Ansible Automation Platform
 
-- **Ansible Automation Platform 2.4+** with Controller (and EDA for event-driven healing)
+- **Ansible Automation Platform 2.4+** with Controller
+- **Event-Driven Ansible** when you adopt use case 9 (event-driven remediation)
 
 ### Featured Ansible Content Collections
 
 | Collection | Type | Purpose |
 |-----------|------|---------|
-| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/eda/">ansible.eda</a> | Certified | Rulebooks and event sources |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/kubernetes/core/">kubernetes.core</a> | Certified | OpenShift / Kubernetes API automation |
+| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/openshift/">redhat.openshift</a> | Certified | OpenShift platform resources |
+| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/eda/">ansible.eda</a> | Certified | Rulebooks for platform and monitoring events |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/rhel_system_roles/">redhat.rhel_system_roles</a> | Certified | Guest OS configuration on RHEL VMs |
+
+Migration-focused content such as **infra.openshift_virtualization_migration** and OpenShift Virtualization lifecycle modules (**kubevirt_vm**, **kubevirt_vm_info**, kubevirt inventory) appear in AVA labs and partner materials -- pin the versions your Hub or validated content set publishes.
 
 ### External Systems
 
 | System | Required | Purpose |
 |--------|----------|---------|
-| OpenShift Virtualization (or equivalent) | Recommended | VM platform under automation |
-| Metrics / alerting | Optional for Crawl | Health signals into EDA |
-| AAP credentials for cluster and guests | Yes | API and guest access |
+| OpenShift Virtualization | Recommended | Target VM platform (kubevirt) |
+| Migration Toolkit for Virtualization (MTV) | For migration use cases | Data-plane migration; AAP orchestrates plans |
+| VMware vSphere (or source virt) | For migration discovery | Source inventory and pre-config |
+| Metrics / alerting (Prometheus, Dynatrace, Kafka, and so on) | Optional for Crawl | Health signals into EDA at Run |
+| ITSM (for example ServiceNow) | Optional | Change tickets and approvals |
 
-**Operational Impact:** Medium to High -- VM remediations can interrupt workloads.
+**Operational Impact:** Medium to High -- migration cutovers and day-2 remediations can interrupt workloads. Prefer lab clusters and approvals first.
 
 ## Virtualization automation workflow
 
 ```mermaid
 graph LR
-  Sig([VM or platform signal]) --> EDA[EDA rulebook]
-  EDA --> Dec{Decide}
-  Dec --> JT[Approved AAP job]
-  JT --> VM[VM / OpenShift Virtualization]
-  JT --> Audit([Job history])
+  Assess([Discover and validate]) --> Migrate[MTV via AAP]
+  Migrate --> Deploy[Provision and configure]
+  Deploy --> Operate[Day-2 jobs and EDA]
+  Operate --> Audit([AAP job history])
 ```
 
-A health or lifecycle signal reaches EDA. The rulebook selects an approved job. AAP changes the VM or cluster object and records the result.
+Assess the VMware estate and target readiness. Orchestrate MTV plans with AAP. Provision and configure on OpenShift Virtualization. Run day-2 snapshots, patches, lifecycle changes, and event-driven remediations -- with every action in the AAP audit trail.
 
 ## Solution Walkthrough
 
-> **Scaffold note:** This foundational page will grow with inventory examples, KubeVirt event mappings, and EE guidance. For a concrete self-healing narrative, open the Self-healing VMs guide.
+> **Scaffold note:** Expand with production YAML as use-case pages mature. See [Self-healing VMs on OpenShift](README-Self-Healing-VMs-OpenShift.md) for a concrete EDA + OpenShift Virtualization day-2 path.
 
-### Step 1: Inventory VMs and namespaces in AAP
+### Step 1: Assess and validate (Crawl / Migration)
 
-**Operational Impact:** Low
+**Operational Impact:** Low to Medium
 
-Sync or static-group the VMs and OpenShift projects you will manage.
+Inventory VMware and supporting hardware; validate MTV prerequisites and target cluster readiness before any cutover.
 
-### Step 2: Publish lifecycle job templates
+### Step 2: Migrate and deploy (Walk)
 
-**Operational Impact:** Low
+**Operational Impact:** High
 
-Create restart, snapshot, and guest-config templates with surveys and credentials.
+Orchestrate MTV plans and waves with AAP; provision new VMs with surveys; configure guest OS and applications so day-1 state matches intent.
 
-### Step 3: Add EDA for unhealthy VM events
+### Step 3: Operate continuously (Run)
 
-**Operational Impact:** Medium
+**Operational Impact:** Medium to High
 
-Subscribe to OpenShift or monitoring events; start with restart-or-notify only.
+Automate snapshots, guest patching in maintenance windows, resource and NIC lifecycle, and EDA-driven remediations for unhealthy VMs or nodes.
 
 ## Validation
 
@@ -152,7 +247,8 @@ oc get vm -A
 ### Expected Result
 
 ```
-VirtualMachine list returns expected namespaces; a lab remediation job completes with failed=0.
+VirtualMachine list returns expected namespaces; a lab migration-prep or lifecycle job
+completes with failed=0 and leaves an AAP job artifact.
 ```
 
 ### Troubleshooting
@@ -160,24 +256,24 @@ VirtualMachine list returns expected namespaces; a lab remediation job completes
 | Symptom | Likely Cause | Fix |
 |---------|-------------|-----|
 | oc / k8s auth fails in job | Missing kubeconfig credential | Add Controller credential and EE packages |
-| EDA ignores VM events | Wrong API or filter | Align rulebook with event payload |
-| Guest job unreachable | Network or SSH/WinRM | Fix inventory and credential |
+| MTV plan fails pre-checks | Source or mapping incomplete | Re-run use case 2 validation; fix network/storage maps |
+| EDA ignores VM events | Wrong API or filter | Align rulebook with OpenShift / monitoring payload |
 
 ## Maturity Path
 
-| Maturity | Description |
-|----------|-------------|
-| **Crawl** | Manual AAP jobs for VM lifecycle and guest config |
-| **Walk** | EDA-triggered remediations with approvals |
-| **Run** | Broader self-healing, placement, and policy-driven recovery |
+| Maturity | Lifecycle phase | Focus | Use cases |
+|----------|-----------------|-------|-----------|
+| **Crawl** | Migration | Discover, validate, orchestrate MTV | 1 Discover and analyze, 2 Pre-migration validation, 3 MTV migration orchestration |
+| **Walk** | Initial Deployment | Provision and configure without drift | 4 VM provisioning, 5 Guest OS and apps, 6 Snapshot and backup |
+| **Run** | Day-2 Operations | Patch, lifecycle, event-driven healing | 7 Patch and package management, 8 Lifecycle management, 9 Event-driven remediation |
 
 ## Summary
 
-Virtualization automation with Ansible brings governed execution to VM estates -- especially OpenShift Virtualization, where platform events and AAP jobs meet. Use this foundational page for Crawl/Walk/Run language, then open the Self-healing VMs Solution Guide for a concrete EDA + OpenShift pattern.
+Virtualization automation with Ansible is an automation-first journey: MTV does the heavy lifting; AAP keeps migrations consistent and turns the same skills into production operations on OpenShift Virtualization. Use this foundational page and the nine use-case strip for customer conversations, then open deeper guides such as Self-healing VMs for executable day-2 patterns.
 
 ## Next Steps
 
-1. Read [Self-healing VMs on OpenShift](README-Self-Healing-VMs-OpenShift.md).
-2. Cross-link AIOps self-healing patterns in [AIOps automation with Ansible](README-AIOps.md) when guest issues are part of a broader ops loop.
-3. Return to the catalog **Virtualization** section as more partner and platform guides land.
+1. Browse the [Common virtualization automation use cases hub](virtualization-use-cases.md).
+2. For a concrete Run pattern, open [Self-healing VMs on OpenShift](README-Self-Healing-VMs-OpenShift.md).
+3. Return to the catalog **Virtualization** section as more platform guides land.
 {% endraw %}
