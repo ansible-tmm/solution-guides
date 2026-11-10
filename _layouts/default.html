@@ -182,7 +182,7 @@
             <a class="header-link" href="{{ '/best-practices/' | relative_url }}">
               Best practices
             </a>
-            <a class="header-link" target="_new" id="open-issue-link" href="https://github.com/ansible-tmm/solution-guides/issues/new">
+            <a class="header-link" target="_blank" rel="noopener" id="open-issue-link" href="https://github.com/ansible-tmm/solution-guides/issues/new" data-guide-path="{{ page.path | default: '' | escape }}" data-guide-title="{{ page.title | default: page.name | default: 'AAP Guides' | escape }}">
               Open an issue
             </a>
             <button type="button" class="header-theme-toggle" id="theme-toggle" aria-label="Switch to dark mode" title="Switch to dark mode">
@@ -241,6 +241,39 @@
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
 
     <!-- Code block enhancements (copy, labels, light theme) handled by code-blocks.js -->
+
+    <!-- Prefill GitHub issue with the guide page the reporter was on -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var link = document.getElementById('open-issue-link');
+        if (!link) return;
+
+        var guidePath = (link.getAttribute('data-guide-path') || '').trim();
+        var guideTitle = (link.getAttribute('data-guide-title') || '').trim();
+        var h1 = document.querySelector('.guide-header h1, h1');
+        if (h1 && h1.textContent) {
+          guideTitle = h1.textContent.replace(/\s+/g, ' ').trim() || guideTitle;
+        }
+        if (!guideTitle) guideTitle = document.title.replace(/\s*[|\u2013\-].*$/, '').trim() || 'AAP Guides';
+
+        var pageUrl = window.location.href.split('#')[0];
+        var issueTitle = guidePath
+          ? '[' + guidePath.replace(/^.*\//, '') + '] Feedback'
+          : '[AAP Guides] Feedback';
+        var body = [
+          '**Guide:** ' + guideTitle,
+          '**Page:** ' + pageUrl,
+          guidePath ? '**Source file:** `' + guidePath + '`' : null,
+          '',
+          '<!-- Describe the issue or suggestion below -->',
+          ''
+        ].filter(function (line) { return line !== null; }).join('\n');
+
+        link.href = 'https://github.com/ansible-tmm/solution-guides/issues/new'
+          + '?title=' + encodeURIComponent(issueTitle)
+          + '&body=' + encodeURIComponent(body);
+      });
+    </script>
 
     <!-- Hamburger menu toggle -->
     <script>
@@ -498,19 +531,6 @@
 
           requestAnimationFrame(animate);
         }
-      })();
-    </script>
-    <script>
-      (function() {
-        var link = document.getElementById('open-issue-link');
-        if (!link) return;
-        var base = link.href.split('?')[0];
-        var pageURL = window.location.href;
-        var pageName = window.location.pathname.split('/').pop().replace('.html', '').replace(/^index$/, '') || 'Solution Guides Index';
-        pageName = pageName.replace(/^README-/, '').replace(/-/g, ' ');
-        var title = encodeURIComponent('Feedback: ' + pageName);
-        var body = encodeURIComponent('**Page:** ' + pageURL + '\n\n---\n\n');
-        link.href = base + '?title=' + title + '&body=' + body;
       })();
     </script>
   </body>
