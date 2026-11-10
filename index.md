@@ -1007,11 +1007,11 @@ patternfly: true
   var wipCheckbox = document.querySelector('.cards-sidebar__checkbox--status input[value="wip"]');
   var cardsMain = document.querySelector('.cards-main');
   var solutionGuidesSection = document.getElementById('solution-guides');
-  var aiopsFoundationalHero = document.getElementById('aiops-foundational-hero');
   var sectionConfigs = [
-    { section: document.getElementById('aiops-solutions'), gallery: document.getElementById('aiops-gallery'), hero: aiopsFoundationalHero },
-    { section: document.getElementById('network-automation'), gallery: document.getElementById('network-gallery') },
-    { section: document.getElementById('security-automation'), gallery: document.getElementById('security-gallery') },
+    { section: document.getElementById('aiops-solutions'), gallery: document.getElementById('aiops-gallery'), hero: document.getElementById('aiops-foundational-hero') },
+    { section: document.getElementById('network-automation'), gallery: document.getElementById('network-gallery'), hero: document.getElementById('network-foundational-hero') },
+    { section: document.getElementById('security-automation'), gallery: document.getElementById('security-gallery'), hero: document.getElementById('security-foundational-hero') },
+    { section: document.getElementById('virtualization'), gallery: document.getElementById('virtualization-gallery'), hero: document.getElementById('virtualization-foundational-hero') },
     { section: document.getElementById('implementation-guides'), gallery: document.getElementById('implementation-gallery') }
   ];
 
@@ -1104,9 +1104,11 @@ patternfly: true
       var aiopsSection = document.getElementById('aiops-solutions');
       var networkSection = document.getElementById('network-automation');
       var securitySection = document.getElementById('security-automation');
+      var virtualizationSection = document.getElementById('virtualization');
       var solutionVisible = (aiopsSection && aiopsSection.style.display !== 'none')
         || (networkSection && networkSection.style.display !== 'none')
-        || (securitySection && securitySection.style.display !== 'none');
+        || (securitySection && securitySection.style.display !== 'none')
+        || (virtualizationSection && virtualizationSection.style.display !== 'none');
       solutionGuidesSection.style.display = solutionVisible ? '' : 'none';
     }
   }
@@ -1124,11 +1126,11 @@ patternfly: true
 
     allCards.forEach(function (card) {
       var cardTags = getCardTags(card);
-      var isSolutionGuide = cardTags.indexOf('solution') !== -1;
       var textMatch = !query || getCardText(card).indexOf(query) !== -1;
       var statusMatch = !activeStatus.length || activeStatus.some(function (s) { return cardTags.indexOf(s) !== -1; });
       var partnerMatch = !activePartners.length || activePartners.some(function (p) { return cardTags.indexOf(p) !== -1; });
-      var trackMatch = !activeTracks.length || !isSolutionGuide || activeTracks.some(function (t) { return cardTags.indexOf(t) !== -1; });
+      // Category filters apply to every card type (Solution and Implementation).
+      var trackMatch = !activeTracks.length || activeTracks.some(function (t) { return cardTags.indexOf(t) !== -1; });
       var show = textMatch && statusMatch && partnerMatch && trackMatch;
       card.style.display = show ? '' : 'none';
       if (show) {
