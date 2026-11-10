@@ -62,7 +62,7 @@ These sections map 1:1 to the section names in every solution guide. When review
 
 | Section | What It Covers |
 |---------|---------------|
-| [Reference](#reference) | Scoring rubric, failure modes, elite guide criteria (includes multi-use-case row) |
+| [Reference](#reference) | Scoring rubric, failure modes, elite guide criteria (includes multi-use-case and Foundational rows) |
 | [Appendix: Starter Template](#appendix-starter-template) | Copy-paste skeleton for single-outcome guides |
 | [Appendix: Multi-use-case starter](#appendix-multi-use-case-starter) | Skeleton when one partner topic has Use Case A/B/… |
 
@@ -161,6 +161,34 @@ Title (broader partner / outcome topic) + Solution Guide badge + partner hero
 **Copy-paste skeleton:** [Appendix: Multi-use-case starter](#appendix-multi-use-case-starter).
 
 **Examples in this repo:** [AIOps with Splunk and Event-Driven Ansible](README-AIOps-Splunk-ITSI.md), [ServiceNow ITSM automation with Ansible](README-AIOps-ServiceNow.md).
+
+### 2.4 Foundational Solution Guides
+
+Each Solution Guide **category** may have one **Foundational** entry: a Crawl/Walk/Run journey map plus a use-case strip or hub that points readers to partner Solution Guides and pattern pages for executable depth. Foundational is a **Solution Guide subclass**, not a third content type and not an Implementation Guide.
+
+**What it is:**
+
+- One per category today: AIOps, Network automation, Security automation, Virtualization
+- Domain narrative, maturity path, and use-case navigation for field conversations
+- Explicit handoff to partner SGs and use-case pages for YAML-heavy walkthroughs
+
+**What it is not:**
+
+- A partner integration Solution Guide (those keep the partner hero and deep walkthrough)
+- An Implementation Guide (platform deploy/tune/day-2)
+- A reason to invent a third framework or catalog badge -- keep the **Solution Guide** pill and add the **Foundational** style label on the card/hero
+
+**Required shape:**
+
+- Solution Guide sections still apply (Overview through Next Steps)
+- Walkthrough may be illustrative: at least one architecture or domain-loop diagram plus maturity narrative
+- YAML depth may be **delegated** when the page links clearly to partner or use-case pages that carry the executable detail
+- Validation may be scenario-based or maturity checkpoints rather than a single 60-minute pipeline
+- Hero: AAP-only unlock callout (no partner wordmark) -- see conventions for Foundational AIOps and peer category heroes
+
+**Scoring:** Use the **Foundational Solution Guide** row under [Scoring by Solution Category](#scoring-by-solution-category). Do not apply Multi-use-case caps to Foundational pages.
+
+**Examples in this repo:** [AIOps automation with Ansible](README-AIOps.md), [Network automation with Ansible](README-Network-Automation.md), [Security automation with Ansible](README-Security-Automation.md), [Virtualization automation with Ansible](README-Virtualization.md).
 
 ---
 
@@ -544,11 +572,13 @@ Apply the base rubric above, then adjust expectations by category. Do not penali
 | **AIOps** | Full rubric. Technical Executability should include AI enrichment, inference endpoints, MCP/Lightspeed integration, or governed playbook selection where the guide claims an AI outcome. |
 | **Network automation** | Do not penalize absence of AI. Weight inventory/source-of-truth integration (for example NetBox), device configuration or failover workflows, and closed-loop automation where EDA is used. Business Framing should cite change velocity, outage reduction, or config consistency. |
 | **Multi-use-case Solution Guide** | Same base weights. Cap **Outcome Clarity** at 3 unless Overview + ToC name each use case and distinguish outcomes. Cap **Architecture Clarity** at 3 unless there is a shared architecture *and* a per-use-case flow (diagram or narrative). Cap **Validation/Testability** at 3 unless **each** use case has a concrete test (or an explicit, justified N/A). Do **not** penalize a single catalog entry for covering multiple use cases when the card body lists them. Score Technical Executability across use cases: thin use cases drag the score even if one use case is elite. |
+| **Foundational Solution Guide** | Same base weights. Cap **Technical Executability** at 3 if the page claims a runnable pipeline but has no featured code *and* no explicit deferral to partner or use-case pages. Weight **Outcome Clarity** on Crawl/Walk/Run plus use-case hub clarity; **Architecture Clarity** on the domain loop (for example Observe → Infer → Act, or Detect → Decide → Act → Prove); **Business Framing** on adoption narrative. Do **not** fail solely for fewer than 2 YAML blocks when depth is delegated with clear links. Validation may be scenario-based or maturity checkpoints. See [§2.4](#24-foundational-solution-guides). |
 | **AIOps Use Case** | Lighter on YAML depth and single-partner executability. Weight decision paths, adoption narrative, explicit signals for when to add the next capability, and cross-links to reference architectures. Validation may be scenario-based rather than a single runnable pipeline. Six patterns live in [README-AIOps.md](README-AIOps.md#common-aiops-use-cases); the ticket enrichment appendix is the primary extended adoption page. |
 
 **N/A rules:**
 - Network automation guides: skip AI-specific executability checks unless the guide adds an optional AI enrichment section.
 - AIOps Use Case pages: Architecture Clarity may emphasize decision flow over deployment topology; Production Readiness Info may be advisory rather than a full runbook.
+- Foundational Solution Guides: skip partner-ROI and single-pipeline executability checks unless the guide claims them. Do **not** apply Multi-use-case caps to Foundational pages (different pattern).
 
 </details>
 
@@ -581,6 +611,8 @@ A truly excellent solution guide:
 
 **Minimum Depth Standard:** A guide that covers every section can still fail in practice if it lacks depth.
 
+The floor below applies to **partner** and **multi-use-case** Solution Guides (per use case for multi-use-case). **Foundational** Solution Guides use the [Foundational scoring row](#scoring-by-solution-category) instead -- do not fail them solely against the 2-YAML / 3-walkthrough minimum when depth is delegated.
+
 | Indicator | Minimum | Ideal |
 |-----------|---------|-------|
 | Solution walkthrough steps | 3 | 5-8 |
@@ -591,7 +623,7 @@ A truly excellent solution guide:
 
 > **Warning:** Your guide may be too thin.
 >
-> If it has fewer than 3 walkthrough steps or fewer than 2 code blocks, either expand the scope or merge it with a related guide.
+> If it has fewer than 3 walkthrough steps or fewer than 2 code blocks, either expand the scope or merge it with a related guide. Foundational journey pages: see [§2.4](#24-foundational-solution-guides) and the Foundational scoring row before expanding or merging.
 
 </details>
 

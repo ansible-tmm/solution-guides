@@ -113,7 +113,7 @@ When reviewing or grading solution guides, use the weighted rubric from `README-
 
 Score each category 1-5. Multiply by weight for a final score out of 10. Any category below 3 means revise before publishing.
 
-Apply category-aware adjustments for AIOps, Network automation, and AIOps Use Case pages (see "Scoring by Solution Category" in `README-best-practices.md`). Do not penalize Network automation guides for lacking AI components.
+Apply category-aware adjustments for AIOps, Network automation, multi-use-case Solution Guides, **Foundational Solution Guides**, and AIOps Use Case pages (see "Scoring by Solution Category" in `README-best-practices.md`). Foundational is a Solution Guide subclass (journey + use-case hub) -- score with the Foundational row; do not invent a third framework. Do not penalize Network automation guides for lacking AI components.
 
 When writing a review:
 1. List **Strengths** (what the guide does well).
