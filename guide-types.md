@@ -107,8 +107,7 @@ inline_edit: true
         <span class="guide-type-track__examples-label">Examples</span>
         <div class="guide-type-track__pills">
           <a href="{{ '/README-Network-Automation' | relative_url }}" class="guide-type-example-pill">Network automation with Ansible</a>
-          <a href="{{ '/README-NetBox-WAN-EDA-Failover' | relative_url }}" class="guide-type-example-pill">Event-driven WAN circuit failover with NetBox and AAP</a>
-          <a href="{{ '/README-NetBox-SoT-EDA-Config' | relative_url }}" class="guide-type-example-pill">Event-driven network source of truth with NetBox and AAP</a>
+          <a href="{{ '/README-NetBox-EDA' | relative_url }}" class="guide-type-example-pill">Event-driven network automation with NetBox and AAP</a>
         </div>
       </div>
     </article>

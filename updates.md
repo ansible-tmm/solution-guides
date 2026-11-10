@@ -27,6 +27,7 @@ permalink: /updates/
 
 ### Guide updates
 
+- [Event-Driven Network Automation with NetBox and AAP]({{ "/README-NetBox-EDA" | relative_url }}): Merged NetBox SoT and WAN failover into one multi-use-case Solution Guide (Use Case A source of truth; Use Case B WAN failover). Legacy URLs redirect to the matching anchors.
 - [High Availability and Disaster Recovery for AAP 2.7 on OpenShift]({{ "/README-AAP-HA-DR-OpenShift" | relative_url }}): docs: link public AAP HA DR example
 - [PostgreSQL Autovacuum Tuning Guide for Ansible Automation Platform]({{ "/README-AAP-PostgreSQL-Autovacuum-Tuning" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)
 - [Event-Driven Remediation with Azure Service Bus and Ansible]({{ "/README-AIOps-Azure-Service-Bus" | relative_url }}): fix: size all partner logos for raw markdown rendering (#67)

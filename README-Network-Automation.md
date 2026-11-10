@@ -268,6 +268,6 @@ Network automation with Ansible is a journey: opportunistic wins on backup and f
 ## Next Steps
 
 1. Browse the [Common network automation use cases hub](network-use-cases.md).
-2. For SoT and failover depth, read [Event-Driven Network Source of Truth with NetBox and AAP](README-NetBox-SoT-EDA-Config.md) and [Event-driven WAN circuit failover with NetBox and AAP](README-NetBox-WAN-EDA-Failover.md).
+2. For NetBox depth, read [Event-Driven Network Automation with NetBox and AAP](README-NetBox-EDA.md) ([source of truth](README-NetBox-EDA.md#use-case-a-event-driven-network-source-of-truth) and [WAN failover](README-NetBox-EDA.md#use-case-b-event-driven-wan-circuit-failover)).
 3. Return to the catalog **Network automation** section for Gluware and LogicMonitor paths.
 {% endraw %}
