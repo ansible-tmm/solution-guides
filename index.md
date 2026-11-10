@@ -907,12 +907,15 @@ patternfly: true
 
       <a href="{{ '/README-Falco-runtime-mitigation' | relative_url }}" class="card-link" data-tags="security,implementation,published">
         <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header">
+          <div class="pf-v6-c-card__header card-header--labels">
             <span class="pf-v6-c-label pf-m-blue">
               <span class="pf-v6-c-label__content">
                 <i class="fas fa-cogs pf-v6-c-label__icon"></i>
                 Implementation Guide
               </span>
+            </span>
+            <span class="pf-v6-c-label card-label-track card-label-track--security">
+              <span class="pf-v6-c-label__content">Security</span>
             </span>
           </div>
           <div class="pf-v6-c-card__title">
@@ -926,12 +929,15 @@ patternfly: true
 
       <a href="{{ '/README-Compliance-Governance-with-policy' | relative_url }}" class="card-link" data-tags="security,implementation,published">
         <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header">
+          <div class="pf-v6-c-card__header card-header--labels">
             <span class="pf-v6-c-label pf-m-blue">
               <span class="pf-v6-c-label__content">
                 <i class="fas fa-cogs pf-v6-c-label__icon"></i>
                 Implementation Guide
               </span>
+            </span>
+            <span class="pf-v6-c-label card-label-track card-label-track--security">
+              <span class="pf-v6-c-label__content">Security</span>
             </span>
           </div>
           <div class="pf-v6-c-card__title">
@@ -945,12 +951,15 @@ patternfly: true
 
       <a href="{{ '/README-ZTA-with-AAP' | relative_url }}" class="card-link" data-tags="security,implementation,published">
         <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header">
+          <div class="pf-v6-c-card__header card-header--labels">
             <span class="pf-v6-c-label pf-m-blue">
               <span class="pf-v6-c-label__content">
                 <i class="fas fa-cogs pf-v6-c-label__icon"></i>
                 Implementation Guide
               </span>
+            </span>
+            <span class="pf-v6-c-label card-label-track card-label-track--security">
+              <span class="pf-v6-c-label__content">Security</span>
             </span>
           </div>
           <div class="pf-v6-c-card__title">
@@ -964,12 +973,15 @@ patternfly: true
 
       <a href="{{ '/README-CME' | relative_url }}" class="card-link" data-tags="redhat,security,implementation,published">
         <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header">
+          <div class="pf-v6-c-card__header card-header--labels">
             <span class="pf-v6-c-label pf-m-blue">
               <span class="pf-v6-c-label__content">
                 <i class="fas fa-cogs pf-v6-c-label__icon"></i>
                 Implementation Guide
               </span>
+            </span>
+            <span class="pf-v6-c-label card-label-track card-label-track--security">
+              <span class="pf-v6-c-label__content">Security</span>
             </span>
           </div>
           <div class="pf-v6-c-card__title">
