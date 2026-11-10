@@ -829,14 +829,17 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-Ansible-DevTools' | relative_url }}" class="card-link" data-tags="redhat,implementation,published">
+      <a href="{{ '/README-Ansible-DevTools' | relative_url }}" class="card-link" data-tags="redhat,aiops,implementation,published">
         <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header">
+          <div class="pf-v6-c-card__header card-header--labels">
             <span class="pf-v6-c-label pf-m-blue">
               <span class="pf-v6-c-label__content">
                 <i class="fas fa-cogs pf-v6-c-label__icon"></i>
                 Implementation Guide
               </span>
+            </span>
+            <span class="pf-v6-c-label card-label-track card-label-track--aiops">
+              <span class="pf-v6-c-label__content">AIOps</span>
             </span>
           </div>
           <div class="pf-v6-c-card__title">
