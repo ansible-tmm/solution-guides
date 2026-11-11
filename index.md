@@ -403,9 +403,15 @@ patternfly: true
           </a>
         </div>
         <p class="cards-track-section__intro">Network source of truth, configuration, and failover patterns. Start with the foundational guide below, then explore NetBox, Gluware, and related partner guides. Event-Driven Ansible applies where state changes should trigger governed execution.</p>
-        <a href="{{ '/README-Network-Automation' | relative_url }}" id="network-foundational-hero" class="card-link card-link--foundational-hero" data-tags="network,solution,foundational,published">
+        <a href="{{ '/README-Network-Automation' | relative_url }}" id="network-foundational-hero" class="card-link card-link--foundational-hero" data-tags="network,solution,foundational,wip">
           <div class="pf-v6-c-card card-foundational card-foundational--hero">
             <div class="pf-v6-c-card__header card-header--labels">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
+              </span>
               <span class="pf-v6-c-label pf-m-green">
                 <span class="pf-v6-c-label__content">
                   <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
@@ -525,9 +531,15 @@ patternfly: true
           </a>
         </div>
         <p class="cards-track-section__intro">Automated security response, compliance enforcement, and threat mitigation using Ansible Automation Platform. Start with the foundational guide below, then explore SIEM, runtime, vulnerability, and compliance partner guides.</p>
-        <a href="{{ '/README-Security-Automation' | relative_url }}" id="security-foundational-hero" class="card-link card-link--foundational-hero" data-tags="security,solution,foundational,published">
+        <a href="{{ '/README-Security-Automation' | relative_url }}" id="security-foundational-hero" class="card-link card-link--foundational-hero" data-tags="security,solution,foundational,wip">
           <div class="pf-v6-c-card card-foundational card-foundational--hero">
             <div class="pf-v6-c-card__header card-header--labels">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
+              </span>
               <span class="pf-v6-c-label pf-m-green">
                 <span class="pf-v6-c-label__content">
                   <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
@@ -700,9 +712,15 @@ patternfly: true
           </a>
         </div>
         <p class="cards-track-section__intro">Automate from migration to production on OpenShift Virtualization. Start with the foundational guide below, then explore event-driven remediation and related VM lifecycle guides.</p>
-        <a href="{{ '/README-Virtualization' | relative_url }}" id="virtualization-foundational-hero" class="card-link card-link--foundational-hero" data-tags="virtualization,solution,foundational,published">
+        <a href="{{ '/README-Virtualization' | relative_url }}" id="virtualization-foundational-hero" class="card-link card-link--foundational-hero" data-tags="virtualization,solution,foundational,wip">
           <div class="pf-v6-c-card card-foundational card-foundational--hero">
             <div class="pf-v6-c-card__header card-header--labels">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
+              </span>
               <span class="pf-v6-c-label pf-m-green">
                 <span class="pf-v6-c-label__content">
                   <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
