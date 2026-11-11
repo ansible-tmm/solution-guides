@@ -1273,9 +1273,19 @@ patternfly: true
     cb.addEventListener('change', filterCards);
   });
 
-  // Categories are radios (one at a time). Partners stay multi-select checkboxes.
+  // Categories are radios (one at a time). Click the selected one again to clear it.
+  // Partners stay multi-select checkboxes.
   trackCheckboxes.forEach(function (cb) {
-    cb.addEventListener('change', filterCards);
+    cb.addEventListener('click', function () {
+      if (cb.getAttribute('data-selected') === 'true') {
+        cb.checked = false;
+        cb.removeAttribute('data-selected');
+      } else {
+        trackCheckboxes.forEach(function (other) { other.removeAttribute('data-selected'); });
+        if (cb.checked) cb.setAttribute('data-selected', 'true');
+      }
+      filterCards();
+    });
   });
 
   partnerCheckboxes.forEach(function (cb) {
@@ -1283,7 +1293,10 @@ patternfly: true
   });
 
   filterClearBtn.addEventListener('click', function () {
-    trackCheckboxes.forEach(function (cb) { cb.checked = false; });
+    trackCheckboxes.forEach(function (cb) {
+      cb.checked = false;
+      cb.removeAttribute('data-selected');
+    });
     partnerCheckboxes.forEach(function (cb) { cb.checked = false; });
     if (publishedCheckbox) publishedCheckbox.checked = true;
     if (wipCheckbox) wipCheckbox.checked = true;
