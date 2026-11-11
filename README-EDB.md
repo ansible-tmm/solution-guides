@@ -703,7 +703,8 @@ eda2-dc1.example.com
 eda1-dc2.example.com
 eda2-dc2.example.com
 
-# Redis (colocated on gateway, hub, and EDA nodes)
+# Redis cluster (redis-tcp colocated on gateway, hub, and EDA nodes)
+# Controller and hub nodes also run a local redis-unix unit
 [redis]
 gateway1-dc1.example.com
 gateway2-dc1.example.com
@@ -802,27 +803,60 @@ ansible-playbook -i inventory ansible.containerized_installer.install
 # Verify installation
 podman ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 
-# Enable systemd services
-systemctl enable --user --now automation-controller-web
-systemctl enable --user --now automation-controller-task
-systemctl enable --user --now automation-gateway
-systemctl enable --user --now automation-hub
-systemctl enable --user --now eda-activation-worker
-systemctl enable --user --now redis
+# Enable systemd services on each DC1 node (units differ by node type)
+
+# Gateway nodes (gateway1-dc1, gateway2-dc1):
+systemctl enable --user --now automation-gateway automation-gateway-proxy redis-tcp
+
+# Controller nodes (controller1-dc1, controller2-dc1):
+systemctl enable --user --now automation-controller-web automation-controller-task \
+  automation-controller-rsyslog receptor redis-unix
+
+# Hub nodes (hub1-dc1, hub2-dc1):
+systemctl enable --user --now automation-hub-web automation-hub-api automation-hub-content \
+  automation-hub-worker-1 automation-hub-worker-2 redis-tcp redis-unix
+
+# EDA nodes (eda1-dc1, eda2-dc1):
+systemctl enable --user --now automation-eda-api automation-eda-web automation-eda-daphne \
+  automation-eda-worker-1 automation-eda-worker-2 \
+  automation-eda-activation-worker-1 automation-eda-activation-worker-2 \
+  automation-eda-scheduler redis-tcp
 ```
+
+> **Note:** The numbered worker units follow the `hub_workers`, `eda_workers`, and `eda_activation_workers` inventory variables (default 2 each). If you change those values, adjust the unit names in this guide to match.
 
 #### Step 11: Install AAP on DC2 (standby) and stop services
 
 ```bash
-# On DC2 nodes
+# On DC2 nodes (units differ by node type)
 
-# IMMEDIATELY STOP all AAP containers (standby mode)
-systemctl stop --user automation-controller-web automation-controller-task
-systemctl stop --user automation-gateway automation-hub eda-activation-worker redis
+# IMMEDIATELY STOP all AAP containers (standby mode), then disable auto-start
 
-# Disable auto-start
-systemctl disable --user automation-controller-web automation-controller-task
-systemctl disable --user automation-gateway automation-hub eda-activation-worker redis
+# Gateway nodes (gateway1-dc2, gateway2-dc2):
+systemctl stop --user automation-gateway automation-gateway-proxy redis-tcp
+systemctl disable --user automation-gateway automation-gateway-proxy redis-tcp
+
+# Controller nodes (controller1-dc2, controller2-dc2):
+systemctl stop --user automation-controller-web automation-controller-task \
+  automation-controller-rsyslog receptor redis-unix
+systemctl disable --user automation-controller-web automation-controller-task \
+  automation-controller-rsyslog receptor redis-unix
+
+# Hub nodes (hub1-dc2, hub2-dc2):
+systemctl stop --user automation-hub-web automation-hub-api automation-hub-content \
+  automation-hub-worker-1 automation-hub-worker-2 redis-tcp redis-unix
+systemctl disable --user automation-hub-web automation-hub-api automation-hub-content \
+  automation-hub-worker-1 automation-hub-worker-2 redis-tcp redis-unix
+
+# EDA nodes (eda1-dc2, eda2-dc2):
+systemctl stop --user automation-eda-api automation-eda-web automation-eda-daphne \
+  automation-eda-worker-1 automation-eda-worker-2 \
+  automation-eda-activation-worker-1 automation-eda-activation-worker-2 \
+  automation-eda-scheduler redis-tcp
+systemctl disable --user automation-eda-api automation-eda-web automation-eda-daphne \
+  automation-eda-worker-1 automation-eda-worker-2 \
+  automation-eda-activation-worker-1 automation-eda-activation-worker-2 \
+  automation-eda-scheduler redis-tcp
 ```
 
 #### Step 12: Verify AAP database connectivity to PostgreSQL VIP
@@ -885,22 +919,22 @@ fi
 # Start AAP containers by component type
 echo "Starting Platform Gateway nodes in $DATACENTER..."
 for node in "${GATEWAY_NODES[@]}"; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-gateway redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-gateway automation-gateway-proxy redis-tcp"
 done
 
 echo "Starting Automation Controller nodes in $DATACENTER..."
 for node in "${CONTROLLER_NODES[@]}"; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-controller-web automation-controller-task"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-controller-web automation-controller-task automation-controller-rsyslog receptor redis-unix"
 done
 
 echo "Starting Automation Hub nodes in $DATACENTER..."
 for node in "${HUB_NODES[@]}"; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-hub redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-hub-web automation-hub-api automation-hub-content automation-hub-worker-1 automation-hub-worker-2 redis-tcp redis-unix"
 done
 
 echo "Starting Event-Driven Ansible nodes in $DATACENTER..."
 for node in "${EDA_NODES[@]}"; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user eda-activation-worker redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-eda-api automation-eda-web automation-eda-daphne automation-eda-worker-1 automation-eda-worker-2 automation-eda-activation-worker-1 automation-eda-activation-worker-2 automation-eda-scheduler redis-tcp"
 done
 
 # Wait for AAP API
@@ -1068,16 +1102,16 @@ psql -h 10.1.2.100 -U postgres -c "SELECT pg_is_in_recovery();"
 ```bash
 # Stop AAP in DC1
 for node in gateway1-dc1 gateway2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-gateway redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-gateway automation-gateway-proxy redis-tcp"
 done
 for node in controller1-dc1 controller2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-controller-web automation-controller-task"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-controller-web automation-controller-task automation-controller-rsyslog receptor redis-unix"
 done
 for node in hub1-dc1 hub2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-hub redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-hub-web automation-hub-api automation-hub-content automation-hub-worker-1 automation-hub-worker-2 redis-tcp redis-unix"
 done
 for node in eda1-dc1 eda2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user eda-activation-worker redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-eda-api automation-eda-web automation-eda-daphne automation-eda-worker-1 automation-eda-worker-2 automation-eda-activation-worker-1 automation-eda-activation-worker-2 automation-eda-scheduler redis-tcp"
 done
 
 # Promote DC2 database to primary
@@ -1238,16 +1272,16 @@ ssh pg-dc2-1 "psql -U postgres -c \"SELECT * FROM pg_stat_replication;\""
 
 # 5. Stop AAP in DC2
 for node in gateway1-dc2 gateway2-dc2; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-gateway redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-gateway automation-gateway-proxy redis-tcp"
 done
 for node in controller1-dc2 controller2-dc2; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-controller-web automation-controller-task"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-controller-web automation-controller-task automation-controller-rsyslog receptor redis-unix"
 done
 for node in hub1-dc2 hub2-dc2; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-hub redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-hub-web automation-hub-api automation-hub-content automation-hub-worker-1 automation-hub-worker-2 redis-tcp redis-unix"
 done
 for node in eda1-dc2 eda2-dc2; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user eda-activation-worker redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-eda-api automation-eda-web automation-eda-daphne automation-eda-worker-1 automation-eda-worker-2 automation-eda-activation-worker-1 automation-eda-activation-worker-2 automation-eda-scheduler redis-tcp"
 done
 
 # 6. Promote DC1 back to primary
@@ -1262,16 +1296,16 @@ ssh pg-dc2-1 "sudo systemctl start edb-as-16"
 
 # 8. Start AAP in DC1
 for node in gateway1-dc1 gateway2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-gateway redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-gateway automation-gateway-proxy redis-tcp"
 done
 for node in controller1-dc1 controller2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-controller-web automation-controller-task"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-controller-web automation-controller-task automation-controller-rsyslog receptor redis-unix"
 done
 for node in hub1-dc1 hub2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-hub redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-hub-web automation-hub-api automation-hub-content automation-hub-worker-1 automation-hub-worker-2 redis-tcp redis-unix"
 done
 for node in eda1-dc1 eda2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user eda-activation-worker redis"
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-eda-api automation-eda-web automation-eda-daphne automation-eda-worker-1 automation-eda-worker-2 automation-eda-activation-worker-1 automation-eda-activation-worker-2 automation-eda-scheduler redis-tcp"
 done
 
 # 9. Update Global Load Balancer back to DC1
@@ -1321,16 +1355,34 @@ echo "Checking EFM cluster status..."
 # /usr/local/bin/manual-failover-dc2.sh
 
 # Stop AAP in DC1
-for node in gateway1-dc1 gateway2-dc1 controller1-dc1 controller2-dc1 hub1-dc1 hub2-dc1 eda1-dc1 eda2-dc1; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-*"
+for node in gateway1-dc1 gateway2-dc1; do
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-gateway automation-gateway-proxy redis-tcp"
+done
+for node in controller1-dc1 controller2-dc1; do
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-controller-web automation-controller-task automation-controller-rsyslog receptor redis-unix"
+done
+for node in hub1-dc1 hub2-dc1; do
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-hub-web automation-hub-api automation-hub-content automation-hub-worker-1 automation-hub-worker-2 redis-tcp redis-unix"
+done
+for node in eda1-dc1 eda2-dc1; do
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl stop --user automation-eda-api automation-eda-web automation-eda-daphne automation-eda-worker-1 automation-eda-worker-2 automation-eda-activation-worker-1 automation-eda-activation-worker-2 automation-eda-scheduler redis-tcp"
 done
 
 # Promote DC2 database
 ssh pg-dc2-1 "sudo -u enterprisedb /usr/edb/as16/bin/pg_ctl promote -D /var/lib/edb/as16/data"
 
 # Start AAP in DC2
-for node in gateway1-dc2 gateway2-dc2 controller1-dc2 controller2-dc2 hub1-dc2 hub2-dc2 eda1-dc2 eda2-dc2; do
-    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-*"
+for node in gateway1-dc2 gateway2-dc2; do
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-gateway automation-gateway-proxy redis-tcp"
+done
+for node in controller1-dc2 controller2-dc2; do
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-controller-web automation-controller-task automation-controller-rsyslog receptor redis-unix"
+done
+for node in hub1-dc2 hub2-dc2; do
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-hub-web automation-hub-api automation-hub-content automation-hub-worker-1 automation-hub-worker-2 redis-tcp redis-unix"
+done
+for node in eda1-dc2 eda2-dc2; do
+    ssh "$node" "export XDG_RUNTIME_DIR=/run/user/\$(id -u); systemctl start --user automation-eda-api automation-eda-web automation-eda-daphne automation-eda-worker-1 automation-eda-worker-2 automation-eda-activation-worker-1 automation-eda-activation-worker-2 automation-eda-scheduler redis-tcp"
 done
 
 # Update Global Load Balancer
@@ -1376,13 +1428,13 @@ curl -k -X POST -H "Authorization: Bearer ${AAP_TOKEN}" \
 # (Manual via AAP UI or API)
 
 # 2. Stop services
-ssh controller1-dc1 "export XDG_RUNTIME_DIR=/run/user/\$(id -u);  systemctl stop --user automation-controller-web automation-controller-task"
+ssh controller1-dc1 "export XDG_RUNTIME_DIR=/run/user/\$(id -u);  systemctl stop --user automation-controller-web automation-controller-task automation-controller-rsyslog receptor redis-unix"
 
 # 3. Perform maintenance
 ssh controller1-dc1 "dnf update -y && reboot"
 
 # 4. Start services
-ssh controller1-dc1 "export XDG_RUNTIME_DIR=/run/user/\$(id -u);  systemctl start --user automation-controller-web automation-controller-task"
+ssh controller1-dc1 "export XDG_RUNTIME_DIR=/run/user/\$(id -u);  systemctl start --user automation-controller-web automation-controller-task automation-controller-rsyslog receptor redis-unix"
 
 # 5. Verify health
 curl -k https://controller1-dc1/api/v2/ping/
