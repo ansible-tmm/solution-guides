@@ -20,15 +20,17 @@
 
 Security operations still lose time between detection and durable change. A Splunk alert lands, analysts open tickets, and containment or patching waits on manual SSH and spreadsheet evidence -- giving attackers room to pivot, or leaving CVE windows open for tens of minutes per host.
 
-This guide shows how **Splunk**, **Event-Driven Ansible (EDA)**, and **Ansible Automation Platform (AAP)** close that gap for two operational outcomes:
+This guide shows how **Splunk**, **Event-Driven Ansible (EDA)**, and **Ansible Automation Platform (AAP)** close that gap for three operational outcomes:
 
 - **[Use Case A: Automated brute-force remediation](#use-case-a-automated-brute-force-remediation)** -- SSH authentication failures trigger EDA, which revokes HashiCorp Vault database credentials and stops the compromised service in seconds.
 - **[Use Case B: Automated CVE response](#use-case-b-automated-cve-response)** -- Splunk CVE alerts drive DEFEND containment, OPA-gated CONTAIN patching with human approval, then COMPLY evidence and a scanned container image.
+- **[Use Case C: Splunk ES investigation lifecycle](#use-case-c-splunk-es-investigation-lifecycle)** -- The `splunk.es` collection closes the loop: correlation searches as code, automated findings, investigations, and response plans managed entirely through Ansible.
 
 | Use case | Primary outcome | Operational impact | Maturity fit |
 |----------|-----------------|-------------------|--------------|
 | **A. Brute-force remediation** | Instant credential and service containment | High | Crawl alert; Walk approve; Run closed-loop revoke |
 | **B. CVE response** | Contain, policy-gated patch, prove | High | Crawl alert; Walk EDA contain; Run full DEFEND/CONTAIN/COMPLY |
+| **C. ES investigation lifecycle** | Detection-as-code and SOC write-back | Medium | Crawl audit searches; Walk findings write-back; Run full investigation lifecycle |
 
 > **AIOps Splunk is separate.**
 >
@@ -41,6 +43,7 @@ This guide shows how **Splunk**, **Event-Driven Ansible (EDA)**, and **Ansible A
 - [Prerequisites](#prerequisites)
 - **[Use Case A: Automated brute-force remediation](#use-case-a-automated-brute-force-remediation)**
 - **[Use Case B: Automated CVE response](#use-case-b-automated-cve-response)**
+- **[Use Case C: Splunk ES investigation lifecycle](#use-case-c-splunk-es-investigation-lifecycle)**
 - [Maturity Path](#maturity-path)
 - [Summary](#summary)
 - [Next Steps](#next-steps)
@@ -62,7 +65,7 @@ What makes up the solution?
 
 - **Splunk Enterprise** -- Brute-force and CVE detection; Ansible add-on webhooks (both)
 - **Event-Driven Ansible** -- Rulebooks that launch job or workflow templates (both)
-- **Ansible Automation Platform 2.5+** -- Orchestration, approvals, audit (both). AAP 2.6 recommended for Token Event Stream enhancements
+- **Ansible Automation Platform 2.5+** -- Orchestration, approvals, audit (all)
 - **HashiCorp Vault** -- Dynamic DB leases and revocation (Use Case A)
 - **Open Policy Agent (OPA)** -- Patch and execution policy gates (Use Case B)
 - **RHEL 9 targets** -- firewalld, SELinux, httpd, Podman for containment and compliance (Use Case B)
@@ -74,6 +77,7 @@ What makes up the solution?
 | **IT Ops / SRE** | 3 AM manual revoke or 45+ minutes SSH per CVE host | Closed-loop containment; patching after gates and approval |
 | **Security Architect** | Response times miss policy; patch rules live in docs | Code-driven revoke and OPA-enforced patch prerequisites |
 | **Compliance / CISO** | Weak evidence and supply-chain provenance | AAP job trails; before/after HTML evidence; labeled scanned images (Use Case B) |
+| **SOC Analyst** | Context-switching between SIEM and remediation tools | Findings, investigations, and response plan status visible in Splunk ES console (Use Case C) |
 
 ## Prerequisites
 
@@ -85,7 +89,8 @@ What makes up the solution?
 
 | Collection | Type | Purpose |
 |-----------|------|---------|
-| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/eda/">ansible.eda</a> | Certified | Webhook / event stream sources and rulebook actions (both) |
+| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/eda/">ansible.eda</a> | Certified | Webhook / event stream sources and rulebook actions (all) |
+| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/splunk/es/">splunk.es</a> | Certified | Manage ES correlation searches, findings, investigations, response plans, adaptive response notable events, and data inputs (Use Cases A, B, C) |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/community/hashi_vault/">community.hashi_vault</a> / <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/collections/published/hashicorp/vault/details">hashicorp.vault</a> | Community / Certified | Vault APIs (Use Case A) |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller/">ansible.controller</a> | Certified | Workflow control and set_stats (Use Case B) |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/posix/">ansible.posix</a> | Certified | firewalld, SELinux, sysctl (Use Case B) |
@@ -96,12 +101,16 @@ What makes up the solution?
 
 | System | Required | Details |
 |--------|----------|---------|
-| Splunk | Required | Enterprise with Ansible add-on (both); HEC optional for Use Case B |
+| Splunk | Required | Enterprise with Ansible add-on (all); HEC optional for Use Case B; Enterprise Security (ES) app required for Use Case C and `splunk.es` write-back in A and B |
 | HashiCorp Vault | Use Case A | Dynamic DB credentials and lease revoke |
 | Open Policy Agent | Use Case B | Patch and execution policies (for example port 8181) |
 | RHEL 9 lab hosts | Use Case B | httpd, firewalld, SELinux targeted, Podman |
 
-**Operational Impact:** High for both use cases -- credential revoke / service stop (A); interface isolation, advisory patch, CIS and container changes (B). Lab first.
+**Operational Impact:** High for Use Cases A and B -- credential revoke / service stop (A); interface isolation, advisory patch, CIS and container changes (B). Medium for Use Case C (ES configuration changes). Lab first.
+
+> **Warning:** TLS in production
+>
+> Code examples use `validate_certs: false` for lab convenience. Production deployments must use proper TLS certificates and set `validate_certs: true`.
 
 ---
 
@@ -213,6 +222,37 @@ Authenticate to Vault, read the active lease, revoke it, remove credentials on d
 >
 > `vault lease revoke` drops the generated user for new connections. Configure PostgreSQL to terminate sessions for dropped users, or add an explicit kill-sessions task.
 
+#### Step 4: Write back to Splunk ES
+
+**Operational Impact:** Low
+
+After remediation, write a finding and notable event back into Splunk Enterprise Security so SOC analysts see the outcome without leaving Splunk:
+
+```yaml
+    - name: Create ES finding for brute-force remediation
+      splunk.es.splunk_finding:
+        title: "Brute-force remediation completed - {{ inventory_hostname }}"
+        description: >
+          Vault lease revoked, service stopped by AAP job {{ tower_job_id }}.
+          Lease ID: {{ lease_id | default('unknown') }}.
+        urgency: critical
+        status: closed
+        state: merged
+      register: finding_result
+
+    - name: Attach remediation notes to finding
+      splunk.es.splunk_notes:
+        finding_id: "{{ finding_result.splunk_finding.id }}"
+        note: >
+          Vault lease {{ lease_id }} revoked. Service ztaapp stopped.
+          AAP job {{ tower_job_id }}. Timestamp: {{ ansible_date_time.iso8601 }}.
+        state: merged
+```
+
+> **Tip:** `splunk.es` httpapi connection
+>
+> The `splunk.es` modules use httpapi. Set `ansible_network_os: splunk.es.splunk`, `ansible_httpapi_port: 8089`, and `ansible_httpapi_use_ssl: true` in your inventory or group vars for the Splunk host.
+
 ### Validation
 
 #### Test
@@ -268,7 +308,9 @@ graph LR
 
 ```yaml
 sources:
-  - ansible.eda.pg_listener:
+  - ansible.eda.webhook:
+      host: 0.0.0.0
+      port: 5000
       token: "{{ EDA_WEBHOOK_TOKEN | default('') }}"
 rules:
   - name: CVE alert from Splunk -- trigger containment
@@ -336,6 +378,45 @@ Audit controls before and after CIS hardening, publish HTML evidence, then build
       dest: "{{ registry_url }}/parasol-app:{{ rhsa_id }}"
 ```
 
+#### Step 4: Write findings back to Splunk ES
+
+**Operational Impact:** Low
+
+After COMPLY completes, write findings and investigation notes back into Splunk ES for SOC traceability:
+
+```yaml
+    - name: Create ES finding for CVE remediation
+      splunk.es.splunk_finding:
+        title: "CVE remediation completed - {{ rhsa_id }} on {{ inventory_hostname }}"
+        description: >
+          DEFEND: eth0 isolated, httpd hardened, SELinux enforced.
+          CONTAIN: Advisory {{ rhsa_id }} applied.
+          COMPLY: CIS evidence generated, container image scanned.
+        urgency: high
+        status: closed
+        state: merged
+      register: cve_finding
+
+    - name: Create ES investigation for CVE response chain
+      splunk.es.splunk_investigation:
+        title: "CVE Response - {{ rhsa_id }}"
+        description: >
+          Automated DEFEND/CONTAIN/COMPLY response for {{ rhsa_id }}.
+          AAP workflow {{ tower_job_id }}.
+        status: closed
+        state: merged
+      register: cve_investigation
+
+    - name: Attach evidence notes to investigation
+      splunk.es.splunk_notes:
+        investigation_id: "{{ cve_investigation.splunk_investigation.id }}"
+        note: >
+          Before/after evidence: {{ evidence_url }}.
+          Container image: {{ registry_url }}/parasol-app:{{ rhsa_id }}.
+          OPA gates: all passed. Approval: granted.
+        state: merged
+```
+
 ### Validation
 
 #### Test
@@ -366,22 +447,215 @@ Use Case B automates detect-contain-patch-prove: Splunk to EDA for immediate DEF
 
 ---
 
+<h2 id="use-case-c-splunk-es-investigation-lifecycle">Use Case C: Splunk ES investigation lifecycle</h2>
+
+### Overview
+
+Use Cases A and B remediate and write findings back to Splunk ES. This use case goes further: manage the full Splunk Enterprise Security lifecycle -- correlation searches, findings, investigations, response plans, and notes -- as code through the `splunk.es` certified Ansible collection. Detection-as-code means reproducible, version-controlled security posture across environments.
+
+### Workflow
+
+```mermaid
+graph LR
+  Git([Git repo]) -->|splunk_correlation_searches| Splunk([Splunk ES])
+  Splunk -->|Alert| EDA[EDA rulebook]
+  EDA -->|Remediate| AAP[AAP Controller]
+  AAP -->|splunk_finding| Splunk
+  AAP -->|splunk_investigation| Splunk
+  AAP -->|splunk_response_plan_execution| Splunk
+```
+
+### Solution Walkthrough
+
+#### Step 1: Define correlation searches as code
+
+**Operational Impact:** Medium
+
+Version-control your Splunk ES correlation searches so detection rules are reproducible and auditable across dev, staging, and production:
+
+```yaml
+    - name: Ensure SSH brute-force correlation search exists
+      splunk.es.splunk_correlation_searches:
+        name: "SSH Brute Force Detected"
+        search: >
+          index=main sourcetype=linux_secure "Failed password"
+          | stats count by src_ip
+          | where count > 5
+        disabled: false
+        schedule:
+          cron_schedule: "*/5 * * * *"
+        severity: high
+        state: merged
+
+    - name: Ensure CVE correlation search exists
+      splunk.es.splunk_correlation_searches:
+        name: "CVE Alert"
+        search: >
+          index=main sourcetype=linux_secure tag=vulnerability
+          | lookup cve_database cve_id OUTPUT severity
+          | where severity="critical" OR severity="high"
+        disabled: false
+        schedule:
+          cron_schedule: "*/10 * * * *"
+        severity: critical
+        state: merged
+```
+
+> **Tip:** Audit existing searches first.
+>
+> Use `splunk.es.splunk_correlation_search_info` to gather current correlation searches before overwriting. Export, review, then converge.
+
+#### Step 2: Automate investigation and response plan lifecycle
+
+**Operational Impact:** Low
+
+Create investigation types and response plans that standardize SOC workflows:
+
+```yaml
+    - name: Create investigation type for automated responses
+      splunk.es.splunk_investigation_type:
+        name: "Automated Remediation"
+        description: "Investigations created by AAP automated response workflows"
+        state: merged
+
+    - name: Define response plan for brute-force incidents
+      splunk.es.splunk_response_plan:
+        name: "Brute Force Response Plan"
+        description: >
+          Standard response: revoke credentials, stop service,
+          verify containment, close investigation.
+        state: merged
+      register: response_plan
+
+    - name: Define response plan for CVE incidents
+      splunk.es.splunk_response_plan:
+        name: "CVE Response Plan"
+        description: >
+          Standard response: DEFEND containment, OPA-gated CONTAIN patch,
+          COMPLY evidence collection, close investigation.
+        state: merged
+```
+
+#### Step 3: Apply response plans to active investigations
+
+**Operational Impact:** Low
+
+When remediation completes, apply the matching response plan to the investigation and mark tasks complete:
+
+```yaml
+    - name: Apply response plan to investigation
+      splunk.es.splunk_response_plan_execution:
+        investigation_id: "{{ investigation_id }}"
+        response_plan_id: "{{ response_plan.splunk_response_plan.id }}"
+        state: merged
+
+    - name: Attach closing notes with evidence
+      splunk.es.splunk_notes:
+        investigation_id: "{{ investigation_id }}"
+        note: >
+          Response plan executed. All tasks completed by AAP.
+          Job ID: {{ tower_job_id }}.
+          Evidence: {{ evidence_url | default('see AAP job artifacts') }}.
+        state: merged
+```
+
+#### Step 4: Configure adaptive response notable events
+
+**Operational Impact:** Low
+
+Set up adaptive response actions that create notable events with consistent metadata:
+
+```yaml
+    - name: Configure adaptive response for credential revocation
+      splunk.es.splunk_adaptive_response_notable_events:
+        correlation_search_name: "SSH Brute Force Detected"
+        description: "Automated credential revocation triggered by brute-force detection"
+        default_owner: "ansible_svc"
+        security_domain: "access"
+        severity: "critical"
+        state: merged
+
+    - name: Configure adaptive response for CVE detection
+      splunk.es.splunk_adaptive_response_notable_events:
+        correlation_search_name: "CVE Alert"
+        description: "Automated CVE response triggered"
+        default_owner: "ansible_svc"
+        security_domain: "endpoint"
+        severity: "high"
+        state: merged
+```
+
+#### Step 5: Bootstrap Splunk data inputs with Ansible
+
+**Operational Impact:** Medium
+
+Automate the data input configuration that feeds correlation searches, so new Splunk deployments are production-ready:
+
+```yaml
+    - name: Configure syslog data input for authentication events
+      splunk.es.splunk_data_inputs_network:
+        name: "9514"
+        protocol: udp
+        sourcetype: "linux_secure"
+        index: "main"
+        state: merged
+
+    - name: Configure file monitor for application logs
+      splunk.es.splunk_data_inputs_monitor:
+        name: "/var/log/secure"
+        index: "main"
+        sourcetype: "linux_secure"
+        state: merged
+```
+
+### Validation
+
+#### Test
+
+1. Run the correlation search playbook against a lab Splunk instance. Confirm searches appear in **Settings > Correlation Searches** in Splunk ES.
+2. Trigger a brute-force simulation and confirm an investigation is created with the correct response plan applied and notes attached.
+3. Use `splunk.es.splunk_correlation_search_info` and `splunk.es.splunk_finding_info` to verify state matches what was declared.
+
+#### Expected Result
+
+```
+Correlation searches appear in ES with correct schedules and severity.
+Findings and investigations created programmatically match declared state.
+Response plans applied to investigations; tasks and notes visible in ES console.
+```
+
+#### Troubleshooting
+
+| Symptom | Likely Cause | Fix |
+|---------|-------------|-----|
+| `splunk.es` modules fail to connect | httpapi misconfiguration | Set `ansible_network_os: splunk.es.splunk`, `ansible_httpapi_port: 8089`, `ansible_httpapi_use_ssl: true` |
+| Correlation search not firing | Schedule or search syntax | Test search manually in Splunk; check `cron_schedule` format |
+| Finding/investigation not visible in ES | Wrong Splunk app context | Confirm `SplunkEnterpriseSecuritySuite` is installed and the user has ES permissions |
+| `state: merged` not idempotent | Naming mismatch | Ensure `name` matches exactly; `splunk_*_info` modules verify current state |
+
+### Summary
+
+Use Case C treats Splunk ES configuration as code. Correlation searches, response plans, and investigation types live in Git, deploy through AAP, and stay consistent across environments. Combined with the write-back steps in Use Cases A and B, the integration is fully bidirectional -- Splunk detects, Ansible remediates, and results flow back into ES for SOC visibility.
+
+---
+
 ## Maturity Path
 
-| Maturity | Use Case A | Use Case B |
-|----------|------------|------------|
-| **Crawl** | Splunk alert to Slack/ITSM; manual revoke | Alert only; manual SSH harden and patch tracking |
-| **Walk** | ITSM approval then AAP revoke playbook | EDA DEFEND automatic; operator approves patch |
-| **Run** | EDA auto-revoke Vault lease and stop service | Full DEFEND / CONTAIN / COMPLY with OPA and evidence |
+| Maturity | Use Case A | Use Case B | Use Case C |
+|----------|------------|------------|------------|
+| **Crawl** | Splunk alert to Slack/ITSM; manual revoke | Alert only; manual SSH harden and patch tracking | `splunk_correlation_search_info` audit of existing searches |
+| **Walk** | ITSM approval then AAP revoke playbook; ES finding write-back | EDA DEFEND automatic; operator approves patch; ES finding write-back | Correlation searches as code; `splunk_finding` write-back after remediation |
+| **Run** | EDA auto-revoke Vault lease and stop service; full ES notable event | Full DEFEND / CONTAIN / COMPLY with OPA, evidence, and ES investigation | Full investigation lifecycle: auto-create investigations, apply response plans, close with evidence notes; correlation searches version-controlled in Git |
 
 ## Summary
 
-Splunk plus EDA and AAP delivers two Security outcomes on one platform: **instant brute-force containment** via Vault and service isolation, and **policy-gated CVE response** with automated compliance proof. Shared webhook and rulebook patterns keep both paths auditable; AIOps Splunk patterns remain in the separate AIOps Solution Guide.
+Splunk plus EDA and AAP delivers three Security outcomes on one platform: **instant brute-force containment** via Vault and service isolation, **policy-gated CVE response** with automated compliance proof, and **bidirectional Splunk ES lifecycle management** through the `splunk.es` collection. The `splunk.es` integration closes the loop -- detection rules deploy as code, remediation results write back as findings and investigations, and response plans execute programmatically. Shared webhook and rulebook patterns keep all paths auditable; AIOps Splunk patterns remain in the separate AIOps Solution Guide.
 
 ## Next Steps
 
 1. Start a free <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/trial">Ansible Automation Platform trial</a> including Event-Driven Ansible.
 2. Work the <a target="_blank" href="https://github.com/ansible/workshops">Zero Trust Architecture workshop</a> for Use Case A patterns; apply Use Case B OPA and compliance stages in a RHEL 9 lab.
 3. For Splunk AIOps (ITSI / RHEL / network), open [AIOps with Splunk and Event-Driven Ansible](README-AIOps-Splunk-ITSI.md).
-4. Engage <a target="_blank" href="https://www.redhat.com/en/services/consulting">Red Hat Consulting</a> or <a target="_blank" href="https://www.redhat.com/en/services/training-and-certification">Training</a> for production security automation.
+4. For Splunk SOAR integration patterns beyond `splunk.es`, see <a target="_blank" href="https://docs.splunk.com/Documentation/SOAR/">Splunk SOAR documentation</a>.
+5. Engage <a target="_blank" href="https://www.redhat.com/en/services/consulting">Red Hat Consulting</a> or <a target="_blank" href="https://www.redhat.com/en/services/training-and-certification">Training</a> for production security automation.
 {% endraw %}
