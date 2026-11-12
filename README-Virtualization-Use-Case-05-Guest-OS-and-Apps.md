@@ -23,12 +23,23 @@ Start from the [Common virtualization automation use cases hub](virtualization-u
 
 ## Background
 
-AVA 301 separates OpenShift Virtualization automation (provision) from guest and infra automation (optimize / install application / orchestration). This use case covers guest and application day-1 configuration.
+AVA 301 separates OpenShift Virtualization automation (provision) from guest and infra automation (optimize / install application / orchestration). This use case covers guest and application day-1 configuration using dynamic inventory from kubevirt, system roles for hardening, and standard Ansible modules for application deployment.
+
+### Key modules and plugins
+
+| Module / Plugin | Collection | Purpose |
+|----------------|-----------|---------|
+| kubevirt inventory plugin | `kubernetes.core` | Dynamic inventory of VMs by namespace and label |
+| `rhel_system_roles.firewall` | `redhat.rhel_system_roles` | Guest firewall configuration |
+| `rhel_system_roles.timesync` | `redhat.rhel_system_roles` | NTP / chrony configuration |
+| `rhel_system_roles.crypto_policies` | `redhat.rhel_system_roles` | System-wide crypto policy |
+| `dnf`, `service`, `template` | `ansible.builtin` | Package management, services, config files |
 
 ## Solution
 
 - **Ansible Automation Platform** with guest credentials (SSH/WinRM)
 - **Dynamic inventory** from OpenShift Virtualization / kubevirt
+- **RHEL system roles** for hardening baselines
 - **Linux and Windows modules** plus optional ITSM / DNS / firewall jobs
 
 ### Who Benefits
@@ -41,64 +52,301 @@ AVA 301 separates OpenShift Virtualization automation (provision) from guest and
 
 ## Prerequisites
 
-- Reachable guests from the execution environment
-- Inventory source for OpenShift Virtualization VMs
+- AAP 2.5+ with guest SSH credentials (machine credential) or WinRM for Windows guests
+- Execution environment with `redhat.rhel_system_roles`, `kubernetes.core`, and guest connectivity
+- Guests must have `qemu-guest-agent` running (set up via cloud-init in [use case 4](README-Virtualization-Use-Case-04-VM-Provisioning.md))
+- Network path from execution environment to guest VMs (pod network or `NodePort` / `LoadBalancer` service)
 
 ## Workflow
 
 ```mermaid
 graph LR
-  VM([VM Running]) --> Guest[Guest config job]
+  VM([VM Running]) --> Inventory[kubevirt inventory]
+  Inventory --> Guest[Guest hardening]
   Guest --> App[Application deploy]
-  App --> Infra([DNS / ITSM / firewall])
+  App --> Verify[Service verification]
+  Verify --> Infra([DNS / ITSM update])
 ```
 
 ## Solution Walkthrough
 
-### Step 1: Build dynamic inventory from kubevirt
+### Step 1: Configure kubevirt dynamic inventory
 
-Target only the VMs in the wave or namespace you just provisioned or migrated.
+Create an inventory source in Controller that uses the kubevirt inventory plugin. This inventory file targets VMs by namespace and label so you only configure the VMs from a specific provisioning wave or application group.
 
-### Step 2: Apply guest optimize and baseline config
+```yaml
+# kubevirt-inventory.yml -- add as an inventory source in AAP Controller
+plugin: kubernetes.core.k8s
+connections:
+  - kubeconfig: "{{ lookup('env', 'K8S_AUTH_KUBECONFIG') }}"
 
-Tools, hardening baselines, and OS settings as code.
+compose:
+  ansible_host: >-
+    status.interfaces[0].ipAddress
+  ansible_user: ansible
 
-### Step 3: Deploy applications and notify dependent systems
+groups:
+  rhel_guests: >-
+    status.guestOSInfo.name is defined
+    and 'Red Hat' in status.guestOSInfo.name
+  windows_guests: >-
+    status.guestOSInfo.name is defined
+    and 'Windows' in status.guestOSInfo.name
 
-Install services; update DNS, load balancers, or ITSM as required.
+resources:
+  - group: virtualmachineinstances
+    api_version: kubevirt.io/v1
+    namespaces:
+      - vms
+      - production
+```
+
+Verify inventory discovery from the execution environment:
+
+```bash
+ansible-inventory -i kubevirt-inventory.yml --graph
+ansible-inventory -i kubevirt-inventory.yml --host <vm-name>
+```
+
+### Step 2: Harden guest OS with RHEL system roles
+
+Apply security baselines, time synchronization, and firewall rules as code. These same playbooks serve as drift detection when re-run on day 2.
+
+**Operational Impact:** Low to Medium -- changes OS-level security settings.
+
+```yaml
+---
+- name: Harden RHEL guest OS
+  hosts: rhel_guests
+  become: true
+  vars:
+    timesync_ntp_servers:
+      - hostname: time.corp.example.com
+        iburst: true
+      - hostname: 0.rhel.pool.ntp.org
+        iburst: true
+    crypto_policies_policy: FUTURE
+    firewall:
+      - service: ssh
+        state: enabled
+        permanent: true
+      - service: http
+        state: enabled
+        permanent: true
+      - service: https
+        state: enabled
+        permanent: true
+      - port: "9090/tcp"
+        state: enabled
+        permanent: true
+  roles:
+    - role: redhat.rhel_system_roles.timesync
+    - role: redhat.rhel_system_roles.crypto_policies
+    - role: redhat.rhel_system_roles.firewall
+
+  tasks:
+    - name: Ensure qemu-guest-agent is running
+      ansible.builtin.service:
+        name: qemu-guest-agent
+        state: started
+        enabled: true
+
+    - name: Set hostname to match VM name
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Configure SELinux to enforcing
+      ansible.posix.selinux:
+        state: enforcing
+        policy: targeted
+
+    - name: Install baseline security packages
+      ansible.builtin.dnf:
+        name:
+          - aide
+          - audit
+          - rsyslog
+          - firewalld
+        state: present
+```
+
+### Step 3: Deploy application and configure services
+
+Install and configure application workloads. This example deploys a web server with a custom configuration template.
+
+```yaml
+---
+- name: Deploy web application on guest
+  hosts: rhel_guests
+  become: true
+  vars:
+    app_name: "{{ hostvars[inventory_hostname]['labels']['app'] | default('webapp') }}"
+    app_port: 8080
+    app_doc_root: /var/www/html
+  tasks:
+    - name: Install application packages
+      ansible.builtin.dnf:
+        name:
+          - httpd
+          - mod_ssl
+          - python3
+        state: present
+
+    - name: Deploy httpd configuration
+      ansible.builtin.template:
+        src: templates/httpd.conf.j2
+        dest: /etc/httpd/conf.d/{{ app_name }}.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Restart httpd
+
+    - name: Deploy application content
+      ansible.builtin.copy:
+        src: "files/{{ app_name }}/"
+        dest: "{{ app_doc_root }}/"
+        owner: apache
+        group: apache
+        mode: "0644"
+
+    - name: Enable and start httpd
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: Verify application responds
+      ansible.builtin.uri:
+        url: "http://localhost:{{ app_port }}/health"
+        return_content: true
+        status_code: 200
+      register: health_check
+      retries: 5
+      delay: 5
+
+  handlers:
+    - name: Restart httpd
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
+```
+
+### Step 4: Register with DNS and load balancer
+
+After application deployment, update DNS records and register the new VM with the load balancer. Optionally update ITSM with the new asset.
+
+```yaml
+---
+- name: Register VM with infrastructure services
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    vm_name: "{{ target_vm }}"
+    vm_ip: "{{ hostvars[target_vm]['ansible_host'] }}"
+    dns_zone: apps.example.com
+  tasks:
+    - name: Create DNS A record
+      ansible.builtin.nsupdate:
+        server: "{{ dns_server }}"
+        zone: "{{ dns_zone }}"
+        record: "{{ vm_name }}"
+        type: A
+        value: "{{ vm_ip }}"
+        state: present
+      when: dns_server is defined
+
+    - name: Create OpenShift Service for the VM
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: "{{ vm_name }}-svc"
+            namespace: "{{ vm_namespace | default('vms') }}"
+          spec:
+            selector:
+              app: "{{ vm_name }}"
+            ports:
+              - name: http
+                port: 80
+                targetPort: 8080
+              - name: https
+                port: 443
+                targetPort: 8443
+
+    - name: Create Route for external access
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: route.openshift.io/v1
+          kind: Route
+          metadata:
+            name: "{{ vm_name }}-route"
+            namespace: "{{ vm_namespace | default('vms') }}"
+          spec:
+            host: "{{ vm_name }}.{{ dns_zone }}"
+            to:
+              kind: Service
+              name: "{{ vm_name }}-svc"
+            port:
+              targetPort: http
+```
 
 ## Validation
 
 ### Test
 
 ```bash
-ansible -i inventories/virt-lab.yml all -m ping
+# Verify dynamic inventory resolves VMs
+ansible-inventory -i kubevirt-inventory.yml --graph
+
+# Ping all discovered guests
+ansible -i kubevirt-inventory.yml rhel_guests -m ping
+
+# Check hardening was applied
+ansible -i kubevirt-inventory.yml rhel_guests -m command -a "chronyc sources" --become
+ansible -i kubevirt-inventory.yml rhel_guests -m command -a "update-crypto-policies --show" --become
+
+# Verify application service
+ansible -i kubevirt-inventory.yml rhel_guests -m uri -a "url=http://localhost:8080/health"
+
+# Confirm firewall rules
+ansible -i kubevirt-inventory.yml rhel_guests -m command -a "firewall-cmd --list-all" --become
 ```
 
 ### Expected Result
 
 ```
-Guest ping succeeds; configure/app job completes with failed=0 and desired packages or services present.
+Dynamic inventory lists VMs by namespace with IP addresses.
+Ping succeeds for all reachable guests.
+Chrony shows configured NTP sources; crypto policy returns FUTURE.
+Application health endpoint returns 200.
+Firewall shows ssh, http, https enabled.
 ```
 
 ### Troubleshooting
 
 | Symptom | Likely Cause | Fix |
 |---------|-------------|-----|
-| Unreachable guest | Network policy or credential | Fix inventory vars and SSH/WinRM |
-| Partial app install | Missing repos or EE packages | Align content and proxy settings |
+| Unreachable guest | Network policy blocking SSH from EE pod | Add `NetworkPolicy` allowing EE egress to VM pod network |
+| Inventory empty | Wrong namespace or missing guest agent | Verify `qemu-guest-agent` running; check inventory `namespaces` list |
+| System roles fail | Missing role or wrong EE | Verify `redhat.rhel_system_roles` is in the EE; check `ansible-galaxy collection list` |
+| Partial app install | Missing repos or proxy | Configure subscription-manager or satellite on guests first |
+| DNS update fails | nsupdate permission or zone mismatch | Verify TSIG key and zone name match DNS server config |
 
 ## Maturity Path
 
 | Maturity | For this use case |
 |----------|-------------------|
-| **Crawl** | Manual guest playbooks after create |
-| **Walk** | Provision workflow chains guest + app |
-| **Run** | Same content used for drift repair day-2 |
+| **Crawl** | Manual guest playbooks run after create |
+| **Walk** | Provision workflow chains guest hardening + app deploy as workflow nodes |
+| **Run** | Same content used for day-2 drift detection and repair; scheduled compliance checks |
 
 ## Summary
 
-**Guest OS and application configuration** is use case 5 -- day-1 intent enforced with the same Ansible skills used for migration.
+**Guest OS and application configuration** is use case 5 -- day-1 intent enforced with the same Ansible skills used for migration. Dynamic inventory from kubevirt, RHEL system roles for hardening, and standard modules for app deployment provide a repeatable, auditable path from VM provisioning to production-ready workload.
 
 ## Next Steps
 
