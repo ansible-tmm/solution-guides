@@ -607,7 +607,7 @@ patternfly: true
             <h3 class="pf-v6-c-card__title-text">Security automation with Splunk and Event-Driven Ansible</h3>
           </div>
           <div class="pf-v6-c-card__body">
-            Closed-loop security from Splunk alerts: revoke Vault credentials and stop compromised services on brute-force detection, then contain CVEs, gate patches with OPA and approval, and produce compliance evidence with a scanned container image.
+            Closed-loop security from Splunk alerts: revoke Vault credentials and stop compromised services on brute-force detection, contain CVEs with OPA-gated patching and compliance evidence, and manage Splunk ES correlation searches, findings, and response plans as code.
           </div>
           <div class="pf-v6-c-card__footer">
             <span class="card-partner-logo-set">

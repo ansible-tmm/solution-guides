@@ -235,23 +235,27 @@ After remediation, write a finding and notable event back into Splunk Enterprise
         description: >
           Vault lease revoked, service stopped by AAP job {{ tower_job_id }}.
           Lease ID: {{ lease_id | default('unknown') }}.
+        security_domain: access
+        entity: "{{ inventory_hostname }}"
+        entity_type: system
+        finding_score: 80
+        owner: unassigned
+        status: resolved
         urgency: critical
-        status: closed
-        state: merged
-      register: finding_result
+        disposition: true_positive
 
-    - name: Attach remediation notes to finding
+    - name: Attach remediation notes to the finding
       splunk.es.splunk_notes:
-        finding_id: "{{ finding_result.splunk_finding.id }}"
-        note: >
+        target_type: finding
+        finding_ref_id: "{{ finding_ref_id }}"
+        content: >
           Vault lease {{ lease_id }} revoked. Service ztaapp stopped.
-          AAP job {{ tower_job_id }}. Timestamp: {{ ansible_date_time.iso8601 }}.
-        state: merged
+          AAP job {{ tower_job_id }}.
 ```
 
 > **Tip:** `splunk.es` httpapi connection
 >
-> The `splunk.es` modules use httpapi. Set `ansible_network_os: splunk.es.splunk`, `ansible_httpapi_port: 8089`, and `ansible_httpapi_use_ssl: true` in your inventory or group vars for the Splunk host.
+> Run these tasks against the Splunk host, not localhost. Set `ansible_connection: httpapi`, `ansible_network_os: splunk.es.splunk`, `ansible_httpapi_port: 8089`, `ansible_httpapi_use_ssl: true`, and `ansible_httpapi_validate_certs: true` in inventory or group vars. `splunk_finding` returns `finding.after`. It does not document a ref id, so set `finding_ref_id` from `splunk.es.splunk_finding_info` (format `uuid@@notable@@time{timestamp}`) before the notes task.
 
 ### Validation
 
@@ -392,30 +396,40 @@ After COMPLY completes, write findings and investigation notes back into Splunk 
           DEFEND: eth0 isolated, httpd hardened, SELinux enforced.
           CONTAIN: Advisory {{ rhsa_id }} applied.
           COMPLY: CIS evidence generated, container image scanned.
+        security_domain: endpoint
+        entity: "{{ inventory_hostname }}"
+        entity_type: system
+        finding_score: 70
+        owner: unassigned
+        status: resolved
         urgency: high
-        status: closed
-        state: merged
-      register: cve_finding
+        disposition: true_positive
 
     - name: Create ES investigation for CVE response chain
       splunk.es.splunk_investigation:
-        title: "CVE Response - {{ rhsa_id }}"
+        name: "CVE Response - {{ rhsa_id }}"
         description: >
           Automated DEFEND/CONTAIN/COMPLY response for {{ rhsa_id }}.
           AAP workflow {{ tower_job_id }}.
-        status: closed
-        state: merged
-      register: cve_investigation
+        status: resolved
+        owner: unassigned
+        urgency: high
+        sensitivity: amber
+        disposition: true_positive
 
-    - name: Attach evidence notes to investigation
+    - name: Attach evidence notes to the investigation
       splunk.es.splunk_notes:
-        investigation_id: "{{ cve_investigation.splunk_investigation.id }}"
-        note: >
+        target_type: investigation
+        investigation_ref_id: "{{ investigation_ref_id }}"
+        content: >
           Before/after evidence: {{ evidence_url }}.
           Container image: {{ registry_url }}/parasol-app:{{ rhsa_id }}.
           OPA gates: all passed. Approval: granted.
-        state: merged
 ```
+
+> **Tip:** Investigation UUID
+>
+> `splunk_investigation` returns `investigation.after` and does not document an id. Set `investigation_ref_id` from `splunk.es.splunk_investigation_info` before attaching notes.
 
 ### Validation
 
@@ -476,28 +490,28 @@ Version-control your Splunk ES correlation searches so detection rules are repro
 ```yaml
     - name: Ensure SSH brute-force correlation search exists
       splunk.es.splunk_correlation_searches:
-        name: "SSH Brute Force Detected"
-        search: >
-          index=main sourcetype=linux_secure "Failed password"
-          | stats count by src_ip
-          | where count > 5
-        disabled: false
-        schedule:
-          cron_schedule: "*/5 * * * *"
-        severity: high
+        config:
+          - name: "SSH Brute Force Detected"
+            description: Failed SSH passwords above threshold
+            search: >
+              index=main sourcetype=linux_secure "Failed password"
+              | stats count by src_ip
+              | where count > 5
+            scheduling:
+              cron_schedule: "*/5 * * * *"
         state: merged
 
     - name: Ensure CVE correlation search exists
       splunk.es.splunk_correlation_searches:
-        name: "CVE Alert"
-        search: >
-          index=main sourcetype=linux_secure tag=vulnerability
-          | lookup cve_database cve_id OUTPUT severity
-          | where severity="critical" OR severity="high"
-        disabled: false
-        schedule:
-          cron_schedule: "*/10 * * * *"
-        severity: critical
+        config:
+          - name: "CVE Alert"
+            description: Critical or high CVE events in linux_secure
+            search: >
+              index=main sourcetype=linux_secure tag=vulnerability
+              | lookup cve_database cve_id OUTPUT severity
+              | where severity="critical" OR severity="high"
+            scheduling:
+              cron_schedule: "*/10 * * * *"
         state: merged
 ```
 
@@ -516,7 +530,6 @@ Create investigation types and response plans that standardize SOC workflows:
       splunk.es.splunk_investigation_type:
         name: "Automated Remediation"
         description: "Investigations created by AAP automated response workflows"
-        state: merged
 
     - name: Define response plan for brute-force incidents
       splunk.es.splunk_response_plan:
@@ -524,8 +537,14 @@ Create investigation types and response plans that standardize SOC workflows:
         description: >
           Standard response: revoke credentials, stop service,
           verify containment, close investigation.
-        state: merged
-      register: response_plan
+        template_status: published
+        phases:
+          - name: Containment
+            tasks:
+              - name: Revoke credentials and stop service
+                description: Vault lease revoke and ztaapp stop
+                is_note_required: true
+                owner: unassigned
 
     - name: Define response plan for CVE incidents
       splunk.es.splunk_response_plan:
@@ -533,7 +552,14 @@ Create investigation types and response plans that standardize SOC workflows:
         description: >
           Standard response: DEFEND containment, OPA-gated CONTAIN patch,
           COMPLY evidence collection, close investigation.
-        state: merged
+        template_status: published
+        phases:
+          - name: Containment
+            tasks:
+              - name: Contain patch and collect evidence
+                description: DEFEND, CONTAIN, and COMPLY stages
+                is_note_required: true
+                owner: unassigned
 ```
 
 #### Step 3: Apply response plans to active investigations
@@ -545,18 +571,23 @@ When remediation completes, apply the matching response plan to the investigatio
 ```yaml
     - name: Apply response plan to investigation
       splunk.es.splunk_response_plan_execution:
-        investigation_id: "{{ investigation_id }}"
-        response_plan_id: "{{ response_plan.splunk_response_plan.id }}"
-        state: merged
+        investigation_ref_id: "{{ investigation_ref_id }}"
+        response_plan: "Brute Force Response Plan"
+        state: present
+        tasks:
+          - phase_name: Containment
+            task_name: Revoke credentials and stop service
+            status: ended
+            owner: unassigned
 
     - name: Attach closing notes with evidence
       splunk.es.splunk_notes:
-        investigation_id: "{{ investigation_id }}"
-        note: >
-          Response plan executed. All tasks completed by AAP.
+        target_type: investigation
+        investigation_ref_id: "{{ investigation_ref_id }}"
+        content: >
+          Response plan executed. Containment task ended by AAP.
           Job ID: {{ tower_job_id }}.
           Evidence: {{ evidence_url | default('see AAP job artifacts') }}.
-        state: merged
 ```
 
 #### Step 4: Configure adaptive response notable events
@@ -568,20 +599,24 @@ Set up adaptive response actions that create notable events with consistent meta
 ```yaml
     - name: Configure adaptive response for credential revocation
       splunk.es.splunk_adaptive_response_notable_events:
-        correlation_search_name: "SSH Brute Force Detected"
-        description: "Automated credential revocation triggered by brute-force detection"
-        default_owner: "ansible_svc"
-        security_domain: "access"
-        severity: "critical"
+        config:
+          - correlation_search_name: "SSH Brute Force Detected"
+            name: ssh_brute_force_notable
+            description: Automated credential revocation triggered by brute-force detection
+            default_owner: unassigned
+            security_domain: access
+            severity: critical
         state: merged
 
     - name: Configure adaptive response for CVE detection
       splunk.es.splunk_adaptive_response_notable_events:
-        correlation_search_name: "CVE Alert"
-        description: "Automated CVE response triggered"
-        default_owner: "ansible_svc"
-        security_domain: "endpoint"
-        severity: "high"
+        config:
+          - correlation_search_name: "CVE Alert"
+            name: cve_alert_notable
+            description: Automated CVE response triggered
+            default_owner: unassigned
+            security_domain: endpoint
+            severity: high
         state: merged
 ```
 
@@ -594,17 +629,19 @@ Automate the data input configuration that feeds correlation searches, so new Sp
 ```yaml
     - name: Configure syslog data input for authentication events
       splunk.es.splunk_data_inputs_network:
-        name: "9514"
-        protocol: udp
-        sourcetype: "linux_secure"
-        index: "main"
+        config:
+          - name: "9514"
+            protocol: udp
+            sourcetype: linux_secure
+            index: main
         state: merged
 
-    - name: Configure file monitor for application logs
+    - name: Configure file monitor for authentication logs
       splunk.es.splunk_data_inputs_monitor:
-        name: "/var/log/secure"
-        index: "main"
-        sourcetype: "linux_secure"
+        config:
+          - name: "/var/log/secure"
+            index: main
+            sourcetype: linux_secure
         state: merged
 ```
 
@@ -619,7 +656,7 @@ Automate the data input configuration that feeds correlation searches, so new Sp
 #### Expected Result
 
 ```
-Correlation searches appear in ES with correct schedules and severity.
+Correlation searches appear in ES with the declared SPL and cron schedule. Notable events use the declared security domain and severity.
 Findings and investigations created programmatically match declared state.
 Response plans applied to investigations; tasks and notes visible in ES console.
 ```
@@ -628,10 +665,10 @@ Response plans applied to investigations; tasks and notes visible in ES console.
 
 | Symptom | Likely Cause | Fix |
 |---------|-------------|-----|
-| `splunk.es` modules fail to connect | httpapi misconfiguration | Set `ansible_network_os: splunk.es.splunk`, `ansible_httpapi_port: 8089`, `ansible_httpapi_use_ssl: true` |
-| Correlation search not firing | Schedule or search syntax | Test search manually in Splunk; check `cron_schedule` format |
-| Finding/investigation not visible in ES | Wrong Splunk app context | Confirm `SplunkEnterpriseSecuritySuite` is installed and the user has ES permissions |
-| `state: merged` not idempotent | Naming mismatch | Ensure `name` matches exactly; `splunk_*_info` modules verify current state |
+| `splunk.es` modules fail to connect | httpapi misconfiguration | Set `ansible_connection: httpapi`, `ansible_network_os: splunk.es.splunk`, `ansible_httpapi_port: 8089`, `ansible_httpapi_use_ssl: true` |
+| Correlation search not firing | Schedule or search syntax | Test the SPL in Splunk; `cron_schedule` belongs under `config[].scheduling` |
+| Finding or investigation not visible in ES | Missing required create fields | Supply `security_domain`, `entity`, `entity_type`, and `finding_score` on create. Confirm Enterprise Security is installed |
+| Notes task fails on id | Ref id was not returned by create | Look up `finding_ref_id` or `investigation_ref_id` with the matching `*_info` module |
 
 ### Summary
 
