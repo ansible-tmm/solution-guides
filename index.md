@@ -220,7 +220,7 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-AIOps-Windows-Cert-Rotation' | relative_url }}" class="card-link" data-tags="windows,aiops,solution,published">
+      <a href="{{ '/README-AIOps-Windows-Cert-Rotation' | relative_url }}" class="card-link" data-tags="windows,aiops,security,solution,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header card-header--labels">
             <span class="pf-v6-c-label pf-m-green">
@@ -231,6 +231,9 @@ patternfly: true
             </span>
             <span class="pf-v6-c-label card-label-track card-label-track--aiops">
               <span class="pf-v6-c-label__content">AIOps</span>
+            </span>
+            <span class="pf-v6-c-label card-label-track card-label-track--security">
+              <span class="pf-v6-c-label__content">Security</span>
             </span>
           </div>
           <div class="pf-v6-c-card__title">
