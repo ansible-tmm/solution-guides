@@ -231,12 +231,12 @@ After remediation, write a finding and notable event back into Splunk Enterprise
 ```yaml
     - name: Create ES finding for brute-force remediation
       splunk.es.splunk_finding:
-        title: "Brute-force remediation completed - {{ inventory_hostname }}"
+        title: "Brute-force remediation completed - {{ affected_host }}"
         description: >
           Vault lease revoked, service stopped by AAP job {{ tower_job_id }}.
           Lease ID: {{ lease_id | default('unknown') }}.
         security_domain: access
-        entity: "{{ inventory_hostname }}"
+        entity: "{{ affected_host }}"
         entity_type: system
         finding_score: 80
         owner: unassigned
@@ -255,7 +255,7 @@ After remediation, write a finding and notable event back into Splunk Enterprise
 
 > **Tip:** `splunk.es` httpapi connection
 >
-> Run these tasks against the Splunk host, not localhost. Set `ansible_connection: httpapi`, `ansible_network_os: splunk.es.splunk`, `ansible_httpapi_port: 8089`, `ansible_httpapi_use_ssl: true`, and `ansible_httpapi_validate_certs: true` in inventory or group vars. `splunk_finding` returns `finding.after`. It does not document a ref id, so set `finding_ref_id` from `splunk.es.splunk_finding_info` (format `uuid@@notable@@time{timestamp}`) before the notes task.
+> Run these tasks against the Splunk host, not localhost. Set `ansible_connection: httpapi`, `ansible_network_os: splunk.es.splunk`, `ansible_httpapi_port: 8089`, `ansible_httpapi_use_ssl: true`, and `ansible_httpapi_validate_certs: true` in inventory or group vars. Pass `affected_host` from the remediation job. On this play, `inventory_hostname` is the Splunk server, not the endpoint that was remediated. `splunk_finding` returns `finding.after`. It does not document a ref id, so set `finding_ref_id` from `splunk.es.splunk_finding_info` (format `uuid@@notable@@time{timestamp}`) before the notes task.
 
 ### Validation
 
@@ -391,13 +391,13 @@ After COMPLY completes, write findings and investigation notes back into Splunk 
 ```yaml
     - name: Create ES finding for CVE remediation
       splunk.es.splunk_finding:
-        title: "CVE remediation completed - {{ rhsa_id }} on {{ inventory_hostname }}"
+        title: "CVE remediation completed - {{ rhsa_id }} on {{ affected_host }}"
         description: >
           DEFEND: eth0 isolated, httpd hardened, SELinux enforced.
           CONTAIN: Advisory {{ rhsa_id }} applied.
           COMPLY: CIS evidence generated, container image scanned.
         security_domain: endpoint
-        entity: "{{ inventory_hostname }}"
+        entity: "{{ affected_host }}"
         entity_type: system
         finding_score: 70
         owner: unassigned
@@ -497,8 +497,8 @@ Version-control your Splunk ES correlation searches so detection rules are repro
               index=main sourcetype=linux_secure "Failed password"
               | stats count by src_ip
               | where count > 5
-            scheduling:
-              cron_schedule: "*/5 * * * *"
+            scheduling: realtime
+            cron_schedule: "*/5 * * * *"
         state: merged
 
     - name: Ensure CVE correlation search exists
@@ -510,8 +510,8 @@ Version-control your Splunk ES correlation searches so detection rules are repro
               index=main sourcetype=linux_secure tag=vulnerability
               | lookup cve_database cve_id OUTPUT severity
               | where severity="critical" OR severity="high"
-            scheduling:
-              cron_schedule: "*/10 * * * *"
+            scheduling: realtime
+            cron_schedule: "*/10 * * * *"
         state: merged
 ```
 
@@ -666,7 +666,7 @@ Response plans applied to investigations; tasks and notes visible in ES console.
 | Symptom | Likely Cause | Fix |
 |---------|-------------|-----|
 | `splunk.es` modules fail to connect | httpapi misconfiguration | Set `ansible_connection: httpapi`, `ansible_network_os: splunk.es.splunk`, `ansible_httpapi_port: 8089`, `ansible_httpapi_use_ssl: true` |
-| Correlation search not firing | Schedule or search syntax | Test the SPL in Splunk; `cron_schedule` belongs under `config[].scheduling` |
+| Correlation search not firing | Schedule or search syntax | Test the SPL in Splunk. On each `config` item, `scheduling` is `realtime` or `continuous`, and `cron_schedule` is a sibling of `scheduling` |
 | Finding or investigation not visible in ES | Missing required create fields | Supply `security_domain`, `entity`, `entity_type`, and `finding_score` on create. Confirm Enterprise Security is installed |
 | Notes task fails on id | Ref id was not returned by create | Look up `finding_ref_id` or `investigation_ref_id` with the matching `*_info` module |
 
