@@ -6,13 +6,13 @@
 
 Organizations invest heavily in observability, yet most still rely on humans to translate monitoring insights into remediation actions. LogicMonitor and Edwin AI provide the intelligence to detect, analyze, and recommend. Ansible Automation Platform provides the trust layer to govern, execute, and report. Together, they deliver closed-loop AIOps that is safe enough for 3 AM and auditable enough for Monday morning.
 
-This guide follows a crawl-walk-run maturity progression for BGP network remediation. Crawl uses LogicMonitor Envision to map approved playbooks for operator-led execution; Walk uses Event-Driven Ansible (EDA) and rule-based triggers; Run uses Edwin AI chat and autonomous agents. The same pattern applies to any infrastructure domain that LogicMonitor monitors -- servers, storage, cloud, and hybrid IT environments.
+This guide follows a crawl-walk-run maturity progression for BGP network remediation. Crawl uses Envision for static mappings and manual execution; Walk adds Edwin correlation and maps approved automation to Insights for manual initiation; Run adds root-cause-informed Rules and Actions that trigger approved automation through Event-Driven Ansible (EDA). Edwin AI chat complements these stages. The same pattern applies to any infrastructure domain that LogicMonitor monitors -- servers, storage, cloud, and hybrid IT environments.
 
 |  |  |
 | :---- | :---- |
-| **Operational Impact** | Clear operator guidance and repeatable manual execution (Crawl), reduced response time through rule-based automation for proven scenarios (Walk), and faster diagnosis with autonomous diagnostics and remediation recommendations, with human-approved execution (Run) |
+| **Operational Impact** | Clear operator guidance and repeatable manual execution (Crawl), faster operator decisions through correlated Insights and mapped automation (Walk), and reduced response time through root-cause-informed, rule-triggered automation with human approval for writes (Run) |
 | **Business Value Drivers** | Reduced MTTR, lower on-call escalation volume, faster incident resolution without increasing headcount |
-| **Technical Value Drivers** | Envision playbook mapping, Event-Driven Ansible (EDA) rule-based triggers, Edwin AI chat and agentic diagnostics, governed execution with RBAC, approvals, and audit trails |
+| **Technical Value Drivers** | Envision static mappings, Edwin correlation and Insight action mappings, root-cause-informed EDA triggers, governed execution with RBAC, approvals, and audit trails |
 
 ---
 
@@ -23,8 +23,9 @@ This guide follows a crawl-walk-run maturity progression for BGP network remedia
 * [Prerequisites](#prerequisites)  
 * [Integration Architecture](#integration-architecture)  
 * [Stage 1 -- Crawl: Envision Playbook Mapping and Manual Execution](#stage-1----crawl-envision-playbook-mapping-and-manual-execution)  
-* [Stage 2 -- Walk: Event-Driven Network Remediation](#stage-2----walk-event-driven-network-remediation)  
-* [Stage 3 -- Run: AI-Driven Chat and Agentic Operations](#stage-3----run-ai-driven-chat-and-agentic-operations)  
+* [Stage 2 -- Walk: AI Correlated Insights and Operator-Initiated Automation](#stage-2----walk-ai-correlated-insights-and-operator-initiated-automation)
+* [Stage 3 -- Run: Root-Cause-Informed, Rule-Triggered Automation](#stage-3----run-root-cause-informed-rule-triggered-automation)
+* [Going Further -- Conversational Investigation with Edwin AI](#going-further----conversational-investigation-with-edwin-ai)  
 * [Operational Considerations](#operational-considerations)  
 * [Validation and Troubleshooting](#validation-and-troubleshooting)  
 * [Maturity Path Summary](#maturity-path-summary)  
@@ -179,29 +180,27 @@ The integration maps cleanly across the AIOps value chain, with LogicMonitor and
 
 ### Integration Surfaces
 
-Five integration surfaces are used across the three maturity stages:
+The following surfaces support the maturity stages and complementary chat experience:
 
 | Surface | Component | Stage | Role |
 | :---- | :---- | :---- | :---- |
-| **EDA Event Stream** | AAP Event Streams (AAP 2.6+) | Walk, Run | Configured endpoint that receives events and routes them to rulebook activations. |
-| **EDA webhook source** | `ansible.eda.webhook` source plugin | Walk, Run | EDA rulebook activation that evaluates events received through the configured Event Stream. |
+| **EDA Event Stream** | AAP Event Streams (AAP 2.6+) | Run | Configured endpoint that receives events and routes them to rulebook activations. |
+| **EDA webhook source** | `ansible.eda.webhook` source plugin | Run | EDA rulebook activation that evaluates events received through the configured Event Stream. |
 | **LM device management** | `logicmonitor.integration` collection | All | Manages LM devices, collectors, alert rules, device groups |
-| **Edwin AI query** | `logicmonitor.edwin_ai.query_api` module | Run | Queries Edwin AI for correlated alerts, events, insights |
-| **MCP integration** | `MCP connection to AAP APIs` | Run | Connects Edwin AI to AAP APIs for approved automation discovery and execution. |
+| **Edwin AI query** | `logicmonitor.edwin_ai.query_api` module | Optional enrichment | Queries Edwin AI for correlated alerts, events, insights |
+| **MCP integration** | `MCP connection to AAP APIs` | Complementary chat | Connects Edwin AI to AAP APIs for approved automation discovery and execution. |
 
 ### Integration Patterns
 
 Each maturity stage uses a different integration pattern with AAP. The patterns differ in how they are triggered, how tightly they couple the partner platform to AAP, and how governance is enforced:
 
-|  | Envision (Crawl) | EDA (Walk) | Edwin AI Chat + MCP (Run) |
+|  | Envision (Crawl) | Correlated Insights (Walk) | Rule-Triggered Automation (Run) |
 | :---- | :---- | :---- | :---- |
-| **Trigger** | Operator-selected mapped playbooks | Edwin events and EDA rules | Natural-language chat and agent tools |
-| **Coupling** | Guided (operator-led, mapped) | Rule-based (event-driven) | Agentic (chat and tool-mediated) |
-| **Primary user** | NOC / platform operators | Operations and platform teams | Operators using Edwin AI chat and agents |
-| **Governance** | RBAC, approval, and audit controls | Rulebook conditions, service accounts, and AAP policy | RBAC, approvals, and MCP action boundaries |
-| **Response model** | Human-initiated and auditable | Event-driven | Conversational, AI-assisted |
-
-The crawl-walk-run progression starts with Envision mapping and operator-led execution, adds EDA rule-based triggering for repeatable patterns, and then adds Edwin AI chat and agentic diagnostics. AAP governance applies at every stage.
+| **Trigger** | Operator-selected mapped playbooks | Operator triggers recommended playbooks | Configured Rules and Actions route correlated Insight and root-cause context to EDA |
+| **Coupling** | Guided (operator-led, mapped) | Guided (operator-led, correlation-informed) | Rule-based (root-cause-informed, event-driven) |
+| **Primary user** | NOC / platform operators | Operations and platform teams | Operations and platform teams |
+| **Governance** | RBAC, approval, and audit controls | RBAC, approval, and audit controls | Rulebook conditions, service accounts, AAP policy, and human approval before writes |
+| **Response model** | Human-initiated and auditable | Human-initiated, with Edwin discovery, mapping, and recommendations | Event-driven, with approval gates for write-based remediation |
 
 > **Roadmap note:** Today, Edwin AI reaches AAP through a custom LogicMonitor MCP service. Native integration with the Ansible AAP MCP Server -- including its OAuth-based authorization -- is in development. Throughout this guide, "MCP" refers to that custom LogicMonitor MCP; once AAP MCP Server support ships, the specifics of this integration surface will change.
 
@@ -223,7 +222,7 @@ LogicMonitor detects a condition and surfaces its context in Envision
     -> Operator reviews the diagnostic context and available actions  
       -> Operator manually executes the AAP job from the LogicMonitor Envision UI  
         -> AAP enforces access controls and any required approval  
-          -> Results are recorded and used to identify candidates for Walk-stage triggers
+          -> Results are recorded and used to identify candidates for Walk-stage Insight mappings
 
 ### Setup
 
@@ -231,13 +230,94 @@ LogicMonitor detects a condition and surfaces its context in Envision
 * Validate playbook discovery and resource mapping: LogicMonitor retrieves AAP job-template metadata only. Confirm the AAP host name matches the LogicMonitor resource hostname, IP address, or display name before making the action available to the appropriate resources.  
 * Run and review from the resource: authorized operators use the resource Actions tab to launch a mapped playbook, monitor execution status, and review output and run history. 
 
-## Stage 2 -- Walk: Event-Driven Network Remediation
+## Stage 2 -- Walk: AI Correlated Insights and Operator-Initiated Automation
+
+* Integration surface: LogicMonitor alerts, Edwin AI Insights, and mapped AAP job and workflow templates
+* Operational impact: Medium -- Corellated Insight map to recommended AAP playbooks and manually initiate diagnostics or approved remediation
+* Story: Edwin AI correlates related alerts into an Insight and recommends relevant approved automation to it. The operator reviews the Insight and manually triggers the selected action.
+
+Walk adds correlated incident context to the static mappings established in Crawl. Edwin groups related LogicMonitor alerts into an Insight and maps relevant approved AAP job templates or workflows to that Insight, and reccomends the best option for this issue. The operator reviews the context, chooses an available diagnostic or remediation action, and explicitly starts execution. Correlation and action mapping do not themselves launch automation in this stage. AAP authorization and any required approval gates govern execution.
+
+### Flow
+
+```
+LogicMonitor detects related alerts
+  -> Edwin AI correlates the alerts into an Insight
+  -> Relevant approved AAP templates are mapped to the Insight
+  -> Edwin AI recommends the best plabook for this Insight
+  -> Operator reviews the Insight and manually triggers an action
+  -> AAP enforces authorization and required approvals, then executes
+  -> Edwin receives execution status and output for operator review
+```
+
+### Setup
+
+1. **Connect Edwin AI to AAP.** In the Edwin AI integration, configure the AAP Base URL, OAuth token, AAP API path prefix, and AAP EDA API path prefix. Use a Relay Agent only when direct HTTPS/API connectivity is unavailable.
+   ![][image1]
+
+2. **Confirm the LogicMonitor signal path.** Ensure the relevant alerts, device metrics, logs, and topology context are available to Edwin AI. Verify that related alerts are correlated into an Insight.
+
+3. **Verify automation discovery and recommendations.** Edwin discovers available AAP job templates, maps relevant automation to correlated Insights, and recommends the most appropriate playbook to run. Operators review the recommendation and manually initiate execution; they do not configure the Insight-to-automation mappings.
+
+4. **Define safe execution boundaries.** Use approved AAP templates, appropriately scoped credentials and permissions, and human approval gates before write-based remediation. Limit the integration credential or service account to the required AAP resources and actions. Verify that automation starts only when an operator manually initiates it, and that execution status and output return to Edwin for review.
+
+5. **Create the job template.** Create the "Reset BGP Session" job template using the configuration below. Once the template is available, verify that Edwin discovers it and recommends the appropriate approved action for the correlated Insight.
+
+| Field | Value |
+| :---- | :---- |
+| Name | Reset BGP Session |
+| Job Type | Run |
+| Organization | Network Ops |
+| Project | LM AIOps Solution Guide |
+| Playbook | `playbooks/reset_bgp_session.yml` |
+| Inventory | Network Inventory |
+| Credentials | Machine Credential |
+| Ask Variables on Launch | Yes |
+| Extra Variables | `{"affected_host":"<host>","alert_id":"<alert_id>"} (valid JSON supplied by the Edwin action payload)` |
+
+### Use Case: BGP Peer Down -- Review the Insight and Launch an Action
+
+A BGP peer relationship drops on a router, generating a peer-down alert and related reachability alerts in LogicMonitor. Edwin correlates these alerts into an Insight and recommends the automation associated with the "Reset BGP Session" job template configured above.
+
+The operator reviews the Insight and Edwin's recommendation, supplies any required device and peer inputs, and manually initiates the approved remediation workflow. AAP enforces authorization before launching the "Reset BGP Session" job template.
+
+The job template runs `playbooks/reset_bgp_session.yml` against the affected device. The playbook resets only the affected BGP peer session, waits for it to re-establish, and validates recovery.
+
+
+### Validation
+
+Generate a test BGP peer failure and verify that related alerts appear in a correlated Insight with the mapped actions. Manually trigger the diagnostic or approved remediation workflow, then verify the target, execution ID, status, and output.
+
+**Expected behavior:**
+
+```
+Correlated Insight: related BGP and reachability alerts
+Mapped actions: approved diagnostic and remediation templates
+Before operator initiation: no job or workflow launched
+After operator initiation: selected AAP job or workflow created
+Completed execution: status and output available for review
+```
+
+### Components
+
+| Component | Details |
+| :---- | :---- |
+| LogicMonitor | Detects alerts and supplies operational context |
+| Edwin AI Insights | Correlates related alerts and surfaces mapped automation |
+| Mapped AAP actions | Associate relevant approved job or workflow templates with the Insight |
+| Operator | Reviews the Insight and manually initiates the selected action |
+| AAP | Applies authorization, approval gates, execution, and audit logging |
+| Execution results | Execution ID, status, and output returned to Edwin |
+
+---
+
+## Stage 3 -- Run: Root-Cause-Informed, Rule-Triggered Automation
 
 * Integration surface: LogicMonitor alerts, Edwin AI Rules and Actions, Event-Driven Ansible, and Ansible Automation Platform  
-* Operational impact: Medium -- root-cause-informed routing of repeatable alerts to approved automation  
-* Story: LogicMonitor detects an alert; Edwin AI identifies its likely root cause and uses configured Rules and Actions to select the correct AAP job template or workflow for execution.
+* Operational impact: High -- AI correlation and root cause analysis drive automated execution of diagnostic and remediation job templates
+* Story: LogicMonitor detects an alert; Edwin AI identifies its likely root cause and uses configured Rules and Actions to execute the correct AAP job template or workflow for execution.
 
-The Walk stage combines LogicMonitor detection with Edwin AI correlation and rule-based action mapping. Edwin identifies the likely root cause, then configured Rules and Actions select an approved AAP job template and send the relevant payload to Event-Driven Ansible for governed AAP execution. This creates a repeatable, root-cause-informed path from alert to action.
+The Run stage combines LogicMonitor detection with Edwin AI correlation and rule-based action mapping. Edwin identifies the likely root cause, then configured Rules and Actions select an approved AAP job template and send the relevant payload to Event-Driven Ansible for governed AAP execution. This creates a repeatable, root-cause-informed path from alert to action. Configured rules initiate the workflow without an operator manually launching each run. Read-only diagnostics may execute automatically where permitted; write-capable branches can pause for human approval before changing a device.
 
 ### Flow
 
@@ -248,7 +328,8 @@ LogicMonitor detects a BGP alert on a network device
       -> Edwin Rules and Actions select the mapped AAP job template
         -> Edwin uses Post Ansible EDA Event to send the mapped payload to the configured Event Stream URL
           -> The EDA rulebook evaluates the payload and invokes the approved AAP job template
-            -> AAP executes the job, records the execution ID, and validates the outcome
+            -> AAP runs permitted diagnostics and remediations
+              -> AAP executes approved remediation and validates the outcome
               -> Edwin checks status using the execution ID and receives the result and output
 ```
 
@@ -264,35 +345,21 @@ LogicMonitor detects a BGP alert on a network device
 4. **Define safe execution boundaries.** Use approved AAP templates, appropriate credentials and permissions, and approval gates for write-based remediation where policy requires. Rule-based actions run only within the configured integration credential or service-account and AAP RBAC boundaries. Capture the execution ID, check status after launch, and review output in Edwin; synchronize to ITSM only when configured.
    ![][image3]
 
-5. **Create the job template.** Create the "Reset BGP Session" job template:  
- 
+5. **Reuse the existing BGP remediation template.** Use the "Reset BGP Session" job template created in Stage 2, retaining its playbook, inventory, credentials, and required inputs. Configure the EDA rule to launch this job template for the validated scenario.
 
+### Use Case: Correlated BGP Peer Failure -- Approved Remediation
 
-| Field | Value |
-| :---- | :---- |
-| Name | Reset BGP Session |
-| Job Type | Run |
-| Organization | Network Ops |
-| Project | LM AIOps Solution Guide |
-| Playbook | `playbooks/reset_bgp_session.yml` |
-| Inventory | Network Inventory |
-| Credentials | Machine Credential |
-| Ask Variables on Launch | Yes |
-| Extra Variables | `{"affected_host":"<host>","alert_id":"<alert_id>"} (valid JSON supplied by the Edwin action payload)` |
+LogicMonitor detects a BGP peer failure and related reachability alerts. Edwin correlates the alerts into an Insight and identifies the likely root cause. A configured rule matches the validated scenario and routes the affected device and peer context to approved automation. An unresolved or unmatched cause remains available for operator investigation rather than triggering an arbitrary remediation.
 
-### Use Case: BGP Peer Down -- Reset Session
-
-A BGP neighbor relationship drops to IDLE state on one router, causing a network segment to become unreachable. LogicMonitor detects the state change, fires a critical alert, and sends the alert context to Edwin AI for correlation and action selection.
-
-Edwin uses Post Ansible EDA Event to send the mapped payload to the configured Event Stream URL, where an EDA rulebook evaluates it and launches the approved job template:
+Edwin uses Post Ansible EDA Event to send the mapped payload to the configured Event Stream URL, where an EDA rulebook evaluates it and launches the existing "Reset BGP Session" job template. This illustrative rule assumes the payload has already been mapped by the configured Edwin action:
 
 ```
-# --- WALK: Known alerts, deterministic remediation ---
+# --- RUN: Configured response following Edwin correlation and root-cause analysis ---
 - name: BGP peer down - reset session
   condition: event.payload.type == "bgp_peer_down"
   action:
-    run_job_template:
-      name: "Reset BGP Session"
+    run_workflow_template:
+      name: "Reset BGP Session (Approved)"
       organization: "Network Ops"
       job_args:
         extra_vars:
@@ -306,33 +373,13 @@ The "Reset BGP Session" job template (`playbooks/reset_bgp_session.yml`) targets
 >
 > In production, scope the reset to the specific affected peer session rather than clearing all BGP sessions on the device. Clearing all sessions disrupts working peers and can cause broader network impact.
 
-On success, it reports the remediation result back to LogicMonitor via `playbooks/report_to_logicmonitor.yml`, which acknowledges and annotates the alert:
-
-```
-# Note: The logicmonitor.integration collection does not yet include an alert
-# acknowledgment module. This task uses ansible.builtin.uri as a placeholder
-# until native module support is available.
-- name: Acknowledge alert in LogicMonitor
-  ansible.builtin.uri:
-    url: "https://{{ lm_company }}.logicmonitor.com/santaba/rest/alert/alerts/{{ alert_id }}/ack"
-    method: POST
-    headers:
-      Authorization: "Bearer {{ lm_bearer_token }}"
-      Content-Type: "application/json"
-    body_format: json
-    body:
-      ackComment: >-
-        Automated remediation by AAP: {{ remediation_result }}
-        on host {{ remediation_host }}.
-    status_code: [200, 202]
-  no_log: true
-```
+AAP records the workflow execution status and job output, including the recovery validation results. Operators can review these results in AAP to confirm the outcome or continue investigating if recovery fails.
 
 ### Validation
 
-Once configured, trigger a real or test BGP peer down alert in LogicMonitor. Verify in the AAP Controller that the "Reset BGP Session" job launches targeting the correct host.
+Once configured, trigger a real or test BGP peer down alert in LogicMonitor. Verify that Edwin creates the correlated Insight and the matching rule posts the event without a manual launch. In AAP, verify that "Reset BGP Session (Approved)" targets the correct host, and runs the remediation only after approval. Denial or timeout must leave the device unchanged.
 
-**Expected result in Edwin AI chat:**
+**Illustrative job output after approval:**
 
 ```
 PLAY [Reset BGP session on affected device] ************************************
@@ -353,186 +400,45 @@ affected-device            : ok=6    changed=0    unreachable=0    failed=0
 | :---- | :---- |
 | LogicMonitor | Detects alerts and sends operational context to Edwin AI |
 | Edwin AI | `Correlates signals and identifies the likely root cause` |
-| Edwin Rules and Actions | Maps the identified condition to an approved Ansible job template and builds the execution payload |
+| Edwin Rules and Actions | Matches configured conditions against the correlated Insight and root-cause context; builds and routes the execution payload |
 | Event Stream | Configured Event Stream URL that receives the mapped payload from Edwin's Post Ansible EDA Event action |
 | EDA source | `EDA rulebook activation configured for the Event Stream` |
 | Rulebook | `Evaluates the mapped payload, conditions, and guardrails; invokes the selected approved job template` |
-| Job Template | `"Reset BGP Session"` |
+| AAP workflow | "Reset BGP Session (Approved)" -- approval gate followed by the remediation job template |
 | Playbook | `playbooks/reset_bgp_session.yml` |
 | Collections | `arista.eos, ansible.eda` |
 
 ---
 
-## Stage 3 -- Run: AI-Driven Chat and Agentic Operations
+## Going Further -- Conversational Investigation with Edwin AI
 
-- Integration surface: Edwin AI Insights and chat, MCP integration, approved AAP job and workflow templates, and AAP authorization controls  
-- Operational impact: High -- faster contextual diagnosis and guided, governed automation execution from the operator's chat workflow  
-- Story: Edwin AI correlates related alerts into an Insight, identifies the likely root cause, and recommends approved AAP job or workflow templates. An operator uses chat to investigate, start an eligible job or workflow template, and receive the execution result.
-
-The Run stage is a conversational, AI-assisted operations experience. Edwin AI correlates alerts into an Insight, identifies the likely root cause, and recommends existing approved AAP job or workflow templates for diagnostics or remediation. Operators interact with Edwin AI chat to review the rationale, ask follow-up questions, and initiate eligible execution. Edwin communicates with AAP through MCP and returns execution status and results to the conversation. Configured AAP authorization and approval controls govern which templates and actions are permitted. Read-only diagnostics may be autonomous where policy permits; write-based remediation remains human-approved.
+Edwin AI chat complements the maturity stages by giving operators a conversational way to investigate Insights, review recommendations, and initiate approved AAP automation. Chat is useful when the available context needs exploration or the appropriate response is not covered by an established rule.
 
 ### Flow
 
 ```
-LogicMonitor alerts contribute to an Edwin AI Insight
-  -> Edwin AI correlates alerts from LogicMonitor
-    -> Edwin AI correlates signals and identifies the likely root cause
-      -> LogicMonitor alerts provide the operational context
-        -> Edwin AI correlates related alerts into an Insight
-          -> Edwin summarizes the Insight, impact, and likely root cause
-            -> Edwin recommends approved diagnostic or remediation job and workflow templates
-                -> Operator opens Edwin AI chat and reviews recommendations
-          |
-                  -> Operator asks follow-up questions or selects a recommendation
-                    -> Edwin AI chat connects to AAP through MCP
-          |
-                      -> MCP calls AAP APIs to retrieve eligible job and workflow templates
-                        -> Edwin presents the selected diagnostic or remediation option
-          |
-                          -> Operator approves and starts the selected template or workflow from chat
-                            -> AAP executes the approved job template
-          |
-                              -> Execution status and output return through MCP
-                                -> AAP records the execution and audit trail
-          |
-                                  -> Edwin keeps the rationale and actions visible
-                                    -> Operator can continue the investigation in chat
+Operator opens an Edwin Insight in chat
+  -> Edwin explains correlated alerts, likely cause, and recommendations
+  -> Operator investigates and selects an eligible AAP action
+  -> Edwin communicates with AAP via MCP
+  -> AAP enforces authorization and approval controls, then executes
+  -> Status and output return to the conversation
 ```
 
-### Setup
+Configure the AAP connection and expose only eligible, validated job and workflow templates. Permit autonomous read-only diagnostics only within the configured authorization boundaries; retain human approval for write-based remediation.
 
-1. Configure the AAP connection in Edwin with the Base URL, OAuth token, AAP API path prefix, and AAP EDA API path prefix. Make validated AAP job and workflow templates available to chat. Use a Relay Agent only when direct connectivity is constrained. Ensure configured AAP authorization and approval policies limit template actions. Keep human approval for write-based actions; allow autonomous read-only diagnostics only where policy permits.
+### Example: Investigating BGP Flapping
 
-2. Prepare approved AAP job templates. The following templates are examples of diagnostic and remediation options that Edwin can recommend from chat:
+Edwin correlates BGP flapping with other operational signals. The operator uses chat to explore the Insight and review diagnostic or remediation options. The following are illustrative investigation paths, not automatic conclusions from a single metric:
 
-| Field | Enrich with Edwin AI | Bounce Interface | Restart Routing | Rollback Config |
-| :---- | :---- | :---- | :---- | :---- |
-| Job Type | Run | Run | Run | Run |
-| Organization | Network Ops | Network Ops | Network Ops | Network Ops |
-| Project | LM AIOps Solution Guide | LM AIOps Solution Guide | LM AIOps Solution Guide | LM AIOps Solution Guide |
-| Playbook | `playbooks/enrich_with_edwin_ai.yml` | `playbooks/bounce_interface.yml` | `playbooks/restart_routing.yml` | `playbooks/rollback_config.yml` |
-| Inventory | Network Inventory | Network Inventory | Network Inventory | Network Inventory |
-| Credentials | Edwin AI API, Machine Credential | Machine Credential | Machine Credential | Machine Credential |
-| Ask Variables on Launch | Yes | Yes | Yes | Yes |
-
-3. Optionally define reusable workflow templates. A workflow can be one of the approved assets recommended from chat, but it is not required to drive the conversational Run flow:
-
-```
-                +----------------------+
-                | Enrich with Edwin AI |
-                | (query_api)          |
-                +---------+------+-----+
-                          |      |
-                       success  failure
-                          |      |
-          +-------+-------+      |
-          |       |       |      |
-          v       v       v      v
-     +---------+ +-----+ +------+ +-------------+
-     | Bounce  | | Re- | | Roll-| | Default BGP |
-     | Iface   | |start| | back | | Reset       |
-     +----+----+ |Rout.| |Config| +------+------+
-          |      +--+--+ +--+---+        |
-          |         |       |            |
-          +---------+-------+------------+
-                    |
-                    v
-           +------------------+
-           | Report to        |
-           | LogicMonitor     |
-           +------------------+
-```
-
-This optional workflow illustrates how AAP can package a multi-step remediation. In the Run stage, Edwin performs correlation and recommendation in chat; an operator selects or approves an eligible AAP job or workflow template, and results return to that conversation.
-
-### Use Case: BGP Flapping -- Conversational Investigation and Recommendations
-
-BGP sessions are flapping on a router. Edwin correlates the BGP alert with related operational signals, identifies the likely cause, and presents relevant approved AAP job or workflow templates in chat. The operator can ask follow-up questions, run a read-only diagnostic, or approve a write-based remediation. The examples below illustrate how Edwin can connect findings to recommended automation:
-
-| Edwin AI Insight finds | Root cause | Recommended AAP job or workflow template |
+| Correlated context | Possible cause to investigate | Potential approved action |
 | :---- | :---- | :---- |
-| BGP flapping + interface error counters spiking | Bad link or cable | Bounce the interface (`playbooks/bounce_interface.yml`) |
-| BGP flapping + CPU at 98% on the device | Resource exhaustion | Restart routing process (`playbooks/restart_routing.yml`) |
-| BGP flapping + config change event 5 minutes ago | Config drift | Roll back to last known good config (`playbooks/rollback_config.yml`) |
-| Only BGP flapping, no correlated alerts | Unknown / transient | Recommend a read-only BGP and interface diagnostic before any remediation |
+| Interface errors alongside BGP flapping | Link or interface fault | Gather interface diagnostics; consider an approved interface action after review |
+| High CPU alongside BGP flapping | Resource exhaustion | Gather process and routing diagnostics before deciding on remediation |
+| Recent configuration change alongside BGP flapping | Configuration regression | Compare configuration; consider an approved rollback after review |
+| No clear supporting signals | Undetermined | Gather additional read-only diagnostics |
 
-For the chat-driven Run flow, Edwin uses its correlated Insight directly to recommend relevant AAP job or workflow templates. The enrichment playbook below is an optional asset for organizations that also maintain reusable AAP workflows; it is not required for chat-based correlation or recommendation.
-
-```
-- name: Query Edwin AI for correlated alerts
-  logicmonitor.edwin_ai.query_api:
-    portal: "{{ edwin_portal }}"
-    access_id: "{{ edwin_access_id }}"
-    access_key: "{{ edwin_access_key }}"
-    record_type: alerts
-    limit: 20
-    lookback_window: "{{ edwin_lookback_window }}"
-  register: __edwin_alerts
-```
-
-In the chat-driven Run path, Edwin performs correlation directly as part of the Insight and uses it to explain the recommendation. The following workflow example is optional reusable AAP automation, not the core decisioning path:
-
-```
-- name: Set workflow artifacts for downstream nodes
-  ansible.builtin.set_stats:
-    data:
-      root_cause: "{{ __root_cause | trim }}"
-      correlated_alert_count: "{{ __correlated_alerts | length }}"
-      affected_host: "{{ affected_host }}"
-      alert_id: "{{ alert_id }}"
-```
-
-Optional: retain an EDA handoff only for a proven, repeatable pattern promoted to Walk. It is not part of the core chat-driven Run flow:
-
-```
-# --- WALK: rule-based automation promoted from a proven Run pattern ---
-- name: BGP flapping - smart remediation
-  condition: event.payload.type == "bgp_flapping"
-  action:
-    run_workflow_template:
-      name: "BGP Smart Remediation"
-      organization: "Network Ops"
-      job_args:
-        extra_vars:
-          affected_host: "{{ event.payload.host }}"
-          alert_id: "{{ event.payload.id }}"
-          alert_context: "{{ event.payload }}"
-```
-
-### Relationship to Walk
-
-When a Run-stage recommendation becomes sufficiently repeatable, promote it to Walk only after its conditions, approval requirements, and rollback path are proven. In Walk, Edwin Rules and Actions and EDA can route that defined scenario to approved automation without a conversational decision.
-
-### Validation
-
-From an Edwin AI Insight, open chat and verify that correlated alerts, the likely root cause, and relevant approved AAP job or workflow templates are visible. Start an eligible job template or workflow, then verify that execution status and output return to the same conversation.
-
-**Expected result in Edwin AI chat:**
-
-```
-Chat recommendation -- an approved diagnostic or remediation job or workflow template
-
-Operator selects the recommended action and confirms execution
-Configured AAP authorization and approval policies permit the selected template.
-
-AAP job template -- Status: Successful
-Execution status and output return to the Edwin AI chat
-
-Edwin AI chat summarizes the result and recommends next steps
-```
-
-### Components
-
-| Component | Details |
-| :---- | :---- |
-| LogicMonitor | Supplies alerts and operational context for Edwin Insights |
-| Edwin AI Insights | `Correlates related alerts, identifies the likely root cause, and generates recommendations` |
-| Edwin AI chat | Conversational experience for investigation, recommendations, execution, and results |
-| MCP integration | Connects Edwin chat to AAP APIs for approved job and workflow template discovery and execution |
-| Approved AAP job and workflow templates | `Existing diagnostic and remediation job and workflow templates made available to chat` |
-| AAP RBAC | `Configured AAP authorization and approval policies limit execution` |
-| AAP execution results | `Execution status and output returned through MCP and summarized in chat` |
-| Optional workflow templates | `Reusable multi-step automation that chat can recommend when appropriate` |
+Validate the chat path by opening an Insight, reviewing eligible templates, initiating an approved action, and confirming that execution status and output return to the same conversation. Chat actions remain subject to the configured AAP authorization and approval controls.
 
 ---
 
@@ -554,7 +460,7 @@ When Edwin posts payloads to an EDA Event Stream URL, protect the endpoint:
 
 ### Defining "Read-Only" Automation
 
-The Run stage describes "autonomous read-only diagnostics." In practice, "read-only" is an operational contract, not a platform-level toggle. Enforce it through:
+Run and the complementary chat experience may use autonomous read-only diagnostics. In practice, "read-only" is an operational contract, not a platform-level toggle. Enforce it through:
 
 * **Template design:** Ensure diagnostic playbooks only run gather-facts, show commands, or other non-mutating operations.
 * **Credential scoping:** Use read-only credentials for diagnostic service accounts on target devices.
@@ -562,7 +468,7 @@ The Run stage describes "autonomous read-only diagnostics." In practice, "read-o
 
 ### Write-Approval Gates
 
-Every write-based job or workflow template reachable from Walk or Run should sit behind an explicit approval step, not just RBAC. In AAP, add an **Approval** node before the remediation node(s) in the workflow template:
+Every write-based job or workflow template reachable from Crawl, Walk, Run, or chat should sit behind an explicit approval step, not just RBAC. In AAP, add an **Approval** node before the remediation node(s) in the workflow template:
 
 ```
 Edwin / EDA trigger
@@ -573,7 +479,7 @@ Edwin / EDA trigger
        Node 2 (on denial/timeout): Job Template -- "Notify on-call" (no device change)
 ```
 
-For the Crawl and Walk stages, pair this with a read-only diagnostic template (`check_mode: true` or a dry-run playbook) that Edwin or the operator can run first to preview the change before approving the write-capable template. This keeps the "read-only by default, human-approved for writes" posture consistent across all three stages, not just Run.
+For the Crawl Walk, and Run stages, pair this with a read-only diagnostic template (`check_mode: true` or a dry-run playbook) that Edwin or the operator can run first to preview the change before approving the write-capable template. This keeps the "read-only by default, human-approved for writes" posture consistent across all three stages, not just Run.
 
 ### Idempotency and Rate Limiting
 
@@ -592,15 +498,14 @@ For the Crawl and Walk stages, pair this with a read-only diagnostic template (`
 | **Crawl** | Configure Ansible Actions integration in LogicMonitor | AAP endpoint connects and retrieves job template metadata |
 | **Crawl** | Map an approved playbook to a monitored resource in Envision | Mapped action appears in the resource Actions tab |
 | **Crawl** | Operator launches mapped playbook from Envision | AAP job executes with RBAC enforcement; output and run history visible in LogicMonitor |
-| **Walk** | BGP peer down alert fires in LogicMonitor | Edwin Post Ansible EDA Event reaches the configured Event Stream URL |
-| **Walk** | EDA rulebook evaluates alert | "Reset BGP Session" job launches targeting correct host |
-| **Walk** | Check LM alert after remediation | Alert acknowledged with AAP annotation |
-| **Run** | BGP flapping alert fires in LogicMonitor | Edwin AI chat presents an eligible job or workflow recommendation |
-| **Run** | Approve and start an eligible action from chat | AAP returns the execution status and output to the same chat conversation |
-| **Run** | Edwin AI Insight and chat show correlated alerts and the likely root cause | Edwin recommends an approved diagnostic or remediation template |
-| **Run** | Open an Edwin AI Insight for a complex or ambiguous alert | Edwin chat presents the insight, recommendations, and available actions |
-| **Run** | Verify the MCP connection to AAP APIs | MCP returns eligible job or workflow templates and execution status |
-| **Run** | Check AAP audit log | Chat-initiated and rule-based automation actions are logged in AAP. |
+| **Walk** | Generate related BGP and reachability alerts | Edwin creates a correlated Insight with mapped approved actions |
+| **Walk** | Review the Insight before selecting an action | No automation launches solely because the Insight appears |
+| **Walk** | Manually trigger the mapped action | AAP launches the selected template or approval workflow; results return to Edwin |
+| **Run** | Generate a correlated scenario matching a configured rule | Edwin identifies the likely root cause and posts the mapped EDA event without a manual launch |
+| **Run** | EDA evaluates the payload | Approved workflow starts with the correct target and inputs |
+| **Run** | Check execution result and audit log | Status, output, approval decision, and execution are recorded |
+| **Chat (optional)** | Investigate an Insight and start an eligible action via MCP | Execution status and output return to the conversation |
+
 
 ### Common Issues
 
@@ -608,11 +513,9 @@ For the Crawl and Walk stages, pair this with a read-only diagnostic template (`
 | :---- | :---- | :---- |
 | EDA event not reaching the configured Event Stream | Network reachability, incorrect Event Stream URL, invalid action configuration, or activation not running | Verify the Event Stream URL and activation in EDA Controller; validate the Edwin action configuration and network reachability. |
 | BGP not re-establishing after reset | Hold timer not expired, or underlying link still down | Increase wait timeout in `playbooks/reset_bgp_session.yml`; verify link connectivity on affected device |
-| Edwin AI query returns empty results | Incorrect credentials, wrong portal name, or no alerts in lookback window | Verify Edwin AI credential type is attached to the job template; check `edwin_lookback_window` value |
-| Edwin AI timeout during enrichment | Network latency or Edwin AI portal outage | Review the optional workflow failure path; do not automatically trigger a write-based remediation without the required approval. |
+| Run rule does not match | Correlated context or mapped root-cause fields do not meet the configured conditions | Compare the actual Insight and event payload with the Edwin action mapping and EDA conditions. |
 | MCP connection to AAP APIs cannot reach the configured AAP instance | Invalid AAP Base URL, OAuth token, API path prefix, or unavailable Relay Agent | Verify the AAP connection settings and OAuth token; confirm API paths and Relay Agent reachability when used |
-| Optional workflow selects an unexpected remediation branch | Optional workflow logic does not match the intended root-cause response | Review the optional workflow and its data mapping against the expected Edwin AI response structure |
-| Walk rule fires for a scenario that should be handled differently | Rulebook rule ordering issue | Review rule conditions and ordering; ensure only proven repeatable scenarios are routed through Walk rules. |
+| Run rule fires for a scenario that should be handled differently | Rulebook rule ordering issue | Review rule conditions and ordering; ensure only proven repeatable scenarios are routed through Run rules. |
 
 ---
 
@@ -621,44 +524,42 @@ For the Crawl and Walk stages, pair this with a read-only diagnostic template (`
 ### Progression
 
 ```
-  CRAWL                    WALK                     RUN
-  Static mapping,          Repeatable event,        Complex or novel alert,
-  manual execution         rule-based trigger        chat and agentic diagnostics
+CRAWL                         WALK                          RUN
+Static mappings               Correlated Insights           Correlation + likely root cause
+Operator initiates            Operator initiates            Configured rules initiate
+Envision -> AAP                Edwin action -> AAP           Edwin -> EDA -> AAP
 
-  Envision --> AAP         EDA --> AAP               Edwin AI chat --> AAP
-                           (explicit rules)          (via MCP)
-
-  Operator-led             Rule-based execution      Autonomous read-only diagnostics
-  Controlled learning      Fast repeatable response  Faster investigation with approval gates
-
-              <--- Pattern promotion over time ---
-              Successful Run patterns become Walk rules
-              Successful Walk patterns become Crawl mappings
+Human approval before writes applies at every stage.
+Chat complements the stages for investigation and operator-initiated execution.
 ```
 
 ### When to Advance
 
-From Crawl to Walk: Advance when operators repeatedly select the same approved playbook for a well-defined LogicMonitor event and the rule, guardrails, and rollback path are understood. The Walk stage promotes that procedure into an EDA rule-based trigger.
+From Crawl to Walk: Add correlated Insights when operators need related alerts and operational context together to choose an action. Verify that Edwin discovers the available AAP automation, maps relevant templates to Insights, and recommends the appropriate playbook. Operators review the recommendation and manually initiate execution.
 
-From Walk to Run: Advance when an alert needs contextual investigation, conversational analysis, or agentic tool use beyond explicit event rules. Begin with autonomous read-only diagnostics, and retain human approval for every write-based remediation.
+From Walk to Run: Promote a validated procedure when the root-cause conditions, target mapping, inputs, approval requirements, and recovery checks can be expressed as repeatable rules. Configure Edwin Rules and Actions and EDA to initiate the workflow; retain human approval before writes.
 
 ### The Promotion Pattern
 
-The crawl-walk-run framework is not just an adoption path -- it is an ongoing operational pattern. As the Run stage handles novel alerts and the team observes which patterns recur:
+The crawl-walk-run framework is not just an adoption path -- it is an ongoing operational pattern. As operators validate Edwin's recommendations and observe which responses consistently resolve incidents:
 
-1. A recurring Run pattern that yields a repeatable, approved action can be promoted to a Walk rule with explicit event conditions and guardrails.  
-2. A recurring Walk procedure can be retained as a Crawl mapping for operator-led execution when manual oversight remains the preferred operating model.  
-3. The need for agentic escalation narrows as repeatable patterns gain explicit Walk rules, while Crawl preserves the operator-led procedures that should remain human-directed.
+1. A recurring Walk recommendation that produces a repeatable, approved outcome can be promoted to a Run rule with explicit root-cause conditions, input mappings, and approval gates.
+
+2. A proven Run response can remain available for manual initiation through a Walk Insight or a Crawl mapping when the situation requires operator judgment or falls outside the configured rule conditions.
+
+3. Execution outcomes inform ongoing refinement of recommendations and Run rules. Expand automated triggering as confidence grows; return unreliable or ambiguous scenarios to operator-led investigation until their conditions and safeguards are understood.
 
 ---
+
+
 
 ## ROI Recap
 
 ### MTTR Reduction
 
 - Crawl: Teams reduce time-to-action by mapping common conditions to approved playbooks in Envision, while retaining operator judgment and traceable manual execution.  
-- Walk: Repeatable, approved patterns move from manual execution to EDA-triggered automation, reducing response time and on-call effort.  
-- Run: Edwin AI chat and agents reduce investigation time through autonomous read-only diagnostics; write-based remediation remains human-approved and governed.
+- Walk: Correlated Insights and mapped automation reduce alert-by-alert investigation and help operators choose and manually initiate an appropriate response.  
+- Run: Root-cause-informed rules initiate approved automation through EDA, reducing manual launch effort and response time; write-based remediation remains human-approved.
 
 ### Alert Noise Reduction
 
@@ -666,7 +567,7 @@ Edwin AI's alert correlation reduces the volume of events that reach the on-call
 
 ### Governance and Audit Readiness
 
-Every remediation action -- whether manually launched from a Crawl mapping, triggered by a Walk rule, or initiated from Run-stage chat through MCP -- flows through AAP's governance framework. This means:
+Every remediation action -- whether launched from a Crawl mapping or Walk Insight, triggered by a Run rule, or initiated through complementary chat via MCP -- flows through AAP's governance framework. This means:
 
 - Complete audit trails for every action taken  
 - RBAC enforcement on all automation, including AI-initiated actions  
@@ -679,11 +580,11 @@ Track these metrics to quantify the value of each stage:
 
 | Metric | What it measures | Target |
 | :---- | :---- | :---- |
-| MTTR by stage | Time from mapped recommendation to execution (Crawl), event to execution (Walk), and investigation to approved action (Run) | Set a baseline for Crawl; target a measurable reduction for Walk; track diagnostic and approval time for Run |
-| Remediation success rate | Percentage of automated remediations that resolve the issue | Track operator-validated Crawl outcomes and success rate for Walk rules |
+| MTTR by stage | Time from static mapping to manual execution (Crawl), Insight to operator action (Walk), and matched cause to workflow initiation and approved execution (Run) | Set a baseline for Crawl; target a measurable reduction for Walk; track diagnostic and approval time for Run |
+| Remediation success rate | Percentage of automated remediations that resolve the issue | Track operator-validated Crawl outcomes and success rate for Run rules |
 | On-call escalation reduction | Change in pages to on-call engineers | Illustrative targets: 30-50% reduction after Walk, 50-70% after Run (establish baselines to validate) |
-| Alert noise reduction | Volume of alerts reaching human operators | Measurable decrease as Walk rules expand without sacrificing approval controls |
-| Pattern promotion rate | Number of Run patterns promoted to Walk rules or documented as Crawl mappings per quarter | Indicates system maturity growth |
+| Alert noise reduction | Volume of alerts reaching human operators | Measurable decrease as Run rules expand without sacrificing approval controls |
+| Pattern promotion rate | Number of validated Walk procedures promoted to Run rules per quarter | Indicates system maturity growth |
 
 ---
 
@@ -693,9 +594,10 @@ This guide uses BGP network remediation as the reference scenario because networ
 
 | Domain | Crawl example | Walk example | Run example |
 | :---- | :---- | :---- | :---- |
-| **Server / OS** | Disk usage alert -> Envision-mapped playbook, manually reviewed and launched | High memory alert -> EDA rule triggers an approved diagnostic or remediation workflow | Unknown performance degradation -> Edwin AI chat and agents investigate; MCP provides governed access to approved automation |
-| **Cloud** | Cloud budget threshold -> Envision-mapped rightsizing playbook, manually reviewed and launched | Latency spike + deployment event -> EDA rules trigger an approved workflow | Novel cloud service alert -> Edwin AI chat and agentic investigation |
-| **Storage** | Array health alert -> Envision-mapped diagnostic playbook, manually reviewed and launched | I/O latency + firmware event correlation -> EDA rule triggers an approved workflow | Cascading storage alerts -> Edwin AI chat and agents triage across arrays |
+| **Server / OS** | Disk alert -> static mapping, manually launched | Related memory alerts -> correlated Insight with mapped diagnostics, manually launched | Validated resource-exhaustion cause -> rule-triggered approved automation |
+| **Cloud** | Budget alert -> static mapping, manually launched | Latency and deployment alerts -> correlated Insight with mapped actions, manually launched | Validated deployment-related cause -> rule-triggered approved workflow |
+| **Storage** | Array health alert -> static mapping, manually launched | Related I/O and firmware events -> correlated Insight with mapped diagnostics, manually launched | Validated storage cause -> rule-triggered approved workflow |
+
 
 The architecture remains the same: LogicMonitor detects, Edwin AI analyzes, and AAP governs execution. Only the content collections and remediation playbooks change per domain. Teams that start with network can expand to additional domains by adding new rulebook rules, job templates, and the appropriate content collections.
 
@@ -717,9 +619,12 @@ The architecture remains the same: LogicMonitor detects, Edwin AI analyzes, and 
 
 1. Start with Crawl. In LogicMonitor Envision, map a small set of well-understood network conditions to tested AAP job templates. Have operators review context and launch the mapped automation manually, using RBAC and approvals to establish confidence and collect outcomes.  
      
-2. Expand to Walk. Promote high-confidence Crawl mappings into EDA rules. Configure the Edwin Post Ansible EDA Event action and Event Stream URL, then start with a single repeatable alert type and expand only after validating its governance, outcomes, and rollback path.  
-     
-3. Explore Run. Enable Edwin AI chat and agentic diagnostics for conditions that require investigation. Permit autonomous read-only discovery where appropriate, and keep human approval for all write-based remediation initiated through chat or its recommendations via MCP.
+2. Expand to Walk. Verify that Edwin correlates related alerts into Insights, discovers relevant AAP automation, and recommends the appropriate playbook. Have operators review each recommendation, manually initiate the selected action, and validate the results.
+
+3. Explore Run. Promote proven Walk procedures into configured Rules and Actions that route root-cause context to EDA. Start with permitted read-only diagnostics and retain human approval before every write-based remediation.
+
+4. Add conversational investigation where useful. Use Edwin AI chat to explore Insights, review recommendations, and initiate approved automation via MCP.
+
 
 The crawl-walk-run progression is designed to meet teams where they are. Each stage delivers immediate value while building the foundation for the next.  
 
