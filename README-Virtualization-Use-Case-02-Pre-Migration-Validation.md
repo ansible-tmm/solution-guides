@@ -45,7 +45,9 @@ The AVA 301 deck identifies pre-configuration for migration as a distinct automa
 
 - AAP with credentials to source virt and target OpenShift
 - MTV installed on the target platform for the migration path you will use
-- Execution environment with `kubernetes.core` and `infra.openshift_virtualization_migration`
+- Execution environment with:
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/kubernetes/core/">kubernetes.core</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/validated/infra/openshift_virtualization_migration/">infra.openshift_virtualization_migration</a> (optional validated roles; walkthroughs use `kubernetes.core.k8s_info` against MTV CRDs)
 
 ## Workflow
 
@@ -294,10 +296,25 @@ oc get sc
 
 ### Expected Result
 
-```
-Pre-flight playbook completes with failed=0 on a known-good lab.
-Intentionally missing a NetworkMap or StorageMap causes a clear assertion failure
-with a message naming exactly what is missing.
+```text
+$ ansible-playbook preflight-mtv.yml -v
+...
+TASK [Assert MTV operator is healthy] ******************************************
+ok: [localhost] => {
+    "msg": "MTV operator 2.7.0 is healthy"
+}
+TASK [Assert NetworkMap exists] ************************************************
+ok: [localhost] => {"changed": false, "msg": "all assertions passed"}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=12   changed=0    unreachable=0    failed=0
+
+# Intentionally missing StorageMap:
+TASK [Assert StorageMap exists] ************************************************
+fatal: [localhost]: FAILED! => {
+    "assertion": "storagemaps.resources | length > 0",
+    "msg": "Missing StorageMap in openshift-mtv. Create mappings before cutover."
+}
 ```
 
 ### Troubleshooting

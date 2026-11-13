@@ -46,7 +46,14 @@ The AVA 301 technical deck identifies two discovery scopes: **virtual infrastruc
 - Ansible Automation Platform with VMware credentials (vCenter read-only service account)
 - Optional: Redfish/iDRAC credentials for hardware discovery
 - Lab or pilot vSphere inventory for first runs
-- Execution environment with `community.vmware`, `kubernetes.core`, and `community.general` (for Redfish)
+- Execution environment with:
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/community/vmware/">community.vmware</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/kubernetes/core/">kubernetes.core</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/community/general/">community.general</a> (for Redfish)
+
+> **Tip:** TLS certificates.
+>
+> Use `vcenter_validate_certs: true` with a trusted CA in production. Lab examples may set it to `false` only for initial connectivity.
 
 ## Workflow
 
@@ -293,10 +300,21 @@ oc get sc
 
 ### Expected Result
 
-```
-VMware inventory returns expected hosts and VMs grouped by datacenter or cluster.
-Discovery playbook completes with failed=0 and writes a JSON report.
-Target cluster shows OpenShift Virtualization and MTV CSVs in Succeeded phase.
+```text
+$ ansible-playbook discover-vmware.yml -v
+...
+TASK [Report readiness] ********************************************************
+ok: [localhost] => {
+    "msg": "Found 42 powered-on VMs in VMware. 3 VMs already on target."
+}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=8    changed=1    unreachable=0    failed=0
+
+$ oc get csv -n openshift-cnv -o jsonpath='{.items[0].status.phase}{"\n"}'
+Succeeded
+$ oc get csv -n openshift-mtv -o jsonpath='{.items[0].status.phase}{"\n"}'
+Succeeded
 ```
 
 ### Troubleshooting

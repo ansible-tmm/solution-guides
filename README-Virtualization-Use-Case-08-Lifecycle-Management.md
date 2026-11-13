@@ -42,7 +42,9 @@ AVA 301 groups these under Lifecycle Management and shows Controller surveys suc
 
 ## Prerequisites
 
-- AAP 2.5+ with Controller and a custom execution environment containing `kubernetes.core` and `redhat.openshift_virtualization`
+- AAP 2.5+ with Controller and a custom execution environment containing:
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/kubernetes/core/">kubernetes.core</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/openshift_virtualization/">redhat.openshift_virtualization</a>
 - Cluster credentials with rights to patch VirtualMachine specs
 - Clear policy for live vs restart-required changes
 - `NetworkAttachmentDefinition` resources pre-configured for secondary NIC use cases
@@ -538,14 +540,20 @@ oc get vmim -n vms --sort-by=.metadata.creationTimestamp | tail -1
 
 ### Expected Result
 
-```
-Facts template returns current VM config without changes.
-Power operations transition VMI phase within 5 minutes.
-CPU/memory patch reflects in VM spec; VMI shows new values after restart.
-Disk add creates PVC and adds volume to VM spec.
-NIC add shows new interface in VM spec referencing the NetworkAttachmentDefinition.
-Live migration shows different nodeName on the VMI after completion.
-All jobs end with failed=0.
+```text
+$ oc get vmi demo-web -n vms -o jsonpath='{.status.phase}{" on "}{.status.nodeName}{"\n"}'
+Running on worker-2
+
+$ oc get vm demo-web -n vms -o jsonpath='{.spec.template.spec.domain.cpu.cores}{" cores, "}{.spec.template.spec.domain.resources.requests.memory}{"\n"}'
+4 cores, 8Gi
+
+$ ansible-playbook lifecycle-live-migrate.yml -e vm_name=demo-web -v
+...
+PLAY RECAP *********************************************************************
+localhost                  : ok=6    changed=1    unreachable=0    failed=0
+
+$ oc get vmi demo-web -n vms -o jsonpath='{.status.nodeName}{"\n"}'
+worker-5
 ```
 
 ### Troubleshooting

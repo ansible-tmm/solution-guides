@@ -54,7 +54,10 @@ AVA 301 highlights `kubevirt_vm` modules and Controller surveys (CPU, memory, di
 - Target namespace with resource quotas configured
 - Storage class available for DataVolume provisioning (for example `ocs-storagecluster-ceph-rbd`)
 - Golden image PVC in `openshift-virtualization-os-images` namespace (for example `rhel9-base`)
-- Execution environment with `redhat.openshift_virtualization`, `kubernetes.core`, and `python3-openshift`
+- Execution environment with:
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/openshift_virtualization/">redhat.openshift_virtualization</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/kubernetes/core/">kubernetes.core</a>
+  - `python3-openshift`
 
 ## Workflow
 
@@ -327,11 +330,17 @@ oc get dv <vm-name>-rootdisk -n <namespace> -o jsonpath='{.status.phase}'
 
 ### Expected Result
 
-```
-VM object exists; VMI reaches Running within 5 minutes.
-Guest agent reports OS name (for example "Red Hat Enterprise Linux 9.x").
-Cloud-init user can SSH with the provided public key.
-DataVolume phase is "Succeeded".
+```text
+$ oc get vm demo-web -n vms
+NAME       AGE   STATUS    READY
+demo-web   3m    Running   True
+
+$ oc get vmi demo-web -n vms -o jsonpath='{.status.phase}{"\n"}{.status.guestOSInfo.name}{"\n"}'
+Running
+Red Hat Enterprise Linux
+
+$ oc get dv demo-web-rootdisk -n vms -o jsonpath='{.status.phase}{"\n"}'
+Succeeded
 ```
 
 ### Troubleshooting

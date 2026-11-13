@@ -53,7 +53,10 @@ AVA 301 lists automated snapshots as a Production (Day-2) capability and as a de
 
 - AAP 2.5+ with cluster credentials that can create snapshots in target namespaces
 - `VolumeSnapshotClass` configured for your storage provider (for example `ocs-storagecluster-rbdplugin-snapclass`)
-- Execution environment with `kubernetes.core` and `python3-openshift`
+- Execution environment with:
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/kubernetes/core/">kubernetes.core</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/openshift_virtualization/">redhat.openshift_virtualization</a>
+  - `python3-openshift`
 - Lab VMs for restore drill testing before production use
 
 ## Workflow
@@ -350,11 +353,18 @@ oc get virtualmachinerestore -n <namespace>
 
 ### Expected Result
 
-```
-VirtualMachineSnapshot shows readyToUse: true within 5 minutes.
-Matching VolumeSnapshot objects exist for each disk.
-VolumeSnapshotClass is present for the storage provider.
-After restore: VM starts and guest agent reports OS info matching pre-snapshot state.
+```text
+$ oc get virtualmachinesnapshot demo-web-prepatch -n vms \
+    -o jsonpath='{.status.readyToUse}{"\n"}'
+true
+
+$ oc get volumesnapshot -n vms
+NAME                         READYTOUSE   SOURCEPVC
+demo-web-prepatch-rootdisk   true         demo-web-rootdisk
+
+$ oc get volumesnapshotclass
+NAME                                      DRIVER
+ocs-storagecluster-rbdplugin-snapclass    openshift-storage.rbd.csi.ceph.com
 ```
 
 ### Troubleshooting

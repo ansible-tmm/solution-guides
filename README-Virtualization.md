@@ -134,7 +134,7 @@ All playbooks in this guide run inside an execution environment (EE). Build or e
 | `kubernetes.core` | OpenShift API access (`k8s`, `k8s_info`, inventory plugin) |
 | `redhat.openshift` | OpenShift-specific resources |
 | `redhat.openshift_virtualization` | `kubevirt_vm`, `kubevirt_vm_info` modules |
-| `infra.openshift_virtualization_migration` | MTV plan and mapping modules (Crawl) |
+| `infra.openshift_virtualization_migration` | Validated roles for MTV management and migrate waves (Crawl) |
 | `ansible.eda` | Rulebooks and source plugins (Run) |
 | `redhat.rhel_system_roles` | Guest OS configuration (Walk / Run) |
 | `servicenow.itsm` | ITSM integration (optional) |
@@ -249,7 +249,7 @@ Requirements depend on which use case or partner guide you implement.
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/kubernetes/core/">kubernetes.core</a> | Certified | OpenShift / Kubernetes API automation, dynamic inventory | All |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/openshift/">redhat.openshift</a> | Certified | OpenShift platform resources | All |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/openshift_virtualization/">redhat.openshift_virtualization</a> | Certified | `kubevirt_vm`, `kubevirt_vm_info` modules for VM lifecycle | 4, 5, 6, 7, 8 |
-| infra.openshift_virtualization_migration | Community / Validated | MTV plan creation, network/storage mappings, wave orchestration | 1, 2, 3 |
+| <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/validated/infra/openshift_virtualization_migration/">infra.openshift_virtualization_migration</a> | Validated | Roles such as `mtv_management` and `mtv_migrate` for MTV at scale | 1, 2, 3 |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/eda/">ansible.eda</a> | Certified | Rulebooks for platform and monitoring events | 9 |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/rhel_system_roles/">redhat.rhel_system_roles</a> | Certified | Guest OS configuration on RHEL VMs | 5, 7 |
 | <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/servicenow/itsm/">servicenow.itsm</a> | Certified | ITSM change records and incident enrichment | Optional for all |
@@ -265,27 +265,31 @@ Requirements depend on which use case or partner guide you implement.
 | Metrics / alerting (Prometheus, Dynatrace, Kafka, and so on) | Optional for Crawl | Health signals into EDA at Run |
 | ITSM (for example ServiceNow) | Optional | Change tickets and approvals |
 
+> **Warning:** Cutover risk.
+>
+> Migration cutovers and day-2 remediations can interrupt workloads. Prefer lab clusters, change tickets, and approval gates before production waves.
+
 **Operational Impact:** Medium to High -- migration cutovers and day-2 remediations can interrupt workloads. Prefer lab clusters and approvals first.
 
 ## Collection and module mapping
 
-Each use case relies on specific modules. This table maps use cases to the primary modules and plugins so teams know exactly what to include in their execution environment and playbooks.
+Each use case relies on specific modules, plugins, or roles. Walkthrough examples in this guide create MTV NetworkMap, StorageMap, and Plan objects with `kubernetes.core.k8s` against the forklift CRDs. The validated `infra.openshift_virtualization_migration` collection adds higher-level roles (`mtv_management`, `mtv_migrate`) when you adopt the full AVA migration content set -- it does not ship standalone `mtv_plan`-style modules.
 
-| Use case | Collection | Key modules / plugins | What they do |
-|----------|-----------|----------------------|-------------|
+| Use case | Collection | Key modules / plugins / roles | What they do |
+|----------|-----------|------------------------------|-------------|
 | **1 -- Discover** | `community.vmware` | `vmware_vm_info`, `vmware_host_info`, `vmware_datastore_info` | Pull VM, host, and datastore facts from vCenter |
 | **1 -- Discover** | `kubernetes.core` | `k8s_info` | Query target cluster readiness and existing VMs |
-| **2 -- Validate** | `kubernetes.core` | `k8s_info` | Check MTV CRDs, storage classes, network attachments |
-| **2 -- Validate** | `infra.openshift_virtualization_migration` | `mtv_provider_info`, `mtv_plan_info` | Verify source/target providers and plan prerequisites |
-| **3 -- Migrate** | `infra.openshift_virtualization_migration` | `mtv_plan`, `mtv_networkmap`, `mtv_storagemap`, `mtv_hook` | Create and execute MTV plans programmatically |
+| **2 -- Validate** | `kubernetes.core` | `k8s_info` | Check MTV CRDs, providers, storage classes, and network attachments |
+| **3 -- Migrate** | `kubernetes.core` | `k8s`, `k8s_info` | Create MTV NetworkMap, StorageMap, and Plan CRs; watch plan status |
+| **3 -- Migrate** | `infra.openshift_virtualization_migration` | Roles: `mtv_management`, `mtv_migrate` | Optional validated roles for MTV install and wave orchestration at scale |
 | **4 -- Provision** | `redhat.openshift_virtualization` | `kubevirt_vm` | Create VirtualMachine resources with desired specs |
 | **4 -- Provision** | `kubernetes.core` | `k8s`, `k8s_info` | Manage PVCs, services, and related resources |
-| **5 -- Guest config** | `redhat.rhel_system_roles` | `rhel_system_roles.firewall`, `rhel_system_roles.timesync`, `rhel_system_roles.crypto_policies` | Harden and configure RHEL guests |
+| **5 -- Guest config** | `redhat.rhel_system_roles` | `timesync`, `firewall`, `crypto_policies` | Harden and configure RHEL guests |
 | **5 -- Guest config** | `ansible.builtin` | `dnf`, `service`, `template`, `user` | Install packages, manage services, deploy configs |
 | **6 -- Snapshot** | `kubernetes.core` | `k8s` | Create and restore `VirtualMachineSnapshot` and `VirtualMachineRestore` objects |
 | **7 -- Patch** | `ansible.builtin` | `dnf`, `yum`, `reboot` | Apply package updates and handle reboots |
-| **7 -- Patch** | `redhat.rhel_system_roles` | `rhel_system_roles.selinux` | Relabel after kernel updates |
-| **8 -- Lifecycle** | `redhat.openshift_virtualization` | `kubevirt_vm` | Modify CPU, memory, disks on existing VMs |
+| **7 -- Patch** | `redhat.rhel_system_roles` | `selinux` | Relabel after kernel updates |
+| **8 -- Lifecycle** | `redhat.openshift_virtualization` | `kubevirt_vm`, `kubevirt_vm_info` | Modify CPU, memory, disks on existing VMs |
 | **8 -- Lifecycle** | `kubernetes.core` | `k8s` | Patch VirtualMachine specs for NIC and storage changes |
 | **9 -- EDA** | `ansible.eda` | `alertmanager` source, `k8s` source | Subscribe to Prometheus alerts and Kubernetes events |
 | **9 -- EDA** | `redhat.openshift_virtualization` | `kubevirt_vm` | Restart, recreate, or live-migrate VMs from remediation jobs |
@@ -312,6 +316,10 @@ Each step below includes a representative playbook. Full production examples liv
 
 Inventory VMware and supporting hardware; validate MTV prerequisites and target cluster readiness before any cutover.
 
+> **Tip:** TLS certificates.
+>
+> Set `vcenter_validate_certs: true` in production and trust your vCenter CA in the EE. The example defaults to `false` only for lab connectivity.
+
 ```yaml
 ---
 - name: Discover VMware estate for migration planning
@@ -322,13 +330,14 @@ Inventory VMware and supporting hardware; validate MTV prerequisites and target 
     vcenter_hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
     vcenter_username: "{{ lookup('env', 'VMWARE_USER') }}"
     vcenter_password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+    vcenter_validate_certs: false
   tasks:
     - name: Gather all VM info from vCenter
       community.vmware.vmware_vm_info:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
+        validate_certs: "{{ vcenter_validate_certs }}"
       register: vmware_vms
 
     - name: Build migration candidate report
@@ -647,6 +656,43 @@ awx job_templates list --name "Remediate VM*" -f human
 ```
 
 ### Expected Results
+
+Representative command output for each phase:
+
+**Crawl -- MTV operator and providers**
+
+```text
+$ oc get csv -n openshift-mtv
+NAME                            DISPLAY   VERSION   PHASE
+mtv-operator.v2.7.0             MTV       2.7.0     Succeeded
+
+$ oc get providers.forklift.konveyor.io -A
+NAMESPACE       NAME            TYPE      READY
+openshift-mtv   vmware-source   vsphere   True
+openshift-mtv   host            openshift True
+```
+
+**Walk -- provisioned VM running**
+
+```text
+$ oc get vmi demo-web -n vms -o jsonpath='{.status.phase}{"\n"}'
+Running
+
+$ oc get vmi demo-web -n vms -o jsonpath='{.status.guestOSInfo.name}{"\n"}'
+Red Hat Enterprise Linux
+```
+
+**Run -- snapshot ready and EDA job fired**
+
+```text
+$ oc get virtualmachinesnapshot demo-web-prepatch -n vms \
+    -o jsonpath='{.status.readyToUse}{"\n"}'
+true
+
+$ awx jobs list --job_template "Remediate VM - Restart VMI" --order_by=-created -f human | head -3
+id     name                              status    finished
+1842   Remediate VM - Restart VMI #42   successful 2026-11-13T15:01:12Z
+```
 
 | Phase | Check | Pass criteria |
 |-------|-------|---------------|

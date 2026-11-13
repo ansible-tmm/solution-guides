@@ -21,13 +21,17 @@ Orchestrate Migration Toolkit for Virtualization (MTV) plans with Ansible Automa
 
 Start from the [Common virtualization automation use cases hub](virtualization-use-cases.md) or the foundational [Virtualization automation with Ansible](README-Virtualization.md) guide.
 
-**Related content:** Migration collections such as `infra.openshift_virtualization_migration` in AVA labs and Hub.
+**Related content:** Validated roles in <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/validated/infra/openshift_virtualization_migration/">infra.openshift_virtualization_migration</a> (`mtv_management`, `mtv_migrate`) for AVA-scale waves. The walkthroughs below create MTV CRs with `kubernetes.core.k8s`.
 
 ## Background
 
 MTV moves the data. AAP ensures the same migration plan runs identically across environments, pre-flight has passed, and post-migration validation happens automatically. Without automation, migration teams create plans through the MTV UI one cluster at a time -- a process that does not scale to 50+ clusters and introduces human error in network/storage mapping selections.
 
-The `infra.openshift_virtualization_migration` collection provides Ansible modules for the full MTV lifecycle: create providers, define network and storage mappings, build plans, and execute migrations. AAP adds workflow orchestration, wave ordering, ITSM approval gates, and a complete audit trail.
+Use `kubernetes.core.k8s` to apply NetworkMap, StorageMap, and Plan objects as code, or adopt the validated `infra.openshift_virtualization_migration` roles (`mtv_management`, `mtv_migrate`) for broader AVA content. AAP adds workflow orchestration, wave ordering, ITSM approval gates, and a complete audit trail.
+
+> **Warning:** Cutover risk.
+>
+> Executing an MTV plan moves or cuts over workloads. Run pre-flight (use case 2), use a change ticket, and start with a lab wave before production.
 
 ## Solution
 
@@ -47,7 +51,10 @@ The `infra.openshift_virtualization_migration` collection provides Ansible modul
 
 - AAP, MTV, and target OpenShift Virtualization
 - Successful [pre-migration validation](README-Virtualization-Use-Case-02-Pre-Migration-Validation.md) pattern
-- Execution environment with `infra.openshift_virtualization_migration`, `kubernetes.core`, and optionally `servicenow.itsm`
+- Execution environment with:
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/kubernetes/core/">kubernetes.core</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/validated/infra/openshift_virtualization_migration/">infra.openshift_virtualization_migration</a> (optional validated roles)
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/servicenow/itsm/">servicenow.itsm</a> (optional ITSM)
 
 ## Workflow
 
@@ -416,10 +423,19 @@ oc get vmi <vm-name> -n <target-namespace> -o jsonpath='{.status.guestOSInfo}'
 
 ### Expected Result
 
-```
-MTV plan created and migration completed via AAP with failed=0.
-Plan definition matches survey or variable inputs.
-All expected VMs reach Running phase with guest agent reporting.
+```text
+$ oc get plans.forklift.konveyor.io wave-1 -n openshift-mtv
+NAME     READY   STATUS      TOTAL
+wave-1   True    Succeeded   3
+
+$ oc get vmi -n vms
+NAME        AGE   PHASE     IP
+app-web-1   12m   Running   10.128.2.15
+app-web-2   12m   Running   10.128.2.16
+app-db-1    11m   Running   10.128.2.17
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=15   changed=4    unreachable=0    failed=0
 ```
 
 ### Troubleshooting

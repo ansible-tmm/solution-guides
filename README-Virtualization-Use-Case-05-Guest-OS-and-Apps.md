@@ -30,9 +30,9 @@ AVA 301 separates OpenShift Virtualization automation (provision) from guest and
 | Module / Plugin | Collection | Purpose |
 |----------------|-----------|---------|
 | kubevirt inventory plugin | `kubernetes.core` | Dynamic inventory of VMs by namespace and label |
-| `rhel_system_roles.firewall` | `redhat.rhel_system_roles` | Guest firewall configuration |
-| `rhel_system_roles.timesync` | `redhat.rhel_system_roles` | NTP / chrony configuration |
-| `rhel_system_roles.crypto_policies` | `redhat.rhel_system_roles` | System-wide crypto policy |
+| `redhat.rhel_system_roles.firewall` | `redhat.rhel_system_roles` | Guest firewall configuration |
+| `redhat.rhel_system_roles.timesync` | `redhat.rhel_system_roles` | NTP / chrony configuration |
+| `redhat.rhel_system_roles.crypto_policies` | `redhat.rhel_system_roles` | System-wide crypto policy |
 | `dnf`, `service`, `template` | `ansible.builtin` | Package management, services, config files |
 
 ## Solution
@@ -53,7 +53,10 @@ AVA 301 separates OpenShift Virtualization automation (provision) from guest and
 ## Prerequisites
 
 - AAP 2.5+ with guest SSH credentials (machine credential) or WinRM for Windows guests
-- Execution environment with `redhat.rhel_system_roles`, `kubernetes.core`, and guest connectivity
+- Execution environment with:
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/rhel_system_roles/">redhat.rhel_system_roles</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/kubernetes/core/">kubernetes.core</a>
+  - guest SSH/WinRM connectivity
 - Guests must have `qemu-guest-agent` running (set up via cloud-init in [use case 4](README-Virtualization-Use-Case-04-VM-Provisioning.md))
 - Network path from execution environment to guest VMs (pod network or `NodePort` / `LoadBalancer` service)
 
@@ -140,9 +143,9 @@ Apply security baselines, time synchronization, and firewall rules as code. Thes
         state: enabled
         permanent: true
   roles:
-    - role: redhat.rhel_system_roles.timesync
-    - role: redhat.rhel_system_roles.crypto_policies
-    - role: redhat.rhel_system_roles.firewall
+    - redhat.rhel_system_roles.timesync
+    - redhat.rhel_system_roles.crypto_policies
+    - redhat.rhel_system_roles.firewall
 
   tasks:
     - name: Ensure qemu-guest-agent is running
@@ -318,12 +321,22 @@ ansible -i kubevirt-inventory.yml rhel_guests -m command -a "firewall-cmd --list
 
 ### Expected Result
 
-```
-Dynamic inventory lists VMs by namespace with IP addresses.
-Ping succeeds for all reachable guests.
-Chrony shows configured NTP sources; crypto policy returns FUTURE.
-Application health endpoint returns 200.
-Firewall shows ssh, http, https enabled.
+```text
+$ ansible-inventory -i kubevirt.yml --graph
+@all:
+  |--@vms:
+  |  |--demo-web
+  |  |--demo-app
+
+$ ansible -i kubevirt.yml rhel_guests -m ping
+demo-web | SUCCESS => {"changed": false, "ping": "pong"}
+
+$ ansible -i kubevirt.yml demo-web -a 'update-crypto-policies --show'
+demo-web | CHANGED | rc=0 >>
+FUTURE
+
+$ curl -s -o /dev/null -w "%{http_code}\n" http://demo-web.vms.svc:8080/health
+200
 ```
 
 ### Troubleshooting

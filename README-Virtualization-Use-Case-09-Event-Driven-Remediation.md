@@ -98,7 +98,10 @@ graph TB
 ## Prerequisites
 
 - AAP 2.5+ with Controller and Event-Driven Ansible controller
-- Custom execution environment with `ansible.eda`, `kubernetes.core`, and `redhat.openshift_virtualization`
+- Custom execution environment with:
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/ansible/eda/">ansible.eda</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/kubernetes/core/">kubernetes.core</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/openshift_virtualization/">redhat.openshift_virtualization</a>
 - Event source configured:
   - **Alertmanager**: webhook receiver pointing to EDA endpoint
   - **Kubernetes events**: service account with watch permissions on target namespaces
@@ -106,6 +109,10 @@ graph TB
 - Lab remediations with clear blast radius tested manually first
 - AAP job templates for each remediation action (created in advance)
 - Decision token or API credential for EDA to call Controller job templates
+
+> **Warning:** Trust escalation.
+>
+> Do not jump from manual ops to full auto-remediation. Start at Level 1 (notify only), prove conditions, then add approval (Level 2) before throttle-limited auto-remediate (Level 3+).
 
 ## Workflow
 
@@ -613,7 +620,9 @@ After any remediation, verify the VM returned to a healthy state. Use this as th
 
 ### Step 7: Trust escalation
 
-Teams should grow their EDA trust level over time. Do not jump from manual operations to full auto-remediation in one step.
+> **Tip:** Climb one level at a time.
+>
+> Teams should grow EDA trust over time. Do not jump from manual operations to full auto-remediation in one step.
 
 | Trust level | EDA behavior | When to use |
 |------------|-------------|-------------|
@@ -688,13 +697,22 @@ oc get vmi test-vm -n vms -o jsonpath='{.status.phase}'
 
 ### Expected Result
 
-```
-EDA pod is Running in the ansible-eda namespace.
-Rulebook activation shows "running" status.
-Replayed alert triggers the matching job template within 60 seconds.
-Job completes with failed=0.
-Test VM returns to Running phase after remediation.
-Verification annotations are present on the VM.
+```text
+$ oc get pods -n ansible-eda -l app=eda
+NAME                         READY   STATUS    RESTARTS   AGE
+eda-activation-worker-0      1/1     Running   0          2d
+
+$ curl -s -X POST http://eda-controller.ansible-eda.svc:8000/endpoint \
+    -H "Content-Type: application/json" \
+    -d '{"alerts":[{"status":"firing","labels":{"alertname":"KubeVirtVMICrashLoop","name":"test-vm","namespace":"vms"}}]}'
+# (empty 200 OK body from Alertmanager-compatible receiver)
+
+$ awx jobs list --job_template "Remediate VM - Restart VMI" --order_by=-created -f human | head -3
+id     name                             status      finished
+1842   Remediate VM - Restart VMI #42   successful  2026-11-13T15:01:12Z
+
+$ oc get vmi test-vm -n vms -o jsonpath='{.status.phase}{"\n"}'
+Running
 ```
 
 ### Troubleshooting

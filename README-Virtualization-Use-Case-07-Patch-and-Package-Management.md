@@ -43,11 +43,18 @@ AVA 301 shows package update playbooks (for example `dnf` state latest) as an op
 
 ## Prerequisites
 
-- AAP 2.5+ with Controller and a custom execution environment containing `redhat.rhel_system_roles`, `kubernetes.core`, and `redhat.openshift_virtualization`
+- AAP 2.5+ with Controller and a custom execution environment containing:
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/rhel_system_roles/">redhat.rhel_system_roles</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/kubernetes/core/">kubernetes.core</a>
+  - <a target="_blank" href="https://console.redhat.com/ansible/automation-hub/repo/published/redhat/openshift_virtualization/">redhat.openshift_virtualization</a>
 - Guest credentials (SSH for Linux, WinRM for Windows) reachable from the EE
 - Package repositories accessible from guest VMs (subscription-manager or local mirror)
 - Agreement on maintenance windows and reboot policy
 - kubevirt dynamic inventory source configured in Controller
+
+> **Warning:** Patch windows.
+>
+> Security updates and kernel reboots interrupt workloads. Schedule maintenance windows, take a snapshot first, and keep a tested restore path.
 
 ## Workflow
 
@@ -372,12 +379,23 @@ ansible -i kubevirt_inventory.yml patch_group_a -m command -a "dnf check-update 
 
 ### Expected Result
 
-```
-kubevirt inventory lists VMs grouped by patch-group label.
-Check mode reports expected package changes without applying them.
-Full run ends with failed=0 and updated package counts in the job output.
-Pre-patch snapshots show readyToUse: true.
-Post-patch dnf check-update returns exit code 0 (no updates available).
+```text
+$ ansible-playbook patch-guests.yml --check -v
+...
+TASK [Apply all available security updates] ************************************
+ok: [demo-web] => {"changed": true, "msg": "Check mode: would update 14 packages"}
+
+$ ansible-playbook patch-guests.yml -v
+...
+PLAY RECAP *********************************************************************
+demo-web                   : ok=9    changed=3    unreachable=0    failed=0
+
+$ oc get virtualmachinesnapshot -n vms -l app=demo-web \
+    -o jsonpath='{range .items[*]}{.metadata.name}{" "}{.status.readyToUse}{"\n"}{end}'
+demo-web-prepatch-20261113 true
+
+$ ansible demo-web -a 'dnf check-update' ; echo exit:$?
+exit:0
 ```
 
 ### Troubleshooting
