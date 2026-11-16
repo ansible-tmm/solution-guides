@@ -1,0 +1,40 @@
+/* Presentation shared by the five Microsoft solution guide drafts. */
+section table td:first-child a,
+section table td:first-child code {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
+
+section pre,
+section pre[class*="language-"],
+section .code-block-wrapper,
+section .code-block-wrapper pre {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #333 !important;
+  border-radius: 6px;
+}
+
+section pre {
+  padding: 20px !important;
+  overflow-x: auto !important;
+}
+
+section pre code,
+section pre code[class*="language-"],
+section pre code *,
+section .code-block-lang {
+  background: transparent !important;
+  color: #fff !important;
+  text-shadow: none !important;
+}
+
+section pre code {
+  display: block;
+  padding: 0 !important;
+  white-space: pre !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  line-height: 1.6;
+}
