@@ -473,10 +473,16 @@ patternfly: true
                 <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
                 Work in Progress
               </span>
-            </span>
-            <span class="pf-v6-c-label card-label-track card-label-track--network">
-              <span class="pf-v6-c-label__content">Network</span>
-            </span>
+            </div>
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">AI-Assisted Ansible Developer Experience</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              Standardize your automation developer experience across the organization using Ansible Development Tools, from individual uv/pip installs to enterprise-governed Dev Spaces with 2-minute onboarding.
+            </div>
+            <div class="pf-v6-c-card__footer">
+              <span class="pf-v6-c-label pf-m-outline pf-m-compact"><span class="pf-v6-c-label__content">Foundational</span></span>
+            </div>
           </div>
           <div class="pf-v6-c-card__title">
             <h3 class="pf-v6-c-card__title-text">Intelligent Network Automation with Gluware and Ansible</h3>
@@ -565,18 +571,61 @@ patternfly: true
         </a>
         <div class="pf-v6-l-gallery pf-m-gutter cards-gallery" id="security-gallery">
 
-      <a href="{{ '/README-Satellite-CVE-Remediation' | relative_url }}" class="card-link" data-tags="redhat,security,solution,published">
-        <div class="pf-v6-c-card">
-          <div class="pf-v6-c-card__header card-header--labels">
-            <span class="pf-v6-c-label pf-m-green">
-              <span class="pf-v6-c-label__content">
-                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
-                Solution Guide
+        <a href="{{ '/README-OpenShift-EDA-Kafka' | relative_url }}" class="card-link" data-partners="infrastructure,wip">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__header">
+              <span class="pf-v6-c-label pf-m-orange">
+                <span class="pf-v6-c-label__content">
+                  <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
+                  Work in Progress
+                </span>
               </span>
-            </span>
-            <span class="pf-v6-c-label card-label-track card-label-track--security">
-              <span class="pf-v6-c-label__content">Security</span>
-            </span>
+            </div>
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">Consuming OpenShift API Resources with EDA and Kafka</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              Capture OpenShift Namespace lifecycle events via Knative APIServerSource, stream them through Kafka, and surface them in Event-Driven Ansible for logging and downstream automation.
+            </div>
+            <div class="pf-v6-c-card__footer">
+              <img src="{{ '/assets/images/kafka_logo.webp' | relative_url }}" alt="Kafka" class="card-partner-logo">
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="cards-contributing">
+      <h2>Contributing</h2>
+      <p>Writing a new solution guide? Start with the <a href="{{ '/README-best-practices' | relative_url }}">Best Practices for Writing Solution Guides</a> -- it includes the framework, quality scoring rubric, and a starter template.</p>
+    </div>
+
+    <details class="legacy-guides">
+      <summary>Legacy Solution Guides (Under Review)</summary>
+      <p>These solution guides were published on access.redhat.com before this repository existed. They are being reviewed and will be migrated to the new format as full markdown guides.</p>
+      <div class="pf-v6-l-gallery pf-m-gutter cards-gallery">
+        <a href="https://access.redhat.com/articles/7136383" class="card-link" target="_blank" data-partners="published">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">Automation Dashboard and Analytics</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              Visualize automation ROI and operational metrics with the AAP Dashboard and Automation Analytics.
+            </div>
+          </div>
+        </a>
+        <a href="{{ '/README-ServiceNow-ITSM' | relative_url }}" class="card-link" data-partners="servicenow,published">
+          <div class="pf-v6-c-card">
+            <div class="pf-v6-c-card__title">
+              <h3 class="pf-v6-c-card__title-text">ServiceNow ITSM Ticket Enrichment</h3>
+            </div>
+            <div class="pf-v6-c-card__body">
+              Automate ServiceNow ticket creation and enrich incidents with CVE data from Red Hat Insights.
+            </div>
+            <div class="pf-v6-c-card__footer">
+              <img src="{{ '/assets/images/servicenow-logo.png' | relative_url }}" alt="ServiceNow" class="card-partner-logo">
+            </div>
           </div>
           <div class="pf-v6-c-card__title">
             <h3 class="pf-v6-c-card__title-text">Proactive Vulnerability Remediation with Satellite and Event-Driven Ansible</h3>

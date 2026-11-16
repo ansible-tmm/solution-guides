@@ -808,19 +808,16 @@ podman ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 # Gateway nodes (gateway1-dc1, gateway2-dc1):
 systemctl enable --user --now automation-gateway automation-gateway-proxy redis-tcp
 
-# Controller nodes (controller1-dc1, controller2-dc1):
-systemctl enable --user --now automation-controller-web automation-controller-task \
-  automation-controller-rsyslog receptor redis-unix
+```bash
+# On DC2 nodes
 
-# Hub nodes (hub1-dc1, hub2-dc1):
-systemctl enable --user --now automation-hub-web automation-hub-api automation-hub-content \
-  automation-hub-worker-1 automation-hub-worker-2 redis-tcp redis-unix
+# IMMEDIATELY STOP all AAP containers (standby mode)
+systemctl stop automation-controller-web automation-controller-task
+systemctl stop automation-gateway automation-hub eda-activation-worker redis
 
-# EDA nodes (eda1-dc1, eda2-dc1):
-systemctl enable --user --now automation-eda-api automation-eda-web automation-eda-daphne \
-  automation-eda-worker-1 automation-eda-worker-2 \
-  automation-eda-activation-worker-1 automation-eda-activation-worker-2 \
-  automation-eda-scheduler redis-tcp
+# Disable auto-start
+systemctl disable automation-controller-web automation-controller-task
+systemctl disable automation-gateway automation-hub eda-activation-worker redis
 ```
 
 > **Note:** The numbered worker units follow the `hub_workers`, `eda_workers`, and `eda_activation_workers` inventory variables (default 2 each). If you change those values, adjust the unit names in this guide to match.
