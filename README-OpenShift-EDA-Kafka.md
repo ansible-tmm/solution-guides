@@ -1,7 +1,20 @@
 {% raw %}
-# Using Event-Driven Ansible to Consume OpenShift API Resources With Kafka - Solution Guide <!-- omit in toc -->
+<div class="guide-header">
 
-<img src="assets/images/kafka_logo.webp" alt="OpenShift API events with Kafka and EDA" style="max-width:400px">
+<h1>Using Event-Driven Ansible to Consume OpenShift API Resources With Kafka</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--cloud-native" role="img" aria-label="Ansible Automation Platform and Red Hat OpenShift">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set">
+    <img src="assets/images/logos/cloud-native.png" alt="Red Hat OpenShift" class="card-partner-logo card-partner-logo--light" width="27" height="32">
+    <img src="assets/images/logos/cloud-native-dark.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true" width="27" height="32">
+  </span>
+</div>
 
 <style>
   div#toc {
@@ -18,32 +31,6 @@ This guide demonstrates how to build a push-based event pipeline that captures O
 > **This guide builds the foundational event pipeline.**
 >
 > The walkthrough captures and logs namespace activity as it flows through each stage. For adding automated response actions (applying quotas, enforcing policies, triggering remediation), see the [Maturity Path](#maturity-path) section.
-
-- [Overview](#overview)
-- [Background](#background)
-- [Solution](#solution)
-  - [Who Benefits](#who-benefits)
-- [Prerequisites](#prerequisites)
-  - [Ansible Automation Platform](#ansible-automation-platform)
-  - [OpenShift](#openshift)
-  - [Featured Ansible Content Collections](#featured-ansible-content-collections)
-  - [External Systems](#external-systems)
-- [OpenShift API Event Pipeline Workflow](#openshift-api-event-pipeline-workflow)
-  - [Operational Impact per Stage](#operational-impact-per-stage)
-  - [CloudEvents Captured](#cloudevents-captured)
-- [Solution Walkthrough](#solution-walkthrough)
-  - [1. Deploy Kafka with Streams for Apache Kafka](#1-deploy-kafka-with-streams-for-apache-kafka)
-  - [2. Install OpenShift Serverless and KnativeKafka](#2-install-openshift-serverless-and-knativekafka)
-  - [3. Create Namespace and RBAC for APIServerSource](#3-create-namespace-and-rbac-for-apiserversource)
-  - [4. Configure KafkaSink to Publish to Kafka](#4-configure-kafkasink-to-publish-to-kafka)
-  - [5. Create APIServerSource to Watch Namespaces](#5-create-apiserversource-to-watch-namespaces)
-  - [6. Configure EDA Resources](#6-configure-eda-resources)
-  - [7. Configure Automation Controller Resources](#7-configure-automation-controller-resources)
-- [Validation](#validation)
-  - [Troubleshooting](#troubleshooting)
-- [Maturity Path](#maturity-path)
-- [Related Guides](#related-guides)
-- [Summary](#summary)
 
 <h2 id="background"></h2>
 
@@ -81,7 +68,7 @@ What makes up the solution?
 
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2638.png" width="20" style="vertical-align:text-bottom;"> **Red Hat OpenShift** as the source where API resource changes occur <a target="_blank" href="https://www.redhat.com/en/technologies/cloud-computing/openshift">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f300.png" width="20" style="vertical-align:text-bottom;"> **OpenShift Serverless (Knative Eventing)** to watch the API server and emit CloudEvents <a target="_blank" href="https://docs.redhat.com/en/documentation/red_hat_openshift_serverless/">[Link]</a>
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e8.png" width="20" style="vertical-align:text-bottom;"> **Streams for Apache Kafka** as the durable event transport <a target="_blank" href="https://www.redhat.com/en/resources/amq-streams-datasheet">[Link]</a>
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e8.png" width="20" style="vertical-align:text-bottom;"> **Streams for Apache Kafka** as the durable event transport <a target="_blank" href="https://access.redhat.com/products/streams-apache-kafka/">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **Event-Driven Ansible (EDA)** to consume Kafka topics and trigger automation <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f501.png" width="20" style="vertical-align:text-bottom;"> **Ansible Automation Platform (AAP)** for orchestration <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible">[Link]</a>
 
@@ -1043,17 +1030,6 @@ localhost                  : ok=1    changed=0    unreachable=0    failed=0    s
 > **Ready for AI-driven operations?**
 >
 > The **Run** stage integrates this event pipeline with the AIOps reference architecture. The Kafka topic from this guide becomes the event source for the AIOps Enrichment Workflow. See [AIOps automation with Ansible](README-AIOps.md) for the full self-healing pipeline.
-
-<h2 id="related-guides"></h2>
-
-## Related Guides
-
-- **Full AIOps reference architecture:** See [AIOps automation with Ansible](README-AIOps.md) for the complete self-healing pipeline with AI inference, Lightspeed playbook generation, and Kafka event consumption.
-- **Alternative event transport:** See [AIOps with AWS SQS and Event-Driven Ansible](README-SQS.md) for using AWS SQS instead of Kafka as the message queue.
-- **Another EDA pattern:** See [Event-Driven Network Configuration with NetBox and Ansible Automation Platform](README-NetBox-EDA-Config-Solution-Guide.md) for using EDA with webhooks instead of Kafka.
-- **New to Event-Driven Ansible?** See <a target="_blank" href="https://access.redhat.com/articles/7136720">Get started with EDA (Ansible Rulebook)</a> for the fundamentals.
-
----
 
 ## Summary
 

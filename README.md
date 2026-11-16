@@ -12,10 +12,20 @@ Solution guides for AI-driven automation with Ansible Automation Platform.
 | AIOps with AWS SQS and Event-Driven Ansible | [README-SQS.md](README-SQS.md) | |
 | AI Infrastructure automation with Ansible | [README-IA.md](README-IA.md) | [access.redhat.com](https://access.redhat.com/articles/7118390) |
 | Configuring Ansible Lightspeed intelligent assistant with Red Hat AI Inference Server on RHEL | | [access.redhat.com](https://access.redhat.com/articles/7130595) |
-| Network Fact Gathering & Reporting | | [access.redhat.com](https://access.redhat.com/articles/7123361) |
-| Network Back Up and Configuration | | [access.redhat.com](https://access.redhat.com/articles/7123366) |
-| Unlock AIOps with ServiceNow LEAP and Ansible MCP server | [README-AIOps-ServiceNow.md](README-AIOps-ServiceNow.md) | [access.redhat.com](https://access.redhat.com/articles/7127603) |
+| ServiceNow ITSM automation with Ansible | [README-AIOps-ServiceNow.md](README-AIOps-ServiceNow.md) (ticket enrichment and LEAP + MCP AIOps) | [access.redhat.com](https://access.redhat.com/articles/7127603) |
+| Intelligent Network Automation with Gluware and Ansible | [README-Gluware-Network-Automation.md](README-Gluware-Network-Automation.md) | |
 | Consuming OpenShift API Resources with EDA and Kafka | [README-OpenShift-EDA-Kafka.md](README-OpenShift-EDA-Kafka.md) | |
+| AAP HA/DR on OpenShift with CloudNativePG | [README-AAP-HA-DR-OpenShift.md](README-AAP-HA-DR-OpenShift.md) | |
+| Proactive vulnerability remediation with Satellite, Event-Driven Ansible, and Lightspeed On-Premises | [README-Satellite-CVE-Remediation.md](README-Satellite-CVE-Remediation.md) | |
+| Automated runtime mitigation for Linux OT hosts | [README-Falco-runtime-mitigation.md](README-Falco-runtime-mitigation.md) | |
+| PQC Discovery - Post-Quantum Cryptography readiness on RHEL | [README-PQC-Discovery.md](README-PQC-Discovery.md) | |
+| Automated CVE response and compliance verification with CME | [README-CME.md](README-CME.md) | |
+| Security automation with Splunk and Event-Driven Ansible | [README-Splunk-Security-EDA.md](README-Splunk-Security-EDA.md) (brute-force remediation and CVE defend/contain/comply) | |
+| AI-driven CVE routing and remediation with Automation orchestrator | [README-AO-driven-CVE-routing.md](README-AO-driven-CVE-routing.md) | |
+| Zero Trust Architecture infrastructure with Ansible Automation Platform | [README-ZTA-with-AAP.md](README-ZTA-with-AAP.md) | |
+| Enforcing compliance and network governance with Policy as Code | [README-Compliance-Governance-with-policy.md](README-Compliance-Governance-with-policy.md) | |
+| RHEL 9 STIG and CIS compliance scanning with Ansible | [README-STIG-CIS-compliance.md](README-STIG-CIS-compliance.md) | |
+| Automated vulnerability remediation with Lightwell and Ansible | [README-AAP-LightWell-AO.md](README-AAP-LightWell-AO.md) | |
 
 ## Contributing
 

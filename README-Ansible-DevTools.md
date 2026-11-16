@@ -1,4 +1,20 @@
-# AI-Assisted Ansible Developer Experience - Solution Guide
+<div class="guide-header">
+
+<h1>AI-Assisted Ansible Developer Experience</h1>
+
+<span class="guide-type-badge guide-type-badge--solution"><i class="fas fa-check-circle" aria-hidden="true"></i> Solution Guide</span>
+
+</div>
+
+<div class="guide-hero-callout guide-hero-partner guide-hero-partner--devtools" role="img" aria-label="Ansible Automation Platform and Ansible Content Tools">
+  <img src="assets/images/logos/aap-ansible-icon.png" alt="" class="guide-hero-callout__icon" width="36" height="36">
+  <span class="guide-hero-partner__plus" aria-hidden="true">+</span>
+  <span class="guide-hero-partner__partner card-partner-logo-set card-partner-logo-set--devtools">
+    <img src="assets/images/logos/ansible-devtools-logo.png" alt="" class="card-partner-logo card-partner-logo--light" aria-hidden="true">
+    <img src="assets/images/logos/ansible-devtools-logo.png" alt="" class="card-partner-logo card-partner-logo--dark" aria-hidden="true">
+    <span class="card-partner-logo-label">Ansible Content Tools</span>
+  </span>
+</div>
 
 ## Overview
 
@@ -13,12 +29,11 @@ graph LR
     C -->|centralize| D["Dev Spaces<br/><b>Governed</b><br/>~5 min"]
 ```
 
-| Method | Onboarding | Consistency | Who manages it |
-|--------|-----------|-------------|---------------|
-| **uv/pip** | ~30 min, but developers must manually coordinate versions with their team and troubleshoot conflicts on their own | Low: each developer manages their own environment, drift is inevitable | Developer |
-| **RPM** | ~15 min if Satellite is available, but requires IT to include it in laptop provisioning workflows | Medium: same package version across RHEL systems, but no IDE or linting config | IT / Platform team |
-| **Dev Container** | ~10 min (first image pull), then instant for subsequent projects. Requires permissions to run containers on the workstation. Available as community (free) or supported (AAP subscription) image | High: same image, same tools, same config. Adding `.devcontainer/` to a repo is all it takes | Team lead / repo owner |
-| **Dev Spaces** | ~2 min. Open a browser, click create, start coding | Highest: centrally managed, browser-only, zero local dependencies | Platform team / IT |
+The goal is to move every automation developer in your organization onto the same toolchain, with the same versions, the same linting rules, and the same testing frameworks. Dev containers and Dev Spaces are the recommended enterprise options: they require an initial investment in image management to account for different project scenarios, but once that setup is done, the environment is completely transparent to developers. See the [Maturity Path](#maturity-path) for a detailed comparison of each method.
+
+> **Example:** Dev Spaces onboarding.
+>
+> A network automation team of 12 engineers across three offices adopts Dev Spaces. A new engineer joins on Monday, opens a browser, navigates to the Dev Spaces URL, and clicks "Create Workspace" on the team's Git repository. Five minutes later they have a full VS Code environment with ansible-lint, molecule, ansible-navigator, and the team's linting profile, identical to every other engineer on the team. No local installs, no "which Python version do I need," no VPN issues with package mirrors.
 
 ### AI-Assisted Ansible Development
 
@@ -50,33 +65,21 @@ graph LR
     D -->|inspect results| E["<b>Troubleshoot</b><br/>Devtools + AAP MCP"]
 ```
 
-- [AI-Assisted Ansible Developer Experience - Solution Guide](#ai-assisted-ansible-developer-experience---solution-guide)
-  - [Overview](#overview)
-  - [Background](#background)
-  - [Solution](#solution)
-    - [What's in the Bundle](#whats-in-the-bundle)
-    - [Who Benefits](#who-benefits)
-    - [Recommended Resources](#recommended-resources)
-  - [Prerequisites](#prerequisites)
-    - [Ansible Automation Platform](#ansible-automation-platform)
-    - [System Requirements](#system-requirements)
-  - [Installation Methods](#installation-methods)
-    - [Method A: Python Package (uv)](#method-a-python-package-uv)
-    - [Method B: RPM (Red Hat Subscription)](#method-b-rpm-red-hat-subscription)
-    - [Method C: Dev Container (VS Code)](#method-c-dev-container-vs-code)
-    - [Method D: Red Hat OpenShift Dev Spaces](#method-d-red-hat-openshift-dev-spaces)
-  - [Comparison](#comparison)
-  - [AI-Assisted Ansible Development](#ai-assisted-ansible-development)
-    - [Ansible Devtools MCP Server](#ansible-devtools-mcp-server)
-    - [Connecting to Ansible Automation Platform](#connecting-to-ansible-automation-platform)
-    - [End-to-End Development Workflow](#end-to-end-development-workflow)
-  - [Validation](#validation)
-    - [Verify the Installation](#verify-the-installation)
-    - [Quick Smoke Test](#quick-smoke-test)
-    - [Troubleshooting](#troubleshooting)
-  - [Maturity Path](#maturity-path)
-  - [Related Guides](#related-guides)
-  - [Sources](#sources)
+1. **Scaffold** -- the AI assistant uses the Devtools MCP server to create a new role or playbook with `ansible-creator`, pre-configured with the correct structure and metadata.
+2. **Validate locally** -- the assistant runs `ansible-lint` through the Devtools MCP server, identifies issues, and applies fixes automatically before the code ever reaches AAP.
+3. **Check inventory** -- the assistant queries the AAP inventory through the AAP MCP server to verify target hosts, groups, and variables match what the playbook expects.
+4. **Run on AAP** -- the assistant launches the playbook as a job on a development AAP instance, using the correct job template, credentials, and survey variables.
+5. **Troubleshoot** -- if the job fails, the assistant inspects the job output through AAP MCP, correlates it with the playbook logic it can read locally through Devtools MCP, and proposes a fix. The cycle repeats from step 2 until the job succeeds.
+
+> **Example:** NTP configuration with AI-assisted workflow.
+>
+> A developer asks the AI assistant to "configure NTP on my RHEL hosts." Before writing any code, the assistant searches Automation Hub and discovers `redhat.rhel_system_roles.timesync`, a certified, tested role that handles chrony, ntp, and linuxptp configuration. It asks: "There's a certified role for this. Want to use it, or build a custom one?"
+>
+> **Path 1: Use existing content.** The developer chooses the certified role. The assistant looks up the role's parameters, generates a playbook that sets `timesync_ntp_servers` with the organization's NTP pool, lints it, queries the AAP development instance to confirm the RHEL inventory group exists, launches a test job, and validates that chrony is running with the correct sources. The developer never had to read the role's documentation.
+>
+> **Path 2: Build from scratch.** The developer also needs clock drift reported to an internal monitoring system. The `timesync` role configures NTP perfectly, but it does not export metrics. The assistant scaffolds a custom role with `ansible-creator` that queries `chronyc tracking`, extracts drift values, and posts them to the monitoring API. It lints the new role, runs it against the dev AAP instance alongside the certified role, and confirms both work together. The certified role handles NTP configuration; the custom role handles observability.
+>
+> In both paths, the developer stays in one conversation. The AI assistant handles discovery, scaffolding, validation, and troubleshooting while the developer focuses on intent and decisions.
 
 ---
 
@@ -122,34 +125,12 @@ graph LR
 
 ### Who Benefits
 
-**Business Value Drivers:**
-
-- **Faster onboarding** -- new automation developers go from zero to productive in minutes instead of weeks, directly reducing time-to-value for automation initiatives.
-- **Reduced support burden** -- eliminating "works on my machine" failures frees senior engineers from troubleshooting environment issues and lets them focus on building automation.
-- **Lower risk of inconsistent deployments** -- when every developer uses the same toolchain, the gap between what passes locally and what runs in production shrinks to zero.
-
-**Technical Value Drivers:**
-
-- **Deterministic environments** -- containerized workspaces guarantee identical OS, Python, tool versions, linting rules, and VS Code extensions across every developer.
-- **Governed toolchain updates** -- platform teams control image versions centrally, rolling out upgrades and security patches without requiring action from individual developers.
-- **Integrated content lifecycle** -- Create, Test, and Deploy tools are pre-integrated and version-locked, eliminating dependency conflicts and broken tool interactions.
-
 | Persona | Challenge | What They Gain |
 |---------|-----------|----------------|
 | **Automation Developer** | Spending days or weeks assembling tools, resolving conflicts, and matching versions with the rest of the team instead of writing automation | A single install (or a container they never have to configure) that provides all tools in known-good, compatible versions |
 | **Platform Engineer / SRE** | Inconsistent environments across developers causing "works on my machine" failures that waste CI cycles and delay releases | Containerized workspaces that guarantee identical toolchains for every developer, eliminating environment as a variable |
 | **Automation Architect** | Enforcing development standards and testing practices across multiple teams when each team manages tools differently | Standardized tooling embedded in the project repo (`.devcontainer/`) or the platform (Dev Spaces), so standards are inherited, not documented |
 | **Engineering Manager** | New developers take 1 to 3 months to become productive, with most of that time spent on environment setup and troubleshooting | Onboarding drops to minutes with dev containers or Dev Spaces. New hires open a browser or VS Code and start contributing on day one |
-
-### Recommended Resources
-
-- **Source code:** [ansible/ansible-dev-tools](https://github.com/ansible/ansible-dev-tools) on GitHub
-- **Documentation (upstream):** [Ansible Development Tools](https://docs.ansible.com/projects/dev-tools/) official docs
-- **Documentation (downstream):** [Developing automation content (AAP 2.6)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/developing_automation_content/devtools-intro) on Red Hat docs
-- **Community container image:** [community-ansible-dev-tools](https://github.com/ansible/community-ansible-dev-tools/pkgs/container/community-ansible-dev-tools) on GHCR
-- **Supported container image:** [ansible-dev-tools-rhel9](https://catalog.redhat.com/software/containers/ansible-automation-platform-26/ansible-dev-tools-rhel9/) on Red Hat Ecosystem Catalog (requires AAP or Ansible Developer subscription)
-- **VS Code extension:** [Ansible extension for VS Code](https://marketplace.visualstudio.com/items?itemName=redhat.ansible)
-- **Community:** [Ansible Forum (devtools)](https://forum.ansible.com/tags/devtools)
 
 ---
 
@@ -159,8 +140,8 @@ graph LR
 
 - **uv/pip methods:** No AAP subscription required -- these use the upstream community packages.
 - **Dev container method:** Available in two variants -- a free upstream community image (no subscription required) and a supported downstream image from `registry.redhat.io` (requires an AAP or Ansible Developer subscription).
-- **RPM method:** Requires an AAP or Ansible Developer subscription and RHEL 9 registered with Red Hat Subscription Manager.
-- **Dev Spaces method:** Requires an OpenShift cluster with Red Hat OpenShift Dev Spaces operator installed.
+- **RPM method:** Requires an AAP or Ansible Developer subscription (supported) and RHEL 9 registered with Red Hat Subscription Manager.
+- **Dev Spaces method:** Requires an OpenShift subscription (supported) with the Dev Spaces operator installed.
 
 ### System Requirements
 
@@ -170,7 +151,35 @@ graph LR
 | **OS** | Linux, macOS, WSL | RHEL 9 | Any (VS Code + container runtime) | Browser only |
 | **Container runtime** | Optional (for molecule, builder) | Optional (for molecule, builder) | Docker or Podman | Managed by OpenShift |
 | **Disk space** | ~500 MB | ~500 MB | ~2 GB (image) | Managed by cluster |
-| **Subscription** | None | Red Hat AAP or Ansible Developer | None (community) or AAP/Ansible Developer (supported) | OpenShift + Dev Spaces |
+| **Subscription** | None | AAP or Ansible Developer (supported) | None (community) or AAP/Ansible Developer (supported) | OpenShift (supported) |
+
+---
+
+## Maturity Path
+
+| Maturity | Method | Onboarding | What You Do | Consistency | Who manages it |
+|----------|--------|-----------|-------------|-------------|---------------|
+| **Crawl** | pipx/pip | ~30 min | Individual developers install ADT on their own workstations. Each developer manages their own Python version and tool upgrades. Teams coordinate versions manually via chat or documentation. | Low: each developer manages their own environment, drift is inevitable | Developer |
+| **Walk** | RPM | ~15 min | IT includes ADT in the standard RHEL laptop provisioning via Satellite. All developers on RHEL get the same RPM version. Add `ansible-lint` and `molecule` to CI pipelines for a second layer of consistency. | Medium: same tool versions across RHEL systems, but no guarantee of IDE config, linting profiles, or Python library alignment | IT / Platform team |
+| **Run** | Dev Container | ~10 min | Add a `.devcontainer/` directory to every Ansible project repo. Developers open the repo in VS Code and get the full environment automatically. The platform team manages a base container image; teams can extend it for project-specific needs. | High: same OS, same Python, same tools, same VS Code extensions, same linting config | Team lead / repo owner |
+| **Fly** | Dev Spaces | ~5 min | Deploy Dev Spaces on OpenShift for the entire organization. Developers open a browser, click create, and start coding. The platform team manages workspace images, resource limits, and access centrally. | Highest: zero local dependencies, zero configuration, fully governed | Platform team / IT |
+
+> **Tip:** Dev containers and Dev Spaces are the target.
+>
+> The pipx/pip and RPM methods are stepping stones. They get individual developers productive quickly, but they don't solve the consistency problem at scale. Invest in a base container image early. Once that image exists, both dev containers and Dev Spaces use it, and every developer gets an identical environment from day one.
+
+### Detailed Comparison
+
+| Dimension | pipx/pip | RPM | Dev Container | Dev Spaces |
+|-----------|--------|-----|---------------|------------|
+| **Local install required** | Python 3.10+ | RHEL + subscription | VS Code + container runtime | Browser only |
+| **Image management needed** | No | No | Yes (initial investment) | Yes (initial investment) |
+| **Nested containers** | N/A (use host runtime) | N/A (use host runtime) | Yes (with capabilities) | Yes (OCP user namespaces) |
+| **Offline / air-gapped** | PyPI mirror | Satellite | Registry mirror | Internal registry |
+| **Vendor support** | Community | Red Hat (supported) | Community or Red Hat (supported) | Red Hat (supported) |
+| **Cost** | Free | AAP or Ansible Developer subscription (supported) | Free (community) or AAP/Ansible Developer subscription (supported) | OpenShift subscription (supported) |
+
+By standardizing on ADT, your organization eliminates environment drift as a source of CI failures, reduces developer onboarding from weeks to minutes, and ensures that every automation artifact is created, tested, and deployed with the same governed toolchain. The investment shifts from individual troubleshooting to platform management -- a one-time image setup that scales across every team and project without requiring action from individual developers.
 
 ---
 
@@ -267,69 +276,7 @@ Both subscriptions provide repos for RHEL 9 across four architectures: `x86_64`,
 
 ---
 
-### Method C: Dev Container (VS Code)
-
-**Operational Impact:** None -- local workstation only
-
-**Best for:** Teams wanting a consistent, reproducible development environment without managing Python installations. Works on any OS that runs VS Code and a container runtime.
-
-Pre-built container images with all ADT tools, the Ansible VS Code extension, and nested Podman support are available in two variants:
-
-- **Upstream (community):** `ghcr.io/ansible/community-ansible-dev-tools:latest`
-- **Downstream (Red Hat supported):** `registry.redhat.io/ansible-automation-platform-26/ansible-dev-tools-rhel9` (requires [Red Hat registry authentication](https://access.redhat.com/RegistryAuthentication))
-
-**Step 1:** Install prerequisites:
-
-- [VS Code](https://code.visualstudio.com/)
-- [Ansible extension for VS Code](https://marketplace.visualstudio.com/items?itemName=redhat.ansible) (`redhat.ansible`)
-- [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) (`ms-vscode-remote.remote-containers`)
-- A container runtime: [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman Desktop](https://podman-desktop.io/)
-
-**Step 2:** Add a devcontainer to your project using one of these methods:
-
-**Option A: CLI.** Run `ansible-creator` to scaffold devcontainer files into an existing project:
-
-```bash
-ansible-creator add resource devcontainer /path/to/your/project
-```
-
-This generates a `.devcontainer/` directory with both Docker and Podman configurations.
-
-**Option B: VS Code UI.** Open the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and run **Ansible: Add devcontainer configuration**. The Ansible extension generates the same `.devcontainer/` directory.
-
-**Option C: Manual.** Create `.devcontainer/devcontainer.json` in your project. This example matches the output of `ansible-creator` for a Podman-based setup:
-
-```json
-{
-  "name": "ansible-dev-container-podman",
-  "image": "ghcr.io/ansible/community-ansible-dev-tools:latest",
-  "containerUser": "root",
-  "runArgs": [
-    "--cap-add=SYS_ADMIN",
-    "--cap-add=SYS_RESOURCE",
-    "--device", "/dev/fuse",
-    "--security-opt", "seccomp=unconfined",
-    "--security-opt", "label=disable",
-    "--security-opt", "apparmor=unconfined",
-    "--userns=host",
-    "--hostname=ansible-dev-container"
-  ],
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "redhat.ansible",
-        "redhat.vscode-redhat-account"
-      ]
-    }
-  }
-}
-```
-
-> **Tip:** Using the supported downstream image.
->
-> To use the Red Hat supported image instead of the community one, replace the `image` value in your `devcontainer.json` with `registry.redhat.io/ansible-automation-platform-26/ansible-dev-tools-rhel9:latest`. You must authenticate to `registry.redhat.io` first -- run `podman login registry.redhat.io` (or `docker login`) with your Red Hat account credentials. See [Red Hat Registry Authentication](https://access.redhat.com/RegistryAuthentication) for details.
-
-**Step 3:** Open your project in VS Code, and when prompted, click **Reopen in Container** (or run the command `Dev Containers: Reopen in Container` from the command palette).
+### Method C: Python Package (pipx)
 
 **Best for:** Individual developers, quick setup on Linux/macOS/WSL, CI pipelines.
 
@@ -391,49 +338,7 @@ adt --version
 
 ---
 
-## Comparison
-
-| Dimension | uv/pip | RPM | Dev Container | Dev Spaces |
-|-----------|--------|-----|---------------|------------|
-| **New developer onboarding** | ~30 min (manual coordination) | ~15 min (if Satellite provisioned) | ~10 min (first image pull) | ~2 min (browser, click, code) |
-| **Team consistency** | Low (each dev manages their own) | Medium (same RPM, no IDE config) | High (same image, tools, config) | Highest (centrally managed) |
-| **Local install required** | Python 3.10+ | RHEL + subscription | VS Code + container runtime | Browser only |
-| **Who manages it** | Developer | IT / Platform team | Team lead / repo owner | Platform team / IT |
-| **Image management needed** | No | No | Yes (initial investment) | Yes (initial investment) |
-| **Nested containers** | N/A (use host runtime) | N/A (use host runtime) | Yes (with capabilities) | Yes (OCP user namespaces) |
-| **Offline / air-gapped** | PyPI mirror | Satellite | Registry mirror | Internal registry |
-| **Vendor support** | Community | Red Hat (AAP sub) | Community or Red Hat (AAP sub) | Red Hat (OCP + Dev Spaces) |
-| **Cost** | Free | AAP subscription | Free (community) or AAP subscription (supported) | OCP + Dev Spaces subscription |
-
-### Ansible Devtools MCP Server
-
-The <a href="https://docs.ansible.com/projects/vscode-ansible/mcp/" target="_blank">Ansible Devtools MCP Server</a> (`@ansible/ansible-mcp-server`) exposes ADT tools to any MCP-compatible AI client. It provides capabilities for playbook and collection scaffolding, automated linting with fix suggestions, execution environment building, and playbook execution via ansible-navigator.
-
-## AI-Assisted Ansible Development
-
-The Model Context Protocol (MCP) is an open standard that enables AI coding assistants to interact with external tools through a unified interface. The Ansible ecosystem provides two MCP servers that enhance the developer experience when used with AI assistants like Claude Code, VS Code Copilot Chat, or Cursor:
-
-- **Ansible Devtools MCP Server** -- gives AI assistants direct access to ADT tools (lint, scaffold, navigate, build) so they can create, validate, and fix Ansible content on your behalf.
-- **Ansible Automation Platform MCP Server** -- gives AI assistants access to your AAP instance (inventory, job templates, workflows) so they can query platform state and launch automation during development and testing.
-
-Together, these turn your AI assistant into an Ansible-aware pair programmer that can scaffold a collection, lint it, run it against a development AAP instance, and troubleshoot the results -- all within a single conversation.
-
-```mermaid
-graph TD
-    IDE["<b>VS Code / AI Assistant</b><br/>Claude Code, Copilot Chat, Cursor"]
-    IDE -->|MCP| DT["<b>Devtools MCP Server</b>"]
-    IDE -->|MCP| AAP["<b>AAP MCP Server</b>"]
-    DT --> S["ansible-creator<br/><i>Scaffold</i>"]
-    DT --> L["ansible-lint<br/><i>Validate</i>"]
-    DT --> N["ansible-navigator<br/><i>Run locally</i>"]
-    DT --> B["ansible-builder<br/><i>Build EEs</i>"]
-    AAP --> J["Job Management<br/><i>Launch & monitor</i>"]
-    AAP --> I["Inventory Management<br/><i>Query hosts</i>"]
-    AAP --> M["System Monitoring<br/><i>Platform health</i>"]
-    AAP --> R["Security & Compliance<br/><i>RBAC & credentials</i>"]
-```
-
-> **Tip:** Both MCP servers are currently available as a technology preview.
+## Configuring MCP Servers
 
 ### Ansible Devtools MCP Server
 
@@ -486,128 +391,6 @@ When using the Ansible VS Code extension, the MCP server can be started automati
 
 When developing against a development or staging AAP instance, the <a href="https://www.redhat.com/en/blog/it-automation-agentic-ai-introducing-mcp-server-red-hat-ansible-automation-platform" target="_blank">AAP MCP server</a> allows your AI assistant to query inventories, inspect job templates, launch jobs, and monitor results -- all without leaving your editor. This is particularly useful for iterating on automation content: write a playbook, push it to your dev AAP instance, run it, and troubleshoot failures in a single workflow.
 
-The AAP gateway (starting with AAP 2.6.4) exposes MCP endpoints for six service areas:
-
-| Service | Endpoint | What It Provides |
-|---------|----------|------------------|
-| **Job Management** | `/job_management/mcp` | Launch, monitor, and inspect job runs |
-| **Inventory Management** | `/inventory_management/mcp` | Query hosts, groups, and inventory sources |
-| **System Monitoring** | `/system_monitoring/mcp` | Check platform health and capacity |
-| **User Management** | `/user_management/mcp` | Inspect users, teams, and organizations |
-| **Security & Compliance** | `/security_compliance/mcp` | Review RBAC policies and credentials |
-| **Platform Configuration** | `/platform_configuration/mcp` | Inspect settings and configuration |
-
-**Adding AAP MCP to Claude Code** (using a `.mcp.json` file in your project root):
-
-```json
-{
-  "mcpServers": {
-    "aap-mcp-job-management": {
-      "type": "http",
-      "url": "https://aap-gateway.example.com:8448/job_management/mcp",
-      "headersHelper": "echo '{\"Authorization\": \"Bearer '\"$MCP_AAP_TOKEN\"'\"}'"
-    },
-    "aap-mcp-inventory-management": {
-      "type": "http",
-      "url": "https://aap-gateway.example.com:8448/inventory_management/mcp",
-      "headersHelper": "echo '{\"Authorization\": \"Bearer '\"$MCP_AAP_TOKEN\"'\"}'"
-    }
-  }
-}
-```
-
-> **Tip:** Start with just the services you need.
->
-> You don't have to configure all six AAP MCP services at once. For content development, `job_management` and `inventory_management` are typically the most useful -- they let your AI assistant launch test runs and inspect target hosts.
-
-Authentication uses an AAP personal access token passed via `MCP_AAP_TOKEN`. The MCP server inherits the user's RBAC permissions, so the AI assistant can only access what the token owner is authorized to see. Tokens can be scoped as read-only or read-write, providing an additional layer of control -- a read-only token lets the AI assistant query inventories, inspect job results, and review platform configuration without being able to launch jobs or modify state. Note that job execution requires a write-scoped token.
-
-> **Warning:** Use development or staging AAP instances for AI-assisted workflows.
->
-> AI assistants can launch jobs and modify platform state through the AAP MCP server. Always point MCP configurations at non-production instances during development, and use a read-only token unless you specifically need the AI assistant to launch jobs.
-
-### End-to-End Development Workflow
-
-When both MCP servers are configured together, your AI assistant has access to the full content lifecycle -- from scaffolding automation content locally to validating it against a real AAP instance. Instead of switching between your editor, terminal, and AAP UI, the entire develop-test-validate loop happens in a single conversation:
-
-```mermaid
-graph LR
-    A["<b>Scaffold</b><br/>ansible-creator"] -->|lint & fix| B["<b>Validate locally</b><br/>ansible-lint"]
-    B -->|query targets| C["<b>Check inventory</b><br/>AAP MCP"]
-    C -->|launch job| D["<b>Run on AAP</b><br/>AAP MCP"]
-    D -->|inspect results| E["<b>Troubleshoot</b><br/>Devtools + AAP MCP"]
-```
-
-1. **Scaffold** -- the AI assistant uses the Devtools MCP server to create a new role or playbook with `ansible-creator`, pre-configured with the correct structure and metadata.
-2. **Validate locally** -- the assistant runs `ansible-lint` through the Devtools MCP server, identifies issues, and applies fixes automatically before the code ever reaches AAP.
-3. **Check inventory** -- the assistant queries the AAP inventory through the AAP MCP server to verify target hosts, groups, and variables match what the playbook expects.
-4. **Run on AAP** -- the assistant launches the playbook as a job on a development AAP instance, using the correct job template, credentials, and survey variables.
-5. **Troubleshoot** -- if the job fails, the assistant inspects the job output through AAP MCP, correlates it with the playbook logic it can read locally through Devtools MCP, and proposes a fix. The cycle repeats from step 2 until the job succeeds.
-
-This workflow is particularly valuable for teams onboarding new automation developers. A developer who is still learning Ansible conventions can ask the AI assistant to scaffold a role, explain why the linter flagged a particular rule, fix it, and then run the corrected playbook against a real environment -- building understanding of both the toolchain and the platform in context rather than in isolation.
-
-> **Example:** A developer asks the AI assistant to create a role that configures NTP on RHEL hosts. The assistant scaffolds the role with `ansible-creator`, lints it, queries the AAP development instance to confirm the RHEL inventory group exists and has the expected hosts, launches a test job, and discovers that the `chrony` package is already installed but the configuration file differs. The assistant updates the template, re-runs the job, and confirms idempotency -- all within the same conversation, without the developer opening the AAP UI once.
-
----
-
-## Validation
-
-| Method | Command | Requirements |
-|--------|---------|-------------|
-| **npm** | `npx -y @ansible/ansible-mcp-server --stdio` | Node.js 24+ |
-| **Container** | `ghcr.io/ansible/devtools-mcp-server:latest` | Docker or Podman |
-| **VS Code extension** | Enable `ansible.mcpServer.enabled` in settings | Ansible VS Code extension |
-
-**Adding to Claude Code:**
-
-```bash
-claude mcp add ansible -- npx -y @ansible/ansible-mcp-server --stdio
-```
-
-**Adding to Claude Code (container):**
-
-```
-ansible-builder                 3.1.1
-ansible-core                    2.20.5
-ansible-creator                 26.4.3
-ansible-dev-environment         26.4.0
-ansible-dev-tools               26.4.6
-ansible-lint                    26.4.0
-ansible-navigator               26.4.0
-ansible-sign                    0.1.5
-molecule                        26.4.0
-pytest-ansible                  26.4.0
-tox-ansible                     26.3.0
-```
-
-**Adding to VS Code Copilot Chat** (in `.vscode/settings.json`):
-
-```json
-{
-  "mcp": {
-    "servers": {
-      "ansible": {
-        "command": "npx",
-        "args": ["-y", "@ansible/ansible-mcp-server", "--stdio"],
-        "env": {
-          "WORKSPACE_ROOT": "${workspaceFolder}"
-        }
-      }
-    }
-  }
-}
-```
-
-**Expected output:**
-
-```
-Passed with production profile: 0 failure(s), 0 warning(s) on 5 files.
-```
-
-### Connecting to Ansible Automation Platform
-
-When developing against a development or staging AAP instance, the <a href="https://www.redhat.com/en/blog/it-automation-agentic-ai-introducing-mcp-server-red-hat-ansible-automation-platform" target="_blank">AAP MCP server</a> allows your AI assistant to query inventories, inspect job templates, launch jobs, and monitor results -- all without leaving your editor. This is particularly useful for iterating on automation content: write a playbook, push it to your dev AAP instance, run it, and troubleshoot failures in a single workflow.
-
 The AAP gateway (starting with AAP 2.6.4) exposes MCP on port **8448**. In **AAP 2.7**, URLs use the `/mcp/<toolset>` pattern (older guides used `/<toolset>/mcp`). See [Deploying the Ansible MCP server](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/extend-assembly_deploying_ansible_mcp_server#proc-connect-ai-agent-ansible-mcp-server).
 
 | Service | Endpoint (2.7) | What It Provides |
@@ -646,25 +429,15 @@ The AAP gateway (starting with AAP 2.6.4) exposes MCP on port **8448**. In **AAP
 }
 ```
 
-By standardizing on ADT, your organization eliminates environment drift as a source of CI failures, reduces developer onboarding from weeks to minutes, and ensures that every automation artifact is created, tested, and deployed with the same governed toolchain. The investment shifts from individual troubleshooting to platform management -- a one-time image setup that scales across every team and project without requiring action from individual developers.
-
----
+> **Tip:** Prefer a single **`/mcp/discover`** entry unless you need to restrict which toolsets the agent can load.
+>
+> You don't have to configure all six AAP MCP services at once. For content development, `job_management` and `inventory_management` are typically the most useful -- they let your AI assistant launch test runs and inspect target hosts.
 
 Authentication uses an AAP personal access token passed via `MCP_AAP_TOKEN`. The MCP server inherits the user's RBAC permissions, so the AI assistant can only access what the token owner is authorized to see. Tokens can be scoped as read-only or read-write, providing an additional layer of control -- a read-only token lets the AI assistant query inventories, inspect job results, and review platform configuration without being able to launch jobs or modify state. Note that job execution requires a write-scoped token.
 
-**Solution guides in this collection:**
-
-- **Database automation:** The [EDB Postgres automation guide](README-EDB.md) demonstrates a multi-role deployment that benefits from consistent dev environments -- teams working on complex database automation can use ADT dev containers to ensure every contributor has the same linting rules and molecule test setup.
-- **ITSM integration:** The [ServiceNow ITSM guide](README-ServiceNow-ITSM.md) and [RHEL patching guide](README-Patching-RHEL.md) show production automation workflows where environment consistency directly reduces "works on my machine" failures in CI/CD pipelines.
-- **AI-assisted operations:** The [Intelligent Assistant with RHAIIS guide](README-Intelligent-Assistant-RHAIIS.md) extends the AI-assisted development theme -- once your dev environment includes the Ansible MCP server, the same AI assistant that helps you write automation can also interact with your AAP instance.
-- **Network automation:** The [NetBox + AAP guide](README-NetBox-AAP-Solution-Guide.md) and [NetBox + EDA guide](README-NetBox-EDA-Config-Solution-Guide.md) are examples of multi-tool integrations where standardized dev environments prevent version conflicts across collections.
-
-**External documentation:**
-
-- **Execution Environments:** See the [Ansible Builder documentation](https://docs.ansible.com/projects/dev-tools/container/) for building custom EEs on top of the ADT container image.
-- **Content Testing:** See [Molecule documentation](https://ansible.readthedocs.io/projects/molecule/) for comprehensive testing strategies with ADT.
-- **Content Signing:** See [ansible-sign documentation](https://docs.ansible.com/projects/sign/) for signing and verifying Ansible content in CI/CD.
-- **Dev Spaces Administration:** See the [Red Hat OpenShift Dev Spaces docs](https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/) for cluster setup and operator configuration.
+> **Warning:** Use development or staging AAP instances for AI-assisted workflows.
+>
+> AI assistants can launch jobs and modify platform state through the AAP MCP server. Always point MCP configurations at non-production instances during development, and use a read-only token unless you specifically need the AI assistant to launch jobs.
 
 ---
 
