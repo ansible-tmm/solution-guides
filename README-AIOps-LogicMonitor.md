@@ -396,6 +396,24 @@ PLAY RECAP *********************************************************************
 affected-device            : ok=6    changed=0    unreachable=0    failed=0
 ```
 
+### Optional: Enrich Playbooks with Edwin AI
+
+The rule-triggered path above does not require playbook-side queries to Edwin AI. For organizations that also want diagnostic playbooks to pull correlated context directly -- for example, to annotate run output with related alerts -- the `logicmonitor.edwin_ai` collection provides a query module:
+
+```yaml
+- name: Query Edwin AI for correlated alerts
+  logicmonitor.edwin_ai.query_api:
+    portal: "{{ edwin_portal }}"
+    access_id: "{{ edwin_access_id }}"
+    access_key: "{{ edwin_access_key }}"
+    record_type: alerts
+    limit: 20
+    lookback_window: "{{ edwin_lookback_window }}"
+  register: __edwin_alerts
+```
+
+This enrichment is optional and independent of the Edwin Rules and Actions flow; store the Edwin credentials as an AAP credential type and attach them only to templates that need them.
+
 ### Components
 
 | Component | Details |
