@@ -475,7 +475,7 @@ Quick reference for metrics, settings, and diagnostic views. Settings show the s
 <li><a href="#overview">Review the decision diagram in Overview</a></li>
 <li><a href="#tuning-path">Follow the tuning path</a> for rung order</li>
 <li><a href="#key-terms">Jump to Key Terms</a> for a parameter lookup</li>
-<li><a href="/">Back to AAP Guides</a></li>
+<li><a href="./">Back to AAP Guides</a></li>
 </ul>
 
 </div>
