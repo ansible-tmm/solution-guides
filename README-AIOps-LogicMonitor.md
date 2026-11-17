@@ -345,13 +345,15 @@ LogicMonitor detects a BGP alert on a network device
 4. **Define safe execution boundaries.** Use approved AAP templates, appropriate credentials and permissions, and approval gates for write-based remediation where policy requires. Rule-based actions run only within the configured integration credential or service-account and AAP RBAC boundaries. Capture the execution ID, check status after launch, and review output in Edwin; synchronize to ITSM only when configured.
    ![][image3]
 
-5. **Reuse the existing BGP remediation template.** Use the "Reset BGP Session" job template created in Stage 2, retaining its playbook, inventory, credentials, and required inputs. Configure the EDA rule to launch this job template for the validated scenario.
+5. **Reuse the Stage 2 job template.** Keep the "Reset BGP Session" job template created in Stage 2 unchanged -- same playbook, inventory, credentials, and required inputs.
+
+6. **Wrap it in an approval workflow.** Create a workflow template named "Reset BGP Session (Approved)" with an **Approval** node ("Approve BGP reset on {{ affected_host }}") followed by the "Reset BGP Session" job template on approval. Mirror the denial/timeout branch on the "Notify on-call" pattern from Write-Approval Gates. Configure the EDA rule to launch this workflow template for the validated scenario.
 
 ### Use Case: Correlated BGP Peer Failure -- Approved Remediation
 
 LogicMonitor detects a BGP peer failure and related reachability alerts. Edwin correlates the alerts into an Insight and identifies the likely root cause. A configured rule matches the validated scenario and routes the affected device and peer context to approved automation. An unresolved or unmatched cause remains available for operator investigation rather than triggering an arbitrary remediation.
 
-Edwin uses Post Ansible EDA Event to send the mapped payload to the configured Event Stream URL, where an EDA rulebook evaluates it and launches the existing "Reset BGP Session" job template. This illustrative rule assumes the payload has already been mapped by the configured Edwin action:
+Edwin uses Post Ansible EDA Event to send the mapped payload to the configured Event Stream URL, where an EDA rulebook evaluates it and launches the "Reset BGP Session (Approved)" workflow from setup step 6. This illustrative rule assumes the payload has already been mapped by the configured Edwin action:
 
 ```
 # --- RUN: Configured response following Edwin correlation and root-cause analysis ---
