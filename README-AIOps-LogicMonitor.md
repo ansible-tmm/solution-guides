@@ -339,7 +339,7 @@ LogicMonitor detects a BGP alert on a network device
    ![][image1]  
 2. **Confirm the LogicMonitor signal path.** Ensure the relevant alerts, device metrics, logs, and topology context are available to Edwin AI so it can correlate the event and identify the likely root cause.  
      
-3. **Configure Edwin Rules and Actions.** For direct execution, map a condition to an approved AAP job or workflow template ID. For EDA, use Post Ansible EDA Event with the configured Event Stream URL. Map the affected resource and incident context into valid JSON extra variables expected by the target template.
+3. **Configure Edwin Rules and Actions.** For direct execution, map a condition to an approved AAP job or workflow template ID. For EDA, use Post Ansible EDA Event with the configured Event Stream URL. Map the affected resource and incident context into valid JSON extra variables expected by the target template. Simple, single-cause scenarios can also bypass correlation entirely: the direct mapping or the EDA post can key on alert type alone.
    ![][image2]
 
 4. **Define safe execution boundaries.** Use approved AAP templates, appropriate credentials and permissions, and approval gates for write-based remediation where policy requires. Rule-based actions run only within the configured integration credential or service-account and AAP RBAC boundaries. Capture the execution ID, check status after launch, and review output in Edwin; synchronize to ITSM only when configured.
