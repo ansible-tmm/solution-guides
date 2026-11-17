@@ -44,6 +44,8 @@ jobs:
       - name: Prepare report for PR
         if: steps.lychee.outputs.exit_code != '0'
         run: |
+          set -euo pipefail
+          EXCLUDED="$(sed -nE 's/.*Excluded[^|]*\|\s*([0-9]+).*/\1/p' link-check-report.md | head -1)"
           {
             echo "# Link check report"
             echo
@@ -52,6 +54,9 @@ jobs:
             echo "Broken or unreachable outbound links were found in published markdown."
             echo "Humans should fix the links in the guide sources; this PR only carries the report."
             echo
+            echo "---"
+            echo
+            python3 scripts/explain-link-check-exclusions.py "${EXCLUDED:-}"
             echo "---"
             echo
             cat link-check-report.md
@@ -70,7 +75,9 @@ jobs:
           body: |
             Automated weekly lychee run found broken outbound links.
 
-            Review `link-check-report.md`, fix the guide sources on a normal branch, then close this PR.
+            Review `link-check-report.md` (Errors and Redirects are actionable;
+            Excluded is explained in the report and does not need fixes), fix the
+            guide sources on a normal branch, then close this PR.
             This workflow does not delete or rewrite guide content.
           add-paths: |
             link-check-report.md

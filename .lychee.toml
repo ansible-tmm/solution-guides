@@ -12,6 +12,9 @@ retry_wait_time = 2
 # Prefer GET -- some sites reject or mishandle HEAD.
 method = "get"
 
+# Only http(s) outbound URLs are checked. Relative paths, #anchors, local
+# images, and other schemes are discovered then counted as Excluded (not errors).
+# The weekly report breaks that Excluded total into categories for readers.
 scheme = ["https", "http"]
 include_mail = false
 
