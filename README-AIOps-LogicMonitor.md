@@ -217,12 +217,14 @@ Crawl establishes the shared operational vocabulary before automation is delegat
 
 ### Flow
 
-LogicMonitor detects a condition and surfaces its context in Envision  
-  -> LogicMonitor presents the mapped, approved AAP job template  
-    -> Operator reviews the diagnostic context and available actions  
-      -> Operator manually executes the AAP job from the LogicMonitor Envision UI  
-        -> AAP enforces access controls and any required approval  
-          -> Results are recorded and used to identify candidates for Walk-stage Insight mappings
+```mermaid
+graph LR
+  A([Condition detected]) --> B[Envision surfaces context]
+  B --> C[Operator reviews actions]
+  C --> D[Operator launches AAP job]
+  D --> E[AAP enforces RBAC and approval]
+  E --> F([Results recorded])
+```
 
 ### Setup
 
@@ -240,14 +242,18 @@ Walk adds correlated incident context to the static mappings established in Craw
 
 ### Flow
 
-```
-LogicMonitor detects related alerts
-  -> Edwin AI correlates the alerts into an Insight
-  -> Relevant approved AAP templates are mapped to the Insight
-  -> Edwin AI recommends the best plabook for this Insight
-  -> Operator reviews the Insight and manually triggers an action
-  -> AAP enforces authorization and required approvals, then executes
-  -> Edwin receives execution status and output for operator review
+```mermaid
+sequenceDiagram
+  participant LM as LogicMonitor
+  participant ED as Edwin AI
+  participant OP as Operator
+  participant AAP as AAP
+  LM->>ED: Related alerts
+  ED->>ED: Correlate into an Insight
+  ED->>OP: Insight with mapped actions and recommendation
+  OP->>AAP: Manually launch selected template
+  AAP->>AAP: Authorization and approval gates
+  AAP->>ED: Execution status and output
 ```
 
 ### Setup
@@ -290,12 +296,17 @@ Generate a test BGP peer failure and verify that related alerts appear in a corr
 
 **Expected behavior:**
 
-```
-Correlated Insight: related BGP and reachability alerts
-Mapped actions: approved diagnostic and remediation templates
-Before operator initiation: no job or workflow launched
-After operator initiation: selected AAP job or workflow created
-Completed execution: status and output available for review
+```mermaid
+sequenceDiagram
+  participant LM as LogicMonitor
+  participant ED as Edwin AI
+  participant OP as Operator
+  participant AAP as AAP
+  LM->>ED: Related BGP and reachability alerts
+  ED->>OP: Correlated Insight with mapped approved actions
+  Note over OP,AAP: Before operator initiation, no job or workflow launches
+  OP->>AAP: Manually trigger mapped action
+  AAP->>ED: Execution ID, status, and output
 ```
 
 ### Components
@@ -321,16 +332,18 @@ The Run stage combines LogicMonitor detection with Edwin AI correlation and rule
 
 ### Flow
 
-```
-LogicMonitor detects a BGP alert on a network device
-  -> LogicMonitor sends alert context to Edwin AI
-    -> Edwin AI correlates signals and identifies the likely root cause
-      -> Edwin Rules and Actions select the mapped AAP job template
-        -> Edwin uses Post Ansible EDA Event to send the mapped payload to the configured Event Stream URL
-          -> The EDA rulebook evaluates the payload and invokes the approved AAP job template
-            -> AAP runs permitted diagnostics and remediations
-              -> AAP executes approved remediation and validates the outcome
-              -> Edwin checks status using the execution ID and receives the result and output
+```mermaid
+sequenceDiagram
+  participant LM as LogicMonitor
+  participant ED as Edwin AI
+  participant EDA as Event-Driven Ansible
+  participant AAP as AAP
+  LM->>ED: BGP alert context
+  ED->>ED: Correlate signals and identify the likely root cause
+  ED->>EDA: Post Ansible EDA Event to the Event Stream URL
+  EDA->>AAP: Rulebook invokes the approved workflow
+  AAP->>AAP: Approval gate before write-based remediation
+  AAP->>ED: Execution status, result, and output
 ```
 
 ### Setup
@@ -436,13 +449,18 @@ Edwin AI chat complements the maturity stages by giving operators a conversation
 
 ### Flow
 
-```
-Operator opens an Edwin Insight in chat
-  -> Edwin explains correlated alerts, likely cause, and recommendations
-  -> Operator investigates and selects an eligible AAP action
-  -> Edwin communicates with AAP via MCP
-  -> AAP enforces authorization and approval controls, then executes
-  -> Status and output return to the conversation
+```mermaid
+sequenceDiagram
+  participant OP as Operator
+  participant ED as Edwin AI chat
+  participant AAP as AAP
+  OP->>ED: Open Insight in chat
+  ED->>OP: Correlated alerts, likely cause, and recommendations
+  OP->>ED: Select an eligible AAP action
+  ED->>AAP: AAP APIs via MCP
+  AAP->>AAP: Authorization and approval controls, then execution
+  AAP->>ED: Status and output
+  ED->>OP: Result summarized in the conversation
 ```
 
 Configure the AAP connection and expose only eligible, validated job and workflow templates. Permit autonomous read-only diagnostics only within the configured authorization boundaries; retain human approval for write-based remediation.
@@ -490,13 +508,12 @@ Run and the complementary chat experience may use autonomous read-only diagnosti
 
 Every write-based job or workflow template reachable from Crawl, Walk, Run, or chat should sit behind an explicit approval step, not just RBAC. In AAP, add an **Approval** node before the remediation node(s) in the workflow template:
 
-```
-Edwin / EDA trigger
-  -> Workflow Template: "Bounce Interface (Approved)"
-       Node 1: Approval -- "Approve interface bounce on {{ affected_host }}"
-         (timeout, approved-by audit trail, denial path)
-       Node 2 (on approval): Job Template -- "Bounce Interface"
-       Node 2 (on denial/timeout): Job Template -- "Notify on-call" (no device change)
+```mermaid
+flowchart TD
+  A([Edwin / EDA trigger]) --> B["Workflow Template: Bounce Interface (Approved)"]
+  B --> C{"Approval node"}
+  C -->|Approved| D["Job Template: Bounce Interface"]
+  C -->|Denied or timeout| E["Job Template: Notify on-call (no device change)"]
 ```
 
 For the Crawl Walk, and Run stages, pair this with a read-only diagnostic template (`check_mode: true` or a dry-run playbook) that Edwin or the operator can run first to preview the change before approving the write-capable template. This keeps the "read-only by default, human-approved for writes" posture consistent across all three stages, not just Run.
