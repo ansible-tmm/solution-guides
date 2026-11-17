@@ -47,7 +47,7 @@ For infrastructure automation, this creates specific demands. Every operational 
 
 <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://www.redhat.com/en/topics/security/what-is-zero-trust">Zero Trust Architecture -- redhat.com</a>
 
-<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://csrc.nist.gov/publications/detail/sp/800-207/final">NIST SP 800-207: Zero Trust Architecture</a>
+<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://csrc.nist.gov/pubs/sp/800/207/final">NIST SP 800-207: Zero Trust Architecture</a>
 
 <h2 id="solution"></h2>
 
@@ -57,7 +57,7 @@ The ZTA infrastructure stack maps directly onto the three NIST components:
 
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f501.png" width="20" style="vertical-align:text-bottom;"> **Ansible Automation Platform (AAP) 2.6** as the Policy Enforcement Point -- the single platform through which every infrastructure change flows <a target="_blank" href="https://www.redhat.com/en/technologies/management/ansible">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e1.png" width="20" style="vertical-align:text-bottom;"> **Open Policy Agent (OPA)** as the Policy Decision Point -- evaluates Rego policies and returns allow/deny before any job runs <a target="_blank" href="https://www.openpolicyagent.org/">[Link]</a>
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f511.png" width="20" style="vertical-align:text-bottom;"> **HashiCorp Vault** for short-lived, least-privilege secrets -- dynamic database credentials (5-minute TTL) and Vault-signed SSH certificates instead of static keys <a target="_blank" href="https://www.vaultproject.io/">[Link]</a>
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f511.png" width="20" style="vertical-align:text-bottom;"> **HashiCorp Vault** for short-lived, least-privilege secrets -- dynamic database credentials (5-minute TTL) and Vault-signed SSH certificates instead of static keys <a target="_blank" href="https://developer.hashicorp.com/vault">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f464.png" width="20" style="vertical-align:text-bottom;"> **Red Hat Identity Management (FreeIPA / IdM)** as the identity source of truth -- user and group memberships that flow into AAP teams via LDAP <a target="_blank" href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/identity-management">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **SPIFFE/SPIRE** for workload identity -- cryptographic proof that a job runs on the attested AAP node, not a rogue laptop <a target="_blank" href="https://spiffe.io/">[Link]</a>
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f5fa.png" width="20" style="vertical-align:text-bottom;"> **NetBox** as the infrastructure source of truth -- IPAM and DCIM state that feeds inventory and policy context <a target="_blank" href="https://netboxlabs.com/">[Link]</a>

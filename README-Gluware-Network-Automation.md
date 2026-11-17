@@ -54,7 +54,7 @@ This guide demonstrates how to integrate the collection for three high-value net
 - **Network RPA** -- customizable, drag-and-drop workflow automation to orchestrate Gluware applications and third-party integrations for complex multi-step network operations.
 - **GluAPI** -- a comprehensive REST API that enables programmatic integration with external systems, including Ansible.
 
-<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://gluware.com/ansible">Gluware Ansible Certified Collection -- gluware.com</a>
+<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png" width="20" style="vertical-align:text-bottom;"> <a target="_blank" href="https://gluware.com/ansible/">Gluware Ansible Certified Collection -- gluware.com</a>
 
 The **Gluware Ansible Certified Collection** bridges these two platforms. With 14 modules and 2 plugins, it allows Ansible playbooks to directly invoke Gluware operations -- device inventory sync, configuration snapshots, audit execution, OS upgrade workflows, config model deployments, and RPA workflow triggers -- as native Ansible tasks.
 

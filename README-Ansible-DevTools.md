@@ -191,7 +191,7 @@ By standardizing on ADT, your organization eliminates environment drift as a sou
 
 Pre-built container images with all ADT tools, the Ansible VS Code extension, and nested Podman support are available in two variants:
 
-- **Red Hat supported:** `registry.redhat.io/ansible-automation-platform-26/ansible-dev-tools-rhel9` (requires [Red Hat registry authentication](https://access.redhat.com/RegistryAuthentication))
+- **Red Hat supported:** `registry.redhat.io/ansible-automation-platform-26/ansible-dev-tools-rhel9` (requires [Red Hat registry authentication](https://access.redhat.com/articles/RegistryAuthentication))
 - **Community:** `ghcr.io/ansible/community-ansible-dev-tools:latest`
 
 **Step 1:** Install prerequisites:
@@ -215,7 +215,7 @@ This generates a `.devcontainer/` directory with both Docker and Podman configur
 
 > **Tip:** Using the supported downstream image.
 >
-> To use the Red Hat supported image instead of the community one, replace the `image` value in your `devcontainer.json` with `registry.redhat.io/ansible-automation-platform-26/ansible-dev-tools-rhel9:latest`. You must authenticate to `registry.redhat.io` first -- run `podman login registry.redhat.io` (or `docker login`) with your Red Hat account credentials. See [Red Hat Registry Authentication](https://access.redhat.com/RegistryAuthentication) for details.
+> To use the Red Hat supported image instead of the community one, replace the `image` value in your `devcontainer.json` with `registry.redhat.io/ansible-automation-platform-26/ansible-dev-tools-rhel9:latest`. You must authenticate to `registry.redhat.io` first -- run `podman login registry.redhat.io` (or `docker login`) with your Red Hat account credentials. See [Red Hat Registry Authentication](https://access.redhat.com/articles/RegistryAuthentication) for details.
 
 **Step 3:** Open your project in VS Code, and when prompted, click **Reopen in Container** (or run the command `Dev Containers: Reopen in Container` from the command palette).
 
@@ -450,7 +450,7 @@ Authentication uses an AAP personal access token passed via `MCP_AAP_TOKEN`. The
 - [Using Ansible development workspaces (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/develop-assembly_workspaces_intro)
 - [MCP server integration (AAP 2.7)](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/develop-con_mcp_server_integration)
 - [ansible-dev-tools-rhel9 container](https://catalog.redhat.com/en/software/containers/ansible-automation-platform-27/ansible-dev-tools-rhel9/69fb1e26616f0fc2878516a6)
-- [Red Hat OpenShift Dev Spaces documentation](https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/)
+- [Red Hat OpenShift Dev Spaces documentation](https://docs.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/)
 
 **Community**
 
@@ -461,9 +461,9 @@ Authentication uses an AAP personal access token passed via `MCP_AAP_TOKEN`. The
 - [OpenShift Dev Spaces with ADT](https://docs.ansible.com/projects/dev-tools/devspaces/)
 - [ansible-dev-tools on PyPI](https://pypi.org/project/ansible-dev-tools/)
 - [Ansible extension for VS Code](https://marketplace.visualstudio.com/items?itemName=redhat.ansible)
-- [Ansible Forum (devtools)](https://forum.ansible.com/tags/devtools)
-- [Molecule documentation](https://ansible.readthedocs.io/projects/molecule/)
-- [ansible-sign documentation](https://docs.ansible.com/projects/sign/)
+- [Ansible Forum (devtools)](https://forum.ansible.com/tag/devtools)
+- [Molecule documentation](https://docs.ansible.com/projects/molecule/)
+- [ansible-sign documentation](https://docs.ansible.com/projects/sign/en/latest/)
 
 ---
 

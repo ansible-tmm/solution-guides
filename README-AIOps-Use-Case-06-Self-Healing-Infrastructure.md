@@ -130,7 +130,7 @@ Stages 1-3 are safe to experiment with in any environment. Stage 4 is where prod
 
 This diagram is from the hands-on workshop **Introduction to AI-Driven Ansible Automation**.
 
-[![overview_diagram](https://github.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/blob/main/solution_images/overview_diagram.png?raw=true)](https://github.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/blob/main/solution_images/overview_diagram.png?raw=true)
+[![overview_diagram](https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/overview_diagram.png)](https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/overview_diagram.png)
 
 
 > **This is a high level diagram.**
@@ -310,7 +310,7 @@ This is where we synchronize the output from Red Hat AI to another outside syste
 
 <img class="guide-vendor-logo" alt="" src="https://raw.githubusercontent.com/rhpds/showroom-lb2961-ai-driven-ansible-automation/refs/heads/main/solution_images/matter_most_logo.svg">
 
-<a target="_blank" href="https://docs.ansible.com/ansible/latest/collections/community/general/mattermost_module.html">Mattermost Documentation</a>
+<a target="_blank" href="https://docs.ansible.com/projects/ansible/latest/collections/community/general/mattermost_module.html">Mattermost Documentation</a>
 
 **Mattermost** is an open-source, self-hostable chat platform with robust API and webhook integrations. We use it in the AIOps workshop as a free alternative to Slack or Microsoft Teams -- Ansible posts AI-generated diagnoses and remediation updates to a Mattermost channel in real time.
 

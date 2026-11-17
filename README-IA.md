@@ -85,7 +85,7 @@ ansible-galaxy collection install infra.ai
 ansible-galaxy collection install redhat.ai
 ```
 
-[Installing Ansible Collections – Documentation](https://docs.ansible.com/ansible/latest/collections_guide/collections_installing.html)
+[Installing Ansible Collections – Documentation](https://docs.ansible.com/projects/ansible/latest/collections_guide/collections_installing.html)
 
 <h2 id="aws-ami-setup-for-rhel-ai"></h2>
 ## AWS AMI Setup for RHEL AI
@@ -302,7 +302,7 @@ We recommend checking for updates to these collections regularly on [Automation 
 ## Sources
 
 - [Red Hat Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible)
-- [Red Hat Lightspeed for Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible/ansible-lightspeed)
+- [Red Hat Lightspeed for Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible/automation-coding-assistant)
 - [Red Hat Enterprise Linux AI](https://www.redhat.com/en/products/ai/enterprise-linux-ai)
 
 ---

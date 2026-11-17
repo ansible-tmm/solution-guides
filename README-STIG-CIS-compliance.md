@@ -214,7 +214,7 @@ Because remediation is a separate job template -- never a node in the assessment
 
 DISA publishes STIG updates approximately quarterly. Each update changes rule content, adds new rules, or retires old ones. Because rule metadata is extracted from the datastream at EE build time (`extract_rule_metadata.py`), updating compliance content means **rebuilding the EE** -- no mapping files go stale, but the EE image tag must be updated in the Assessment and Remediation JTs after each rebuild.
 
-Monitor the [DISA STIG document library](https://public.cyber.mil/stigs/) for RHEL 9 updates. When a new version is published:
+Monitor the [DISA STIG document library](https://www.cyber.mil/stigs/) for RHEL 9 updates. When a new version is published:
 
 1. Update `scap-security-guide` version pin in the EE `system` dependencies.
 2. Run `ansible-builder build` and push the new image to your registry.
