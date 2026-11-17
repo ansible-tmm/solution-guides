@@ -64,7 +64,7 @@ This architecture extends Red Hat's tested Container Enterprise Topology -- an 8
 
 ### EDB Postgres: Enterprise-Grade Database Platform
 
-[EDB Postgres Advanced Server](https://www.enterprisedb.com/products/edb-postgres-advanced-server) extends PostgreSQL with enterprise features required for mission-critical AAP deployments:
+[EDB Postgres Advanced Server](https://www.enterprisedb.com/products/database) extends PostgreSQL with enterprise features required for mission-critical AAP deployments:
 
 - **Streaming replication** with synchronous local standbys and asynchronous cross-datacenter standbys delivers sub-5-second RPO
 - **EDB Failover Manager (EFM)** provides automated database promotion, virtual IP failover, and post-promotion script execution for application service activation
@@ -88,7 +88,7 @@ EDB is a trusted PostgreSQL partner with deep integration into Red Hat's ecosyst
 
 **EDB PostgreSQL -- the database layer:**
 
-- **[EDB Postgres Advanced Server 16](https://www.enterprisedb.com/products/edb-postgres-advanced-server)** -- 3-node cluster per datacenter with streaming replication
+- **[EDB Postgres Advanced Server 16](https://www.enterprisedb.com/products/database)** -- 3-node cluster per datacenter with streaming replication
 - **[EDB Failover Manager (EFM)](https://www.enterprisedb.com/docs/efm/latest/)** -- automated database promotion, VIP management, and post-promotion script execution
 - **[Barman](https://pgbarman.org/)** -- continuous WAL archiving and point-in-time recovery to S3/NFS
 

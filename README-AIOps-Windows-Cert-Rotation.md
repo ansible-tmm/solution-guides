@@ -53,7 +53,7 @@ The challenge is in the decision: should we rotate now, schedule it for the main
 ### Components
 
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4e1.png" width="20" style="vertical-align:text-bottom;"> **[Event-Driven Ansible](https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible)** to detect certificate expiry events via webhook in real time
-- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9e0.png" width="20" style="vertical-align:text-bottom;"> **[Red Hat AI](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/ai)** (or any LLM inference endpoint) to assess risk and determine whether to proceed, schedule, or escalate
+- <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9e0.png" width="20" style="vertical-align:text-bottom;"> **[Red Hat AI](https://www.redhat.com/en/products/ai/enterprise-linux-ai)** (or any LLM inference endpoint) to assess risk and determine whether to proceed, schedule, or escalate
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f501.png" width="20" style="vertical-align:text-bottom;"> **[Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible)** to rotate certificates and orchestrate the workflow via automation controller
 - <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4cb.png" width="20" style="vertical-align:text-bottom;"> **ITSM platform** (this example uses [ServiceNow ITSM](https://console.redhat.com/ansible/automation-hub/repo/published/servicenow/itsm/)) to track every rotation with a full audit trail from detection through resolution
 
@@ -67,7 +67,7 @@ The challenge is in the decision: should we rotate now, schedule it for the main
 
 ### Demos
 
-- Interactive walkthrough: [Try the interactive Arcade demo](https://app.arcade.software/flows/1v4CnAXAopRJhJ4AUBF1/view)
+- Interactive walkthrough: [Try the interactive Arcade demo](https://app.arcade.software/share/1v4CnAXAopRJhJ4AUBF1)
 
 <div style="text-align: left;"><iframe width="400" height="250" src="https://demo.arcade.software/1v4CnAXAopRJhJ4AUBF1?embed" frameborder="0" loading="lazy" allowfullscreen></iframe></div>
 

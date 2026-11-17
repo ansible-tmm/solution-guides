@@ -58,7 +58,7 @@ Red Hat Ansible Automation Platform solves this by turning your existing automat
 [IBM Instana Observability](https://www.ibm.com/products/instana) is a full-stack observability platform that provides the intelligent detection feeding AAP's automation layer:
 
 - **Zero-config auto-discovery** of [300+ technologies](https://www.ibm.com/products/instana/supported-technologies) -- application runtimes, databases, messaging systems, Kubernetes clusters, and infrastructure -- without manual agent configuration
-- **[Probable Root Cause](https://www.ibm.com/blog/probable-root-cause-accelerating-incident-remediation-with-causal-ai/)** -- uses causal AI and differential observability to identify *why* something broke, not just *that* it broke, giving AAP the context needed to choose the right remediation
+- **[Probable Root Cause](https://www.ibm.com/new/product-blog/probable-root-cause-accelerating-incident-remediation-with-causal-ai)** -- uses causal AI and differential observability to identify *why* something broke, not just *that* it broke, giving AAP the context needed to choose the right remediation
 - **[Smart Alerts](https://www.ibm.com/docs/en/instana-observability/current?topic=applications-smart-alerts)** with [adaptive thresholds](https://www.ibm.com/docs/en/instana-observability/1.0.313?topic=instana-adaptive-thresholds-in-smart-alerts) -- learns daily and weekly seasonality patterns to reduce false positives without manual threshold tuning
 - Three event types (**Change**, **Issue**, **Incident**) that map cleanly to EDA rulebook conditions
 
@@ -853,7 +853,7 @@ Start capturing these metrics before enabling automated remediation -- having a 
 
 | Resource | What you get |
 |----------|-------------|
-| <a target="_blank" href="https://www.ibm.com/blog/probable-root-cause-accelerating-incident-remediation-with-causal-ai/">Probable Root Cause with Causal AI</a> | How Instana uses causal AI to surface probable root cause during incidents |
+| <a target="_blank" href="https://www.ibm.com/new/product-blog/probable-root-cause-accelerating-incident-remediation-with-causal-ai">Probable Root Cause with Causal AI</a> | How Instana uses causal AI to surface probable root cause during incidents |
 | <a target="_blank" href="https://www.ibm.com/new/announcements/achieving-operational-efficiency-through-instanas-intelligent-remediation">Intelligent Remediation</a> | Announcement of Instana's built-in remediation framework and how it pairs with Ansible |
 | <a target="_blank" href="https://www.ibm.com/new/announcements/use-agentic-ai-to-resolve-incidents-faster-with-ibm-instana-intelligent-incident-investigation">Intelligent Incident Investigation</a> | Agentic AI capabilities for faster incident triage inside Instana |
 

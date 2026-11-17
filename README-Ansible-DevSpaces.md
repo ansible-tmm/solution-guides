@@ -45,7 +45,7 @@ graph LR
 
 ## Background
 
-[Red Hat OpenShift Dev Spaces](https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/) provides browser-based VS Code environments running on OpenShift. Each workspace is defined by a `devfile.yaml` checked into the project repository. When a developer clicks **Create Workspace**, Dev Spaces reads the devfile, provisions the environment, and presents a ready-to-use IDE. Zero local dependencies, zero configuration. For a full introduction to Ansible Development Tools and all installation methods (including Dev Spaces getting started), see the [AI-Assisted Ansible Developer Experience guide](README-Ansible-DevTools.md).
+[Red Hat OpenShift Dev Spaces](https://docs.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/) provides browser-based VS Code environments running on OpenShift. Each workspace is defined by a `devfile.yaml` checked into the project repository. When a developer clicks **Create Workspace**, Dev Spaces reads the devfile, provisions the environment, and presents a ready-to-use IDE. Zero local dependencies, zero configuration. For a full introduction to Ansible Development Tools and all installation methods (including Dev Spaces getting started), see the [AI-Assisted Ansible Developer Experience guide](README-Ansible-DevTools.md).
 
 The challenge starts when multiple teams share the same base image but need different system-level packages:
 
@@ -60,7 +60,7 @@ Because the Ansible DevTools container image has `/var` read-only at runtime, de
 
 This guide uses a tiered container image strategy to deliver governed development environments. Each tier layers on top of the previous using standard OpenShift build primitives:
 
-- **<a href="https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/" target="_blank">Red Hat OpenShift Dev Spaces</a>** for browser-based development environments
+- **<a href="https://docs.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/" target="_blank">Red Hat OpenShift Dev Spaces</a>** for browser-based development environments
 - **OpenShift BuildConfigs and ImageStreams** for automated image building and tracking
 - **Ansible DevTools container image** as the base (Tier 0)
 - **Containerfiles** for customization layers at each tier
@@ -92,7 +92,7 @@ This guide uses a tiered container image strategy to deliver governed developmen
 
 ### OpenShift and Dev Spaces
 
-- **Red Hat OpenShift Container Platform** with the <a href="https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/" target="_blank">Dev Spaces operator</a> installed and configured
+- **Red Hat OpenShift Container Platform** with the <a href="https://docs.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/" target="_blank">Dev Spaces operator</a> installed and configured
 - **`oc` CLI** authenticated to the cluster with permissions to create BuildConfigs and ImageStreams in your target namespace
 - Familiarity with Containerfiles (Dockerfiles)
 
@@ -348,7 +348,7 @@ devspaces-network-team-2       Docker            Complete   5 minutes ago
 
 ## Sources
 
-- <a href="https://access.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/" target="_blank">Red Hat OpenShift Dev Spaces documentation</a>
+- <a href="https://docs.redhat.com/documentation/en-us/red_hat_openshift_dev_spaces/" target="_blank">Red Hat OpenShift Dev Spaces documentation</a>
 - <a href="https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-buildconfigs.html" target="_blank">OpenShift BuildConfig documentation</a>
 - <a href="https://docs.openshift.com/container-platform/latest/openshift_images/image-streams-manage.html" target="_blank">OpenShift ImageStream documentation</a>
 - <a href="https://docs.ansible.com/projects/dev-tools/container/" target="_blank">Ansible Development Tools container documentation</a>
