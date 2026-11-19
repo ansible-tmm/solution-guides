@@ -274,14 +274,16 @@ Record projects, inventories, credentials, teams, organizations, users, job temp
 
 ### Consumption-pattern checklist
 
-- <input type="checkbox" disabled> Equivalent job template and inventory launches are not repeated in parallel without a workload reason.
-- <input type="checkbox" disabled> Project and inventory synchronization is not performed before every job unless required by a documented freshness objective.
-- <input type="checkbox" disabled> Repeated API work is consolidated or cached where appropriate.
-- <input type="checkbox" disabled> Job concurrency and forks are intentional for the available capacity.
-- <input type="checkbox" disabled> Custom EEs are focused and sized for their purpose.
-- <input type="checkbox" disabled> Plugins and initialization hooks have a measured benefit that justifies startup overhead.
-- <input type="checkbox" disabled> Playbooks avoid repeated expensive work and unnecessary event output.
-- <input type="checkbox" disabled> Container-image pull behavior is appropriate for the operating environment.
+<div class="assessment-checklist">
+<label><input type="checkbox" disabled> Equivalent job template and inventory launches are not repeated in parallel without a workload reason.</label><br>
+<label><input type="checkbox" disabled> Project and inventory synchronization is not performed before every job unless required by a documented freshness objective.</label><br>
+<label><input type="checkbox" disabled> Repeated API work is consolidated or cached where appropriate.</label><br>
+<label><input type="checkbox" disabled> Job concurrency and forks are intentional for the available capacity.</label><br>
+<label><input type="checkbox" disabled> Custom EEs are focused and sized for their purpose.</label><br>
+<label><input type="checkbox" disabled> Plugins and initialization hooks have a measured benefit that justifies startup overhead.</label><br>
+<label><input type="checkbox" disabled> Playbooks avoid repeated expensive work and unnecessary event output.</label><br>
+<label><input type="checkbox" disabled> Container-image pull behavior is appropriate for the operating environment.</label>
+</div>
 
 ### Symptom-to-investigation decision tree
 
