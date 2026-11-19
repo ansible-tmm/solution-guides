@@ -369,7 +369,7 @@ Follow-up: compare queue wait and stale-data incidents after trigger policy chan
 
 ## Maturity path
 
-| <span style="white-space: nowrap;">Maturity</span> | Description |
+| <span style="display: inline-block; min-width: 5.5em; white-space: nowrap;">Maturity</span> | Description |
 |----------|-------------|
 | **Crawl** | Capture version, topology, workload profile, queue time, job duration, synchronization, API, EE, and database baselines. Label uncertain conclusions as **Validate**. |
 | **Walk** | Establish owners and service objectives, separate workload classes, remove duplicate work, govern synchronization and retries, and validate changes in a representative busy window. |
