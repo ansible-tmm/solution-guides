@@ -49,7 +49,7 @@ Use the evidence labels in this guide to keep conclusions precise:
 | Label | Meaning | How to use it |
 | :---- | :---- | :---- |
 | **Documented** | A requirement, supported topology, configuration behavior, or limit stated in applicable Red Hat documentation for the target version. | Cite the exact version-specific source and recheck after upgrades. |
-| **Recommended** | A practice intended to reduce avoidable work or improve diagnosability. | Explain the trade-off and define the measurement that should show benefit. |
+| <span style="white-space: nowrap;"><strong>Recommended</strong></span> | A practice intended to reduce avoidable work or improve diagnosability. | Explain the trade-off and define the measurement that should show benefit. |
 | **Observed** | An anonymized customer or escalation pattern. | Use it as a discovery prompt, not as a universal limit. |
 | **Validate** | A plausible relationship that still needs a controlled test. | State the test, success metric, and owner before making a commitment. |
 
