@@ -274,14 +274,14 @@ Record projects, inventories, credentials, teams, organizations, users, job temp
 
 ### Consumption-pattern checklist
 
-- [ ] Equivalent job template and inventory launches are not repeated in parallel without a workload reason.
-- [ ] Project and inventory synchronization is not performed before every job unless required by a documented freshness objective.
-- [ ] Repeated API work is consolidated or cached where appropriate.
-- [ ] Job concurrency and forks are intentional for the available capacity.
-- [ ] Custom EEs are focused and sized for their purpose.
-- [ ] Plugins and initialization hooks have a measured benefit that justifies startup overhead.
-- [ ] Playbooks avoid repeated expensive work and unnecessary event output.
-- [ ] Container-image pull behavior is appropriate for the operating environment.
+- [ ]&nbsp;Equivalent job template and inventory launches are not repeated in parallel without a workload reason.
+- [ ]&nbsp;Project and inventory synchronization is not performed before every job unless required by a documented freshness objective.
+- [ ]&nbsp;Repeated API work is consolidated or cached where appropriate.
+- [ ]&nbsp;Job concurrency and forks are intentional for the available capacity.
+- [ ]&nbsp;Custom EEs are focused and sized for their purpose.
+- [ ]&nbsp;Plugins and initialization hooks have a measured benefit that justifies startup overhead.
+- [ ]&nbsp;Playbooks avoid repeated expensive work and unnecessary event output.
+- [ ]&nbsp;Container-image pull behavior is appropriate for the operating environment.
 
 ### Symptom-to-investigation decision tree
 
