@@ -326,15 +326,81 @@ Before using a recommendation as a customer requirement, confirm the AAP version
 
 ### Test
 
-Run the assessment against one representative busy window. Export job timestamps and compare the baseline with the same workload after one controlled remediation. The following command illustrates the minimum result expected from a playbook-level validation run:
+Run the assessment as an AAP Controller job so the run, operator, credentials, output, and follow-up evidence are retained in the platform audit trail. Export job timestamps and compare the baseline with the same workload after one controlled remediation. Do not compare a quiet window with a peak window and call the difference an improvement.
 
-```bash
-ansible-playbook -i inventory/hosts.yml playbooks/assessment-probe.yml \
-  -e assessment_window_start="2026-11-19T13:00:00Z" \
-  -e assessment_window_end="2026-11-19T14:00:00Z"
+### Assessment probe playbook
+
+Add this playbook to the project that will be used by the AAP job template. The values are supplied as survey or extra variables at launch time; replace the example values with the measurements recorded in the assessment worksheet.
+
+```yaml
+---
+- name: Record an AAP performance assessment
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    assessment_name: aap-performance-baseline
+    evidence_classification: OBSERVED -> VALIDATE
+    assessment_owner: source-control and inventory owner
+    assessment_window_start: "2026-11-19T13:00:00Z"
+    assessment_window_end: "2026-11-19T14:00:00Z"
+    jobs_observed: 120
+    peak_concurrent_jobs: 80
+    p95_queue_wait: "00:02:14"
+    p95_job_duration: "00:35:12"
+    project_syncs_preceding_jobs: "18%"
+    api_error_rate: "0.2%"
+    database_growth: "1.4 GiB"
+    finding: per-job synchronization is a candidate avoidable dependency
+    follow_up: compare queue wait and stale-data incidents after trigger policy change
+
+  tasks:
+    - name: Validate required assessment inputs
+      ansible.builtin.assert:
+        that:
+          - assessment_window_start | length > 0
+          - assessment_window_end | length > 0
+          - assessment_owner | length > 0
+          - evidence_classification in ['DOCUMENTED', 'MEASURED', 'OBSERVED -> VALIDATE', 'RECOMMENDED']
+        fail_msg: Provide the assessment window, owner, and evidence classification.
+
+    - name: Publish the assessment record in the AAP job output
+      ansible.builtin.set_stats:
+        data:
+          assessment: "{{ assessment_name }}"
+          evidence_window: "{{ assessment_window_start }} to {{ assessment_window_end }}"
+          jobs_observed: "{{ jobs_observed }}"
+          peak_concurrent_jobs: "{{ peak_concurrent_jobs }}"
+          p95_queue_wait: "{{ p95_queue_wait }}"
+          p95_job_duration: "{{ p95_job_duration }}"
+          project_syncs_preceding_jobs: "{{ project_syncs_preceding_jobs }}"
+          api_error_rate: "{{ api_error_rate }}"
+          database_growth: "{{ database_growth }}"
+          finding: "{{ finding }}"
+          classification: "{{ evidence_classification }}"
+          owner: "{{ assessment_owner }}"
+          follow_up: "{{ follow_up }}"
+
+    - name: Display the assessment record
+      ansible.builtin.debug:
+        msg:
+          assessment: "{{ assessment_name }}"
+          evidence_window: "{{ assessment_window_start }} to {{ assessment_window_end }}"
+          finding: "{{ finding }}"
+          classification: "{{ evidence_classification }}"
+          owner: "{{ assessment_owner }}"
+          follow_up: "{{ follow_up }}"
 ```
 
-For a platform-level test, record the AAP version, deployment model, topology, workload profile, change under test, and rollback condition. Do not compare a quiet window with a peak window and call the difference an improvement.
+### Configure and launch the job in AAP
+
+1. Add the playbook to an AAP Project and synchronize the project.
+2. Create or select an inventory containing `localhost`, then select an execution environment that includes `ansible-core` and the `ansible.builtin` collection.
+3. Create a Job Template named `AAP performance assessment`, select the playbook, inventory, execution environment, and an appropriate credential if the project requires one.
+4. Enable **Prompt on launch** or create a survey for the assessment window, workload measurements, finding, evidence classification, owner, and follow-up measurement.
+5. Launch the Job Template from AAP Controller during the selected baseline or peak window. Review the job output and the **JOB RUN STATS** record, then attach the job link to the assessment record.
+
+For repeatability, create a second Job Template for the post-remediation window and use the same survey fields and execution environment. Keep the two AAP job links together so reviewers can compare like-for-like runs.
 
 ### Expected result
 
