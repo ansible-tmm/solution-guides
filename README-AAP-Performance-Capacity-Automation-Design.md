@@ -300,7 +300,7 @@ Record projects, inventories, credentials, teams, organizations, users, job temp
 | Rating | Use when | Required response |
 |--------|----------|------------------|
 | **Low** | The pattern is understood and current capacity has headroom. | Document the baseline and monitor. |
-| **Medium** | There is measurable pressure, unclear ownership, or a pattern likely to become a bottleneck as workload grows. | Define remediation and a follow-up measurement. |
+| <span style="white-space: nowrap;"><strong>Medium</strong></span> | There is measurable pressure, unclear ownership, or a pattern likely to become a bottleneck as workload grows. | Define remediation and a follow-up measurement. |
 | **High** | The pattern contributes to instability, persistent queueing, timeouts, resource exhaustion, or uncontrolled data growth. | Prioritize redesign or capacity change and establish an incident owner. |
 
 | Finding | Evidence | Risk | Recommended change | Owner | Success measure | Target date |
