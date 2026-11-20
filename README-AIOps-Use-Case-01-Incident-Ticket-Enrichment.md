@@ -231,7 +231,7 @@ They open the ticket and read a paragraph. The log-pulling, the reading, the cor
 
 **LLM options:**
 
-Any OpenAI-compatible API endpoint works with this pattern: <a target="_blank" href="https://www.redhat.com/en/products/ai/red-hat-ai-inference-server">Red Hat AI Inference Server</a> (on-prem, RHEL or OpenShift), Azure OpenAI, or any other provider. Store the API key in AAP credential vault; inject it at runtime via `{{ llm_api_key }}`.
+Any OpenAI-compatible API endpoint works with this pattern: <a target="_blank" href="https://www.redhat.com/en/products/ai/inference">Red Hat AI Inference Server</a> (on-prem, RHEL or OpenShift), Azure OpenAI, or any other provider. Store the API key in AAP credential vault; inject it at runtime via `{{ llm_api_key }}`.
 
 > **Design principle:** AI enrichment without AO
 >
