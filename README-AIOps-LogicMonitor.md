@@ -484,7 +484,7 @@ The following best practices apply across all maturity stages and should be addr
 
 ### Credential Management
 
-Multiple credential types are in play across the integration: LogicMonitor API tokens, Edwin AI `access_id` and `access_key`, AAP OAuth tokens, network device credentials, and MCP authentication. Store all secrets using AAP credential types or an external vault (such as HashiCorp Vault or CyberArk). Define a rotation policy for each credential type. Apply least-privilege scoping to ensure service accounts and integration credentials have only the permissions required for their specific function.
+Multiple credential types are in play across the integration: LogicMonitor API tokens, Edwin AI `access_id` and `access_key`, AAP OAuth tokens, network device credentials, and MCP authentication. Store all secrets using AAP credential types or an external vault (such as HashiCorp Vault or Idira, formerly CyberArk). Define a rotation policy for each credential type. Apply least-privilege scoping to ensure service accounts and integration credentials have only the permissions required for their specific function.
 
 ### Event Stream Security
 
