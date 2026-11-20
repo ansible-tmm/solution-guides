@@ -493,13 +493,13 @@ patternfly: true
         </div>
       </a>
 
-      <a href="{{ '/README-AIOps-LogicMonitor' | relative_url }}" class="card-link" data-tags="logicmonitor,aiops,network,solution,wip">
+      <a href="{{ '/README-AIOps-LogicMonitor' | relative_url }}" class="card-link" data-tags="logicmonitor,aiops,network,solution,published">
         <div class="pf-v6-c-card">
           <div class="pf-v6-c-card__header card-header--labels">
-            <span class="pf-v6-c-label pf-m-orange">
+            <span class="pf-v6-c-label pf-m-green">
               <span class="pf-v6-c-label__content">
-                <i class="fas fa-exclamation-triangle pf-v6-c-label__icon"></i>
-                Work in Progress
+                <i class="fas fa-check-circle pf-v6-c-label__icon"></i>
+                Solution Guide
               </span>
             </span>
             <span class="pf-v6-c-label card-label-track card-label-track--aiops">
@@ -513,7 +513,7 @@ patternfly: true
             <h3 class="pf-v6-c-card__title-text">Closed-Loop Network Remediation with LogicMonitor and Edwin AI</h3>
           </div>
           <div class="pf-v6-c-card__body">
-            A crawl-walk-run maturity model for closed-loop network remediation: LogicMonitor alerts trigger Event-Driven Ansible, progressing from a single BGP-reset job template, to Edwin AI-enriched branched workflows, to agentic remediation via the AAP MCP Server.
+            A crawl-walk-run maturity model for closed-loop network remediation: LogicMonitor Envision maps approved playbooks for manual execution, Edwin AI correlates alerts into Insights for operator-initiated automation, and validated procedures promote to rule-triggered EDA remediation with human approval before writes. Edwin AI chat complements the stages for conversational investigation.
           </div>
           <div class="pf-v6-c-card__footer">
             <span class="card-partner-logo-set card-partner-logo-set--logicmonitor">
