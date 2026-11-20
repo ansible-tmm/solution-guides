@@ -26,6 +26,7 @@ Solution guides for AI-driven automation with Ansible Automation Platform.
 | Enforcing compliance and network governance with Policy as Code | [README-Compliance-Governance-with-policy.md](README-Compliance-Governance-with-policy.md) | |
 | RHEL 9 STIG and CIS compliance scanning with Ansible | [README-STIG-CIS-compliance.md](README-STIG-CIS-compliance.md) | |
 | Automated vulnerability remediation with Lightwell and Ansible | [README-AAP-LightWell-AO.md](README-AAP-LightWell-AO.md) | |
+| Designing a reliable, measurable Ansible Automation Platform workload | [README-AAP-Performance-Capacity-Automation-Design.md](README-AAP-Performance-Capacity-Automation-Design.md) | |
 
 ## Contributing
 
