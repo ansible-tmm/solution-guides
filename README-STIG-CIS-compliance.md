@@ -1,4 +1,3 @@
-{% raw %}
 ---
 title: "RHEL 9 STIG and CIS Compliance Scanning"
 description: "Agentless OpenSCAP scanning and selective CaC remediation for RHEL 9 with Ansible Automation Platform"
@@ -7,6 +6,8 @@ domains: [security, compliance]
 profiles: [rhel9-stig, rhel9-cis-l1, rhel9-cis-l2]
 last_verified: 2026-10-20
 ---
+
+{% raw %}
 
 <div class="guide-header">
 <h1>RHEL 9 STIG and CIS compliance scanning with Ansible</h1>
